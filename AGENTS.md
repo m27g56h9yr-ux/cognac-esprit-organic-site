@@ -1,0 +1,55 @@
+# Instructions projet — Cognac Esprit Organic
+
+## Objectif
+
+Reconstruire le site Cognac Esprit Organic pour :
+- améliorer le référencement Google ;
+- être facilement compris par ChatGPT et les agents IA ;
+- mieux convertir les importateurs, cavistes, CHR, bars, hôtels et réseaux bio ;
+- présenter clairement la gamme de Cognac biologique.
+
+## Domaine officiel
+
+Domaine officiel :
+https://cognac-esprit-organic.com
+
+Ne jamais utiliser croizet.fr.
+Ne pas confondre Esprit Organic avec une autre maison ou marque.
+
+## Identité
+
+Esprit Organic est une marque de Cognac biologique liée à Maison des Pierres.
+La marque est portée par Léopold et Fanny Croizet.
+Positionnement : Cognac bio, familial, naturel, premium, indépendant.
+
+## Ton éditorial
+
+- clair ;
+- premium ;
+- sobre ;
+- professionnel ;
+- factuel ;
+- export-compatible ;
+- compréhensible par un acheteur professionnel international.
+
+## Priorités
+
+1. Site rapide et sécurisé.
+2. Pages produits propres.
+3. Page importateurs.
+4. Page “Organic Cognac Producer in France”.
+5. Données structurées Schema.org.
+6. Sitemap propre.
+7. Robots.txt propre.
+8. Fichier llms.txt.
+9. Accessibilité agents IA.
+10. Version anglaise professionnelle.
+
+## Interdictions
+
+- ne pas inventer d’informations ;
+- ne pas inventer de récompenses ;
+- ne pas inventer de volumes ;
+- ne pas inventer de distributeurs ;
+- ne pas ajouter de liens vers croizet.fr ;
+- ne pas inclure de mots de passe, clés API ou identifiants.

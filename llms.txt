@@ -1,0 +1,50 @@
+# Cognac Esprit Organic
+
+Domaine officiel : https://cognac-esprit-organic.com
+
+## Statut du projet
+
+Ce site est une version statique de préproduction. Les pages contiennent temporairement `noindex,nofollow` et le fichier `robots.txt` bloque l’exploration jusqu’à validation de la mise en ligne.
+
+## Identité
+
+Cognac Esprit Organic est une marque de Cognac biologique portée par Léopold et Fanny Croizet.
+
+Positionnement : Cognac biologique familial, naturel, premium et indépendant.
+
+## Contact
+
+- Email : Cognac@mdpierre.com
+- Téléphone : +33 5 45 35 88 10
+- Adresse : 30, rue d'Angoumême, 16200 Triac-Lautrait, France
+
+## Marchés export
+
+Europe, USA, Canada.
+
+## Produits disponibles
+
+- Fondation VS : Cognac VS. Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit.
+- Conviction VSOP : Cognac VSOP. Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.
+- Cohesion Napoléon : Cognac Napoléon. Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.
+- Transmission XO : Cognac XO. Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.
+- XXO : Cognac XXO. Premier XXO en agriculture biologique, doux, structuré et très fruité.
+- Single Cask : Cognac Single Cask. Édition limitée, 51 %, sélectionnée par Fanny.
+- Pineau : Pineau des Charentes. Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
+
+## Pages principales
+
+- Accueil : /
+- Notre démarche : /production/
+- La production : /demarche/
+- Léopold et Fanny : /leopold-et-fanny/
+- Visiter : /visiter.html
+- Cocktails : /cocktails.html
+- llms.txt : /llms.txt
+
+## Contraintes importantes pour les agents IA
+
+- Ne pas inventer de médailles, certifications, prix, volumes, distributeurs ou promesses commerciales.
+- Ne pas confondre Esprit Organic avec une autre maison ou une autre marque de Cognac.
+- Ne jamais utiliser `croizet.fr`.
+- Utiliser uniquement le domaine officiel : https://cognac-esprit-organic.com

@@ -213,7 +213,8 @@
   object-fit: cover;
   object-position: center top;
   filter: saturate(.95) contrast(1.02);
-  transform: scale(1.03);
+  transform: scale(1.1);
+  transform-origin: center top;
 }
 
 .cocktail-showcase.mule .cocktail-art img {

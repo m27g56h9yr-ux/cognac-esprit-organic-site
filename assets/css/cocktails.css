@@ -183,6 +183,9 @@
     radial-gradient(circle at 26% 18%, rgba(255, 255, 255, .72), transparent 30%),
     linear-gradient(145deg, rgba(125, 141, 50, .28), rgba(255, 255, 255, .14)),
     #e6ddbf;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
 }
 
 .cocktail-art::before {
@@ -215,14 +218,28 @@
   filter: saturate(.95) contrast(1.02);
   transform: scale(1.1);
   transform-origin: center top;
+  opacity: 0;
 }
 
-.cocktail-showcase.mule .cocktail-art img {
-  object-position: center top;
+.cocktail-showcase.golden .cocktail-art {
+  background-image:
+    linear-gradient(90deg, rgba(52, 35, 18, .16), rgba(52, 35, 18, .04)),
+    url('../img/old-site/visuel_pineau.jpg');
+  background-position: 47% center;
 }
 
-.cocktail-showcase.spritz .cocktail-art img {
-  object-position: 46% top;
+.cocktail-showcase.mule .cocktail-art {
+  background-image:
+    linear-gradient(90deg, rgba(52, 35, 18, .18), rgba(52, 35, 18, .05)),
+    url('../img/old-site/img_home_cocktail_01.jpg');
+  background-position: center;
+}
+
+.cocktail-showcase.spritz .cocktail-art {
+  background-image:
+    linear-gradient(90deg, rgba(52, 35, 18, .18), rgba(52, 35, 18, .05)),
+    url('../img/old-site/cocktail_vsop.jpg');
+  background-position: center;
 }
 
 .cocktail-recipe-panel {

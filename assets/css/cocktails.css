@@ -1,1 +1,608 @@
-.cocktails-page{background:#ebe7d9}.cocktail-hero{position:relative;min-height:66vh;display:grid;overflow:hidden;background:#1f2d21;color:#fff}.cocktail-hero::after{content:"";position:absolute;inset:auto 0 0;height:35%;background:linear-gradient(to bottom,rgba(235,231,217,0),#ebe7d9 88%)}.cocktail-hero-image{position:absolute;inset:0}.cocktail-hero-image img{width:100%;height:100%;object-fit:cover;filter:saturate(.95) brightness(.58)}.cocktail-hero-copy{position:relative;z-index:1;align-self:center;justify-self:center;width:min(920px,calc(100% - 48px));padding-top:54px;text-align:center}.cocktail-hero-copy h1{margin:10px 0 12px;color:#fff;font-family:"Roboto Slab",Georgia,serif;font-size:clamp(2.8rem,7vw,7.6rem);line-height:.92;text-transform:uppercase;text-shadow:0 10px 34px rgba(0,0,0,.42)}.cocktail-hero-copy p:not(.eyebrow){max-width:760px;margin:0 auto;color:rgba(255,255,255,.92);font-family:Raleway,sans-serif;font-size:clamp(1.05rem,1.8vw,1.55rem);font-weight:500;line-height:1.45}.cocktail-intro-luxury{position:relative;max-width:1180px;margin:0 auto;padding:clamp(54px,8vw,104px) 28px clamp(36px,5vw,62px);text-align:center;color:#5b3a20}.cocktail-intro-luxury::before,.cocktail-intro-luxury::after{content:"";position:absolute;top:44px;width:min(23vw,260px);aspect-ratio:1;opacity:.34;background-repeat:no-repeat;background-position:center;background-size:contain}.cocktail-intro-luxury::before{left:0;background-image:url('../img/old-site/illustration-vigne-left.png')}.cocktail-intro-luxury::after{right:0;background-image:url('../img/old-site/illustration-vigne-right.png')}.intro-label{margin:0 0 16px;color:#9a813f;font-family:Montserrat,sans-serif;font-size:.78rem;font-weight:900;letter-spacing:.22em;text-transform:uppercase}.cocktail-intro-luxury h2{position:relative;z-index:1;max-width:860px;margin:0 auto 18px;color:#4f2e16;font-family:"Roboto Slab",Georgia,serif;font-size:clamp(2rem,4vw,4.1rem);line-height:1.05}.cocktail-intro-luxury p:last-child{position:relative;z-index:1;max-width:720px;margin:0 auto;color:#725a3f;font-size:1.05rem;line-height:1.7}.cocktail-showcases{display:grid;gap:clamp(44px,6vw,86px);padding:0 clamp(18px,4vw,76px) clamp(64px,8vw,112px)}.cocktail-showcase{--accent:#7e8a38;--deep:#4b2b12;display:grid;grid-template-columns:minmax(280px,41%) minmax(0,59%);max-width:1480px;margin:0 auto;border:1px solid rgba(91,58,32,.16);background:#f5f0df;box-shadow:0 22px 70px rgba(49,31,16,.18)}.cocktail-showcase:nth-child(even){grid-template-columns:minmax(0,59%) minmax(280px,41%)}.cocktail-showcase:nth-child(even) .cocktail-art{order:2}.cocktail-showcase.mule{--accent:#657526;--deep:#35451d}.cocktail-showcase.spritz{--accent:#c17621;--deep:#5e3215}.cocktail-art{position:relative;min-height:720px;display:grid;place-items:center;overflow:hidden;background:radial-gradient(circle at 24% 18%,rgba(255,255,255,.8),transparent 28%),linear-gradient(145deg,rgba(126,138,56,.24),rgba(255,255,255,.12)),#e7dfc5}.cocktail-art::before{content:"";position:absolute;inset:18px;border:1px solid rgba(255,255,255,.65)}.poster-frame{position:relative;width:min(78%,430px);min-height:620px;display:grid;align-content:end;padding:34px 34px 42px;overflow:hidden;background:#f7f0dd;box-shadow:0 28px 62px rgba(47,28,12,.28)}.poster-frame::before{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.12),rgba(40,66,28,.18)),url('../img/old-site/img_home_cocktail_01.jpg');background-size:cover;background-position:center;filter:saturate(1.08);transform:scale(1.05)}.poster-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(255,255,255,.72),rgba(255,255,255,.08) 38%,rgba(34,63,26,.64))}.poster-content{position:relative;z-index:1;color:#fff}.poster-content .poster-brand{margin:0 0 14px;color:#304a18;font-family:Montserrat,sans-serif;font-size:1rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase}.poster-content h3{margin:0;color:#304a18;font-family:Montserrat,sans-serif;font-size:clamp(2.4rem,4vw,4.8rem);font-weight:900;line-height:.9;text-transform:uppercase}.poster-content p{max-width:310px;margin:22px 0 0;color:#fff;font-family:"Roboto Slab",Georgia,serif;font-size:1.05rem;line-height:1.45}.poster-badge{display:inline-grid;place-items:center;width:118px;height:118px;margin-top:26px;border:3px solid #fff;border-radius:50%;background:rgba(255,255,255,.86);color:#536b25;font-family:Montserrat,sans-serif;font-weight:900;text-align:center;text-transform:uppercase;font-size:.78rem}.cocktail-recipe-panel{position:relative;display:grid;align-content:center;padding:clamp(38px,6vw,90px);overflow:hidden;background:linear-gradient(90deg,rgba(255,255,255,.84),rgba(255,255,255,.66)),#f3ecd7;color:#4c321e}.cocktail-recipe-panel::before{content:"";position:absolute;right:-54px;top:-54px;width:210px;aspect-ratio:1;border:2px solid var(--accent);border-radius:50%;opacity:.18}.recipe-number{margin:0 0 14px;color:var(--accent);font-family:Montserrat,sans-serif;font-size:.82rem;font-weight:900;letter-spacing:.28em}.recipe-kicker{margin:0 0 12px;color:var(--accent);font-family:Montserrat,sans-serif;font-size:.78rem;font-weight:900;letter-spacing:.18em;text-transform:uppercase}.cocktail-recipe-panel h2{margin:0;color:var(--deep);font-family:"Roboto Slab",Georgia,serif;font-size:clamp(2.4rem,5.5vw,6.2rem);font-weight:800;line-height:.9;text-transform:uppercase}.cocktail-subtitle{margin:14px 0 22px;color:#bc7c25;font-family:"Roboto Slab",Georgia,serif;font-size:clamp(1.25rem,2vw,2.1rem);font-style:italic;line-height:1.2}.recipe-description{max-width:680px;margin:0 0 34px;color:#493724;font-size:clamp(1.02rem,1.25vw,1.25rem);line-height:1.72}.recipe-columns{display:grid;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:clamp(22px,4vw,46px);padding-top:28px;border-top:1px solid rgba(76,50,30,.16)}.recipe-columns h3{margin:0 0 14px;color:var(--deep);font-family:Montserrat,sans-serif;font-size:.78rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}.recipe-columns ul,.recipe-columns ol{margin:0;padding-left:1.15rem}.recipe-columns li{margin:8px 0;color:#604935;line-height:1.48}.cocktail-style{margin:30px 0 0;padding:18px 20px;color:#fff;background:var(--accent);font-family:Raleway,sans-serif;font-weight:600}.cocktail-style span{display:block;margin-bottom:6px;font-family:Montserrat,sans-serif;font-size:.72rem;font-weight:900;letter-spacing:.16em;text-transform:uppercase}@media(max-width:980px){.cocktail-hero{min-height:58vh}.cocktail-showcase,.cocktail-showcase:nth-child(even){grid-template-columns:1fr}.cocktail-showcase:nth-child(even) .cocktail-art{order:0}.cocktail-art{min-height:auto;padding:34px 0}.poster-frame{width:min(82%,390px);min-height:560px}}@media(max-width:640px){.cocktail-hero{min-height:62vh}.cocktail-hero-copy{width:calc(100% - 34px);text-align:left}.cocktail-intro-luxury{padding-inline:22px;text-align:left}.cocktail-intro-luxury::before,.cocktail-intro-luxury::after{display:none}.cocktail-showcases{padding-inline:12px}.cocktail-recipe-panel{padding:34px 24px 38px}.recipe-columns{grid-template-columns:1fr}.poster-frame{width:min(90%,340px);min-height:500px;padding:28px}.poster-content h3{font-size:2.45rem}}
+.cocktails-page {
+  background: #ebe7d9;
+}
+
+.cocktail-hero {
+  position: relative;
+  min-height: 58vh;
+  display: grid;
+  overflow: hidden;
+  background: #1f2d21;
+  color: #fff;
+}
+
+.cocktail-hero::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0;
+  height: 38%;
+  background: linear-gradient(to bottom, rgba(235, 231, 217, 0), #ebe7d9 88%);
+  pointer-events: none;
+}
+
+.cocktail-hero-image {
+  position: absolute;
+  inset: 0;
+}
+
+.cocktail-hero-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(.92) brightness(.55);
+}
+
+.cocktail-hero-copy {
+  position: relative;
+  z-index: 1;
+  align-self: center;
+  justify-self: center;
+  width: min(900px, calc(100% - 48px));
+  padding-top: 54px;
+  text-align: center;
+}
+
+.cocktail-hero-copy h1 {
+  margin: 10px 0 12px;
+  color: #fff;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(2.5rem, 5.8vw, 6.2rem);
+  line-height: .94;
+  text-transform: uppercase;
+  text-shadow: 0 10px 34px rgba(0, 0, 0, .42);
+}
+
+.cocktail-hero-copy p:not(.eyebrow) {
+  max-width: 720px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, .92);
+  font-family: Raleway, sans-serif;
+  font-size: clamp(1rem, 1.45vw, 1.35rem);
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.cocktail-intro-luxury {
+  position: relative;
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: clamp(52px, 7vw, 94px) 28px clamp(34px, 5vw, 58px);
+  text-align: center;
+  color: #5b3a20;
+}
+
+.cocktail-intro-luxury::before,
+.cocktail-intro-luxury::after {
+  content: "";
+  position: absolute;
+  top: 42px;
+  width: min(23vw, 250px);
+  aspect-ratio: 1;
+  opacity: .34;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+}
+
+.cocktail-intro-luxury::before {
+  left: 0;
+  background-image: url('../img/old-site/illustration-vigne-left.png');
+}
+
+.cocktail-intro-luxury::after {
+  right: 0;
+  background-image: url('../img/old-site/illustration-vigne-right.png');
+}
+
+.intro-label {
+  margin: 0 0 16px;
+  color: #9a813f;
+  font-family: Montserrat, sans-serif;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .22em;
+  text-transform: uppercase;
+}
+
+.cocktail-intro-luxury h2 {
+  position: relative;
+  z-index: 1;
+  max-width: 820px;
+  margin: 0 auto 18px;
+  color: #4f2e16;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(1.9rem, 3.5vw, 3.75rem);
+  line-height: 1.08;
+}
+
+.cocktail-intro-luxury p:last-child {
+  position: relative;
+  z-index: 1;
+  max-width: 680px;
+  margin: 0 auto;
+  color: #725a3f;
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.cocktail-showcases {
+  display: grid;
+  gap: clamp(48px, 6vw, 86px);
+  padding: 0 clamp(18px, 4vw, 76px) clamp(64px, 8vw, 112px);
+}
+
+.cocktail-showcase {
+  --accent: #7b8d32;
+  --deep: #4b2b12;
+  --paper: #f5f0df;
+  --ink: #4c321e;
+  --panel: #fff8e8;
+  display: grid;
+  grid-template-columns: minmax(340px, 46%) minmax(0, 54%);
+  max-width: 1480px;
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(91, 58, 32, .16);
+  background: var(--paper);
+  box-shadow: 0 22px 70px rgba(49, 31, 16, .18);
+}
+
+.cocktail-showcase:nth-child(even) {
+  grid-template-columns: minmax(0, 54%) minmax(340px, 46%);
+}
+
+.cocktail-showcase:nth-child(even) .cocktail-art {
+  order: 2;
+}
+
+.cocktail-showcase.golden {
+  --accent: #7f8f33;
+  --deep: #4f2d14;
+  --panel: #fff6dc;
+}
+
+.cocktail-showcase.mule {
+  --accent: #b17128;
+  --deep: #573215;
+  --panel: #f9edd6;
+}
+
+.cocktail-showcase.spritz {
+  --accent: #5c6e2c;
+  --deep: #37441d;
+  --panel: #f4efd8;
+}
+
+.cocktail-art {
+  position: relative;
+  min-height: 720px;
+  margin: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, .34), rgba(255, 255, 255, 0) 38%),
+    radial-gradient(circle at 26% 18%, rgba(255, 255, 255, .72), transparent 30%),
+    linear-gradient(145deg, rgba(125, 141, 50, .28), rgba(255, 255, 255, .14)),
+    #e6ddbf;
+}
+
+.cocktail-art::before {
+  content: "";
+  position: absolute;
+  inset: 18px;
+  z-index: 2;
+  border: 1px solid rgba(255, 255, 255, .68);
+  pointer-events: none;
+}
+
+.cocktail-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background:
+    linear-gradient(90deg, rgba(58, 34, 15, .22), transparent 24%, transparent 72%, rgba(58, 34, 15, .12)),
+    linear-gradient(0deg, rgba(58, 34, 15, .22), transparent 25%, transparent 80%, rgba(255, 255, 255, .16));
+  pointer-events: none;
+}
+
+.cocktail-art img {
+  width: 100%;
+  height: 100%;
+  min-height: 720px;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(.95) contrast(1.02);
+  transform: scale(1.03);
+}
+
+.cocktail-showcase.mule .cocktail-art img {
+  object-position: center top;
+}
+
+.cocktail-showcase.spritz .cocktail-art img {
+  object-position: 46% top;
+}
+
+.cocktail-recipe-panel {
+  position: relative;
+  display: grid;
+  align-content: center;
+  padding: clamp(42px, 5.2vw, 82px);
+  overflow: hidden;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, .80), rgba(255, 255, 255, .64)),
+    var(--panel);
+  color: var(--ink);
+}
+
+.cocktail-recipe-panel::before {
+  content: "";
+  position: absolute;
+  right: -58px;
+  top: -58px;
+  width: 220px;
+  aspect-ratio: 1;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  opacity: .16;
+}
+
+.recipe-number {
+  margin: 0 0 14px;
+  color: var(--accent);
+  font-family: Montserrat, sans-serif;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .28em;
+}
+
+.recipe-kicker {
+  margin: 0 0 12px;
+  color: var(--accent);
+  font-family: Montserrat, sans-serif;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .17em;
+  text-transform: uppercase;
+}
+
+.cocktail-recipe-panel h2 {
+  margin: 0;
+  color: var(--deep);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(2.55rem, 5vw, 5.6rem);
+  font-weight: 800;
+  line-height: .92;
+  text-transform: uppercase;
+}
+
+.cocktail-subtitle {
+  margin: 14px 0 22px;
+  color: #b47725;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(1.25rem, 1.8vw, 1.9rem);
+  font-style: italic;
+  line-height: 1.2;
+}
+
+.recipe-description {
+  max-width: 680px;
+  margin: 0 0 32px;
+  color: #493724;
+  font-size: clamp(1rem, 1.14vw, 1.18rem);
+  line-height: 1.72;
+}
+
+.recipe-columns {
+  display: grid;
+  grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+  gap: clamp(22px, 3.6vw, 42px);
+  padding-top: 26px;
+  border-top: 1px solid rgba(76, 50, 30, .16);
+}
+
+.recipe-columns h3,
+.cocktail-style h3 {
+  margin: 0 0 14px;
+  color: var(--deep);
+  font-family: Montserrat, sans-serif;
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.icon-list,
+.style-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.icon-list li,
+.style-list li {
+  position: relative;
+  min-height: 32px;
+  margin: 10px 0;
+  padding-left: 44px;
+  color: #604935;
+  line-height: 1.46;
+}
+
+.icon-list li::before,
+.style-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: -.02em;
+  width: 27px;
+  height: 27px;
+  border: 1.5px solid currentColor;
+  border-radius: 50%;
+  color: var(--accent);
+  background: rgba(255, 255, 255, .46);
+}
+
+.icon-list li::after,
+.style-list li::after {
+  content: "";
+  position: absolute;
+  left: 7px;
+  top: 7px;
+  width: 14px;
+  height: 14px;
+  border: 2px solid var(--accent);
+  border-top: 0;
+  border-radius: 0 0 7px 7px;
+}
+
+.icon-list li[data-icon="bottle"]::after {
+  left: 10px;
+  top: 5px;
+  width: 7px;
+  height: 17px;
+  border: 1.8px solid var(--accent);
+  border-radius: 2px 2px 4px 4px;
+}
+
+.icon-list li[data-icon="glass"]::after {
+  left: 8px;
+  top: 5px;
+  width: 12px;
+  height: 15px;
+  border: 1.8px solid var(--accent);
+  border-top-width: 3px;
+  border-radius: 1px 1px 7px 7px;
+}
+
+.icon-list li[data-icon="fruit"]::after,
+.style-list li[data-icon="fruit"]::after {
+  left: 7px;
+  top: 7px;
+  width: 14px;
+  height: 14px;
+  border: 1.8px solid var(--accent);
+  border-radius: 50%;
+}
+
+.icon-list li[data-icon="slice"]::after,
+.icon-list li[data-icon="citrus"]::after {
+  left: 7px;
+  top: 8px;
+  width: 15px;
+  height: 9px;
+  border: 1.8px solid var(--accent);
+  border-top: 0;
+  border-radius: 0 0 15px 15px;
+  transform: rotate(-18deg);
+}
+
+.icon-list li[data-icon="leaf"]::after,
+.style-list li[data-icon="leaf"]::after {
+  left: 7px;
+  top: 7px;
+  width: 15px;
+  height: 10px;
+  border: 1.8px solid var(--accent);
+  border-radius: 100% 0 100% 0;
+  transform: rotate(-22deg);
+}
+
+.icon-list li[data-icon="ice"]::after {
+  left: 8px;
+  top: 8px;
+  width: 12px;
+  height: 12px;
+  border: 1.8px solid var(--accent);
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.icon-list li[data-icon="blend"]::after {
+  left: 8px;
+  top: 6px;
+  width: 12px;
+  height: 16px;
+  border: 1.8px solid var(--accent);
+  border-radius: 2px 2px 6px 6px;
+  transform: skewX(-8deg);
+}
+
+.icon-list li[data-icon="time"]::after {
+  left: 7px;
+  top: 7px;
+  width: 14px;
+  height: 14px;
+  border: 1.8px solid var(--accent);
+  border-radius: 50%;
+}
+
+.icon-list li[data-icon="spoon"]::after {
+  left: 12px;
+  top: 5px;
+  width: 3px;
+  height: 18px;
+  border: 0;
+  border-left: 2px solid var(--accent);
+  border-radius: 0;
+  transform: rotate(28deg);
+}
+
+.icon-list li[data-icon="bubble"]::after,
+.style-list li[data-icon="bubble"]::after {
+  left: 6px;
+  top: 6px;
+  width: 5px;
+  height: 5px;
+  border: 1.8px solid var(--accent);
+  border-radius: 50%;
+  box-shadow: 9px 3px 0 -1px transparent, 9px 3px 0 0 var(--accent), 5px 12px 0 -1px transparent, 5px 12px 0 0 var(--accent);
+}
+
+.style-list li[data-icon="drop"]::after {
+  left: 9px;
+  top: 6px;
+  width: 10px;
+  height: 15px;
+  border: 1.8px solid var(--accent);
+  border-radius: 10px 10px 10px 2px;
+  transform: rotate(45deg);
+}
+
+.style-list li[data-icon="percent"]::after {
+  content: "%";
+  left: 0;
+  top: -.02em;
+  width: 27px;
+  height: 27px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  color: var(--accent);
+  font-family: Montserrat, sans-serif;
+  font-size: .74rem;
+  font-weight: 900;
+  transform: none;
+}
+
+.style-list li[data-icon="spice"]::after {
+  left: 8px;
+  top: 6px;
+  width: 13px;
+  height: 13px;
+  border: 1.8px solid var(--accent);
+  border-radius: 45% 55% 55% 45%;
+  transform: rotate(-30deg);
+}
+
+.cocktail-style {
+  margin: 30px 0 0;
+  padding: 22px 22px 18px;
+  background: var(--accent);
+  color: #fff;
+}
+
+.cocktail-showcase.golden .cocktail-style {
+  background: #4f2d14;
+}
+
+.cocktail-showcase.mule .cocktail-style {
+  background: #7f8f33;
+}
+
+.cocktail-showcase.spritz .cocktail-style {
+  background: #b17128;
+}
+
+.cocktail-style h3 {
+  color: #fff;
+}
+
+.cocktail-style .style-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 18px;
+}
+
+.cocktail-style .style-list li {
+  margin: 0;
+  color: #fff;
+  font-weight: 700;
+}
+
+.cocktail-style .style-list li::before {
+  border-color: rgba(255, 255, 255, .78);
+  background: rgba(255, 255, 255, .14);
+}
+
+.cocktail-style .style-list li::after {
+  border-color: #fff;
+  color: #fff;
+}
+
+.cocktail-style .style-list li[data-icon="bubble"]::after {
+  box-shadow: 9px 3px 0 -1px transparent, 9px 3px 0 0 #fff, 5px 12px 0 -1px transparent, 5px 12px 0 0 #fff;
+}
+
+@media (max-width: 980px) {
+  .cocktail-hero {
+    min-height: 56vh;
+  }
+
+  .cocktail-showcase,
+  .cocktail-showcase:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+
+  .cocktail-showcase:nth-child(even) .cocktail-art {
+    order: 0;
+  }
+
+  .cocktail-art,
+  .cocktail-art img {
+    min-height: 560px;
+  }
+}
+
+@media (max-width: 640px) {
+  .cocktail-hero {
+    min-height: 58vh;
+  }
+
+  .cocktail-hero-copy {
+    width: calc(100% - 34px);
+    text-align: left;
+  }
+
+  .cocktail-intro-luxury {
+    padding-inline: 22px;
+    text-align: left;
+  }
+
+  .cocktail-intro-luxury::before,
+  .cocktail-intro-luxury::after {
+    display: none;
+  }
+
+  .cocktail-showcases {
+    padding-inline: 12px;
+  }
+
+  .cocktail-art,
+  .cocktail-art img {
+    min-height: 480px;
+  }
+
+  .cocktail-recipe-panel {
+    padding: 34px 24px 38px;
+  }
+
+  .recipe-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .cocktail-style .style-list {
+    grid-template-columns: 1fr;
+  }
+}

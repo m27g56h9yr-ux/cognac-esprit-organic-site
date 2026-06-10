@@ -47,6 +47,132 @@ const langNames = {
   sv: "Svenska"
 };
 
+const footerNewsletterCopy = {
+  fr: {
+    title: "Je souhaite recevoir de vos nouvelles de temps en temps.",
+    consentStart: "En renseignant votre adresse e-mail, vous acceptez de recevoir nos dernières actualités sur nos produits et vous prenez connaissance de nos ",
+    consentLink: "mentions légales",
+    consentEnd: ". Pour vous désinscrire, merci d'envoyer un e-mail à cognac@mdpierre.com.",
+    placeholder: "Laissez-nous votre e-mail",
+    submit: "S'inscrire",
+    instagram: "Instagram",
+    invalid: "Merci d’indiquer une adresse e-mail valide.",
+    success: "Votre logiciel e-mail va s’ouvrir pour confirmer l’inscription."
+  },
+  en: {
+    title: "I would like to hear from you from time to time.",
+    consentStart: "By entering your e-mail address, you agree to receive occasional news about our products and acknowledge our ",
+    consentLink: "legal notice",
+    consentEnd: ". To unsubscribe, please send an e-mail to cognac@mdpierre.com.",
+    placeholder: "Leave us your e-mail",
+    submit: "Subscribe",
+    instagram: "Instagram",
+    invalid: "Please enter a valid e-mail address.",
+    success: "Your e-mail app will open to confirm the subscription."
+  },
+  da: {
+    title: "Jeg vil gerne høre fra jer fra tid til anden.",
+    consentStart: "Ved at angive din e-mailadresse accepterer du at modtage nyheder om vores produkter og bekræfter vores ",
+    consentLink: "juridiske oplysninger",
+    consentEnd: ". For at afmelde dig, send venligst en e-mail til cognac@mdpierre.com.",
+    placeholder: "Skriv din e-mail",
+    submit: "Tilmeld",
+    instagram: "Instagram",
+    invalid: "Indtast venligst en gyldig e-mailadresse.",
+    success: "Dit e-mailprogram åbnes for at bekræfte tilmeldingen."
+  },
+  no: {
+    title: "Jeg vil gjerne høre fra dere fra tid til annen.",
+    consentStart: "Ved å skrive inn e-postadressen din samtykker du til å motta nyheter om produktene våre og bekrefter våre ",
+    consentLink: "juridiske opplysninger",
+    consentEnd: ". For å melde deg av, send en e-post til cognac@mdpierre.com.",
+    placeholder: "Skriv inn e-postadressen din",
+    submit: "Meld meg på",
+    instagram: "Instagram",
+    invalid: "Skriv inn en gyldig e-postadresse.",
+    success: "E-postprogrammet ditt åpnes for å bekrefte påmeldingen."
+  },
+  sv: {
+    title: "Jag vill gärna höra från er då och då.",
+    consentStart: "Genom att ange din e-postadress godkänner du att få nyheter om våra produkter och bekräftar vår ",
+    consentLink: "juridiska information",
+    consentEnd: ". För att avsluta prenumerationen, skicka ett e-postmeddelande till cognac@mdpierre.com.",
+    placeholder: "Ange din e-postadress",
+    submit: "Prenumerera",
+    instagram: "Instagram",
+    invalid: "Ange en giltig e-postadress.",
+    success: "Ditt e-postprogram öppnas för att bekräfta prenumerationen."
+  }
+};
+
+function getSiteRootUrl() {
+  const script = document.querySelector('script[src*="assets/js/main.js"]');
+  if (!script) return new URL("./", window.location.href).href;
+  const scriptUrl = new URL(script.getAttribute("src"), window.location.href).href;
+  return scriptUrl.split("/assets/js/")[0] + "/";
+}
+
+function renderFooterEnhancements(lang) {
+  const footer = document.querySelector(".site-footer");
+  const footerGrid = footer && footer.querySelector(".footer-grid");
+  if (!footerGrid) return;
+  const copy = footerNewsletterCopy[lang] || footerNewsletterCopy.en;
+  const rootUrl = getSiteRootUrl();
+  let instagramLink = footer.querySelector("[data-footer-instagram]");
+  const footerLinks = footer.querySelector(".footer-links");
+  if (!instagramLink && footerLinks) {
+    instagramLink = document.createElement("a");
+    instagramLink.href = "https://www.instagram.com/cognac_esprit_organic/";
+    instagramLink.target = "_blank";
+    instagramLink.rel = "noopener";
+    instagramLink.dataset.footerInstagram = "true";
+    footerLinks.appendChild(instagramLink);
+  }
+  if (instagramLink) instagramLink.textContent = copy.instagram;
+
+  let newsletter = footer.querySelector("[data-footer-newsletter]");
+  if (!newsletter) {
+    newsletter = document.createElement("section");
+    newsletter.className = "footer-newsletter";
+    newsletter.dataset.footerNewsletter = "true";
+    newsletter.innerHTML = `
+      <h2></h2>
+      <p class="footer-newsletter-consent"><span data-consent-start></span><a data-consent-link></a><span data-consent-end></span></p>
+      <form class="footer-newsletter-form" data-newsletter-form>
+        <label class="visually-hidden" for="newsletter-email">Adresse e-mail</label>
+        <input id="newsletter-email" name="email" type="email" autocomplete="email" required>
+        <button type="submit" aria-label="Envoyer">→</button>
+      </form>
+      <p class="footer-newsletter-status" data-newsletter-status aria-live="polite"></p>
+    `;
+    footerGrid.appendChild(newsletter);
+    const form = newsletter.querySelector("[data-newsletter-form]");
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const status = newsletter.querySelector("[data-newsletter-status]");
+      const input = form.querySelector('input[type="email"]');
+      const email = input.value.trim();
+      const activeCopy = footerNewsletterCopy[document.body.dataset.lang] || footerNewsletterCopy.en;
+      if (!input.checkValidity()) {
+        status.textContent = activeCopy.invalid;
+        input.focus();
+        return;
+      }
+      const subject = encodeURIComponent("Inscription newsletter Cognac Esprit Organic");
+      const body = encodeURIComponent(`Bonjour,\n\nJe souhaite recevoir vos nouvelles de temps en temps.\n\nAdresse e-mail : ${email}\n\nMerci.`);
+      status.textContent = activeCopy.success;
+      window.location.href = `mailto:cognac@mdpierre.com?subject=${subject}&body=${body}`;
+    });
+  }
+  newsletter.querySelector("h2").textContent = copy.title;
+  newsletter.querySelector("[data-consent-start]").textContent = copy.consentStart;
+  newsletter.querySelector("[data-consent-link]").textContent = copy.consentLink;
+  newsletter.querySelector("[data-consent-link]").href = `${rootUrl}mentions-legales.html`;
+  newsletter.querySelector("[data-consent-end]").textContent = copy.consentEnd;
+  newsletter.querySelector('input[type="email"]').placeholder = copy.placeholder;
+  newsletter.querySelector('button[type="submit"]').textContent = copy.submit;
+}
+
 const translations = {
   en: {
     "Accueil": "Home",
@@ -809,6 +935,7 @@ function setLanguage(lang) {
   document.documentElement.lang = lang;
   localStorage.setItem("ceo-lang", lang);
   applyTextTranslations(lang);
+  renderFooterEnhancements(lang);
   if (langToggle) {
     langToggle.textContent = lang.toUpperCase();
     langToggle.setAttribute("aria-label", `Changer de langue. Langue actuelle : ${langNames[lang]}`);

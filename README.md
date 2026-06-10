@@ -35,6 +35,7 @@ Avant la mise en ligne définitive, remplacer ces réglages par `index,follow` e
 - JavaScript léger dans `assets/js/main.js` ;
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
+- Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
 
 ## Ancien site WordPress
 
@@ -55,6 +56,20 @@ Copier à la racine de l'hébergement OVH :
 - le dossier `assets/` ;
 - `robots.txt` ;
 - `sitemap.xml` ;
-- `llms.txt`.
+- `llms.txt` ;
+- `newsletter.php` ;
+- le dossier `newsletter-data/`.
 
 Ne pas envoyer `ancien-site-wordpress/`, les dossiers de travail ou les archives WordPress.
+
+## Inscriptions newsletter
+
+Sur OVH, le formulaire du pied de page enregistre automatiquement chaque adresse e-mail dans :
+
+```text
+newsletter-data/subscriptions.csv
+```
+
+Chaque ligne contient la date d'inscription, l'adresse e-mail, la langue, le marché détecté et la page d'inscription.
+
+Le dossier `newsletter-data/` contient un fichier `.htaccess` pour empêcher la lecture publique du fichier CSV. GitHub Pages ne peut pas enregistrer les inscriptions, car il héberge uniquement des fichiers statiques et n'exécute pas PHP.

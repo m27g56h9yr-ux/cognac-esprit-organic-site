@@ -52,56 +52,66 @@ const footerNewsletterCopy = {
     title: "Je souhaite recevoir de vos nouvelles de temps en temps.",
     consentStart: "En renseignant votre adresse e-mail, vous acceptez de recevoir nos dernières actualités sur nos produits et vous prenez connaissance de nos ",
     consentLink: "mentions légales",
-    consentEnd: ". Pour vous désinscrire, merci d'envoyer un e-mail à cognac@mdpierre.com.",
+    consentEnd: ".",
     placeholder: "Laissez-nous votre e-mail",
     submit: "S'inscrire",
     instagram: "Instagram",
     invalid: "Merci d’indiquer une adresse e-mail valide.",
-    success: "Votre logiciel e-mail va s’ouvrir pour confirmer l’inscription."
+    loading: "Enregistrement en cours...",
+    success: "Merci, votre adresse est enregistrée.",
+    error: "L’enregistrement automatique sera actif après mise en ligne sur OVH."
   },
   en: {
     title: "I would like to hear from you from time to time.",
     consentStart: "By entering your e-mail address, you agree to receive occasional news about our products and acknowledge our ",
     consentLink: "legal notice",
-    consentEnd: ". To unsubscribe, please send an e-mail to cognac@mdpierre.com.",
+    consentEnd: ".",
     placeholder: "Leave us your e-mail",
     submit: "Subscribe",
     instagram: "Instagram",
     invalid: "Please enter a valid e-mail address.",
-    success: "Your e-mail app will open to confirm the subscription."
+    loading: "Saving...",
+    success: "Thank you, your e-mail address has been saved.",
+    error: "Automatic registration will be active after the OVH upload."
   },
   da: {
     title: "Jeg vil gerne høre fra jer fra tid til anden.",
     consentStart: "Ved at angive din e-mailadresse accepterer du at modtage nyheder om vores produkter og bekræfter vores ",
     consentLink: "juridiske oplysninger",
-    consentEnd: ". For at afmelde dig, send venligst en e-mail til cognac@mdpierre.com.",
+    consentEnd: ".",
     placeholder: "Skriv din e-mail",
     submit: "Tilmeld",
     instagram: "Instagram",
     invalid: "Indtast venligst en gyldig e-mailadresse.",
-    success: "Dit e-mailprogram åbnes for at bekræfte tilmeldingen."
+    loading: "Gemmer...",
+    success: "Tak, din e-mailadresse er gemt.",
+    error: "Automatisk registrering bliver aktiv efter upload til OVH."
   },
   no: {
     title: "Jeg vil gjerne høre fra dere fra tid til annen.",
     consentStart: "Ved å skrive inn e-postadressen din samtykker du til å motta nyheter om produktene våre og bekrefter våre ",
     consentLink: "juridiske opplysninger",
-    consentEnd: ". For å melde deg av, send en e-post til cognac@mdpierre.com.",
+    consentEnd: ".",
     placeholder: "Skriv inn e-postadressen din",
     submit: "Meld meg på",
     instagram: "Instagram",
     invalid: "Skriv inn en gyldig e-postadresse.",
-    success: "E-postprogrammet ditt åpnes for å bekrefte påmeldingen."
+    loading: "Lagrer...",
+    success: "Takk, e-postadressen din er lagret.",
+    error: "Automatisk registrering blir aktiv etter opplasting til OVH."
   },
   sv: {
     title: "Jag vill gärna höra från er då och då.",
     consentStart: "Genom att ange din e-postadress godkänner du att få nyheter om våra produkter och bekräftar vår ",
     consentLink: "juridiska information",
-    consentEnd: ". För att avsluta prenumerationen, skicka ett e-postmeddelande till cognac@mdpierre.com.",
+    consentEnd: ".",
     placeholder: "Ange din e-postadress",
     submit: "Prenumerera",
     instagram: "Instagram",
     invalid: "Ange en giltig e-postadress.",
-    success: "Ditt e-postprogram öppnas för att bekräfta prenumerationen."
+    loading: "Sparar...",
+    success: "Tack, din e-postadress har sparats.",
+    error: "Automatisk registrering blir aktiv efter uppladdning till OVH."
   }
 };
 
@@ -125,10 +135,21 @@ function renderFooterEnhancements(lang) {
     instagramLink.href = "https://www.instagram.com/cognac_esprit_organic/";
     instagramLink.target = "_blank";
     instagramLink.rel = "noopener";
+    instagramLink.className = "footer-social-link";
     instagramLink.dataset.footerInstagram = "true";
     footerLinks.appendChild(instagramLink);
   }
-  if (instagramLink) instagramLink.textContent = copy.instagram;
+  if (instagramLink) {
+    instagramLink.innerHTML = `
+      <svg aria-hidden="true" viewBox="0 0 24 24" focusable="false">
+        <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+        <circle cx="12" cy="12" r="4"></circle>
+        <circle cx="17.2" cy="6.8" r="1"></circle>
+      </svg>
+      <span></span>
+    `;
+    instagramLink.querySelector("span").textContent = copy.instagram;
+  }
 
   let newsletter = footer.querySelector("[data-footer-newsletter]");
   if (!newsletter) {
@@ -147,10 +168,11 @@ function renderFooterEnhancements(lang) {
     `;
     footerGrid.appendChild(newsletter);
     const form = newsletter.querySelector("[data-newsletter-form]");
-    form.addEventListener("submit", (event) => {
+    form.addEventListener("submit", async (event) => {
       event.preventDefault();
       const status = newsletter.querySelector("[data-newsletter-status]");
       const input = form.querySelector('input[type="email"]');
+      const button = form.querySelector('button[type="submit"]');
       const email = input.value.trim();
       const activeCopy = footerNewsletterCopy[document.body.dataset.lang] || footerNewsletterCopy.en;
       if (!input.checkValidity()) {
@@ -158,10 +180,28 @@ function renderFooterEnhancements(lang) {
         input.focus();
         return;
       }
-      const subject = encodeURIComponent("Inscription newsletter Cognac Esprit Organic");
-      const body = encodeURIComponent(`Bonjour,\n\nJe souhaite recevoir vos nouvelles de temps en temps.\n\nAdresse e-mail : ${email}\n\nMerci.`);
-      status.textContent = activeCopy.success;
-      window.location.href = `mailto:cognac@mdpierre.com?subject=${subject}&body=${body}`;
+      status.textContent = activeCopy.loading;
+      button.disabled = true;
+      try {
+        const response = await fetch(`${getSiteRootUrl()}newsletter.php`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            language: document.body.dataset.lang || "fr",
+            market: document.body.dataset.market || "",
+            page: window.location.href
+          })
+        });
+        const result = await response.json().catch(() => ({}));
+        if (!response.ok || result.ok !== true) throw new Error("newsletter");
+        input.value = "";
+        status.textContent = activeCopy.success;
+      } catch (error) {
+        status.textContent = activeCopy.error;
+      } finally {
+        button.disabled = false;
+      }
     });
   }
   newsletter.querySelector("h2").textContent = copy.title;

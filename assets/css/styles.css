@@ -23,6 +23,9 @@ body[data-lang="en"] [data-fr],
 body[data-lang="da"] [data-en],
 body[data-lang="no"] [data-en],
 body[data-lang="sv"] [data-en] { display: none !important; }
+
+.norway-buy-link { display: none !important; }
+body[data-lang="no"] .norway-buy-link { display: inline-flex !important; }
 a { color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--ink); color: var(--white); padding: 10px 14px; }
@@ -1152,6 +1155,28 @@ p { margin: 18px 0 0; }
   margin-top: 14px !important;
   font-size: .8rem !important;
   line-height: 1.6;
+}
+.norway-buy-link {
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin-top: 18px;
+  padding: 12px 18px;
+  border: 1px solid rgba(255,255,255,.68);
+  color: #fff;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+.norway-buy-link:hover,
+.norway-buy-link:focus-visible {
+  background: #fff;
+  border-color: #fff;
+  color: var(--product-tone);
 }
 .product-medals {
   display: flex;

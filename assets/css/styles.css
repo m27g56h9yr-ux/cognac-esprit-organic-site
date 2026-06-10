@@ -25,9 +25,11 @@ body[data-lang="no"] [data-en],
 body[data-lang="sv"] [data-en] { display: none !important; }
 
 .norway-buy-link,
-.denmark-buy-link { display: none !important; }
+.denmark-buy-link,
+.quebec-buy-link { display: none !important; }
 body[data-lang="no"] .norway-buy-link { display: inline-flex !important; }
 body[data-lang="da"] .denmark-buy-link { display: inline-flex !important; }
+body[data-market="qc"] .quebec-buy-link { display: inline-flex !important; }
 a { color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--ink); color: var(--white); padding: 10px 14px; }
@@ -1159,7 +1161,8 @@ p { margin: 18px 0 0; }
   line-height: 1.6;
 }
 .norway-buy-link,
-.denmark-buy-link {
+.denmark-buy-link,
+.quebec-buy-link {
   align-items: center;
   justify-content: center;
   width: fit-content;
@@ -1178,7 +1181,9 @@ p { margin: 18px 0 0; }
 .norway-buy-link:hover,
 .norway-buy-link:focus-visible,
 .denmark-buy-link:hover,
-.denmark-buy-link:focus-visible {
+.denmark-buy-link:focus-visible,
+.quebec-buy-link:hover,
+.quebec-buy-link:focus-visible {
   background: #fff;
   border-color: #fff;
   color: var(--product-tone);

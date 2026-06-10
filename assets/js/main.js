@@ -27,7 +27,18 @@ function detectVisitorLanguage() {
   }
   return "en";
 }
+function detectVisitorMarket() {
+  const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+  const hasFrenchCanadaLocale = locales.filter(Boolean).some((locale) => {
+    const parts = locale.replace("_", "-").split("-");
+    const language = (parts[0] || "").toLowerCase();
+    const country = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
+    return language === "fr" && country === "CA";
+  });
+  return hasFrenchCanadaLocale ? "qc" : "";
+}
 const initialLang = savedLang || detectVisitorLanguage();
+const visitorMarket = detectVisitorMarket();
 const langNames = {
   fr: "Français",
   en: "English",
@@ -794,6 +805,7 @@ function applyTextTranslations(lang) {
 function setLanguage(lang) {
   if (!supportedLangs.includes(lang)) lang = "fr";
   document.body.dataset.lang = lang;
+  document.body.dataset.market = visitorMarket;
   document.documentElement.lang = lang;
   localStorage.setItem("ceo-lang", lang);
   applyTextTranslations(lang);

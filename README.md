@@ -36,6 +36,16 @@ Avant la mise en ligne définitive, remplacer ces réglages par `index,follow` e
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
 
+## Ancien site WordPress
+
+Les archives de l'ancien site WordPress sont rangées dans `ancien-site-wordpress/`.
+
+- `ancien-site-wordpress/archives/` contient les fichiers `.zip.part-*` à réassembler si nécessaire ;
+- `ancien-site-wordpress/README-CODEX-site-ec.md` explique le contenu du pack sécurisé ;
+- `ancien-site-wordpress/README-REASSEMBLAGE-GITHUB-site-ec.md` explique comment reconstituer les archives.
+
+Les images récupérées de l'ancien site et utilisées par le nouveau site restent dans `assets/img/old-site/`, car elles servent directement aux pages publiées.
+
 ## Mise en ligne OVH
 
 Copier à la racine de l'hébergement OVH :
@@ -47,4 +57,4 @@ Copier à la racine de l'hébergement OVH :
 - `sitemap.xml` ;
 - `llms.txt`.
 
-Ne pas envoyer les dossiers de travail, les archives WordPress ou les fichiers de l'ancien site.
+Ne pas envoyer `ancien-site-wordpress/`, les dossiers de travail ou les archives WordPress.

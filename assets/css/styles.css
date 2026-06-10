@@ -18,7 +18,11 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; color: var(--ink); background: var(--paper); font-family: Montserrat, Arial, sans-serif; line-height: 1.62; }
-body[data-lang="fr"] [data-en], body[data-lang="en"] [data-fr] { display: none !important; }
+body[data-lang="fr"] [data-en],
+body[data-lang="en"] [data-fr],
+body[data-lang="da"] [data-en],
+body[data-lang="no"] [data-en],
+body[data-lang="sv"] [data-en] { display: none !important; }
 a { color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--ink); color: var(--white); padding: 10px 14px; }

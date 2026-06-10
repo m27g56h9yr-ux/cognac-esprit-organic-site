@@ -1,52 +1,670 @@
-const navToggle=document.querySelector('[data-nav-toggle]');
-const navLinks=document.querySelector('[data-nav-links]');
-const langToggle=document.querySelector('[data-lang-toggle]');
-const langs=['fr','en','da','no','sv'];
-const names={fr:'Français',en:'English',da:'Dansk',no:'Norsk',sv:'Svenska'};
-const browserPrefix=navigator.language?navigator.language.toLowerCase().slice(0,2):'';
-const savedLang=localStorage.getItem('ceo-lang');
-const initialLang=savedLang||document.documentElement.dataset.defaultLang||(langs.includes(browserPrefix)?browserPrefix:'fr');
-const i18n={
-  en:{
-    'Accueil':'Home','Aller au contenu':'Skip to content','La gamme':'The range','Gamme':'Range','La maison':'The house','Notre démarche':'Our approach','La production':'Production','Léopold et Fanny':'Léopold and Fanny','Visiter':'Visit','Menu':'Menu','Cocktails':'Cocktails','Contact':'Contact','Mentions légales':'Legal notice','Valeurs nutritionnelles':'Nutritional values','Téléphone':'Phone','Adresse':'Address','Visites':'Visits','Horaires':'Opening times','Ouvrir dans Google Maps':'Open in Google Maps','Toute la nature de nos Cognacs':'All the nature of our Cognacs','Organique et sans complexe':'Organic and uncomplicated','Accompagner nos Cognacs':'Pair our Cognacs','Laisser courir l\'inspiration':'Let inspiration flow','Bienvenue sur nos terres':'Welcome to our land','Le cycle naturel':'The natural cycle','Travailler dans la durabilité':'Working sustainably','L\'esprit organic':'The Organic spirit','Notre histoire':'Our story','Maîtriser & laisser faire':'Mastering & letting nature work','Travailler dans le bon sens':'Working in the right direction','Cultiver pour transmettre':'Cultivating to transmit','est né d’une volonté':'was born from a desire','de transmission dans laquelle':'to transmit, carried by','mettent tout leur cœur,':'with all their heart,','leur énergie':'energy','et leur passion.':'and passion.','Cognac biologique familial, naturel et premium.':'Family, natural and premium organic Cognac.','Cognac biologique familial, naturel, premium et indépendant.':'Family, natural, premium and independent organic Cognac.','L\'abus d\'alcool est dangereux pour la santé. A consommer avec modération.':'Alcohol abuse is dangerous for your health. Drink responsibly.','Venez sur le territoire des Fins Bois':'Visit the Fins Bois area','Du lundi au vendredi, 10h-12h ou 14h-17h.':'Monday to Friday, 10am-12pm or 2pm-5pm.','Durée : 1h.':'Duration: 1 hour.','Maximum 10 personnes par visite.':'Maximum 10 people per visit.','Contacter Cognac Esprit Organic':'Contact Cognac Esprit Organic','Questions utiles pour Google, les visiteurs et les agents IA.':'Useful questions for Google, visitors and AI agents.','Quels produits Cognac Esprit Organic sont disponibles ?':'Which Cognac Esprit Organic products are available?','Quels sont les horaires de visite ?':'What are the visiting hours?','Quels marchés export sont visés ?':'Which export markets are targeted?','Où se situe Cognac Esprit Organic ?':'Where is Cognac Esprit Organic located?','Le site est-il indexable pendant la préproduction ?':'Is the site indexable during pre-production?','Non. La première version contient temporairement noindex,nofollow.':'No. The first version temporarily contains noindex,nofollow.','Une page B2B export pour les marchés Europe, USA, Canada.':'A B2B export page for Europe, USA and Canada.','Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.':'A dedicated page for importers, wine merchants, hospitality, bars, hotels and organic retail networks.','Demander des informations export':'Request export information','Documents à préparer':'Documents to prepare','Fiches produits professionnelles.':'Professional product sheets.','Photos bouteilles et gamme.':'Bottle and range photographs.','Informations réglementaires et nutritionnelles en HTML accessible.':'Regulatory and nutritional information in accessible HTML.','Tableaux accessibles à compléter':'Accessible tables to complete','Valeurs nutritionnelles à compléter par produit':'Nutritional values to complete by product','Statut':'Status','À intégrer depuis les données validées.':'To be added from approved data.','Photos et visuels récupérés de l\'ancien site':'Images recovered from the former website','Recettes cocktails':'Cocktail recipes','Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.':'Three fresh creations around Cognac and Pineau Esprit Organic.','L’heure dorée':'The Golden Hour','Fraîcheur et élégance du Bio.':'Freshness and organic elegance.','Ingrédients':'Ingredients','Préparation':'Preparation','Style de dégustation':'Tasting style','Désaltérant':'Refreshing','Frais':'Fresh','Fruité':'Fruity','Pétillant':'Sparkling','Tonique':'Tonic','Épicé':'Spicy','Quelques glaçons':'A few ice cubes','Eau pétillante':'Sparkling water','Naturellement rafraîchissant.':'Naturally refreshing.','L’apéritif tendance.':'The contemporary aperitif.','Dégustation':'Tasting','Notes sensorielles':'Sensory notes','Bouche :':'Mouth:','Couleur :':'Colour:','Nez :':'Nose:','Palais :':'Palate:','Finale :':'Finish:','Prendre conscience, mieux produire':'Becoming aware, producing better','Pour mieux consommer, préserver et transmettre.':'To consume better, preserve and pass on.','Déjà 20 ans de production durable':'Already 20 years of sustainable production','Une gamme biologique':'An organic range','Un savoir-faire générationnel':'Generational know-how','Un Cru, les Fins Bois':'A cru: Fins Bois','Respect de nos terres et culture de la vigne':'Respect for our land and vine growing','Distillation':'Distillation','Élevage soigné et suivi':'Careful, attentive ageing','L’art subtil de l’assemblage':'The subtle art of blending','La mise en bouteille':'Bottling','Travailler d’une même passion':'Working with the same passion'
+const navToggle = document.querySelector("[data-nav-toggle]");
+const navLinks = document.querySelector("[data-nav-links]");
+const langToggle = document.querySelector("[data-lang-toggle]");
+const savedLang = localStorage.getItem("ceo-lang");
+const supportedLangs = ["fr", "en", "da", "no", "sv"];
+const browserPrefix = navigator.language ? navigator.language.toLowerCase().slice(0, 2) : "";
+const browserLang = supportedLangs.includes(browserPrefix) ? browserPrefix : "fr";
+const initialLang = savedLang || document.documentElement.dataset.defaultLang || browserLang;
+const langNames = {
+  fr: "Français",
+  en: "English",
+  da: "Dansk",
+  no: "Norsk",
+  sv: "Svenska"
+};
+
+const translations = {
+  en: {
+    "Accueil": "Home",
+    "Aller au contenu": "Skip to content",
+    "La gamme": "The range",
+    "Gamme": "Range",
+    "La maison": "The house",
+    "Notre démarche": "Our approach",
+    "La production": "Production",
+    "Léopold et Fanny": "Léopold and Fanny",
+    "Visiter": "Visit",
+    "Menu": "Menu",
+    "Cocktails": "Cocktails",
+    "Contact": "Contact",
+    "Mentions légales": "Legal notice",
+    "Valeurs nutritionnelles": "Nutritional values",
+    "Toute la nature de nos Cognacs": "All the nature of our Cognacs",
+    "Organique et sans complexe": "Organic and uncomplicated",
+    "Accompagner nos Cognacs": "Pair our Cognacs",
+    "Laisser courir l'inspiration": "Let inspiration flow",
+    "Laisser courir l’inspiration avec des recettes fraîches, naturelles et faciles à servir.": "Let inspiration flow with fresh, natural recipes that are easy to serve.",
+    "Bienvenue sur nos terres": "Welcome to our land",
+    "Depuis 20 ans, Léopold Croizet conduit son vignoble en agriculture biologique. Il distille, élève et met en bouteille sa production à la propriété.": "For 20 years, Léopold Croizet has managed his vineyard organically. He distils, ages and bottles production at the estate.",
+    "Le cycle naturel": "The natural cycle",
+    "Travailler dans la durabilité": "Working sustainably",
+    "L'esprit organic": "The Organic spirit",
+    "Notre histoire": "Our story",
+    "Maîtriser & laisser faire": "Mastering & letting nature work",
+    "Travailler dans le bon sens": "Working in the right direction",
+    "Cultiver pour transmettre": "Cultivating to transmit",
+    "est né d’une volonté": "was born from a desire",
+    "de transmission dans laquelle": "to transmit, carried by",
+    "mettent tout leur cœur,": "with all their heart,",
+    "leur énergie": "energy",
+    "et leur passion.": "and passion.",
+    "L'abus d'alcool est dangereux pour la santé. A consommer avec modération.": "Alcohol abuse is dangerous for your health. Drink responsibly.",
+    "Cognac biologique familial, naturel et premium.": "Family, natural and premium organic Cognac.",
+    "Cognac biologique familial, naturel, premium et indépendant.": "Family, natural, premium and independent organic Cognac.",
+    "Une page B2B export pour les marchés Europe, USA, Canada.": "A B2B export page for Europe, USA and Canada.",
+    "Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.": "A dedicated page for importers, wine merchants, hospitality, bars, hotels and organic retail networks.",
+    "Demander des informations export": "Request export information",
+    "Documents à préparer": "Documents to prepare",
+    "Fiches produits professionnelles.": "Professional product sheets.",
+    "Photos bouteilles et gamme.": "Bottle and range photographs.",
+    "Informations réglementaires et nutritionnelles en HTML accessible.": "Regulatory and nutritional information in accessible HTML.",
+    "Venez sur le territoire des Fins Bois": "Visit the Fins Bois area",
+    "Venez découvrir une petite distillerie nichée sur le territoire des Fins Bois. Nous serons heureux de vous accueillir et de vous faire découvrir quelques secrets de production et de nouvelles expériences gustatives.": "Come and discover a small distillery in the Fins Bois area. We will be pleased to welcome you and share a few production secrets and tasting experiences.",
+    "Horaires": "Opening times",
+    "Du lundi au vendredi, 10h-12h ou 14h-17h.": "Monday to Friday, 10am-12pm or 2pm-5pm.",
+    "Durée : 1h.": "Duration: 1 hour.",
+    "Maximum 10 personnes par visite.": "Maximum 10 people per visit.",
+    "Ouvrir dans Google Maps": "Open in Google Maps",
+    "Email, téléphone, adresse et informations de visite validées.": "Email, phone, address and approved visit information.",
+    "Contacter Cognac Esprit Organic": "Contact Cognac Esprit Organic",
+    "Téléphone": "Phone",
+    "Adresse": "Address",
+    "Visites": "Visits",
+    "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.",
+    "Questions utiles pour Google, les visiteurs et les agents IA.": "Useful questions for Google, visitors and AI agents.",
+    "Quels produits Cognac Esprit Organic sont disponibles ?": "Which Cognac Esprit Organic products are available?",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask and Pineau.",
+    "Quels sont les horaires de visite ?": "What are the visiting hours?",
+    "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Visits are available Monday to Friday, 10am-12pm or 2pm-5pm, duration 1 hour, maximum 10 people.",
+    "Quels marchés export sont visés ?": "Which export markets are targeted?",
+    "La formulation validée est : Europe, USA, Canada.": "The approved wording is: Europe, USA, Canada.",
+    "Où se situe Cognac Esprit Organic ?": "Where is Cognac Esprit Organic located?",
+    "Le site est-il indexable pendant la préproduction ?": "Is the site indexable during pre-production?",
+    "Non. La première version contient temporairement noindex,nofollow.": "No. The first version temporarily contains noindex,nofollow.",
+    "Tableaux accessibles à compléter": "Accessible tables to complete",
+    "Valeurs nutritionnelles à compléter par produit": "Nutritional values to complete by product",
+    "Statut": "Status",
+    "À intégrer depuis les données validées.": "To be added from approved data.",
+    "Photos et visuels récupérés de l'ancien site": "Images recovered from the former website",
+    "Cette galerie rassemble les visuels utiles récupérés depuis l'ancien site WordPress. Elle sert de réserve propre pour reconstruire les pages sans dépendre de WordPress.": "This gallery gathers useful visuals recovered from the former WordPress website. It provides a clean reserve for rebuilding pages without depending on WordPress.",
+    "Recettes cocktails": "Cocktail recipes",
+    "Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.": "Three fresh creations around Cognac and Pineau Esprit Organic.",
+    "Une page pensée comme un carnet d’inspiration : les fiches visuelles ouvrent l’appétit, les recettes donnent l’essentiel, sans surcharger l’expérience.": "A page designed like an inspiration notebook: the visuals create desire, the recipes give the essentials without overloading the experience.",
+    "L’heure dorée": "The Golden Hour",
+    "Fraîcheur et élégance du Bio.": "Freshness and organic elegance.",
+    "Un cocktail fruité et végétal, aux notes douces de melon charentais, rehaussé par le Cognac Esprit Organic. Très désaltérant, faible en alcool, parfait pour l’été.": "A fruity, vegetal cocktail with gentle Charentais melon notes, lifted by Cognac Esprit Organic. Very refreshing, low in alcohol, perfect for summer.",
+    "Ingrédients": "Ingredients",
+    "Préparation": "Preparation",
+    "Style de dégustation": "Tasting style",
+    "Désaltérant": "Refreshing",
+    "Frais": "Fresh",
+    "Fruité": "Fruity",
+    "Pétillant": "Sparkling",
+    "Tonique": "Tonic",
+    "Épicé": "Spicy",
+    "Quelques glaçons": "A few ice cubes",
+    "1 rondelle de citron vert": "1 lime slice",
+    "1 trait de citron vert": "1 dash of lime",
+    "1,5 cl jus de citron vert frais": "1.5 cl fresh lime juice",
+    "4 rondelles de concombre": "4 cucumber slices",
+    "6 feuilles de menthe fraîche": "6 fresh mint leaves",
+    "Eau pétillante": "Sparkling water",
+    "Placer tous les ingrédients dans un blender avec quelques glaçons.": "Place all ingredients in a blender with a few ice cubes.",
+    "Mixer 15 secondes.": "Blend for 15 seconds.",
+    "Servir immédiatement dans un verre rempli de glaçons. Décorer d’une feuille de menthe.": "Serve immediately in a glass filled with ice. Garnish with a mint leaf.",
+    "Remplir une timbale cuivrée de glaçons.": "Fill a copper mug with ice.",
+    "Verser le Cognac Foundation VS.": "Pour in the Cognac Foundation VS.",
+    "Ajouter le jus de citron vert.": "Add the fresh lime juice.",
+    "Compléter avec la Ginger Beer.": "Top up with Ginger Beer.",
+    "Mélanger délicatement.": "Stir gently.",
+    "Décorer d’une rondelle de citron vert.": "Garnish with a lime slice.",
+    "Mixer le melon charentais avec le Pineau blanc, le Pineau rouge et le Cognac VSOP.": "Blend the Charentais melon with the white Pineau, red Pineau and Cognac VSOP.",
+    "Verser dans un verre rempli de glaçons.": "Pour into a glass filled with ice.",
+    "Compléter avec de l’eau pétillante.": "Top up with sparkling water.",
+    "Mélanger délicatement et déguster aussitôt.": "Stir gently and enjoy immediately.",
+    "La fraîcheur du citron vert rencontre les notes épicées du gingembre et le caractère fruité du Cognac Esprit Organic Foundation VS.": "Fresh lime meets spicy ginger notes and the fruity character of Cognac Esprit Organic Foundation VS.",
+    "Naturellement rafraîchissant.": "Naturally refreshing.",
+    "L’alliance fruitée et pétillante de nos Pineaux et du Cognac VSOP, rehaussée par la douceur du melon charentais. Frais, léger et irrésistiblement estival.": "The fruity, sparkling alliance of our Pineaux and Cognac VSOP, lifted by the sweetness of Charentais melon. Fresh, light and irresistibly summery.",
+    "L’apéritif tendance.": "The contemporary aperitif.",
+    "Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit.": "A young, fruity and expressive organic Cognac with a direct fruit-forward profile.",
+    "Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.": "A rounded and generous organic Cognac, expressing candied fruit, warm oak and spice.",
+    "Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.": "A balanced organic Cognac with length, peppery notes, dried fruit and a fresh finish.",
+    "Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.": "A structured and generous organic Cognac with black cherry, dried flowers and rancio notes.",
+    "Premier XXO en agriculture biologique, doux, structuré et très fruité.": "Presented as the first XXO in organic agriculture, soft, structured and fruit-forward.",
+    "Édition limitée, 51 %, sélectionnée par Fanny.": "Limited edition, 51%, selected by Fanny.",
+    "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Organic Pineau des Charentes made with Colombard and Ugni Blanc, with no added sulphites.",
+    "Dégustation": "Tasting",
+    "Notes sensorielles": "Sensory notes",
+    "Bouche :": "Mouth:",
+    "Couleur :": "Colour:",
+    "Nez :": "Nose:",
+    "Palais :": "Palate:",
+    "Finale :": "Finish:",
+    "Prendre conscience, mieux produire": "Becoming aware, producing better",
+    "Pour mieux consommer, préserver et transmettre.": "To consume better, preserve and pass on.",
+    "Déjà 20 ans de production durable": "Already 20 years of sustainable production",
+    "Une gamme biologique": "An organic range",
+    "Un savoir-faire générationnel": "Generational know-how",
+    "Il est là, depuis plus de 20 ans.": "It has been here for more than 20 years.",
+    "Un Cru, les Fins Bois": "A cru: Fins Bois",
+    "Respect de nos terres et culture de la vigne": "Respect for our land and vine growing",
+    "Distillation": "Distillation",
+    "Élevage soigné et suivi": "Careful, attentive ageing",
+    "L’art subtil de l’assemblage": "The subtle art of blending",
+    "La mise en bouteille": "Bottling",
+    "Travailler d’une même passion": "Working with the same passion",
+    "Un héritage passionnant mis au profit des générations futures.": "A passionate heritage serving future generations."
   },
-  da:{
-    'Accueil':'Forside','Aller au contenu':'Gå til indhold','La gamme':'Sortimentet','Gamme':'Sortiment','La maison':'Huset','Notre démarche':'Vores tilgang','La production':'Produktionen','Léopold et Fanny':'Léopold og Fanny','Visiter':'Besøg','Menu':'Menu','Cocktails':'Cocktails','Contact':'Kontakt','Mentions légales':'Juridiske oplysninger','Valeurs nutritionnelles':'Næringsværdier','Téléphone':'Telefon','Adresse':'Adresse','Visites':'Besøg','Horaires':'Åbningstider','Ouvrir dans Google Maps':'Åbn i Google Maps','Toute la nature de nos Cognacs':'Hele naturen i vores Cognac','Organique et sans complexe':'Økologisk og ukompliceret','Accompagner nos Cognacs':'Nyd vores Cognacs i cocktails','Laisser courir l\'inspiration':'Lad inspirationen flyde','Bienvenue sur nos terres':'Velkommen til vores jord','Le cycle naturel':'Den naturlige cyklus','Travailler dans la durabilité':'Arbejde bæredygtigt','L\'esprit organic':'Den organiske ånd','Notre histoire':'Vores historie','Maîtriser & laisser faire':'Mestre og lade naturen gøre sit','Travailler dans le bon sens':'Arbejde i den rigtige retning','Cultiver pour transmettre':'Dyrke for at give videre','est né d’une volonté':'blev født af et ønske','de transmission dans laquelle':'om at give videre, hvor','mettent tout leur cœur,':'lægger hele deres hjerte,','leur énergie':'deres energi','et leur passion.':'og deres passion.','Cognac biologique familial, naturel et premium.':'Familiedrevet, naturlig og premium økologisk Cognac.','Cognac biologique familial, naturel, premium et indépendant.':'Familiedrevet, naturlig, premium og uafhængig økologisk Cognac.','L\'abus d\'alcool est dangereux pour la santé. A consommer avec modération.':'Alkoholmisbrug er sundhedsskadeligt. Nydes med måde.','Venez sur le territoire des Fins Bois':'Besøg Fins Bois-området','Du lundi au vendredi, 10h-12h ou 14h-17h.':'Mandag til fredag, 10-12 eller 14-17.','Durée : 1h.':'Varighed: 1 time.','Maximum 10 personnes par visite.':'Maksimalt 10 personer pr. besøg.','Contacter Cognac Esprit Organic':'Kontakt Cognac Esprit Organic','Questions utiles pour Google, les visiteurs et les agents IA.':'Nyttige spørgsmål for Google, besøgende og AI-agenter.','Quels produits Cognac Esprit Organic sont disponibles ?':'Hvilke Cognac Esprit Organic-produkter er tilgængelige?','Quels sont les horaires de visite ?':'Hvad er besøgstiderne?','Quels marchés export sont visés ?':'Hvilke eksportmarkeder er målrettet?','Où se situe Cognac Esprit Organic ?':'Hvor ligger Cognac Esprit Organic?','Le site est-il indexable pendant la préproduction ?':'Kan siden indekseres under præproduktion?','Non. La première version contient temporairement noindex,nofollow.':'Nej. Den første version indeholder midlertidigt noindex,nofollow.','Une page B2B export pour les marchés Europe, USA, Canada.':'En B2B-eksportside for Europa, USA og Canada.','Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.':'En side for importører, vinhandlere, restauranter, barer, hoteller og økologiske netværk.','Demander des informations export':'Bed om eksportinformation','Documents à préparer':'Dokumenter der skal forberedes','Fiches produits professionnelles.':'Professionelle produktark.','Photos bouteilles et gamme.':'Fotos af flasker og sortiment.','Informations réglementaires et nutritionnelles en HTML accessible.':'Regulatoriske oplysninger og næringsoplysninger i tilgængelig HTML.','Tableaux accessibles à compléter':'Tilgængelige tabeller der skal udfyldes','Valeurs nutritionnelles à compléter par produit':'Næringsværdier der skal udfyldes pr. produkt','Statut':'Status','À intégrer depuis les données validées.':'Tilføjes fra godkendte data.','Photos et visuels récupérés de l\'ancien site':'Fotos og visuelle elementer fra det tidligere site','Recettes cocktails':'Cocktailopskrifter','Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.':'Tre friske kreationer med Cognac og Pineau Esprit Organic.','L’heure dorée':'Den gyldne time','Fraîcheur et élégance du Bio.':'Friskhed og økologisk elegance.','Ingrédients':'Ingredienser','Préparation':'Tilberedning','Style de dégustation':'Smagsstil','Désaltérant':'Forfriskende','Frais':'Frisk','Fruité':'Frugtig','Pétillant':'Mousserende','Tonique':'Tonic','Épicé':'Krydret','Quelques glaçons':'Nogle isterninger','Eau pétillante':'Danskvand','Naturellement rafraîchissant.':'Naturligt forfriskende.','L’apéritif tendance.':'Den moderne aperitif.','Dégustation':'Smagning','Notes sensorielles':'Sensoriske noter','Bouche :':'Mund:','Couleur :':'Farve:','Nez :':'Næse:','Palais :':'Gane:','Finale :':'Afslutning:','Prendre conscience, mieux produire':'Blive bevidst, producere bedre','Pour mieux consommer, préserver et transmettre.':'For at forbruge bedre, bevare og give videre.','Déjà 20 ans de production durable':'Allerede 20 år med bæredygtig produktion','Une gamme biologique':'Et økologisk sortiment','Un savoir-faire générationnel':'Generationers knowhow','Un Cru, les Fins Bois':'En cru: Fins Bois','Respect de nos terres et culture de la vigne':'Respekt for jorden og dyrkning af vinstokken','Distillation':'Destillation','Élevage soigné et suivi':'Omhyggelig og fulgt lagring','L’art subtil de l’assemblage':'Den subtile kunst at blende','La mise en bouteille':'Aftapning','Travailler d’une même passion':'At arbejde med samme passion'
+  da: {
+    "Accueil": "Forside",
+    "Aller au contenu": "Gå til indhold",
+    "La gamme": "Sortimentet",
+    "Gamme": "Sortiment",
+    "La maison": "Huset",
+    "Notre démarche": "Vores tilgang",
+    "La production": "Produktionen",
+    "Léopold et Fanny": "Léopold og Fanny",
+    "Visiter": "Besøg",
+    "Menu": "Menu",
+    "Cocktails": "Cocktails",
+    "Contact": "Kontakt",
+    "Mentions légales": "Juridiske oplysninger",
+    "Valeurs nutritionnelles": "Næringsværdier",
+    "Toute la nature de nos Cognacs": "Hele naturen i vores Cognac",
+    "Organique et sans complexe": "Økologisk og ukompliceret",
+    "Accompagner nos Cognacs": "Nyd vores Cognacs i cocktails",
+    "Laisser courir l'inspiration": "Lad inspirationen flyde",
+    "Laisser courir l’inspiration avec des recettes fraîches, naturelles et faciles à servir.": "Lad inspirationen flyde med friske, naturlige opskrifter, der er lette at servere.",
+    "Bienvenue sur nos terres": "Velkommen til vores jord",
+    "Depuis 20 ans, Léopold Croizet conduit son vignoble en agriculture biologique. Il distille, élève et met en bouteille sa production à la propriété.": "I 20 år har Léopold Croizet dyrket sin vingård økologisk. Han destillerer, lagrer og aftapper produktionen på ejendommen.",
+    "Le cycle naturel": "Den naturlige cyklus",
+    "Travailler dans la durabilité": "Arbejde bæredygtigt",
+    "L'esprit organic": "Den organiske ånd",
+    "Notre histoire": "Vores historie",
+    "Maîtriser & laisser faire": "Mestre og lade naturen gøre sit",
+    "Travailler dans le bon sens": "Arbejde i den rigtige retning",
+    "Cultiver pour transmettre": "Dyrke for at give videre",
+    "est né d’une volonté": "blev født af et ønske",
+    "de transmission dans laquelle": "om at give videre, hvor",
+    "mettent tout leur cœur,": "lægger hele deres hjerte,",
+    "leur énergie": "deres energi",
+    "et leur passion.": "og deres passion.",
+    "L'abus d'alcool est dangereux pour la santé. A consommer avec modération.": "Alkoholmisbrug er sundhedsskadeligt. Nydes med måde.",
+    "Cognac biologique familial, naturel et premium.": "Familiedrevet, naturlig og premium økologisk Cognac.",
+    "Cognac biologique familial, naturel, premium et indépendant.": "Familiedrevet, naturlig, premium og uafhængig økologisk Cognac.",
+    "Une page B2B export pour les marchés Europe, USA, Canada.": "En B2B-eksportside for markederne Europa, USA og Canada.",
+    "Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.": "En side for importører, vinhandlere, restaurationsbranchen, barer, hoteller og økologiske netværk.",
+    "Demander des informations export": "Bed om eksportinformation",
+    "Documents à préparer": "Dokumenter der skal forberedes",
+    "Fiches produits professionnelles.": "Professionelle produktark.",
+    "Photos bouteilles et gamme.": "Fotos af flasker og sortiment.",
+    "Informations réglementaires et nutritionnelles en HTML accessible.": "Regulatoriske oplysninger og næringsoplysninger i tilgængelig HTML.",
+    "Venez sur le territoire des Fins Bois": "Besøg Fins Bois-området",
+    "Venez découvrir une petite distillerie nichée sur le territoire des Fins Bois. Nous serons heureux de vous accueillir et de vous faire découvrir quelques secrets de production et de nouvelles expériences gustatives.": "Kom og oplev et lille destilleri i Fins Bois-området. Vi glæder os til at byde dig velkommen og dele nogle produktionshemmeligheder og smagsoplevelser.",
+    "Horaires": "Åbningstider",
+    "Du lundi au vendredi, 10h-12h ou 14h-17h.": "Mandag til fredag, 10-12 eller 14-17.",
+    "Durée : 1h.": "Varighed: 1 time.",
+    "Maximum 10 personnes par visite.": "Maksimalt 10 personer pr. besøg.",
+    "Ouvrir dans Google Maps": "Åbn i Google Maps",
+    "Email, téléphone, adresse et informations de visite validées.": "E-mail, telefon, adresse og godkendte besøgsoplysninger.",
+    "Contacter Cognac Esprit Organic": "Kontakt Cognac Esprit Organic",
+    "Téléphone": "Telefon",
+    "Adresse": "Adresse",
+    "Visites": "Besøg",
+    "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Aktuelle besøgstider: mandag-fredag, 10-12 eller 14-17. Varighed: 1 time. Maksimum: 10 personer.",
+    "Questions utiles pour Google, les visiteurs et les agents IA.": "Nyttige spørgsmål for Google, besøgende og AI-agenter.",
+    "Quels produits Cognac Esprit Organic sont disponibles ?": "Hvilke Cognac Esprit Organic-produkter er tilgængelige?",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "De tilgængelige produkter er VS, VSOP, Napoléon, XO, XXO, Single Cask og Pineau.",
+    "Quels sont les horaires de visite ?": "Hvad er besøgstiderne?",
+    "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Besøg er mulige mandag til fredag, 10-12 eller 14-17, varighed 1 time, maksimum 10 personer.",
+    "Quels marchés export sont visés ?": "Hvilke eksportmarkeder er målrettet?",
+    "La formulation validée est : Europe, USA, Canada.": "Den godkendte formulering er: Europa, USA, Canada.",
+    "Où se situe Cognac Esprit Organic ?": "Hvor ligger Cognac Esprit Organic?",
+    "Le site est-il indexable pendant la préproduction ?": "Kan siden indekseres under præproduktion?",
+    "Non. La première version contient temporairement noindex,nofollow.": "Nej. Den første version indeholder midlertidigt noindex,nofollow.",
+    "Tableaux accessibles à compléter": "Tilgængelige tabeller der skal udfyldes",
+    "Valeurs nutritionnelles à compléter par produit": "Næringsværdier der skal udfyldes pr. produkt",
+    "Statut": "Status",
+    "À intégrer depuis les données validées.": "Tilføjes fra godkendte data.",
+    "Photos et visuels récupérés de l'ancien site": "Fotos og visuelle elementer fra det tidligere site",
+    "Cette galerie rassemble les visuels utiles récupérés depuis l'ancien site WordPress. Elle sert de réserve propre pour reconstruire les pages sans dépendre de WordPress.": "Dette galleri samler nyttige visuelle elementer fra det tidligere WordPress-site. Det fungerer som en ren ressource til at genopbygge siderne uden WordPress.",
+    "Recettes cocktails": "Cocktailopskrifter",
+    "Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.": "Tre friske kreationer med Cognac og Pineau Esprit Organic.",
+    "Une page pensée comme un carnet d’inspiration : les fiches visuelles ouvrent l’appétit, les recettes donnent l’essentiel, sans surcharger l’expérience.": "En side tænkt som en inspirationsbog: de visuelle kort vækker lysten, opskrifterne giver det væsentlige uden at overbelaste oplevelsen.",
+    "L’heure dorée": "Den gyldne time",
+    "Fraîcheur et élégance du Bio.": "Friskhed og økologisk elegance.",
+    "Un cocktail fruité et végétal, aux notes douces de melon charentais, rehaussé par le Cognac Esprit Organic. Très désaltérant, faible en alcool, parfait pour l’été.": "En frugtig og grøn cocktail med bløde noter af Charentais-melon, løftet af Cognac Esprit Organic. Meget forfriskende, lav på alkohol og perfekt til sommeren.",
+    "Ingrédients": "Ingredienser",
+    "Préparation": "Tilberedning",
+    "Style de dégustation": "Smagsstil",
+    "Désaltérant": "Forfriskende",
+    "Frais": "Frisk",
+    "Fruité": "Frugtig",
+    "Pétillant": "Mousserende",
+    "Tonique": "Tonic",
+    "Épicé": "Krydret",
+    "Quelques glaçons": "Nogle isterninger",
+    "1 rondelle de citron vert": "1 skive lime",
+    "1 trait de citron vert": "1 stænk lime",
+    "1,5 cl jus de citron vert frais": "1,5 cl frisk limesaft",
+    "4 rondelles de concombre": "4 skiver agurk",
+    "6 feuilles de menthe fraîche": "6 friske mynteblade",
+    "Eau pétillante": "Danskvand",
+    "Placer tous les ingrédients dans un blender avec quelques glaçons.": "Kom alle ingredienser i en blender med nogle isterninger.",
+    "Mixer 15 secondes.": "Blend i 15 sekunder.",
+    "Servir immédiatement dans un verre rempli de glaçons. Décorer d’une feuille de menthe.": "Server straks i et glas fyldt med is. Pynt med et mynteblad.",
+    "Remplir une timbale cuivrée de glaçons.": "Fyld et kobberkrus med is.",
+    "Verser le Cognac Foundation VS.": "Hæld Cognac Foundation VS i.",
+    "Ajouter le jus de citron vert.": "Tilsæt frisk limesaft.",
+    "Compléter avec la Ginger Beer.": "Top op med Ginger Beer.",
+    "Mélanger délicatement.": "Rør forsigtigt.",
+    "Décorer d’une rondelle de citron vert.": "Pynt med en skive lime.",
+    "Mixer le melon charentais avec le Pineau blanc, le Pineau rouge et le Cognac VSOP.": "Blend Charentais-melonen med hvid Pineau, rød Pineau og Cognac VSOP.",
+    "Verser dans un verre rempli de glaçons.": "Hæld i et glas fyldt med is.",
+    "Compléter avec de l’eau pétillante.": "Top op med danskvand.",
+    "Mélanger délicatement et déguster aussitôt.": "Rør forsigtigt og nyd med det samme.",
+    "La fraîcheur du citron vert rencontre les notes épicées du gingembre et le caractère fruité du Cognac Esprit Organic Foundation VS.": "Frisk lime møder ingefærens krydrede noter og den frugtige karakter i Cognac Esprit Organic Foundation VS.",
+    "Naturellement rafraîchissant.": "Naturligt forfriskende.",
+    "L’alliance fruitée et pétillante de nos Pineaux et du Cognac VSOP, rehaussée par la douceur du melon charentais. Frais, léger et irrésistiblement estival.": "Den frugtige og perlende forening af vores Pineaux og Cognac VSOP, løftet af Charentais-melonens sødme. Frisk, let og uimodståeligt sommerlig.",
+    "L’apéritif tendance.": "Den moderne aperitif.",
+    "Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit.": "En ung, frugtig og udtryksfuld økologisk Cognac med en direkte frugtprofil.",
+    "Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.": "En rund og generøs økologisk Cognac med bløde udtryk af kandiseret frugt, træ og krydderier.",
+    "Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.": "En afbalanceret økologisk Cognac med længde, pebrede noter, tørret frugt og en mentholfrisk afslutning.",
+    "Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.": "En struktureret og generøs økologisk Cognac præget af sort kirsebær, tørrede blomster og rancio.",
+    "Premier XXO en agriculture biologique, doux, structuré et très fruité.": "Præsenteret som den første XXO i økologisk landbrug, blød, struktureret og meget frugtig.",
+    "Édition limitée, 51 %, sélectionnée par Fanny.": "Begrænset udgave, 51 %, udvalgt af Fanny.",
+    "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Økologisk Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.",
+    "Dégustation": "Smagning",
+    "Notes sensorielles": "Sensoriske noter",
+    "Bouche :": "Mund:",
+    "Couleur :": "Farve:",
+    "Nez :": "Næse:",
+    "Palais :": "Gane:",
+    "Finale :": "Afslutning:",
+    "Prendre conscience, mieux produire": "Blive bevidst, producere bedre",
+    "Pour mieux consommer, préserver et transmettre.": "For at forbruge bedre, bevare og give videre.",
+    "Déjà 20 ans de production durable": "Allerede 20 år med bæredygtig produktion",
+    "Une gamme biologique": "Et økologisk sortiment",
+    "Un savoir-faire générationnel": "Generationers knowhow",
+    "Un Cru, les Fins Bois": "En cru: Fins Bois",
+    "Respect de nos terres et culture de la vigne": "Respekt for jorden og dyrkning af vinstokken",
+    "Distillation": "Destillation",
+    "Élevage soigné et suivi": "Omhyggelig og fulgt lagring",
+    "L’art subtil de l’assemblage": "Den subtile kunst at blende",
+    "La mise en bouteille": "Aftapning",
+    "Travailler d’une même passion": "At arbejde med samme passion",
+    "Un héritage passionnant mis au profit des générations futures.": "En passioneret arv til gavn for fremtidige generationer."
   },
-  no:{
-    'Accueil':'Hjem','Aller au contenu':'Gå til innhold','La gamme':'Sortimentet','Gamme':'Sortiment','La maison':'Huset','Notre démarche':'Vår tilnærming','La production':'Produksjonen','Léopold et Fanny':'Léopold og Fanny','Visiter':'Besøk','Menu':'Meny','Cocktails':'Cocktailer','Contact':'Kontakt','Mentions légales':'Juridisk informasjon','Valeurs nutritionnelles':'Næringsverdier','Téléphone':'Telefon','Adresse':'Adresse','Visites':'Besøk','Horaires':'Åpningstider','Ouvrir dans Google Maps':'Åpne i Google Maps','Toute la nature de nos Cognacs':'Hele naturen i vår Cognac','Organique et sans complexe':'Økologisk og ukomplisert','Accompagner nos Cognacs':'Server våre Cognacer i cocktails','Laisser courir l\'inspiration':'La inspirasjonen flyte','Bienvenue sur nos terres':'Velkommen til våre marker','Le cycle naturel':'Den naturlige syklusen','Travailler dans la durabilité':'Arbeide bærekraftig','L\'esprit organic':'Den organiske ånden','Notre histoire':'Vår historie','Maîtriser & laisser faire':'Mestre og la naturen virke','Travailler dans le bon sens':'Arbeide i riktig retning','Cultiver pour transmettre':'Dyrke for å føre videre','est né d’une volonté':'ble født av et ønske','de transmission dans laquelle':'om å føre videre, der','mettent tout leur cœur,':'legger hele sitt hjerte,','leur énergie':'sin energi','et leur passion.':'og sin lidenskap.','Cognac biologique familial, naturel et premium.':'Familiedrevet, naturlig og premium økologisk Cognac.','Cognac biologique familial, naturel, premium et indépendant.':'Familiedrevet, naturlig, premium og uavhengig økologisk Cognac.','L\'abus d\'alcool est dangereux pour la santé. A consommer avec modération.':'Alkoholmisbruk er skadelig for helsen. Nyt med måte.','Venez sur le territoire des Fins Bois':'Besøk Fins Bois-området','Du lundi au vendredi, 10h-12h ou 14h-17h.':'Mandag til fredag, 10-12 eller 14-17.','Durée : 1h.':'Varighet: 1 time.','Maximum 10 personnes par visite.':'Maksimalt 10 personer per besøk.','Contacter Cognac Esprit Organic':'Kontakt Cognac Esprit Organic','Questions utiles pour Google, les visiteurs et les agents IA.':'Nyttige spørsmål for Google, besøkende og AI-agenter.','Quels produits Cognac Esprit Organic sont disponibles ?':'Hvilke Cognac Esprit Organic-produkter er tilgjengelige?','Quels sont les horaires de visite ?':'Hva er besøkstidene?','Quels marchés export sont visés ?':'Hvilke eksportmarkeder er målrettet?','Où se situe Cognac Esprit Organic ?':'Hvor ligger Cognac Esprit Organic?','Le site est-il indexable pendant la préproduction ?':'Kan nettstedet indekseres under preproduksjon?','Non. La première version contient temporairement noindex,nofollow.':'Nei. Den første versjonen inneholder midlertidig noindex,nofollow.','Une page B2B export pour les marchés Europe, USA, Canada.':'En B2B-eksportside for Europa, USA og Canada.','Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.':'En side for importører, vinhandlere, restauranter, barer, hoteller og økologiske nettverk.','Demander des informations export':'Be om eksportinformasjon','Documents à préparer':'Dokumenter som skal forberedes','Fiches produits professionnelles.':'Profesjonelle produktark.','Photos bouteilles et gamme.':'Bilder av flasker og sortiment.','Informations réglementaires et nutritionnelles en HTML accessible.':'Regulatorisk og ernæringsmessig informasjon i tilgjengelig HTML.','Tableaux accessibles à compléter':'Tilgjengelige tabeller som skal fylles ut','Valeurs nutritionnelles à compléter par produit':'Næringsverdier som skal fylles ut per produkt','Statut':'Status','À intégrer depuis les données validées.':'Legges til fra godkjente data.','Photos et visuels récupérés de l\'ancien site':'Bilder og visuelle elementer fra det tidligere nettstedet','Recettes cocktails':'Cocktailoppskrifter','Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.':'Tre friske kreasjoner med Cognac og Pineau Esprit Organic.','L’heure dorée':'Den gylne timen','Fraîcheur et élégance du Bio.':'Friskhet og økologisk eleganse.','Ingrédients':'Ingredienser','Préparation':'Tilberedning','Style de dégustation':'Smaksstil','Désaltérant':'Forfriskende','Frais':'Frisk','Fruité':'Fruktig','Pétillant':'Sprudlende','Tonique':'Tonic','Épicé':'Krydret','Quelques glaçons':'Noen isbiter','Eau pétillante':'Kullsyrevann','Naturellement rafraîchissant.':'Naturlig forfriskende.','L’apéritif tendance.':'Den moderne aperitiffen.','Dégustation':'Smaking','Notes sensorielles':'Sensoriske noter','Bouche :':'Munn:','Couleur :':'Farge:','Nez :':'Nese:','Palais :':'Gane:','Finale :':'Avslutning:','Prendre conscience, mieux produire':'Bli bevisst, produsere bedre','Pour mieux consommer, préserver et transmettre.':'For å konsumere bedre, bevare og føre videre.','Déjà 20 ans de production durable':'Allerede 20 år med bærekraftig produksjon','Une gamme biologique':'Et økologisk sortiment','Un savoir-faire générationnel':'Generasjoners fagkunnskap','Un Cru, les Fins Bois':'En cru: Fins Bois','Respect de nos terres et culture de la vigne':'Respekt for jorden og dyrking av vinrankene','Distillation':'Destillasjon','Élevage soigné et suivi':'Omhyggelig og fulgt lagring','L’art subtil de l’assemblage':'Den subtile kunsten å blende','La mise en bouteille':'Tapping','Travailler d’une même passion':'Å arbeide med samme lidenskap'
+  no: {
+    "Accueil": "Hjem",
+    "Aller au contenu": "Gå til innhold",
+    "La gamme": "Sortimentet",
+    "Gamme": "Sortiment",
+    "La maison": "Huset",
+    "Notre démarche": "Vår tilnærming",
+    "La production": "Produksjonen",
+    "Léopold et Fanny": "Léopold og Fanny",
+    "Visiter": "Besøk",
+    "Menu": "Meny",
+    "Cocktails": "Cocktailer",
+    "Contact": "Kontakt",
+    "Mentions légales": "Juridisk informasjon",
+    "Valeurs nutritionnelles": "Næringsverdier",
+    "Toute la nature de nos Cognacs": "Hele naturen i vår Cognac",
+    "Organique et sans complexe": "Økologisk og ukomplisert",
+    "Accompagner nos Cognacs": "Server våre Cognacer i cocktails",
+    "Laisser courir l'inspiration": "La inspirasjonen flyte",
+    "Laisser courir l’inspiration avec des recettes fraîches, naturelles et faciles à servir.": "La inspirasjonen flyte med friske, naturlige oppskrifter som er enkle å servere.",
+    "Bienvenue sur nos terres": "Velkommen til våre marker",
+    "Depuis 20 ans, Léopold Croizet conduit son vignoble en agriculture biologique. Il distille, élève et met en bouteille sa production à la propriété.": "I 20 år har Léopold Croizet dyrket vinmarken sin økologisk. Han destillerer, lagrer og tapper produksjonen på eiendommen.",
+    "Le cycle naturel": "Den naturlige syklusen",
+    "Travailler dans la durabilité": "Arbeide bærekraftig",
+    "L'esprit organic": "Den organiske ånden",
+    "Notre histoire": "Vår historie",
+    "Maîtriser & laisser faire": "Mestre og la naturen virke",
+    "Travailler dans le bon sens": "Arbeide i riktig retning",
+    "Cultiver pour transmettre": "Dyrke for å føre videre",
+    "est né d’une volonté": "ble født av et ønske",
+    "de transmission dans laquelle": "om å føre videre, der",
+    "mettent tout leur cœur,": "legger hele sitt hjerte,",
+    "leur énergie": "sin energi",
+    "et leur passion.": "og sin lidenskap.",
+    "L'abus d'alcool est dangereux pour la santé. A consommer avec modération.": "Alkoholmisbruk er skadelig for helsen. Nyt med måte.",
+    "Cognac biologique familial, naturel et premium.": "Familiedrevet, naturlig og premium økologisk Cognac.",
+    "Cognac biologique familial, naturel, premium et indépendant.": "Familiedrevet, naturlig, premium og uavhengig økologisk Cognac.",
+    "Une page B2B export pour les marchés Europe, USA, Canada.": "En B2B-eksportside for markedene Europa, USA og Canada.",
+    "Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.": "En side for importører, vinhandlere, serveringsbransjen, barer, hoteller og økologiske nettverk.",
+    "Demander des informations export": "Be om eksportinformasjon",
+    "Documents à préparer": "Dokumenter som skal forberedes",
+    "Fiches produits professionnelles.": "Profesjonelle produktark.",
+    "Photos bouteilles et gamme.": "Bilder av flasker og sortiment.",
+    "Informations réglementaires et nutritionnelles en HTML accessible.": "Regulatorisk og ernæringsmessig informasjon i tilgjengelig HTML.",
+    "Venez sur le territoire des Fins Bois": "Besøk Fins Bois-området",
+    "Venez découvrir une petite distillerie nichée sur le territoire des Fins Bois. Nous serons heureux de vous accueillir et de vous faire découvrir quelques secrets de production et de nouvelles expériences gustatives.": "Kom og oppdag et lite destilleri i Fins Bois-området. Vi tar gjerne imot deg og deler noen produksjonshemmeligheter og smaksopplevelser.",
+    "Horaires": "Åpningstider",
+    "Du lundi au vendredi, 10h-12h ou 14h-17h.": "Mandag til fredag, 10-12 eller 14-17.",
+    "Durée : 1h.": "Varighet: 1 time.",
+    "Maximum 10 personnes par visite.": "Maksimalt 10 personer per besøk.",
+    "Ouvrir dans Google Maps": "Åpne i Google Maps",
+    "Email, téléphone, adresse et informations de visite validées.": "E-post, telefon, adresse og godkjent besøksinformasjon.",
+    "Contacter Cognac Esprit Organic": "Kontakt Cognac Esprit Organic",
+    "Téléphone": "Telefon",
+    "Adresse": "Adresse",
+    "Visites": "Besøk",
+    "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Gjeldende besøkstider: mandag-fredag, 10-12 eller 14-17. Varighet: 1 time. Maksimum: 10 personer.",
+    "Questions utiles pour Google, les visiteurs et les agents IA.": "Nyttige spørsmål for Google, besøkende og AI-agenter.",
+    "Quels produits Cognac Esprit Organic sont disponibles ?": "Hvilke Cognac Esprit Organic-produkter er tilgjengelige?",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "Tilgjengelige produkter er VS, VSOP, Napoléon, XO, XXO, Single Cask og Pineau.",
+    "Quels sont les horaires de visite ?": "Hva er besøkstidene?",
+    "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Besøk er mulig mandag til fredag, 10-12 eller 14-17, varighet 1 time, maksimum 10 personer.",
+    "Quels marchés export sont visés ?": "Hvilke eksportmarkeder er målrettet?",
+    "La formulation validée est : Europe, USA, Canada.": "Den godkjente formuleringen er: Europa, USA, Canada.",
+    "Où se situe Cognac Esprit Organic ?": "Hvor ligger Cognac Esprit Organic?",
+    "Le site est-il indexable pendant la préproduction ?": "Kan nettstedet indekseres under preproduksjon?",
+    "Non. La première version contient temporairement noindex,nofollow.": "Nei. Den første versjonen inneholder midlertidig noindex,nofollow.",
+    "Tableaux accessibles à compléter": "Tilgjengelige tabeller som skal fylles ut",
+    "Valeurs nutritionnelles à compléter par produit": "Næringsverdier som skal fylles ut per produkt",
+    "Statut": "Status",
+    "À intégrer depuis les données validées.": "Legges til fra godkjente data.",
+    "Photos et visuels récupérés de l'ancien site": "Bilder og visuelle elementer fra det tidligere nettstedet",
+    "Cette galerie rassemble les visuels utiles récupérés depuis l'ancien site WordPress. Elle sert de réserve propre pour reconstruire les pages sans dépendre de WordPress.": "Dette galleriet samler nyttige visuelle elementer fra det tidligere WordPress-nettstedet. Det fungerer som en ren ressurs for å gjenoppbygge sidene uten WordPress.",
+    "Recettes cocktails": "Cocktailoppskrifter",
+    "Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.": "Tre friske kreasjoner med Cognac og Pineau Esprit Organic.",
+    "Une page pensée comme un carnet d’inspiration : les fiches visuelles ouvrent l’appétit, les recettes donnent l’essentiel, sans surcharger l’expérience.": "En side tenkt som en inspirasjonsbok: de visuelle kortene vekker lysten, oppskriftene gir det viktigste uten å overbelaste opplevelsen.",
+    "L’heure dorée": "Den gylne timen",
+    "Fraîcheur et élégance du Bio.": "Friskhet og økologisk eleganse.",
+    "Un cocktail fruité et végétal, aux notes douces de melon charentais, rehaussé par le Cognac Esprit Organic. Très désaltérant, faible en alcool, parfait pour l’été.": "En fruktig og grønn cocktail med milde toner av Charentais-melon, løftet av Cognac Esprit Organic. Svært forfriskende, lav på alkohol og perfekt for sommeren.",
+    "Ingrédients": "Ingredienser",
+    "Préparation": "Tilberedning",
+    "Style de dégustation": "Smaksstil",
+    "Désaltérant": "Forfriskende",
+    "Frais": "Frisk",
+    "Fruité": "Fruktig",
+    "Pétillant": "Sprudlende",
+    "Tonique": "Tonic",
+    "Épicé": "Krydret",
+    "Quelques glaçons": "Noen isbiter",
+    "1 rondelle de citron vert": "1 skive lime",
+    "1 trait de citron vert": "1 dash lime",
+    "1,5 cl jus de citron vert frais": "1,5 cl fersk limesaft",
+    "4 rondelles de concombre": "4 skiver agurk",
+    "6 feuilles de menthe fraîche": "6 friske mynteblader",
+    "Eau pétillante": "Kullsyrevann",
+    "Placer tous les ingrédients dans un blender avec quelques glaçons.": "Ha alle ingrediensene i en blender med noen isbiter.",
+    "Mixer 15 secondes.": "Blend i 15 sekunder.",
+    "Servir immédiatement dans un verre rempli de glaçons. Décorer d’une feuille de menthe.": "Server straks i et glass fylt med is. Pynt med et mynteblad.",
+    "Remplir une timbale cuivrée de glaçons.": "Fyll et kobberkrus med is.",
+    "Verser le Cognac Foundation VS.": "Hell i Cognac Foundation VS.",
+    "Ajouter le jus de citron vert.": "Tilsett fersk limesaft.",
+    "Compléter avec la Ginger Beer.": "Topp med Ginger Beer.",
+    "Mélanger délicatement.": "Rør forsiktig.",
+    "Décorer d’une rondelle de citron vert.": "Pynt med en skive lime.",
+    "Mixer le melon charentais avec le Pineau blanc, le Pineau rouge et le Cognac VSOP.": "Blend Charentais-melonen med hvit Pineau, rød Pineau og Cognac VSOP.",
+    "Verser dans un verre rempli de glaçons.": "Hell i et glass fylt med is.",
+    "Compléter avec de l’eau pétillante.": "Topp med kullsyrevann.",
+    "Mélanger délicatement et déguster aussitôt.": "Rør forsiktig og nyt med det samme.",
+    "La fraîcheur du citron vert rencontre les notes épicées du gingembre et le caractère fruité du Cognac Esprit Organic Foundation VS.": "Frisk lime møter ingefærens krydrede toner og den fruktige karakteren til Cognac Esprit Organic Foundation VS.",
+    "Naturellement rafraîchissant.": "Naturlig forfriskende.",
+    "L’alliance fruitée et pétillante de nos Pineaux et du Cognac VSOP, rehaussée par la douceur du melon charentais. Frais, léger et irrésistiblement estival.": "Den fruktige og perlende kombinasjonen av våre Pineaux og Cognac VSOP, løftet av sødmen fra Charentais-melon. Frisk, lett og uimotståelig sommerlig.",
+    "L’apéritif tendance.": "Den moderne aperitiffen.",
+    "Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit.": "En ung, fruktig og uttrykksfull økologisk Cognac med en direkte fruktprofil.",
+    "Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.": "En rund og generøs økologisk Cognac med myke uttrykk av kandisert frukt, tre og krydder.",
+    "Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.": "En balansert økologisk Cognac med lengde, peppertoner, tørket frukt og en mentolfrisk avslutning.",
+    "Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.": "En strukturert og generøs økologisk Cognac preget av sort kirsebær, tørkede blomster og rancio.",
+    "Premier XXO en agriculture biologique, doux, structuré et très fruité.": "Presentert som den første XXO i økologisk landbruk, myk, strukturert og svært fruktig.",
+    "Édition limitée, 51 %, sélectionnée par Fanny.": "Begrenset utgave, 51 %, valgt ut av Fanny.",
+    "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Økologisk Pineau des Charentes laget med Colombard og Ugni Blanc, uten tilsatte sulfitter.",
+    "Dégustation": "Smaking",
+    "Notes sensorielles": "Sensoriske noter",
+    "Bouche :": "Munn:",
+    "Couleur :": "Farge:",
+    "Nez :": "Nese:",
+    "Palais :": "Gane:",
+    "Finale :": "Avslutning:",
+    "Prendre conscience, mieux produire": "Bli bevisst, produsere bedre",
+    "Pour mieux consommer, préserver et transmettre.": "For å konsumere bedre, bevare og føre videre.",
+    "Déjà 20 ans de production durable": "Allerede 20 år med bærekraftig produksjon",
+    "Une gamme biologique": "Et økologisk sortiment",
+    "Un savoir-faire générationnel": "Generasjoners fagkunnskap",
+    "Un Cru, les Fins Bois": "En cru: Fins Bois",
+    "Respect de nos terres et culture de la vigne": "Respekt for jorden og dyrking av vinrankene",
+    "Distillation": "Destillasjon",
+    "Élevage soigné et suivi": "Omhyggelig og fulgt lagring",
+    "L’art subtil de l’assemblage": "Den subtile kunsten å blende",
+    "La mise en bouteille": "Tapping",
+    "Travailler d’une même passion": "Å arbeide med samme lidenskap",
+    "Un héritage passionnant mis au profit des générations futures.": "En lidenskapelig arv til nytte for kommende generasjoner."
   },
-  sv:{
-    'Accueil':'Startsida','Aller au contenu':'Gå till innehåll','La gamme':'Sortimentet','Gamme':'Sortiment','La maison':'Huset','Notre démarche':'Vårt arbetssätt','La production':'Produktionen','Léopold et Fanny':'Léopold och Fanny','Visiter':'Besök','Menu':'Meny','Cocktails':'Cocktails','Contact':'Kontakt','Mentions légales':'Juridisk information','Valeurs nutritionnelles':'Näringsvärden','Téléphone':'Telefon','Adresse':'Adress','Visites':'Besök','Horaires':'Öppettider','Ouvrir dans Google Maps':'Öppna i Google Maps','Toute la nature de nos Cognacs':'All natur i våra Cognacer','Organique et sans complexe':'Ekologiskt och okomplicerat','Accompagner nos Cognacs':'Servera våra Cognacer i cocktails','Laisser courir l\'inspiration':'Låt inspirationen flöda','Bienvenue sur nos terres':'Välkommen till våra marker','Le cycle naturel':'Den naturliga cykeln','Travailler dans la durabilité':'Arbeta hållbart','L\'esprit organic':'Den ekologiska andan','Notre histoire':'Vår historia','Maîtriser & laisser faire':'Bemästra och låta naturen verka','Travailler dans le bon sens':'Arbeta i rätt riktning','Cultiver pour transmettre':'Odla för att föra vidare','est né d’une volonté':'föddes ur en vilja','de transmission dans laquelle':'att föra vidare, där','mettent tout leur cœur,':'lägger hela sitt hjärta,','leur énergie':'sin energi','et leur passion.':'och sin passion.','Cognac biologique familial, naturel et premium.':'Familjedriven, naturlig och premium ekologisk Cognac.','Cognac biologique familial, naturel, premium et indépendant.':'Familjedriven, naturlig, premium och oberoende ekologisk Cognac.','L\'abus d\'alcool est dangereux pour la santé. A consommer avec modération.':'Alkoholmissbruk är skadligt för hälsan. Njut med måtta.','Venez sur le territoire des Fins Bois':'Besök Fins Bois-området','Du lundi au vendredi, 10h-12h ou 14h-17h.':'Måndag till fredag, 10-12 eller 14-17.','Durée : 1h.':'Längd: 1 timme.','Maximum 10 personnes par visite.':'Högst 10 personer per besök.','Contacter Cognac Esprit Organic':'Kontakta Cognac Esprit Organic','Questions utiles pour Google, les visiteurs et les agents IA.':'Nyttiga frågor för Google, besökare och AI-agenter.','Quels produits Cognac Esprit Organic sont disponibles ?':'Vilka Cognac Esprit Organic-produkter finns tillgängliga?','Quels sont les horaires de visite ?':'Vilka är besökstiderna?','Quels marchés export sont visés ?':'Vilka exportmarknader är målgruppen?','Où se situe Cognac Esprit Organic ?':'Var ligger Cognac Esprit Organic?','Le site est-il indexable pendant la préproduction ?':'Kan webbplatsen indexeras under förproduktionen?','Non. La première version contient temporairement noindex,nofollow.':'Nej. Den första versionen innehåller tillfälligt noindex,nofollow.','Une page B2B export pour les marchés Europe, USA, Canada.':'En B2B-exportsida för Europa, USA och Kanada.','Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.':'En sida för importörer, vinhandlare, restauranger, barer, hotell och ekologiska nätverk.','Demander des informations export':'Begär exportinformation','Documents à préparer':'Dokument att förbereda','Fiches produits professionnelles.':'Professionella produktblad.','Photos bouteilles et gamme.':'Bilder på flaskor och sortiment.','Informations réglementaires et nutritionnelles en HTML accessible.':'Regulatorisk information och näringsinformation i tillgänglig HTML.','Tableaux accessibles à compléter':'Tillgängliga tabeller att komplettera','Valeurs nutritionnelles à compléter par produit':'Näringsvärden att komplettera per produkt','Statut':'Status','À intégrer depuis les données validées.':'Läggs till från godkända data.','Photos et visuels récupérés de l\'ancien site':'Bilder och visuellt material från den tidigare webbplatsen','Recettes cocktails':'Cocktailrecept','Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.':'Tre fräscha skapelser med Cognac och Pineau Esprit Organic.','L’heure dorée':'Den gyllene timmen','Fraîcheur et élégance du Bio.':'Fräschör och ekologisk elegans.','Ingrédients':'Ingredienser','Préparation':'Tillredning','Style de dégustation':'Smakstil','Désaltérant':'Uppfriskande','Frais':'Fräsch','Fruité':'Fruktig','Pétillant':'Mousserande','Tonique':'Tonic','Épicé':'Kryddig','Quelques glaçons':'Några isbitar','Eau pétillante':'Kolsyrat vatten','Naturellement rafraîchissant.':'Naturligt uppfriskande.','L’apéritif tendance.':'Den moderna aperitifen.','Dégustation':'Provning','Notes sensorielles':'Sensoriska noter','Bouche :':'Mun:','Couleur :':'Färg:','Nez :':'Doft:','Palais :':'Gom:','Finale :':'Avslutning:','Prendre conscience, mieux produire':'Bli medveten, producera bättre','Pour mieux consommer, préserver et transmettre.':'För att konsumera bättre, bevara och föra vidare.','Déjà 20 ans de production durable':'Redan 20 år av hållbar produktion','Une gamme biologique':'Ett ekologiskt sortiment','Un savoir-faire générationnel':'Generationers kunnande','Un Cru, les Fins Bois':'En cru: Fins Bois','Respect de nos terres et culture de la vigne':'Respekt för jorden och odlingen av vinrankan','Distillation':'Destillation','Élevage soigné et suivi':'Omsorgsfull och följd lagring','L’art subtil de l’assemblage':'Den subtila konsten att blenda','La mise en bouteille':'Buteljering','Travailler d’une même passion':'Att arbeta med samma passion'
+  sv: {
+    "Accueil": "Startsida",
+    "Aller au contenu": "Gå till innehåll",
+    "La gamme": "Sortimentet",
+    "Gamme": "Sortiment",
+    "La maison": "Huset",
+    "Notre démarche": "Vårt arbetssätt",
+    "La production": "Produktionen",
+    "Léopold et Fanny": "Léopold och Fanny",
+    "Visiter": "Besök",
+    "Menu": "Meny",
+    "Cocktails": "Cocktails",
+    "Contact": "Kontakt",
+    "Mentions légales": "Juridisk information",
+    "Valeurs nutritionnelles": "Näringsvärden",
+    "Toute la nature de nos Cognacs": "All natur i våra Cognacer",
+    "Organique et sans complexe": "Ekologiskt och okomplicerat",
+    "Accompagner nos Cognacs": "Servera våra Cognacer i cocktails",
+    "Laisser courir l'inspiration": "Låt inspirationen flöda",
+    "Laisser courir l’inspiration avec des recettes fraîches, naturelles et faciles à servir.": "Låt inspirationen flöda med fräscha, naturliga recept som är enkla att servera.",
+    "Bienvenue sur nos terres": "Välkommen till våra marker",
+    "Depuis 20 ans, Léopold Croizet conduit son vignoble en agriculture biologique. Il distille, élève et met en bouteille sa production à la propriété.": "I 20 år har Léopold Croizet odlat sin vingård ekologiskt. Han destillerar, lagrar och buteljerar produktionen på gården.",
+    "Le cycle naturel": "Den naturliga cykeln",
+    "Travailler dans la durabilité": "Arbeta hållbart",
+    "L'esprit organic": "Den ekologiska andan",
+    "Notre histoire": "Vår historia",
+    "Maîtriser & laisser faire": "Bemästra och låta naturen verka",
+    "Travailler dans le bon sens": "Arbeta i rätt riktning",
+    "Cultiver pour transmettre": "Odla för att föra vidare",
+    "est né d’une volonté": "föddes ur en vilja",
+    "de transmission dans laquelle": "att föra vidare, där",
+    "mettent tout leur cœur,": "lägger hela sitt hjärta,",
+    "leur énergie": "sin energi",
+    "et leur passion.": "och sin passion.",
+    "L'abus d'alcool est dangereux pour la santé. A consommer avec modération.": "Alkoholmissbruk är skadligt för hälsan. Njut med måtta.",
+    "Cognac biologique familial, naturel et premium.": "Familjedriven, naturlig och premium ekologisk Cognac.",
+    "Cognac biologique familial, naturel, premium et indépendant.": "Familjedriven, naturlig, premium och oberoende ekologisk Cognac.",
+    "Une page B2B export pour les marchés Europe, USA, Canada.": "En B2B-exportsida för marknaderna Europa, USA och Kanada.",
+    "Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.": "En sida för importörer, vinhandlare, restaurangbranschen, barer, hotell och ekologiska nätverk.",
+    "Demander des informations export": "Begär exportinformation",
+    "Documents à préparer": "Dokument att förbereda",
+    "Fiches produits professionnelles.": "Professionella produktblad.",
+    "Photos bouteilles et gamme.": "Bilder på flaskor och sortiment.",
+    "Informations réglementaires et nutritionnelles en HTML accessible.": "Regulatorisk information och näringsinformation i tillgänglig HTML.",
+    "Venez sur le territoire des Fins Bois": "Besök Fins Bois-området",
+    "Venez découvrir une petite distillerie nichée sur le territoire des Fins Bois. Nous serons heureux de vous accueillir et de vous faire découvrir quelques secrets de production et de nouvelles expériences gustatives.": "Kom och upptäck ett litet destilleri i Fins Bois-området. Vi tar gärna emot dig och delar några produktionshemligheter och smakupplevelser.",
+    "Horaires": "Öppettider",
+    "Du lundi au vendredi, 10h-12h ou 14h-17h.": "Måndag till fredag, 10-12 eller 14-17.",
+    "Durée : 1h.": "Längd: 1 timme.",
+    "Maximum 10 personnes par visite.": "Högst 10 personer per besök.",
+    "Ouvrir dans Google Maps": "Öppna i Google Maps",
+    "Email, téléphone, adresse et informations de visite validées.": "E-post, telefon, adress och godkänd besöksinformation.",
+    "Contacter Cognac Esprit Organic": "Kontakta Cognac Esprit Organic",
+    "Téléphone": "Telefon",
+    "Adresse": "Adress",
+    "Visites": "Besök",
+    "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Aktuella besökstider: måndag-fredag, 10-12 eller 14-17. Längd: 1 timme. Max: 10 personer.",
+    "Questions utiles pour Google, les visiteurs et les agents IA.": "Nyttiga frågor för Google, besökare och AI-agenter.",
+    "Quels produits Cognac Esprit Organic sont disponibles ?": "Vilka Cognac Esprit Organic-produkter finns tillgängliga?",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "Tillgängliga produkter är VS, VSOP, Napoléon, XO, XXO, Single Cask och Pineau.",
+    "Quels sont les horaires de visite ?": "Vilka är besökstiderna?",
+    "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Besök är möjliga måndag till fredag, 10-12 eller 14-17, längd 1 timme, högst 10 personer.",
+    "Quels marchés export sont visés ?": "Vilka exportmarknader är målgruppen?",
+    "La formulation validée est : Europe, USA, Canada.": "Den godkända formuleringen är: Europa, USA, Kanada.",
+    "Où se situe Cognac Esprit Organic ?": "Var ligger Cognac Esprit Organic?",
+    "Le site est-il indexable pendant la préproduction ?": "Kan webbplatsen indexeras under förproduktionen?",
+    "Non. La première version contient temporairement noindex,nofollow.": "Nej. Den första versionen innehåller tillfälligt noindex,nofollow.",
+    "Tableaux accessibles à compléter": "Tillgängliga tabeller att komplettera",
+    "Valeurs nutritionnelles à compléter par produit": "Näringsvärden att komplettera per produkt",
+    "Statut": "Status",
+    "À intégrer depuis les données validées.": "Läggs till från godkända data.",
+    "Photos et visuels récupérés de l'ancien site": "Bilder och visuellt material från den tidigare webbplatsen",
+    "Cette galerie rassemble les visuels utiles récupérés depuis l'ancien site WordPress. Elle sert de réserve propre pour reconstruire les pages sans dépendre de WordPress.": "Detta galleri samlar användbart visuellt material från den tidigare WordPress-webbplatsen. Det fungerar som en ren resurs för att bygga om sidorna utan WordPress.",
+    "Recettes cocktails": "Cocktailrecept",
+    "Trois créations fraîches autour du Cognac et du Pineau Esprit Organic.": "Tre fräscha skapelser med Cognac och Pineau Esprit Organic.",
+    "Une page pensée comme un carnet d’inspiration : les fiches visuelles ouvrent l’appétit, les recettes donnent l’essentiel, sans surcharger l’expérience.": "En sida tänkt som en inspirationsbok: de visuella korten väcker lusten, recepten ger det väsentliga utan att överbelasta upplevelsen.",
+    "L’heure dorée": "Den gyllene timmen",
+    "Fraîcheur et élégance du Bio.": "Fräschör och ekologisk elegans.",
+    "Un cocktail fruité et végétal, aux notes douces de melon charentais, rehaussé par le Cognac Esprit Organic. Très désaltérant, faible en alcool, parfait pour l’été.": "En fruktig och grön cocktail med mjuka toner av Charentais-melon, lyft av Cognac Esprit Organic. Mycket uppfriskande, låg alkoholhalt och perfekt för sommaren.",
+    "Ingrédients": "Ingredienser",
+    "Préparation": "Tillredning",
+    "Style de dégustation": "Smakstil",
+    "Désaltérant": "Uppfriskande",
+    "Frais": "Fräsch",
+    "Fruité": "Fruktig",
+    "Pétillant": "Mousserande",
+    "Tonique": "Tonic",
+    "Épicé": "Kryddig",
+    "Quelques glaçons": "Några isbitar",
+    "1 rondelle de citron vert": "1 skiva lime",
+    "1 trait de citron vert": "1 skvätt lime",
+    "1,5 cl jus de citron vert frais": "1,5 cl färsk limejuice",
+    "4 rondelles de concombre": "4 skivor gurka",
+    "6 feuilles de menthe fraîche": "6 färska myntablad",
+    "Eau pétillante": "Kolsyrat vatten",
+    "Placer tous les ingrédients dans un blender avec quelques glaçons.": "Lägg alla ingredienser i en blender med några isbitar.",
+    "Mixer 15 secondes.": "Mixa i 15 sekunder.",
+    "Servir immédiatement dans un verre rempli de glaçons. Décorer d’une feuille de menthe.": "Servera direkt i ett glas fyllt med is. Garnera med ett myntablad.",
+    "Remplir une timbale cuivrée de glaçons.": "Fyll en kopparmugg med is.",
+    "Verser le Cognac Foundation VS.": "Häll i Cognac Foundation VS.",
+    "Ajouter le jus de citron vert.": "Tillsätt färsk limejuice.",
+    "Compléter avec la Ginger Beer.": "Toppa med Ginger Beer.",
+    "Mélanger délicatement.": "Rör försiktigt.",
+    "Décorer d’une rondelle de citron vert.": "Garnera med en skiva lime.",
+    "Mixer le melon charentais avec le Pineau blanc, le Pineau rouge et le Cognac VSOP.": "Mixa Charentais-melonen med vit Pineau, röd Pineau och Cognac VSOP.",
+    "Verser dans un verre rempli de glaçons.": "Häll i ett glas fyllt med is.",
+    "Compléter avec de l’eau pétillante.": "Toppa med kolsyrat vatten.",
+    "Mélanger délicatement et déguster aussitôt.": "Rör försiktigt och njut direkt.",
+    "La fraîcheur du citron vert rencontre les notes épicées du gingembre et le caractère fruité du Cognac Esprit Organic Foundation VS.": "Frisk lime möter ingefärans kryddiga toner och den fruktiga karaktären hos Cognac Esprit Organic Foundation VS.",
+    "Naturellement rafraîchissant.": "Naturligt uppfriskande.",
+    "L’alliance fruitée et pétillante de nos Pineaux et du Cognac VSOP, rehaussée par la douceur du melon charentais. Frais, léger et irrésistiblement estival.": "Den fruktiga och bubblande föreningen av våra Pineaux och Cognac VSOP, lyft av sötman från Charentais-melon. Fräsch, lätt och oemotståndligt somrig.",
+    "L’apéritif tendance.": "Den moderna aperitifen.",
+    "Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit.": "En ung, fruktig och uttrycksfull ekologisk Cognac med en direkt fruktprofil.",
+    "Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.": "En rund och generös ekologisk Cognac med mjuka uttryck av kanderad frukt, trä och kryddor.",
+    "Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.": "En balanserad ekologisk Cognac med längd, peppriga toner, torkad frukt och en mentolfrisk avslutning.",
+    "Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.": "En strukturerad och generös ekologisk Cognac präglad av svart körsbär, torkade blommor och rancio.",
+    "Premier XXO en agriculture biologique, doux, structuré et très fruité.": "Presenterad som den första XXO inom ekologiskt jordbruk, mjuk, strukturerad och mycket fruktig.",
+    "Édition limitée, 51 %, sélectionnée par Fanny.": "Begränsad upplaga, 51 %, utvald av Fanny.",
+    "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Ekologisk Pineau des Charentes gjord med Colombard och Ugni Blanc, utan tillsatta sulfiter.",
+    "Dégustation": "Provning",
+    "Notes sensorielles": "Sensoriska noter",
+    "Bouche :": "Mun:",
+    "Couleur :": "Färg:",
+    "Nez :": "Doft:",
+    "Palais :": "Gom:",
+    "Finale :": "Avslutning:",
+    "Prendre conscience, mieux produire": "Bli medveten, producera bättre",
+    "Pour mieux consommer, préserver et transmettre.": "För att konsumera bättre, bevara och föra vidare.",
+    "Déjà 20 ans de production durable": "Redan 20 år av hållbar produktion",
+    "Une gamme biologique": "Ett ekologiskt sortiment",
+    "Un savoir-faire générationnel": "Generationers kunnande",
+    "Un Cru, les Fins Bois": "En cru: Fins Bois",
+    "Respect de nos terres et culture de la vigne": "Respekt för jorden och odlingen av vinrankan",
+    "Distillation": "Destillation",
+    "Élevage soigné et suivi": "Omsorgsfull och följd lagring",
+    "L’art subtil de l’assemblage": "Den subtila konsten att blenda",
+    "La mise en bouteille": "Buteljering",
+    "Travailler d’une même passion": "Att arbeta med samma passion",
+    "Un héritage passionnant mis au profit des générations futures.": "Ett passionerat arv till gagn för kommande generationer."
   }
 };
 
-function ensureLangStyle(){
-  if(document.getElementById('ceo-lang-style'))return;
-  const style=document.createElement('style');
-  style.id='ceo-lang-style';
-  style.textContent='body[data-lang="fr"] [data-en],body[data-lang="en"] [data-fr],body[data-lang="da"] [data-en],body[data-lang="no"] [data-en],body[data-lang="sv"] [data-en]{display:none!important}';
-  document.head.appendChild(style);
+function applyTextTranslations(lang) {
+  const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || ["SCRIPT", "STYLE", "NOSCRIPT"].includes(parent.tagName)) {
+        return NodeFilter.FILTER_REJECT;
+      }
+      return node.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }
+  });
+  const dictionary = translations[lang] || {};
+  const nodes = [];
+  while (treeWalker.nextNode()) nodes.push(treeWalker.currentNode);
+  nodes.forEach((node) => {
+    if (!node._ceoOriginalText) node._ceoOriginalText = node.nodeValue;
+    const original = node._ceoOriginalText;
+    const trimmed = original.trim();
+    if (!trimmed) return;
+    const translated = lang === "fr" ? trimmed : dictionary[trimmed];
+    if (!translated) {
+      node.nodeValue = original;
+      return;
+    }
+    node.nodeValue = original.replace(trimmed, translated);
+  });
 }
-function translateText(lang){
-  const dict=i18n[lang]||{};
-  const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode(node){const p=node.parentElement;if(!p||['SCRIPT','STYLE','NOSCRIPT'].includes(p.tagName))return NodeFilter.FILTER_REJECT;return node.nodeValue.trim()?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_REJECT;}});
-  const nodes=[];while(walker.nextNode())nodes.push(walker.currentNode);
-  nodes.forEach(node=>{if(!node._ceoText)node._ceoText=node.nodeValue;const original=node._ceoText;const key=original.trim();if(!key)return;const next=lang==='fr'?key:dict[key];node.nodeValue=next?original.replace(key,next):original;});
+
+function setLanguage(lang) {
+  if (!supportedLangs.includes(lang)) lang = "fr";
+  document.body.dataset.lang = lang;
+  document.documentElement.lang = lang;
+  localStorage.setItem("ceo-lang", lang);
+  applyTextTranslations(lang);
+  if (langToggle) {
+    langToggle.textContent = lang.toUpperCase();
+    langToggle.setAttribute("aria-label", `Changer de langue. Langue actuelle : ${langNames[lang]}`);
+    langToggle.setAttribute("title", "FR / EN / DA / NO / SV");
+  }
 }
-function setLanguage(lang){
-  ensureLangStyle();
-  if(!langs.includes(lang))lang='fr';
-  document.body.dataset.lang=lang;
-  document.documentElement.lang=lang;
-  localStorage.setItem('ceo-lang',lang);
-  translateText(lang);
-  if(langToggle){langToggle.textContent=lang.toUpperCase();langToggle.setAttribute('aria-label',`Changer de langue. Langue actuelle : ${names[lang]}`);langToggle.setAttribute('title','FR / EN / DA / NO / SV');}
-}
+
 setLanguage(initialLang);
-if(navToggle&&navLinks){navToggle.addEventListener('click',()=>{const isOpen=navLinks.classList.toggle('is-open');navToggle.setAttribute('aria-expanded',String(isOpen));});}
-if(langToggle){langToggle.addEventListener('click',()=>{const current=langs.indexOf(document.body.dataset.lang||'fr');setLanguage(langs[(current+1)%langs.length]);});}
-const homeSlides=Array.from(document.querySelectorAll('.home-hero-slideshow span'));
-if(homeSlides.length>1){let homeSlideIndex=0;setInterval(()=>{homeSlides[homeSlideIndex].classList.remove('is-active');homeSlideIndex=(homeSlideIndex+1)%homeSlides.length;homeSlides[homeSlideIndex].classList.add('is-active');},5000);}
-document.querySelectorAll('[data-gallery-thumb]').forEach(button=>{button.addEventListener('click',()=>{const detail=button.closest('.product-old-detail');const main=detail&&detail.querySelector('[data-gallery-main]');const next=button.dataset.galleryTarget;if(main&&next)main.src=next;});});
-document.querySelectorAll('[data-nutrition-open]').forEach(button=>{button.addEventListener('click',()=>{const block=button.closest('.product-sensory');const dialog=block&&block.querySelector('[data-nutrition-dialog]');if(!dialog)return;if(typeof dialog.showModal==='function')dialog.showModal();else dialog.setAttribute('open','');});});
+
+if (navToggle && navLinks) {
+  navToggle.addEventListener("click", () => {
+    const isOpen = navLinks.classList.toggle("is-open");
+    navToggle.setAttribute("aria-expanded", String(isOpen));
+  });
+}
+
+if (langToggle) {
+  langToggle.addEventListener("click", () => {
+    const currentIndex = supportedLangs.indexOf(document.body.dataset.lang || "fr");
+    const nextLang = supportedLangs[(currentIndex + 1) % supportedLangs.length];
+    setLanguage(nextLang);
+  });
+}
+
+const homeSlides = Array.from(document.querySelectorAll(".home-hero-slideshow span"));
+if (homeSlides.length > 1) {
+  let homeSlideIndex = 0;
+  setInterval(() => {
+    homeSlides[homeSlideIndex].classList.remove("is-active");
+    homeSlideIndex = (homeSlideIndex + 1) % homeSlides.length;
+    homeSlides[homeSlideIndex].classList.add("is-active");
+  }, 5000);
+}
+
+document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const detail = button.closest(".product-old-detail");
+    const main = detail && detail.querySelector("[data-gallery-main]");
+    const next = button.dataset.galleryTarget;
+    if (main && next) {
+      main.src = next;
+    }
+  });
+});
+
+document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
+  button.addEventListener("click", () => {
+    const block = button.closest(".product-sensory");
+    const dialog = block && block.querySelector("[data-nutrition-dialog]");
+    if (!dialog) return;
+    if (typeof dialog.showModal === "function") {
+      dialog.showModal();
+    } else {
+      dialog.setAttribute("open", "");
+    }
+  });
+});

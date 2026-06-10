@@ -3,9 +3,31 @@ const navLinks = document.querySelector("[data-nav-links]");
 const langToggle = document.querySelector("[data-lang-toggle]");
 const savedLang = localStorage.getItem("ceo-lang");
 const supportedLangs = ["fr", "en", "da", "no", "sv"];
-const browserPrefix = navigator.language ? navigator.language.toLowerCase().slice(0, 2) : "";
-const browserLang = supportedLangs.includes(browserPrefix) ? browserPrefix : "fr";
-const initialLang = savedLang || document.documentElement.dataset.defaultLang || browserLang;
+const languageAliases = { nb: "no", nn: "no" };
+const countryLanguages = {
+  DK: "da",
+  NO: "no",
+  SJ: "no",
+  SE: "sv",
+  FR: "fr",
+  MC: "fr",
+  BE: "fr",
+  CH: "fr",
+  LU: "fr"
+};
+function detectVisitorLanguage() {
+  const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
+  for (const locale of locales.filter(Boolean)) {
+    const parts = locale.replace("_", "-").split("-");
+    const country = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
+    if (countryLanguages[country]) return countryLanguages[country];
+    const language = (parts[0] || "").toLowerCase();
+    const normalized = languageAliases[language] || language;
+    if (supportedLangs.includes(normalized)) return normalized;
+  }
+  return "en";
+}
+const initialLang = savedLang || detectVisitorLanguage();
 const langNames = {
   fr: "Français",
   en: "English",

@@ -277,7 +277,7 @@ PRODUCT_EXTRAS = {
             "Palais": "Souple, rond, fruité, avec une belle fraîcheur",
             "Finale": "Gourmande, fruitée, légèrement épicée",
         },
-        "gallery": ["assets/img/products/pineau-rouge.png"],
+        "gallery": ["assets/img/products/pineau-rouge-label.png"],
         "colors": ["#565083", "#3e3b59", "#6e6baf"],
         "accent": "#ecb038",
         "nutrition_placeholder": "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.",
@@ -426,7 +426,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge02">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge03">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -456,7 +456,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       </div>
     </div>
   </footer>
-  <script src="{prefix}assets/js/main.js?v=20260611-pineau-rouge02"></script>
+  <script src="{prefix}assets/js/main.js?v=20260611-pineau-rouge03"></script>
 </body>
 </html>
 """
@@ -478,7 +478,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge02">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge03">
 </head>
 <body>
   <main class="redirect-page">

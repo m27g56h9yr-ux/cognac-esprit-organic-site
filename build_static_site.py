@@ -91,18 +91,32 @@ PRODUCTS = [
         "tone": "#522e03",
     },
     {
-        "name": "Pineau",
+        "name": "Pineau blanc",
         "slug": "pineau",
-        "short": "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.",
-        "en_short": "Organic Pineau des Charentes made with Colombard and Ugni Blanc, with no added sulphites.",
+        "short": "Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.",
+        "en_short": "Organic white Pineau des Charentes made with Colombard and Ugni Blanc, with no added sulphites.",
         "notes": ["Pineau des Charentes", "Colombard", "Ugni Blanc", "Sans sulfites ajoutés"],
-        "category": "Pineau des Charentes",
+        "category": "Pineau des Charentes blanc",
         "image": "assets/img/products/pineau.jpg",
         "scene": "assets/img/product-scenes/pineau-01.jpg",
         "detail_image": "assets/img/products/pineau.jpg",
         "tasting_image": "assets/img/product-scenes/pineau-01.jpg",
         "menu": "assets/img/product-menu/pineau.png",
         "tone": "#6b4d13",
+    },
+    {
+        "name": "Pineau rouge",
+        "slug": "pineau-rouge",
+        "short": "Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.",
+        "en_short": "Red Pineau des Charentes made with Merlot and Ugni Blanc, with a supple, generous fruit expression.",
+        "notes": ["Merlot", "Ugni Blanc", "Fruits rouges", "Souple"],
+        "category": "Pineau des Charentes rouge",
+        "image": "assets/img/products/pineau-rouge.png",
+        "scene": "assets/img/products/pineau-rouge.png",
+        "detail_image": "assets/img/products/pineau-rouge.png",
+        "tasting_image": "assets/img/products/pineau-rouge.png",
+        "menu": "assets/img/product-menu/pineau-rouge.png",
+        "tone": "#5b1f22",
     },
 ]
 
@@ -236,7 +250,7 @@ PRODUCT_EXTRAS = {
         "gallery_color": "#eae7db",
         "detail_image": "assets/img/old-site/visuel_pineau.jpg",
         "tasting_image": "assets/img/old-site/img_pineau_degustation.jpg",
-        "degustation_text": "Ce pineau des Charentes est élaboré à partir d’un assemblage d'eaux-de-vie de cognac et de moût de raisins issus de nos cépages de Colombard et d'Ugni Blanc. Il a vieilli pendant de nombreuses années en fûts de chêne, ce qui lui donne sa couleur ambrée et brillante. On retrouve en bouche des notes de fruits confits et de vanille. C’est un pineau riche et gourmand, bien structuré avec des notes intenses et harmonieuses.",
+        "degustation_text": "Ce pineau blanc des Charentes est élaboré à partir d’un assemblage d'eaux-de-vie de cognac et de moût de raisins issus de nos cépages de Colombard et d'Ugni Blanc. Il a vieilli pendant de nombreuses années en fûts de chêne, ce qui lui donne sa couleur ambrée et brillante. On retrouve en bouche des notes de fruits confits et de vanille. C’est un pineau riche et gourmand, bien structuré avec des notes intenses et harmonieuses.",
         "sensory": {
             "Bouche": "Brioche, jus de raisin frais, poire, pruneau, vanille",
             "Couleur": "Jaune or, jaune paille, brillant",
@@ -248,6 +262,26 @@ PRODUCT_EXTRAS = {
         "gallery": ["assets/img/old-site/visuel_pineau_02.jpg"],
         "colors": ["#565083", "#3e3b59", "#6e6baf"],
         "accent": "#ecb038",
+    },
+    "pineau-rouge": {
+        "legacy_url": "pineau-rouge",
+        "gallery_color": "#f4efe3",
+        "detail_image": "assets/img/products/pineau-rouge.png",
+        "tasting_image": "assets/img/products/pineau-rouge.png",
+        "section_class": "pineau-red-detail",
+        "story": "Ce Pineau rouge prolonge l'esprit de la gamme Esprit Organic dans un registre plus coloré : une bouche ronde, fraîche et fruitée, pensée pour l'apéritif, les desserts aux fruits ou un service légèrement rafraîchi.",
+        "degustation_text": "Ce Pineau rouge des Charentes est élaboré à partir de Merlot et d'Ugni Blanc. Il présente une robe rouge profonde et brillante. Le nez évoque les fruits rouges mûrs, la cerise et une touche de prune. La bouche est souple, ample et gourmande, avec une finale fruitée et légèrement épicée.",
+        "sensory": {
+            "Bouche": "Fruits rouges mûrs, cerise, prune, douceur du raisin",
+            "Couleur": "Rouge profond, reflets rubis, brillant",
+            "Nez": "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits",
+            "Palais": "Souple, rond, fruité, avec une belle fraîcheur",
+            "Finale": "Gourmande, fruitée, légèrement épicée",
+        },
+        "gallery": [],
+        "colors": ["#5b1f22", "#78302e", "#4c2529"],
+        "accent": "#d6a14c",
+        "nutrition_placeholder": "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.",
     },
 }
 
@@ -393,7 +427,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260607-homealign01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge01">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -404,7 +438,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         <img src="{prefix}assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic">
       </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Ouvrir le menu">Menu</button>
-      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<button class="lang-toggle" type="button" data-lang-toggle>ENG</button><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></div>
+      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">FR</button><div class="lang-menu-panel" role="menu" aria-label="Choisir la langue"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></div>
     </nav>
   </header>
   <main id="contenu">
@@ -423,7 +457,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       </div>
     </div>
   </footer>
-  <script src="{prefix}assets/js/main.js?v=20260607-homealign01"></script>
+  <script src="{prefix}assets/js/main.js?v=20260611-pineau-rouge01"></script>
 </body>
 </html>
 """
@@ -445,7 +479,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260607-homealign01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge01">
 </head>
 <body>
   <main class="redirect-page">
@@ -588,12 +622,12 @@ def home():
 def range_page():
     body = section(
         '<p class="eyebrow">Produits</p><h2 data-fr>Gamme Cognac Esprit Organic</h2><h2 data-en>Cognac Esprit Organic range</h2>'
-        + '<p data-fr>Les produits disponibles aujourd’hui sont : VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.</p>'
-        + '<p data-en>Products currently available are: VS, VSOP, Napoléon, XO, XXO, Single Cask and Pineau.</p>'
+        + '<p data-fr>Les produits disponibles aujourd’hui sont : VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.</p>'
+        + '<p data-en>Products currently available are: VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p>'
         + product_menu()
         + f'<div class="product-text-grid">{"".join(product_text_tile(p) for p in PRODUCTS)}</div>'
     )
-    return layout("produits.html", "Gamme produits | Cognac Esprit Organic", "Découvrez les Cognacs biologiques Esprit Organic : VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.", "Gamme produits Cognac Esprit Organic", "Une gamme biologique structurée pour une lecture simple, du VS au XXO.", "An organic range structured for clear reading, from VS to XXO.", body)
+    return layout("produits.html", "Gamme produits | Cognac Esprit Organic", "Découvrez les Cognacs biologiques Esprit Organic : VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.", "Gamme produits Cognac Esprit Organic", "Une gamme biologique structurée pour une lecture simple, du VS au XXO.", "An organic range structured for clear reading, from VS to XXO.", body)
 
 
 def product_page(product):
@@ -618,6 +652,7 @@ def product_page(product):
     degustation_title = extra.get("degustation_title", "Dégustation")
     degustation_text = extra.get("degustation_text", product["short"])
     nutrition_image = NUTRITION_IMAGES.get(product["slug"], "")
+    nutrition_placeholder = extra.get("nutrition_placeholder", "")
     sensory_items = "".join(
         f'<li><span>{escape(label)} :</span><strong>{escape(value)}</strong></li>'
         for label, value in extra.get("sensory", {}).items()
@@ -632,7 +667,12 @@ def product_page(product):
         f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="" loading="lazy"></button>'
         for idx, src in enumerate(gallery_images)
     )
-    nutrition_dialog = f"""
+    nutrition_controls = f"""
+      <button class="nutrition-link" type="button" data-nutrition-open data-fr>Valeurs nutritionnelles</button>
+      <button class="nutrition-link" type="button" data-nutrition-open data-en>Nutritional values</button>
+"""
+    if nutrition_image:
+        nutrition_controls += f"""
       <dialog class="nutrition-dialog" data-nutrition-dialog>
         <form method="dialog">
           <button type="submit" aria-label="Fermer">×</button>
@@ -640,12 +680,25 @@ def product_page(product):
         <h2>Valeurs nutritionnelles - {escape(product["name"])}</h2>
         <img src="{prefix}{nutrition_image}" alt="Valeurs nutritionnelles {escape(product["name"])}" loading="lazy">
       </dialog>
-""" if nutrition_image else ""
+"""
+    elif nutrition_placeholder:
+        nutrition_controls += f"""
+      <dialog class="nutrition-dialog" data-nutrition-dialog>
+        <form method="dialog">
+          <button type="submit" aria-label="Fermer">×</button>
+        </form>
+        <h2>Valeurs nutritionnelles - {escape(product["name"])}</h2>
+        <p>{escape(nutrition_placeholder)}</p>
+      </dialog>
+"""
+    else:
+        nutrition_controls = ""
+    section_class = f'product-old-detail {extra.get("section_class", "")}'.strip()
     body = f"""
 <section class="product-menu-strip">
   <div class="section-inner">{product_menu(prefix)}</div>
 </section>
-<section class="product-old-detail" style="--product-tone: {product['tone']}; --product-gallery: {gallery_color}; --product-top: {colors[0]}; --product-mid: {colors[1]}; --product-low: {colors[2]}; --product-accent: {accent};">
+<section class="{section_class}" style="--product-tone: {product['tone']}; --product-gallery: {gallery_color}; --product-top: {colors[0]}; --product-mid: {colors[1]}; --product-low: {colors[2]}; --product-accent: {accent};">
   <div class="product-gallery-rail">
     {gallery_buttons}
   </div>
@@ -676,9 +729,7 @@ def product_page(product):
       <ul>
         {sensory_items}
       </ul>
-      <button class="nutrition-link" type="button" data-nutrition-open data-fr>Valeurs nutritionnelles</button>
-      <button class="nutrition-link" type="button" data-nutrition-open data-en>Nutritional values</button>
-      {nutrition_dialog}
+      {nutrition_controls}
     </div>
   </div>
 </section>
@@ -845,7 +896,7 @@ def people_page(path="leopold-et-fanny/index.html"):
 def importer_page():
     body = f"""
 {split('<p class="eyebrow">B2B export</p><h2 data-fr>Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.</h2><h2 data-en>A dedicated page for importers, wine merchants, hospitality, bars, hotels and organic retail networks.</h2>', '<p data-fr>Esprit Organic s’adresse aux marchés export formulés ainsi : Europe, USA, Canada. Cette page reste volontairement factuelle : elle présente la gamme, les informations de contact et les documents à préparer, sans inventer de volumes ni de distributeurs.</p><p data-en>Esprit Organic addresses export markets formulated as: Europe, USA, Canada. This page stays factual: it presents the range, contact details and documents to prepare, without inventing volumes or distributors.</p><a class="button" href="contact.html" data-fr>Demander des informations export</a><a class="button" href="contact.html" data-en>Request export information</a>')}
-{section('<div class="feature-grid"><article><h2>Range</h2><p>VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau.</p></article><article><h2>Positioning</h2><p data-fr>Cognac biologique familial, naturel, premium et indépendant.</p><p data-en>Family, natural, premium and independent organic Cognac.</p></article><article><h2>Markets</h2><p>Europe, USA, Canada.</p></article></div>')}
+{section('<div class="feature-grid"><article><h2>Range</h2><p>VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc, Pineau rouge.</p></article><article><h2>Positioning</h2><p data-fr>Cognac biologique familial, naturel, premium et indépendant.</p><p data-en>Family, natural, premium and independent organic Cognac.</p></article><article><h2>Markets</h2><p>Europe, USA, Canada.</p></article></div>')}
 {section('<h2 data-fr>Documents à préparer</h2><h2 data-en>Documents to prepare</h2><ul class="check-list"><li data-fr>Fiches produits professionnelles.</li><li data-en>Professional product sheets.</li><li data-fr>Photos bouteilles et gamme.</li><li data-en>Bottle and range photographs.</li><li data-fr>Informations réglementaires et nutritionnelles en HTML accessible.</li><li data-en>Regulatory and nutritional information in accessible HTML.</li></ul>')}
 """
     return layout("importers.html", "For Importers | Cognac Esprit Organic", "B2B export page for Cognac Esprit Organic importers in Europe, USA and Canada: organic Cognac range, positioning and contact.", "For Importers", "Une page B2B export pour les marchés Europe, USA, Canada.", "A B2B export page for Europe, USA and Canada.", body)
@@ -854,7 +905,7 @@ def importer_page():
 def producer_page():
     location_cards = "<div class=\"feature-grid\"><article><h2>Location</h2><p>30, rue d'Angoumême, 16200 Triac-Lautrait, France.</p></article><article><h2>Organic focus</h2><p>Family, natural and premium positioning for professional buyers looking for organic Cognac from France.</p></article><article><h2>Export wording</h2><p>Europe, USA, Canada.</p></article></div>"
     body = f"""
-{split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>This page is written in English for international buyers and search engines. Esprit Organic is an organic Cognac brand led by Léopold and Fanny Croizet.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask and Pineau.</p><a class="button" href="importers.html">For Importers</a>')}
+{split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>This page is written in English for international buyers and search engines. Esprit Organic is an organic Cognac brand led by Léopold and Fanny Croizet.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><a class="button" href="importers.html">For Importers</a>')}
 {section(location_cards)}
 {section('<h2>Useful internal pages</h2><div class="link-list"><a href="produits/transmission-xo.html">Transmission XO</a><a href="production/">Organic approach</a><a href="demarche/">Production</a><a href="contact.html">Contact</a></div>')}
 """
@@ -906,7 +957,7 @@ def simple_page(path, title, desc, h1, intro_fr, intro_en, body):
 
 def faq_page():
     questions = [
-        ("Quels produits Cognac Esprit Organic sont disponibles ?", "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau."),
+        ("Quels produits Cognac Esprit Organic sont disponibles ?", "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge."),
         ("Quels marchés export sont visés ?", "La formulation validée est : Europe, USA, Canada."),
         ("Où se situe Cognac Esprit Organic ?", CONTACT["address"]),
         ("Quels sont les horaires de visite ?", "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes."),
@@ -1048,7 +1099,11 @@ def write_css():
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body { margin: 0; color: var(--ink); background: var(--paper); font-family: Montserrat, Arial, sans-serif; line-height: 1.62; }
-body[data-lang="fr"] [data-en], body[data-lang="en"] [data-fr] { display: none !important; }
+body[data-lang="fr"] [data-en],
+body[data-lang="en"] [data-fr],
+body[data-lang="da"] [data-en],
+body[data-lang="no"] [data-en],
+body[data-lang="sv"] [data-en] { display: none !important; }
 a { color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--ink); color: var(--white); padding: 10px 14px; }
@@ -1062,6 +1117,41 @@ img { display: block; max-width: 100%; height: auto; }
 .nav-toggle, .lang-toggle { border: 1px solid var(--line); background: var(--cream); color: var(--ink); min-height: 42px; border-radius: var(--radius); font-weight: 800; cursor: pointer; }
 .nav-toggle { display: none; margin-left: auto; padding: 0 12px; }
 .lang-toggle { min-width: 46px; }
+.lang-menu { position: relative; display: inline-flex; }
+.lang-menu-panel {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 8px);
+  z-index: 35;
+  min-width: 84px;
+  padding: 8px;
+  border: 1px solid rgba(94, 61, 35, .18);
+  background: var(--cream);
+  box-shadow: 0 16px 34px rgba(23,19,15,.16);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px);
+  transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+}
+.lang-menu.is-open .lang-menu-panel,
+.lang-menu:hover .lang-menu-panel,
+.lang-menu:focus-within .lang-menu-panel { opacity: 1; visibility: visible; transform: translateY(0); }
+.lang-option {
+  display: block;
+  width: 100%;
+  min-height: 34px;
+  border: 0;
+  background: transparent;
+  color: var(--brand);
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+.lang-option:hover,
+.lang-option:focus-visible,
+.lang-option[aria-current="true"] { background: rgba(94, 61, 35, .08); }
 .header-bio { display: none; }
 .home-page .header-bio {
   display: block;
@@ -1290,10 +1380,17 @@ p { margin: 18px 0 0; }
   .home-page .site-header { position: sticky; background: rgba(236, 232, 220, .92); }
   .home-page .brand img { filter: none; }
   .home-page .nav-links a { color: var(--muted); }
+  .home-page .lang-toggle { border: 1px solid var(--line); background: var(--cream); color: var(--ink); font-family: Montserrat, Arial, sans-serif; min-width: 46px; }
   .nav { flex-wrap: wrap; padding: 12px 0; }
   .nav-toggle { display: inline-flex; align-items: center; justify-content: center; }
-  .nav-links { display: none; width: 100%; flex-direction: column; align-items: stretch; gap: 2px; margin-left: 0; }
-  .nav-links.is-open { display: flex; }
+  .nav-links { display: flex; width: auto; flex-direction: row; align-items: center; gap: 10px; margin-left: auto; }
+  .nav-links .nav-dropdown,
+  .nav-links > a,
+  .nav-links .header-bio { display: none; }
+  .nav-links.is-open { width: 100%; flex-direction: column; align-items: stretch; gap: 2px; margin-left: 0; order: 10; }
+  .nav-links.is-open .nav-dropdown,
+  .nav-links.is-open > a { display: block; }
+  .nav-links.is-open .header-bio { display: block; width: 82px; margin-top: 8px; }
   .nav-links a { padding: 12px 0; }
   .nav-dropdown { padding: 0; }
   .dropdown-menu {

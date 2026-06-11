@@ -1,6 +1,8 @@
 const navToggle = document.querySelector("[data-nav-toggle]");
 const navLinks = document.querySelector("[data-nav-links]");
 const langToggle = document.querySelector("[data-lang-toggle]");
+const langMenu = document.querySelector("[data-lang-menu]");
+const langOptions = Array.from(document.querySelectorAll("[data-lang-option]"));
 const savedLang = localStorage.getItem("ceo-lang");
 const supportedLangs = ["fr", "en", "da", "no", "sv"];
 const languageAliases = { nb: "no", nn: "no" };
@@ -274,7 +276,7 @@ const translations = {
     "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.",
     "Questions utiles pour Google, les visiteurs et les agents IA.": "Useful questions for Google, visitors and AI agents.",
     "Quels produits Cognac Esprit Organic sont disponibles ?": "Which Cognac Esprit Organic products are available?",
-    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask and Pineau.",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.": "The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.",
     "Quels sont les horaires de visite ?": "What are the visiting hours?",
     "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Visits are available Monday to Friday, 10am-12pm or 2pm-5pm, duration 1 hour, maximum 10 people.",
     "Quels marchés export sont visés ?": "Which export markets are targeted?",
@@ -415,7 +417,7 @@ const translations = {
     "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Aktuelle besøgstider: mandag-fredag, 10-12 eller 14-17. Varighed: 1 time. Maksimum: 10 personer.",
     "Questions utiles pour Google, les visiteurs et les agents IA.": "Nyttige spørgsmål for Google, besøgende og AI-agenter.",
     "Quels produits Cognac Esprit Organic sont disponibles ?": "Hvilke Cognac Esprit Organic-produkter er tilgængelige?",
-    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "De tilgængelige produkter er VS, VSOP, Napoléon, XO, XXO, Single Cask og Pineau.",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.": "De tilgængelige produkter er VS, VSOP, Napoléon, XO, XXO, Single Cask, hvid Pineau og rød Pineau.",
     "Quels sont les horaires de visite ?": "Hvad er besøgstiderne?",
     "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Besøg er mulige mandag til fredag, 10-12 eller 14-17, varighed 1 time, maksimum 10 personer.",
     "Quels marchés export sont visés ?": "Hvilke eksportmarkeder er målrettet?",
@@ -555,7 +557,7 @@ const translations = {
     "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Gjeldende besøkstider: mandag-fredag, 10-12 eller 14-17. Varighet: 1 time. Maksimum: 10 personer.",
     "Questions utiles pour Google, les visiteurs et les agents IA.": "Nyttige spørsmål for Google, besøkende og AI-agenter.",
     "Quels produits Cognac Esprit Organic sont disponibles ?": "Hvilke Cognac Esprit Organic-produkter er tilgjengelige?",
-    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "Tilgjengelige produkter er VS, VSOP, Napoléon, XO, XXO, Single Cask og Pineau.",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.": "Tilgjengelige produkter er VS, VSOP, Napoléon, XO, XXO, Single Cask, hvit Pineau og rød Pineau.",
     "Quels sont les horaires de visite ?": "Hva er besøkstidene?",
     "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Besøk er mulig mandag til fredag, 10-12 eller 14-17, varighet 1 time, maksimum 10 personer.",
     "Quels marchés export sont visés ?": "Hvilke eksportmarkeder er målrettet?",
@@ -695,7 +697,7 @@ const translations = {
     "Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.": "Aktuella besökstider: måndag-fredag, 10-12 eller 14-17. Längd: 1 timme. Max: 10 personer.",
     "Questions utiles pour Google, les visiteurs et les agents IA.": "Nyttiga frågor för Google, besökare och AI-agenter.",
     "Quels produits Cognac Esprit Organic sont disponibles ?": "Vilka Cognac Esprit Organic-produkter finns tillgängliga?",
-    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask et Pineau.": "Tillgängliga produkter är VS, VSOP, Napoléon, XO, XXO, Single Cask och Pineau.",
+    "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.": "Tillgängliga produkter är VS, VSOP, Napoléon, XO, XXO, Single Cask, vit Pineau och röd Pineau.",
     "Quels sont les horaires de visite ?": "Vilka är besökstiderna?",
     "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes.": "Besök är möjliga måndag till fredag, 10-12 eller 14-17, längd 1 timme, högst 10 personer.",
     "Quels marchés export sont visés ?": "Vilka exportmarknader är målgruppen?",
@@ -942,6 +944,81 @@ Object.assign(translations.da, nordicLegacyTerms.da);
 Object.assign(translations.no, nordicLegacyTerms.no);
 Object.assign(translations.sv, nordicLegacyTerms.sv);
 
+const pineauProductTranslations = {
+  en: {
+    "Pineau blanc": "White Pineau",
+    "Pineau rouge": "Red Pineau",
+    "Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Organic white Pineau des Charentes made with Colombard and Ugni Blanc, with no added sulphites.",
+    "Ce pineau blanc des Charentes est élaboré à partir d’un assemblage d'eaux-de-vie de cognac et de moût de raisins issus de nos cépages de Colombard et d'Ugni Blanc. Il a vieilli pendant de nombreuses années en fûts de chêne, ce qui lui donne sa couleur ambrée et brillante. On retrouve en bouche des notes de fruits confits et de vanille. C’est un pineau riche et gourmand, bien structuré avec des notes intenses et harmonieuses.": "This white Pineau des Charentes is made from a blend of Cognac eaux-de-vie and grape must from our Colombard and Ugni Blanc varieties. It has aged for many years in oak casks, giving it its bright amber colour. The palate shows candied fruit and vanilla notes. It is a rich, generous Pineau, well structured with intense and harmonious notes.",
+    "Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.": "Red Pineau des Charentes made with Merlot and Ugni Blanc, with a supple, generous fruit expression.",
+    "Ce Pineau rouge prolonge l'esprit de la gamme Esprit Organic dans un registre plus coloré : une bouche ronde, fraîche et fruitée, pensée pour l'apéritif, les desserts aux fruits ou un service légèrement rafraîchi.": "This red Pineau extends the Esprit Organic range in a more colourful register: a round, fresh and fruity palate, suited to aperitifs, fruit desserts or lightly chilled service.",
+    "Ce Pineau rouge des Charentes est élaboré à partir de Merlot et d'Ugni Blanc. Il présente une robe rouge profonde et brillante. Le nez évoque les fruits rouges mûrs, la cerise et une touche de prune. La bouche est souple, ample et gourmande, avec une finale fruitée et légèrement épicée.": "This red Pineau des Charentes is made with Merlot and Ugni Blanc. It shows a deep, bright red colour. The nose suggests ripe red fruit, cherry and a touch of plum. The palate is supple, broad and generous, with a fruity, lightly spicy finish.",
+    "Fruits rouges mûrs, cerise, prune, douceur du raisin": "Ripe red fruit, cherry, plum, grape sweetness",
+    "Rouge profond, reflets rubis, brillant": "Deep red, ruby highlights, bright",
+    "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Fruity and generous, with cherry, blackberry and candied red fruit",
+    "Souple, rond, fruité, avec une belle fraîcheur": "Supple, round and fruity, with fine freshness",
+    "Gourmande, fruitée, légèrement épicée": "Generous, fruity and lightly spicy",
+    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Nutritional values to add once the official red Pineau product sheet is available.",
+    "Valeurs nutritionnelles - Pineau blanc": "Nutritional values - White Pineau",
+    "Valeurs nutritionnelles - Pineau rouge": "Nutritional values - Red Pineau"
+  },
+  da: {
+    "Pineau blanc": "Hvid Pineau",
+    "Pineau rouge": "Rød Pineau",
+    "Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.",
+    "Ce pineau blanc des Charentes est élaboré à partir d’un assemblage d'eaux-de-vie de cognac et de moût de raisins issus de nos cépages de Colombard et d'Ugni Blanc. Il a vieilli pendant de nombreuses années en fûts de chêne, ce qui lui donne sa couleur ambrée et brillante. On retrouve en bouche des notes de fruits confits et de vanille. C’est un pineau riche et gourmand, bien structuré avec des notes intenses et harmonieuses.": "Denne hvide Pineau des Charentes fremstilles af en blanding af Cognac eaux-de-vie og druemost fra vores Colombard- og Ugni Blanc-druer. Den har lagret i mange år på egetræsfade, hvilket giver den sin klare ravfarve. I munden findes noter af kandiseret frugt og vanilje. Det er en rig, fyldig Pineau med struktur og harmoniske noter.",
+    "Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.": "Rød Pineau des Charentes lavet med Merlot og Ugni Blanc, med et smidigt, frugtigt og generøst udtryk.",
+    "Ce Pineau rouge prolonge l'esprit de la gamme Esprit Organic dans un registre plus coloré : une bouche ronde, fraîche et fruitée, pensée pour l'apéritif, les desserts aux fruits ou un service légèrement rafraîchi.": "Denne røde Pineau fører Esprit Organic-sortimentet videre i en mere farverig stil: rund, frisk og frugtig i munden, velegnet til aperitif, frugtdesserter eller let afkølet servering.",
+    "Ce Pineau rouge des Charentes est élaboré à partir de Merlot et d'Ugni Blanc. Il présente une robe rouge profonde et brillante. Le nez évoque les fruits rouges mûrs, la cerise et une touche de prune. La bouche est souple, ample et gourmande, avec une finale fruitée et légèrement épicée.": "Denne røde Pineau des Charentes er lavet med Merlot og Ugni Blanc. Farven er dyb rød og blank. Duften leder tankerne mod modne røde frugter, kirsebær og et strejf af blomme. Smagen er smidig, fyldig og generøs med en frugtig, let krydret afslutning.",
+    "Fruits rouges mûrs, cerise, prune, douceur du raisin": "Modne røde frugter, kirsebær, blomme, druesødme",
+    "Rouge profond, reflets rubis, brillant": "Dyb rød, rubinreflekser, blank",
+    "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Frugtig og generøs med kirsebær, brombær og kandiserede røde frugter",
+    "Souple, rond, fruité, avec une belle fraîcheur": "Smidig, rund og frugtig med fin friskhed",
+    "Gourmande, fruitée, légèrement épicée": "Generøs, frugtig og let krydret",
+    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Næringsværdier tilføjes, når den officielle produktfiche for rød Pineau er klar.",
+    "Valeurs nutritionnelles - Pineau blanc": "Næringsværdier - Hvid Pineau",
+    "Valeurs nutritionnelles - Pineau rouge": "Næringsværdier - Rød Pineau"
+  },
+  no: {
+    "Pineau blanc": "Hvit Pineau",
+    "Pineau rouge": "Rød Pineau",
+    "Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Økologisk hvit Pineau des Charentes laget med Colombard og Ugni Blanc, uten tilsatte sulfitter.",
+    "Ce pineau blanc des Charentes est élaboré à partir d’un assemblage d'eaux-de-vie de cognac et de moût de raisins issus de nos cépages de Colombard et d'Ugni Blanc. Il a vieilli pendant de nombreuses années en fûts de chêne, ce qui lui donne sa couleur ambrée et brillante. On retrouve en bouche des notes de fruits confits et de vanille. C’est un pineau riche et gourmand, bien structuré avec des notes intenses et harmonieuses.": "Denne hvite Pineau des Charentes er laget av en blanding av Cognac eaux-de-vie og druemost fra Colombard- og Ugni Blanc-druene våre. Den har lagret i mange år på eikefat, noe som gir den en klar ravfarge. I munnen finner man noter av kandisert frukt og vanilje. Det er en rik, fyldig Pineau med struktur og harmoniske noter.",
+    "Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.": "Rød Pineau des Charentes laget med Merlot og Ugni Blanc, med et fruktig, mykt og fyldig uttrykk.",
+    "Ce Pineau rouge prolonge l'esprit de la gamme Esprit Organic dans un registre plus coloré : une bouche ronde, fraîche et fruitée, pensée pour l'apéritif, les desserts aux fruits ou un service légèrement rafraîchi.": "Denne røde Pineauen viderefører Esprit Organic-serien i en mer fargerik stil: rund, frisk og fruktig i munnen, godt egnet som aperitiff, til fruktdesserter eller lett avkjølt servering.",
+    "Ce Pineau rouge des Charentes est élaboré à partir de Merlot et d'Ugni Blanc. Il présente une robe rouge profonde et brillante. Le nez évoque les fruits rouges mûrs, la cerise et une touche de prune. La bouche est souple, ample et gourmande, avec une finale fruitée et légèrement épicée.": "Denne røde Pineau des Charentes er laget med Merlot og Ugni Blanc. Fargen er dyp rød og klar. Duften minner om modne røde frukter, kirsebær og et hint av plomme. Smaken er myk, fyldig og generøs med en fruktig, lett krydret avslutning.",
+    "Fruits rouges mûrs, cerise, prune, douceur du raisin": "Modne røde frukter, kirsebær, plomme, druesødme",
+    "Rouge profond, reflets rubis, brillant": "Dyp rød, rubinreflekser, klar",
+    "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Fruktig og fyldig med kirsebær, bjørnebær og kandiserte røde frukter",
+    "Souple, rond, fruité, avec une belle fraîcheur": "Myk, rund og fruktig med fin friskhet",
+    "Gourmande, fruitée, légèrement épicée": "Fyldig, fruktig og lett krydret",
+    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Næringsverdier legges til når den offisielle produktfiche for rød Pineau er klar.",
+    "Valeurs nutritionnelles - Pineau blanc": "Næringsverdier - Hvit Pineau",
+    "Valeurs nutritionnelles - Pineau rouge": "Næringsverdier - Rød Pineau"
+  },
+  sv: {
+    "Pineau blanc": "Vit Pineau",
+    "Pineau rouge": "Röd Pineau",
+    "Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Ekologisk vit Pineau des Charentes gjord med Colombard och Ugni Blanc, utan tillsatta sulfiter.",
+    "Ce pineau blanc des Charentes est élaboré à partir d’un assemblage d'eaux-de-vie de cognac et de moût de raisins issus de nos cépages de Colombard et d'Ugni Blanc. Il a vieilli pendant de nombreuses années en fûts de chêne, ce qui lui donne sa couleur ambrée et brillante. On retrouve en bouche des notes de fruits confits et de vanille. C’est un pineau riche et gourmand, bien structuré avec des notes intenses et harmonieuses.": "Denna vita Pineau des Charentes framställs av en blandning av Cognac eaux-de-vie och druvmust från våra Colombard- och Ugni Blanc-druvor. Den har lagrats i många år på ekfat, vilket ger den sin klara bärnstensfärg. I munnen finns toner av kanderad frukt och vanilj. Det är en rik, generös Pineau med struktur och harmoniska toner.",
+    "Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.": "Röd Pineau des Charentes gjord med Merlot och Ugni Blanc, med ett fruktigt, mjukt och generöst uttryck.",
+    "Ce Pineau rouge prolonge l'esprit de la gamme Esprit Organic dans un registre plus coloré : une bouche ronde, fraîche et fruitée, pensée pour l'apéritif, les desserts aux fruits ou un service légèrement rafraîchi.": "Denna röda Pineau för vidare Esprit Organic-sortimentet i en mer färgstark stil: rund, frisk och fruktig i munnen, lämpad som aperitif, till fruktdesserter eller lätt kyld servering.",
+    "Ce Pineau rouge des Charentes est élaboré à partir de Merlot et d'Ugni Blanc. Il présente une robe rouge profonde et brillante. Le nez évoque les fruits rouges mûrs, la cerise et une touche de prune. La bouche est souple, ample et gourmande, avec une finale fruitée et légèrement épicée.": "Denna röda Pineau des Charentes görs med Merlot och Ugni Blanc. Färgen är djupt röd och klar. Doften påminner om mogna röda frukter, körsbär och en ton av plommon. Smaken är mjuk, fyllig och generös med en fruktig, lätt kryddig avslutning.",
+    "Fruits rouges mûrs, cerise, prune, douceur du raisin": "Mogna röda frukter, körsbär, plommon, druvsötma",
+    "Rouge profond, reflets rubis, brillant": "Djup röd, rubinreflexer, klar",
+    "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Fruktig och generös med körsbär, björnbär och kanderade röda frukter",
+    "Souple, rond, fruité, avec une belle fraîcheur": "Mjuk, rund och fruktig med fin friskhet",
+    "Gourmande, fruitée, légèrement épicée": "Generös, fruktig och lätt kryddig",
+    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Näringsvärden läggs till när den officiella produktinformationen för röd Pineau finns klar.",
+    "Valeurs nutritionnelles - Pineau blanc": "Näringsvärden - Vit Pineau",
+    "Valeurs nutritionnelles - Pineau rouge": "Näringsvärden - Röd Pineau"
+  }
+};
+
+Object.entries(pineauProductTranslations).forEach(([lang, dictionary]) => {
+  Object.assign(translations[lang], dictionary);
+});
+
 function applyTextTranslations(lang) {
   const treeWalker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
     acceptNode(node) {
@@ -981,7 +1058,12 @@ function setLanguage(lang) {
     langToggle.textContent = lang.toUpperCase();
     langToggle.setAttribute("aria-label", `Changer de langue. Langue actuelle : ${langNames[lang]}`);
     langToggle.setAttribute("title", "FR / EN / DA / NO / SV");
+    langToggle.setAttribute("aria-expanded", "false");
   }
+  if (langMenu) langMenu.classList.remove("is-open");
+  langOptions.forEach((option) => {
+    option.setAttribute("aria-current", String(option.dataset.langOption === lang));
+  });
 }
 
 setLanguage(initialLang);
@@ -995,11 +1077,28 @@ if (navToggle && navLinks) {
 
 if (langToggle) {
   langToggle.addEventListener("click", () => {
-    const currentIndex = supportedLangs.indexOf(document.body.dataset.lang || "fr");
-    const nextLang = supportedLangs[(currentIndex + 1) % supportedLangs.length];
-    setLanguage(nextLang);
+    const isOpen = langMenu && langMenu.classList.toggle("is-open");
+    langToggle.setAttribute("aria-expanded", String(Boolean(isOpen)));
   });
 }
+
+langOptions.forEach((option) => {
+  option.addEventListener("click", () => {
+    setLanguage(option.dataset.langOption || "fr");
+  });
+});
+
+document.addEventListener("click", (event) => {
+  if (!langMenu || langMenu.contains(event.target)) return;
+  langMenu.classList.remove("is-open");
+  if (langToggle) langToggle.setAttribute("aria-expanded", "false");
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape" || !langMenu) return;
+  langMenu.classList.remove("is-open");
+  if (langToggle) langToggle.setAttribute("aria-expanded", "false");
+});
 
 const homeSlides = Array.from(document.querySelectorAll(".home-hero-slideshow span"));
 if (homeSlides.length > 1) {

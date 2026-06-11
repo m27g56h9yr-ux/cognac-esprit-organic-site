@@ -420,7 +420,6 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       <div class="footer-links">
         <a href="{prefix}produits/transmission-xo.html">Gamme</a>
         <a href="{prefix}cocktails.html">Cocktails</a>
-        <a href="{prefix}llms.txt">llms.txt</a>
       </div>
     </div>
   </footer>

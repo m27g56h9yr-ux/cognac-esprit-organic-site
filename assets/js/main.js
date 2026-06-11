@@ -149,6 +149,7 @@ function renderFooterEnhancements(lang) {
       <span></span>
     `;
     instagramLink.querySelector("span").textContent = copy.instagram;
+    instagramLink.setAttribute("aria-label", copy.instagram);
   }
 
   let newsletter = footer.querySelector("[data-footer-newsletter]");

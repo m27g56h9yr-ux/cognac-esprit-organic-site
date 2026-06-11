@@ -72,4 +72,6 @@ newsletter-data/subscriptions.csv
 
 Chaque ligne contient la date d'inscription, l'adresse e-mail, la langue, le marché détecté et la page d'inscription.
 
+Après chaque inscription, `newsletter.php` envoie aussi le fichier CSV complet en pièce jointe à `cognac@mdpierre.com`.
+
 Le dossier `newsletter-data/` contient un fichier `.htaccess` pour empêcher la lecture publique du fichier CSV. GitHub Pages ne peut pas enregistrer les inscriptions, car il héberge uniquement des fichiers statiques et n'exécute pas PHP.

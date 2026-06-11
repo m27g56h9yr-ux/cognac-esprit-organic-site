@@ -3,6 +3,39 @@ declare(strict_types=1);
 
 header('Content-Type: application/json; charset=utf-8');
 
+function sendSubscriptionsFile(string $csvFile): bool
+{
+    if (!function_exists('mail') || !is_readable($csvFile)) {
+        return false;
+    }
+
+    $to = 'cognac@mdpierre.com';
+    $subject = 'Newsletter Cognac Esprit Organic - fichier mis a jour';
+    $boundary = 'ceo-newsletter-' . bin2hex(random_bytes(12));
+    $csvContent = chunk_split(base64_encode((string)file_get_contents($csvFile)));
+
+    $headers = [
+        'From: Cognac Esprit Organic <no-reply@cognac-esprit-organic.com>',
+        'MIME-Version: 1.0',
+        'Content-Type: multipart/mixed; boundary="' . $boundary . '"'
+    ];
+
+    $message = "--{$boundary}\r\n";
+    $message .= "Content-Type: text/plain; charset=utf-8\r\n";
+    $message .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
+    $message .= "Bonjour,\r\n\r\n";
+    $message .= "Une nouvelle adresse e-mail vient d'etre ajoutee a la newsletter Cognac Esprit Organic.\r\n";
+    $message .= "Le fichier complet subscriptions.csv est joint a cet e-mail.\r\n\r\n";
+    $message .= "--{$boundary}\r\n";
+    $message .= "Content-Type: text/csv; name=\"subscriptions.csv\"\r\n";
+    $message .= "Content-Transfer-Encoding: base64\r\n";
+    $message .= "Content-Disposition: attachment; filename=\"subscriptions.csv\"\r\n\r\n";
+    $message .= $csvContent . "\r\n";
+    $message .= "--{$boundary}--\r\n";
+
+    return mail($to, $subject, $message, implode("\r\n", $headers));
+}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     http_response_code(405);
     echo json_encode(['ok' => false, 'error' => 'method_not_allowed']);
@@ -58,4 +91,6 @@ fputcsv($handle, [gmdate('c'), $email, $language, $market, $page]);
 flock($handle, LOCK_UN);
 fclose($handle);
 
-echo json_encode(['ok' => true]);
+$mailSent = sendSubscriptionsFile($file);
+
+echo json_encode(['ok' => true, 'mail_sent' => $mailSent]);

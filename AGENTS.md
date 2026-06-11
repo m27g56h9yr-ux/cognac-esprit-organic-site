@@ -45,6 +45,11 @@ Positionnement : Cognac bio, familial, naturel, premium, indépendant.
 9. Accessibilité agents IA.
 10. Version anglaise professionnelle.
 
+## Workflow GitHub
+
+- Avant tout envoi vers GitHub (`git push`), demander l'autorisation réseau si elle n'est pas déjà active.
+- Si GitHub répond `Could not resolve host: github.com`, refaire l'essai après autorisation réseau.
+
 ## Interdictions
 
 - ne pas inventer d’informations ;

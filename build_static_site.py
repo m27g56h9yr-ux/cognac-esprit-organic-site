@@ -112,11 +112,11 @@ PRODUCTS = [
         "notes": ["Merlot", "Ugni Blanc", "Fruits rouges", "Souple"],
         "category": "Pineau des Charentes rouge",
         "image": "assets/img/products/pineau-rouge.png",
-        "scene": "assets/img/products/pineau-rouge.png",
-        "detail_image": "assets/img/products/pineau-rouge.png",
-        "tasting_image": "assets/img/products/pineau-rouge.png",
+        "scene": "assets/img/products/pineau-rouge-scene.png",
+        "detail_image": "assets/img/products/pineau-rouge-scene.png",
+        "tasting_image": "assets/img/old-site/img_pineau_degustation.jpg",
         "menu": "assets/img/product-menu/pineau-rouge.png",
-        "tone": "#5b1f22",
+        "tone": "#6b4d13",
     },
 ]
 
@@ -265,10 +265,9 @@ PRODUCT_EXTRAS = {
     },
     "pineau-rouge": {
         "legacy_url": "pineau-rouge",
-        "gallery_color": "#f4efe3",
-        "detail_image": "assets/img/products/pineau-rouge.png",
-        "tasting_image": "assets/img/products/pineau-rouge.png",
-        "section_class": "pineau-red-detail",
+        "gallery_color": "#eae7db",
+        "detail_image": "assets/img/products/pineau-rouge-scene.png",
+        "tasting_image": "assets/img/old-site/img_pineau_degustation.jpg",
         "story": "Ce Pineau rouge prolonge l'esprit de la gamme Esprit Organic dans un registre plus coloré : une bouche ronde, fraîche et fruitée, pensée pour l'apéritif, les desserts aux fruits ou un service légèrement rafraîchi.",
         "degustation_text": "Ce Pineau rouge des Charentes est élaboré à partir de Merlot et d'Ugni Blanc. Il présente une robe rouge profonde et brillante. Le nez évoque les fruits rouges mûrs, la cerise et une touche de prune. La bouche est souple, ample et gourmande, avec une finale fruitée et légèrement épicée.",
         "sensory": {
@@ -278,9 +277,9 @@ PRODUCT_EXTRAS = {
             "Palais": "Souple, rond, fruité, avec une belle fraîcheur",
             "Finale": "Gourmande, fruitée, légèrement épicée",
         },
-        "gallery": [],
-        "colors": ["#5b1f22", "#78302e", "#4c2529"],
-        "accent": "#d6a14c",
+        "gallery": ["assets/img/products/pineau-rouge.png"],
+        "colors": ["#565083", "#3e3b59", "#6e6baf"],
+        "accent": "#ecb038",
         "nutrition_placeholder": "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.",
     },
 }
@@ -427,7 +426,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge02">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -457,7 +456,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       </div>
     </div>
   </footer>
-  <script src="{prefix}assets/js/main.js?v=20260611-pineau-rouge01"></script>
+  <script src="{prefix}assets/js/main.js?v=20260611-pineau-rouge02"></script>
 </body>
 </html>
 """
@@ -479,7 +478,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge02">
 </head>
 <body>
   <main class="redirect-page">

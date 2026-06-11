@@ -1279,30 +1279,6 @@ p { margin: 18px 0 0; }
   height: auto;
   object-fit: contain;
 }
-.pineau-red-detail .product-scene {
-  display: grid;
-  place-items: center;
-  background: radial-gradient(circle at center, #fff 0%, #f4efe3 58%, #e6ddca 100%);
-}
-.pineau-red-detail .product-scene img {
-  width: auto;
-  max-width: 58%;
-  max-height: 78vh;
-  margin: auto;
-}
-.pineau-red-detail .product-gallery-rail img {
-  width: 76%;
-  padding: 16px 0;
-  object-fit: contain;
-}
-.pineau-red-detail .product-bottle-inline {
-  grid-template-columns: 28% 72%;
-}
-.pineau-red-detail .product-bottle-inline img {
-  object-fit: contain;
-  padding: 30px 0;
-  background: #f4efe3;
-}
 .product-info-block {
   display: grid;
   grid-template-rows: auto auto auto;

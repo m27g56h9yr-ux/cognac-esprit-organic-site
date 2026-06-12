@@ -15,7 +15,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/styles.css?v=20260612-pineau-rouge-mask01">
+  <link rel="stylesheet" href="../assets/css/styles.css?v=20260612-pineau-rouge-mask02">
   <style>
     .pineau-rouge-detail .pineau-rouge-scene {
       position: relative;
@@ -24,7 +24,7 @@
       display: grid;
       place-items: start center;
       overflow: hidden;
-      background: #fff url("../assets/img/old-site/visuel_pineau.jpg") center / 100% 100% no-repeat;
+      background: #fff url("../assets/img/old-site/visuel_pineau.jpg") top center / 100% auto no-repeat;
     }
 
     .pineau-rouge-detail .pineau-rouge-scene::before {
@@ -33,17 +33,17 @@
       inset: 0;
       z-index: 0;
       background: #fff;
-      -webkit-mask: url("../assets/img/products/pineau-rouge.png") center 2.375% / auto 93.25% no-repeat;
-      mask: url("../assets/img/products/pineau-rouge.png") center 2.375% / auto 93.25% no-repeat;
+      -webkit-mask: url("../assets/img/products/pineau-rouge.png") center 4.125% / 20.43% auto no-repeat;
+      mask: url("../assets/img/products/pineau-rouge.png") center 4.125% / 20.43% auto no-repeat;
     }
 
     .pineau-rouge-detail .pineau-rouge-scene img {
       position: relative;
       z-index: 1;
-      width: auto;
-      height: 93.25%;
-      max-height: 93.25%;
-      margin-top: 2.375%;
+      width: 20.43%;
+      height: auto;
+      max-height: none;
+      margin-top: 4.125%;
       object-fit: contain;
     }
 
@@ -165,7 +165,7 @@
       </div>
     </div>
   </footer>
-  <script src="../assets/js/main.js?v=20260612-pineau-rouge-mask01"></script>
+  <script src="../assets/js/main.js?v=20260612-pineau-rouge-mask02"></script>
   <script>
     document.querySelectorAll(".pineau-rouge-detail [data-gallery-thumb]").forEach((button) => {
       button.addEventListener("click", () => {

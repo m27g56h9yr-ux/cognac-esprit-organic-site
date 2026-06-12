@@ -115,7 +115,7 @@ PRODUCTS = [
         "scene": "assets/img/products/pineau-rouge-scene.png",
         "detail_image": "assets/img/products/pineau-rouge-scene.png",
         "tasting_image": "assets/img/old-site/img_pineau_degustation.jpg",
-        "menu": "assets/img/product-menu/pineau-rouge.png?v=20260612-menu02",
+        "menu": "assets/img/product-menu/pineau-rouge.png?v=20260612-menu03",
         "tone": "#6b4d13",
     },
 ]

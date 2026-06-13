@@ -9,7 +9,7 @@ NOINDEX = True
 CONTACT = {
     "email": "Cognac@mdpierre.com",
     "phone": "+33 5 45 35 88 10",
-    "address": "30, rue d'Angoumême, 16200 Triac-Lautrait, France",
+    "address": "30 Rue d'Angoulême, 16200 Triac-Lautrait, France",
 }
 
 PRODUCTS = [
@@ -328,7 +328,7 @@ def organization_schema():
         "telephone": CONTACT["phone"],
         "address": {
             "@type": "PostalAddress",
-            "streetAddress": "30, rue d'Angoumême",
+            "streetAddress": "30 Rue d'Angoulême",
             "postalCode": "16200",
             "addressLocality": "Triac-Lautrait",
             "addressCountry": "FR",
@@ -902,7 +902,7 @@ def importer_page():
 
 
 def producer_page():
-    location_cards = "<div class=\"feature-grid\"><article><h2>Location</h2><p>30, rue d'Angoumême, 16200 Triac-Lautrait, France.</p></article><article><h2>Organic focus</h2><p>Family, natural and premium positioning for professional buyers looking for organic Cognac from France.</p></article><article><h2>Export wording</h2><p>Europe, USA, Canada.</p></article></div>"
+    location_cards = "<div class=\"feature-grid\"><article><h2>Location</h2><p>30 Rue d'Angoulême, 16200 Triac-Lautrait, France.</p></article><article><h2>Organic focus</h2><p>Family, natural and premium positioning for professional buyers looking for organic Cognac from France.</p></article><article><h2>Export wording</h2><p>Europe, USA, Canada.</p></article></div>"
     body = f"""
 {split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>This page is written in English for international buyers and search engines. Esprit Organic is an organic Cognac brand led by Léopold and Fanny Croizet.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><a class="button" href="importers.html">For Importers</a>')}
 {section(location_cards)}
@@ -937,7 +937,7 @@ def visit_page():
       <li data-en>Duration: 1 hour.</li>
       <li data-fr>Maximum 10 personnes par visite.</li>
       <li data-en>Maximum 10 people per visit.</li>
-      <li>30, rue d'Angoumême, 16200 Triac-Lautrait.</li>
+      <li>30 Rue d'Angoulême, 16200 Triac-Lautrait.</li>
     </ul>
     <a class="visit-map-link" href="https://www.google.com/maps/search/?api=1&query={maps_query}" target="_blank" rel="noopener" data-fr>Ouvrir dans Google Maps</a>
     <a class="visit-map-link" href="https://www.google.com/maps/search/?api=1&query={maps_query}" target="_blank" rel="noopener" data-en>Open in Google Maps</a>

@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Force the canonical HTTPS host for the public website.
+RewriteCond %{HTTPS} !=on
+RewriteRule ^ https://cognac-esprit-organic.com%{REQUEST_URI} [R=301,L]

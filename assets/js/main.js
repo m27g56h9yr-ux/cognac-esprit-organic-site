@@ -5,6 +5,7 @@ const langMenu = document.querySelector("[data-lang-menu]");
 const langOptions = Array.from(document.querySelectorAll("[data-lang-option]"));
 const savedLang = localStorage.getItem("ceo-lang");
 const supportedLangs = ["fr", "en", "da", "no", "sv"];
+const urlLocale = getUrlLocale();
 const languageAliases = { nb: "no", nn: "no" };
 const countryLanguages = {
   DK: "da",
@@ -39,7 +40,7 @@ function detectVisitorMarket() {
   });
   return hasFrenchCanadaLocale ? "qc" : "";
 }
-const initialLang = savedLang || detectVisitorLanguage();
+const initialLang = urlLocale || document.documentElement.dataset.defaultLang || savedLang || detectVisitorLanguage();
 const visitorMarket = detectVisitorMarket();
 const langNames = {
   fr: "Français",
@@ -116,6 +117,38 @@ const footerNewsletterCopy = {
     error: "Automatisk registrering blir aktiv efter uppladdning till OVH."
   }
 };
+
+function getUrlLocale() {
+  const firstSegment = window.location.pathname.split("/").filter(Boolean)[0] || "fr";
+  return supportedLangs.includes(firstSegment) && firstSegment !== "fr" ? firstSegment : "";
+}
+
+function getCanonicalLanguagePath(lang) {
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const hasLocale = parts.length > 0 && supportedLangs.includes(parts[0]) && parts[0] !== "fr";
+  const baseParts = hasLocale ? parts.slice(1) : parts;
+  let basePath = "/" + baseParts.join("/");
+  if (basePath === "/index.html") basePath = "/";
+  if (basePath.endsWith("/index.html")) basePath = `${basePath.slice(0, -10)}/`;
+  if (basePath === "/") {
+    return lang === "fr" ? "/" : `/${lang}/`;
+  }
+  if (window.location.pathname.endsWith("/") && !basePath.endsWith("/")) basePath += "/";
+  if (lang === "fr") return basePath;
+  return `/${lang}${basePath}`;
+}
+
+function navigateToLanguage(lang) {
+  if (!supportedLangs.includes(lang)) lang = "fr";
+  const nextPath = getCanonicalLanguagePath(lang);
+  const nextUrl = `${nextPath}${window.location.search}${window.location.hash}`;
+  localStorage.setItem("ceo-lang", lang);
+  if (nextUrl !== `${window.location.pathname}${window.location.search}${window.location.hash}`) {
+    window.location.href = nextUrl;
+    return;
+  }
+  setLanguage(lang);
+}
 
 function getSiteRootUrl() {
   const script = document.querySelector('script[src*="assets/js/main.js"]');
@@ -1084,7 +1117,7 @@ if (langToggle) {
 
 langOptions.forEach((option) => {
   option.addEventListener("click", () => {
-    setLanguage(option.dataset.langOption || "fr");
+    navigateToLanguage(option.dataset.langOption || "fr");
   });
 });
 

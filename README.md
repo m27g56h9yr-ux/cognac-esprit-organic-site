@@ -55,6 +55,7 @@ Copier à la racine de l'hébergement OVH :
 - `robots.txt` ;
 - `sitemap.xml` ;
 - `llms.txt` ;
+- `.htaccess` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
 

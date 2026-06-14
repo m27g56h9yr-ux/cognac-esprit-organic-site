@@ -707,7 +707,7 @@ def product_page(product):
   <div class="product-info-block">
     <div class="product-description">
       <p class="eyebrow">{escape(product['category'])}</p>
-      <h2>{escape(product['name'])}</h2>
+      <h1>{escape(product['name'])}</h1>
       <p data-fr>{escape(product['short'])}</p>
       <p data-en>{escape(product['en_short'])}</p>
       <p class="product-story">{escape(story)}</p>
@@ -2247,6 +2247,7 @@ p { margin: 18px 0 0; }
 }
 .product-info-block .product-bottle-inline { background: var(--product-mid); }
 .product-info-block .product-sensory { background: var(--product-low); }
+.product-info-block h1,
 .product-info-block h2 {
   font-family: Raleway, sans-serif;
   font-size: 2.5rem;

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 760" role="img" aria-label="Illustration neutre de bouteille de cognac">
+  <rect width="640" height="760" fill="#f1eee6"/>
+  <path d="M320 70 C342 140 320 206 370 278 C422 352 418 560 320 652 C222 560 218 352 270 278 C320 206 298 140 320 70 Z" fill="#8a572b"/>
+  <rect x="278" y="88" width="84" height="192" rx="34" fill="#4b2b18"/>
+  <rect x="226" y="356" width="188" height="128" rx="4" fill="#fbfaf6"/>
+  <line x1="260" y1="410" x2="380" y2="410" stroke="#b58a45" stroke-width="8"/>
+  <line x1="282" y1="442" x2="358" y2="442" stroke="#7b4a25" stroke-width="6"/>
+</svg>

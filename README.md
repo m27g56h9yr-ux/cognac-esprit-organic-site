@@ -18,14 +18,12 @@ http://localhost:8080
 
 Il est aussi possible d'ouvrir `index.html` directement, mais le serveur local reproduit mieux un hébergement OVH.
 
-## Mode préproduction
+## Mode production
 
-Le site contient volontairement :
+Le site est prêt pour la mise en ligne :
 
-- `<meta name="robots" content="noindex,nofollow">` sur chaque page ;
-- `robots.txt` avec `Disallow: /`.
-
-Avant la mise en ligne définitive, remplacer ces réglages par `index,follow` et autoriser l'exploration dans `robots.txt`.
+- `<meta name="robots" content="index,follow">` sur chaque page ;
+- `robots.txt` autorise l'exploration et référence le sitemap officiel.
 
 ## Fichiers principaux
 

@@ -2,9 +2,9 @@ from html import escape
 import json
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
-NOINDEX = True
+NOINDEX = False
 
 CONTACT = {
     "email": "Cognac@mdpierre.com",
@@ -960,7 +960,7 @@ def faq_page():
         ("Quels marchés export sont visés ?", "La formulation validée est : Europe, USA, Canada."),
         ("Où se situe Cognac Esprit Organic ?", CONTACT["address"]),
         ("Quels sont les horaires de visite ?", "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes."),
-        ("Le site est-il indexable pendant la préproduction ?", "Non. La première version contient temporairement noindex,nofollow."),
+        ("Le site est-il indexable ?", "Oui. La version publique autorise l'indexation et publie un sitemap propre."),
     ]
     faq_schema = {
         "@context": "https://schema.org",
@@ -971,7 +971,7 @@ def faq_page():
         ],
     }
     items = "".join(f'<article class="faq-item"><h2>{escape(q)}</h2><p>{escape(a)}</p></article>' for q, a in questions)
-    return layout("faq.html", "FAQ | Cognac Esprit Organic", "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export, les visites et le mode préproduction.", "FAQ Cognac Esprit Organic", "Questions utiles pour Google, les visiteurs et les agents IA.", "Useful questions for Google, visitors and AI agents.", section(items), schemas=[faq_schema])
+    return layout("faq.html", "FAQ | Cognac Esprit Organic", "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export, les visites et le référencement.", "FAQ Cognac Esprit Organic", "Questions utiles pour Google, les visiteurs et les agents IA.", "Useful questions for Google, visitors and AI agents.", section(items), schemas=[faq_schema])
 
 
 def cocktails_page():
@@ -2751,7 +2751,7 @@ def write_static_files():
 </urlset>
 """)
     write("robots.txt", f"""User-agent: *
-Disallow: /
+Allow: /
 
 Sitemap: {DOMAIN}/sitemap.xml
 """)
@@ -2762,7 +2762,7 @@ Domaine officiel : {DOMAIN}
 
 ## Statut du projet
 
-Ce site est une version statique de préproduction. Les pages contiennent temporairement `noindex,nofollow` et le fichier `robots.txt` bloque l’exploration jusqu’à validation de la mise en ligne.
+Ce site est la version publique statique de Cognac Esprit Organic. Les pages autorisent l'indexation et le fichier `robots.txt` publie le sitemap officiel.
 
 ## Identité
 
@@ -2821,14 +2821,12 @@ http://localhost:8080
 
 Il est aussi possible d'ouvrir `index.html` directement, mais le serveur local reproduit mieux un hébergement OVH.
 
-## Mode préproduction
+## Mode production
 
-Le site contient volontairement :
+Le site est prêt pour la mise en ligne :
 
-- `<meta name="robots" content="noindex,nofollow">` sur chaque page ;
-- `robots.txt` avec `Disallow: /`.
-
-Avant la mise en ligne définitive, remplacer ces réglages par `index,follow` et autoriser l'exploration dans `robots.txt`.
+- `<meta name="robots" content="index,follow">` sur chaque page ;
+- `robots.txt` autorise l'exploration et référence le sitemap officiel.
 
 ## Fichiers principaux
 
@@ -2838,6 +2836,17 @@ Avant la mise en ligne définitive, remplacer ces réglages par `index,follow` e
 - JavaScript léger dans `assets/js/main.js` ;
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
+- Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
+
+## Ancien site WordPress
+
+Les archives de l'ancien site WordPress sont rangées dans `ancien-site-wordpress/`.
+
+- `ancien-site-wordpress/archives/` contient les fichiers `.zip.part-*` à réassembler si nécessaire ;
+- `ancien-site-wordpress/README-CODEX-site-ec.md` explique le contenu du pack sécurisé ;
+- `ancien-site-wordpress/README-REASSEMBLAGE-GITHUB-site-ec.md` explique comment reconstituer les archives.
+
+Les images récupérées de l'ancien site et utilisées par le nouveau site restent dans `assets/img/old-site/`, car elles servent directement aux pages publiées.
 
 ## Mise en ligne OVH
 
@@ -2849,8 +2858,24 @@ Copier à la racine de l'hébergement OVH :
 - `robots.txt` ;
 - `sitemap.xml` ;
 - `llms.txt`.
+- `newsletter.php` ;
+- le dossier `newsletter-data/`.
 
-Ne pas envoyer les dossiers de travail, les archives WordPress ou les fichiers de l'ancien site.
+Ne pas envoyer `ancien-site-wordpress/`, les dossiers de travail ou les archives WordPress.
+
+## Inscriptions newsletter
+
+Sur OVH, le formulaire du pied de page enregistre automatiquement chaque adresse e-mail dans :
+
+```text
+newsletter-data/subscriptions.csv
+```
+
+Chaque ligne contient la date d'inscription, l'adresse e-mail, la langue, le marché détecté et la page d'inscription.
+
+Après chaque inscription, `newsletter.php` envoie aussi le fichier CSV complet en pièce jointe à `cognac@mdpierre.com`.
+
+Le dossier `newsletter-data/` contient un fichier `.htaccess` pour empêcher la lecture publique du fichier CSV. GitHub Pages ne peut pas enregistrer les inscriptions, car il héberge uniquement des fichiers statiques et n'exécute pas PHP.
 """)
 
 

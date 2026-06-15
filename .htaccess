@@ -1,5 +1,12 @@
 RewriteEngine On
 
+# Redirect legacy duplicate URLs to their canonical destinations.
+RewriteRule ^(.*/)?index\.html$ https://cognac-esprit-organic.com/$1 [R=301,L]
+RewriteRule ^production\.html$ https://cognac-esprit-organic.com/demarche/ [R=301,L]
+RewriteRule ^demarche-bio\.html$ https://cognac-esprit-organic.com/production/ [R=301,L]
+RewriteRule ^leopold-et-fanny\.html$ https://cognac-esprit-organic.com/leopold-et-fanny/ [R=301,L]
+
 # Force the canonical HTTPS host for the public website.
-RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTPS} !=on [OR]
+RewriteCond %{HTTP_HOST} !^cognac-esprit-organic\.com$ [NC]
 RewriteRule ^ https://cognac-esprit-organic.com%{REQUEST_URI} [R=301,L]

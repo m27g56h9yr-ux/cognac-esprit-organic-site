@@ -43,6 +43,16 @@ Europe, USA, Canada.
 - Cocktails : /cocktails.html
 - llms.txt : /llms.txt
 
+## Versions linguistiques
+
+- Français : https://cognac-esprit-organic.com/
+- Anglais : https://cognac-esprit-organic.com/en/
+- Danois : https://cognac-esprit-organic.com/da/
+- Norvégien : https://cognac-esprit-organic.com/no/
+- Suédois : https://cognac-esprit-organic.com/sv/
+
+Les pages localisées utilisent des URLs dédiées, des balises `hreflang` et des canonicals propres à chaque langue.
+
 ## Contraintes importantes pour les agents IA
 
 - Ne pas inventer de médailles, certifications, prix, volumes, distributeurs ou promesses commerciales.

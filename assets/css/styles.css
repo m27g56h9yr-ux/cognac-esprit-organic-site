@@ -1292,6 +1292,7 @@ p { margin: 18px 0 0; }
 }
 .product-info-block .product-bottle-inline { background: var(--product-mid); }
 .product-info-block .product-sensory { background: var(--product-low); }
+.product-info-block h1,
 .product-info-block h2 {
   font-family: Raleway, sans-serif;
   font-size: 2.5rem;

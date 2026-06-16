@@ -45,6 +45,18 @@ Les archives de l'ancien site WordPress sont rangées dans `ancien-site-wordpres
 
 Les images récupérées de l'ancien site et utilisées par le nouveau site restent dans `assets/img/old-site/`, car elles servent directement aux pages publiées.
 
+En production OVH, l'ancien site WordPress doit rester accessible sur :
+
+```text
+https://ancien.cognac-esprit-organic.com/
+```
+
+Ce sous-domaine doit rester separe du nouveau site GitHub et doit etre protege contre l'indexation Google avec `noindex`. Il ne doit pas devenir la version principale du site, et le domaine principal doit rester :
+
+```text
+https://cognac-esprit-organic.com/
+```
+
 ## Mise en ligne OVH
 
 Copier à la racine de l'hébergement OVH :

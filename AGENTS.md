@@ -16,6 +16,15 @@ https://cognac-esprit-organic.com
 Ne jamais utiliser croizet.fr.
 Ne pas confondre Esprit Organic avec une autre maison ou marque.
 
+## Regle OVH permanente
+
+- Le nouveau site refait dans ce depot GitHub doit etre le site public principal.
+- Il doit etre consultable a l'adresse : https://cognac-esprit-organic.com/
+- L'ancien site WordPress doit rester accessible a l'adresse : https://ancien.cognac-esprit-organic.com/
+- L'ancien site WordPress ne doit pas etre indexe par Google ni par les autres moteurs.
+- Ne pas rediriger durablement `ancien.cognac-esprit-organic.com` vers le domaine principal.
+- Toute correction SEO sur `ancien.cognac-esprit-organic.com` doit preserver son accessibilite tout en ajoutant une protection `noindex` fiable.
+
 ## Identité
 
 Esprit Organic est une marque de Cognac biologique liée à Maison des Pierres.

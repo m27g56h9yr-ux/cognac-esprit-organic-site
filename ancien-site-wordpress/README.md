@@ -2,7 +2,15 @@
 
 Ce dossier regroupe les elements sources issus de l'ancien site WordPress.
 
-Il sert uniquement d'archive de travail pour comprendre et reconstruire le nouveau site statique. Il ne doit pas etre mis en ligne sur OVH avec le site public.
+Il sert uniquement d'archive de travail pour comprendre et reconstruire le nouveau site statique. Il ne doit pas etre mis en ligne dans le meme dossier OVH que le nouveau site public.
+
+En production, l'ancien site WordPress doit rester accessible a cette adresse :
+
+```text
+https://ancien.cognac-esprit-organic.com/
+```
+
+Cette version ancienne doit imperativement rester non indexable par Google et les autres moteurs (`noindex` fiable, idealement via en-tete HTTP et/ou configuration WordPress). Elle ne doit pas remplacer le nouveau site public sur `https://cognac-esprit-organic.com/`.
 
 ## Contenu
 

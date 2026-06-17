@@ -355,6 +355,10 @@
   border-top: 1px solid rgba(76, 50, 30, .16);
 }
 
+.recipe-columns > section {
+  padding: 0;
+}
+
 .recipe-columns h3,
 .cocktail-style h3 {
   margin: 0 0 14px;
@@ -754,8 +758,8 @@
 }
 
 .cocktail-showcase.golden {
-  grid-template-columns: minmax(320px, 456px) minmax(0, 660px);
-  max-width: min(1160px, calc(100vw - 72px));
+  grid-template-columns: minmax(320px, 492px) minmax(0, 660px);
+  max-width: min(1200px, calc(100vw - 72px));
   align-items: stretch;
   background: transparent;
   border: 0;
@@ -778,7 +782,7 @@
 
 .cocktail-showcase.golden .cocktail-slideshow {
   position: relative;
-  width: min(100%, 456px);
+  width: min(100%, 492px);
   min-height: 0;
   aspect-ratio: 1200 / 1640;
   overflow: hidden;
@@ -853,17 +857,120 @@
 
 .cocktail-showcase.golden .icon-list li,
 .cocktail-showcase.golden .style-list li {
-  min-height: 0;
+  min-height: 22px;
   margin: 3px 0;
-  padding-left: 26px;
-  font-size: .84rem;
-  line-height: 1.2;
+  padding-left: 30px;
+  font-size: .86rem;
+  line-height: 1.25;
 }
 
 .cocktail-showcase.golden .icon-list li::before,
 .cocktail-showcase.golden .style-list li::before {
-  width: 18px;
-  height: 18px;
+  top: .02em;
+  width: 20px;
+  height: 20px;
+  border-width: 1.4px;
+}
+
+.cocktail-showcase.golden .icon-list li::after,
+.cocktail-showcase.golden .style-list li::after {
+  left: 5px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+  border-radius: 0 0 5px 5px;
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="bottle"]::after {
+  left: 7px;
+  top: 4px;
+  width: 5px;
+  height: 12px;
+  border-width: 1.5px;
+  border-radius: 2px 2px 3px 3px;
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="glass"]::after {
+  left: 6px;
+  top: 4px;
+  width: 8px;
+  height: 12px;
+  border-width: 1.5px;
+  border-top-width: 2px;
+  border-radius: 1px 1px 5px 5px;
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="fruit"]::after,
+.cocktail-showcase.golden .style-list li[data-icon="fruit"]::after {
+  left: 5px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+  border-radius: 50%;
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="slice"]::after,
+.cocktail-showcase.golden .icon-list li[data-icon="citrus"]::after {
+  left: 5px;
+  top: 7px;
+  width: 10px;
+  height: 6px;
+  border-width: 1.5px;
+  border-top: 0;
+  border-radius: 0 0 10px 10px;
+  transform: rotate(-18deg);
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="leaf"]::after,
+.cocktail-showcase.golden .style-list li[data-icon="leaf"]::after {
+  left: 5px;
+  top: 6px;
+  width: 10px;
+  height: 7px;
+  border-width: 1.5px;
+  border-radius: 100% 0 100% 0;
+  transform: rotate(-22deg);
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="ice"]::after {
+  left: 6px;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-width: 1.5px;
+  border-radius: 2px;
+  transform: rotate(45deg);
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="blend"]::after {
+  left: 6px;
+  top: 4px;
+  width: 8px;
+  height: 12px;
+  border-width: 1.5px;
+  border-radius: 2px 2px 5px 5px;
+  transform: skewX(-8deg);
+}
+
+.cocktail-showcase.golden .icon-list li[data-icon="time"]::after {
+  left: 5px;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+  border-radius: 50%;
+}
+
+.cocktail-showcase.golden .style-list li[data-icon="drop"]::after {
+  left: 6px;
+  top: 5px;
+  width: 8px;
+  height: 11px;
+  border-width: 1.5px;
+  border-radius: 8px 8px 8px 2px;
+  transform: rotate(45deg);
 }
 
 .cocktail-showcase.golden .cocktail-style {
@@ -878,7 +985,7 @@
 @media (max-width: 1180px) {
   .cocktail-showcase.golden {
     grid-template-columns: 1fr;
-    max-width: min(680px, calc(100vw - 34px));
+    max-width: min(456px, calc(100vw - 34px));
   }
 
   .cocktail-showcase.golden .cocktail-art {
@@ -886,7 +993,17 @@
   }
 
   .cocktail-showcase.golden .cocktail-slideshow {
-    width: min(100%, 420px);
+    width: 100%;
+  }
+
+  .cocktail-showcase.golden .recipe-columns {
+    grid-template-columns: 1fr;
+    gap: 22px;
+  }
+
+  .cocktail-showcase.golden .cocktail-style .style-list {
+    grid-template-columns: 1fr;
+    gap: 6px;
   }
 }
 
@@ -894,7 +1011,7 @@
   .cocktail-showcase.golden,
   .cocktail-showcase.golden:nth-child(even) {
     grid-template-columns: 1fr;
-    max-width: min(640px, calc(100vw - 34px));
+    max-width: min(456px, calc(100vw - 34px));
   }
 
   .cocktail-showcase.golden .cocktail-art {
@@ -902,13 +1019,13 @@
   }
 
   .cocktail-showcase.golden .cocktail-slideshow {
-    width: min(100%, 360px);
+    width: 100%;
   }
 }
 
 @media (max-width: 640px) {
   .cocktail-showcase.golden {
-    max-width: calc(100vw - 24px);
+    max-width: min(318px, calc(100vw - 24px));
   }
 
   .cocktail-showcase.golden .cocktail-art {
@@ -916,7 +1033,7 @@
   }
 
   .cocktail-showcase.golden .cocktail-slideshow {
-    width: min(100%, 318px);
+    width: 100%;
   }
 
   .cocktail-showcase.golden .cocktail-recipe-panel {

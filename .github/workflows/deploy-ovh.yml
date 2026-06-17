@@ -29,15 +29,20 @@ jobs:
 
       - name: Deploy files
         env:
-          OVH_FTP_HOST: ${{ secrets.OVH_FTP_HOST }}
-          OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
           OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
           OVH_FTP_TARGET_DIR: ${{ secrets.OVH_FTP_TARGET_DIR }}
         run: |
           set -euo pipefail
+          FTP_HOST="ftp.cluster128.hosting.ovh.net"
+          FTP_USERNAME="cognacg-siteecgit"
           TARGET_DIR="${OVH_FTP_TARGET_DIR:-.}"
 
-          lftp -u "${OVH_FTP_USERNAME},${OVH_FTP_PASSWORD}" "${OVH_FTP_HOST}" <<EOF
+          if [ -z "${OVH_FTP_PASSWORD:-}" ]; then
+            echo "Missing required GitHub secret: OVH_FTP_PASSWORD"
+            exit 1
+          fi
+
+          lftp -u "${FTP_USERNAME},${OVH_FTP_PASSWORD}" "${FTP_HOST}" <<EOF
           set ftp:ssl-allow no
           set ftp:list-options -a
           set net:max-retries 2

@@ -55,5 +55,6 @@ jobs:
             --exclude-glob README.md \
             --exclude-glob build_static_site.py \
             ./ "${TARGET_DIR}"
+          put -O "${TARGET_DIR}" .htaccess
           bye
           EOF

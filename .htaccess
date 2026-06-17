@@ -1,4 +1,5 @@
 RewriteEngine On
+Options -MultiViews
 
 # Redirect legacy duplicate URLs to their canonical destinations.
 RedirectMatch 301 ^/produits/fondation-vs/?$ https://cognac-esprit-organic.com/produits/fondation-vs.html

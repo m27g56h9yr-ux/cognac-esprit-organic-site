@@ -1,0 +1,54 @@
+name: Deploy to OVH
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ovh-deploy
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    name: Upload site to OVH
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install FTP client
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y lftp
+
+      - name: Deploy files
+        env:
+          OVH_FTP_HOST: ${{ secrets.OVH_FTP_HOST }}
+          OVH_FTP_USERNAME: ${{ secrets.OVH_FTP_USERNAME }}
+          OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
+          OVH_FTP_TARGET_DIR: ${{ secrets.OVH_FTP_TARGET_DIR }}
+        run: |
+          set -euo pipefail
+          TARGET_DIR="${OVH_FTP_TARGET_DIR:-.}"
+
+          lftp -u "${OVH_FTP_USERNAME},${OVH_FTP_PASSWORD}" "${OVH_FTP_HOST}" <<EOF
+          set ftp:ssl-allow no
+          set ftp:list-options -a
+          set net:max-retries 2
+          set net:timeout 20
+          mirror --reverse --delete --verbose --parallel=2 \
+            --exclude-glob .git/** \
+            --exclude-glob .github/** \
+            --exclude-glob "AUDIT-SEO-*.md" \
+            --exclude-glob AGENTS.md \
+            --exclude-glob README.md \
+            --exclude-glob build_static_site.py \
+            ./ "${TARGET_DIR}"
+          bye
+          EOF

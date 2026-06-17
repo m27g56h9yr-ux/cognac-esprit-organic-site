@@ -758,8 +758,8 @@
 }
 
 .cocktail-showcase.golden {
-  grid-template-columns: minmax(320px, 492px) minmax(0, 660px);
-  max-width: min(1200px, calc(100vw - 72px));
+  grid-template-columns: minmax(320px, 440px) minmax(0, 660px);
+  max-width: min(1148px, calc(100vw - 72px));
   align-items: stretch;
   background: transparent;
   border: 0;
@@ -782,7 +782,7 @@
 
 .cocktail-showcase.golden .cocktail-slideshow {
   position: relative;
-  width: min(100%, 492px);
+  width: min(100%, 440px);
   min-height: 0;
   aspect-ratio: 1200 / 1640;
   overflow: hidden;

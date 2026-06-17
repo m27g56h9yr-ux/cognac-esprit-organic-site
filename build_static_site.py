@@ -75,6 +75,7 @@ PRODUCTS = [
         "tasting_image": "assets/img/product-scenes/xxo-01.jpg",
         "menu": "assets/img/product-menu/xxo.png",
         "tone": "#49321e",
+        "abv": "43.5%",
     },
     {
         "name": "Single Cask",
@@ -89,6 +90,7 @@ PRODUCTS = [
         "tasting_image": "assets/img/product-scenes/single-cask-01.jpg",
         "menu": "assets/img/product-menu/single-cask.png",
         "tone": "#522e03",
+        "abv": "51%",
     },
     {
         "name": "Pineau blanc",
@@ -315,7 +317,12 @@ def breadcrumb_schema(path: str, title: str):
     ]
     if path != "index.html":
         items.append({"@type": "ListItem", "position": 2, "name": title, "item": page_url(path)})
-    return {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": items}
+    return {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": items,
+        "@id": page_url(path) + "#breadcrumb",
+    }
 
 
 def organization_schema():
@@ -326,6 +333,7 @@ def organization_schema():
         "url": DOMAIN + "/",
         "email": CONTACT["email"],
         "telephone": CONTACT["phone"],
+        "@id": DOMAIN + "/#organization",
         "address": {
             "@type": "PostalAddress",
             "streetAddress": "30 Rue d'Angoulême",
@@ -333,7 +341,7 @@ def organization_schema():
             "addressLocality": "Triac-Lautrait",
             "addressCountry": "FR",
         },
-        "brand": {"@type": "Brand", "name": "Cognac Esprit Organic"},
+        "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
     }
 
 
@@ -561,8 +569,8 @@ def home():
 </section>
 <section class="cream-signature">
   <div>
-    <img class="floral-left" src="assets/img/floral-01.svg" alt="">
-    <img class="floral-right" src="assets/img/floral-03.svg" alt="">
+    <img class="floral-left" src="assets/img/floral-01.svg" alt="" aria-hidden="true">
+    <img class="floral-right" src="assets/img/floral-03.svg" alt="" aria-hidden="true">
     <p data-fr>Bienvenue sur nos terres</p>
     <p data-en>Welcome to our land</p>
     <span>•••</span>
@@ -592,8 +600,8 @@ def home():
   </div>
 </a>
 <section class="home-transmission-block">
-  <img class="transmission-floral-left" src="assets/img/floral-01.svg" alt="">
-  <img class="transmission-floral-right" src="assets/img/floral-03.svg" alt="">
+  <img class="transmission-floral-left" src="assets/img/floral-01.svg" alt="" aria-hidden="true">
+  <img class="transmission-floral-right" src="assets/img/floral-03.svg" alt="" aria-hidden="true">
   <div>
     <h2 data-fr>Cultiver pour transmettre</h2>
     <h2 data-en>Cultivating to transmit</h2>
@@ -641,11 +649,18 @@ def product_page(product):
         "@context": "https://schema.org",
         "@type": "Product",
         "name": product["name"],
-        "brand": {"@type": "Brand", "name": "Cognac Esprit Organic"},
+        "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
+        "manufacturer": {"@id": DOMAIN + "/#organization"},
+        "countryOfOrigin": "France",
         "category": product["category"],
         "image": DOMAIN + "/" + product["image"],
         "description": product["short"],
+        "@id": page_url(f"produits/{product['slug']}.html") + "#product",
     }
+    if product.get("abv"):
+        schema["additionalProperty"] = [
+            {"@type": "PropertyValue", "name": "Alcohol by volume", "value": product["abv"]}
+        ]
     notes = "".join(f"<li>{escape(note)}</li>" for note in product["notes"])
     story = extra.get("story", product["short"])
     degustation_title = extra.get("degustation_title", "Dégustation")
@@ -960,7 +975,6 @@ def faq_page():
         ("Quels marchés export sont visés ?", "La formulation validée est : Europe, USA, Canada."),
         ("Où se situe Cognac Esprit Organic ?", CONTACT["address"]),
         ("Quels sont les horaires de visite ?", "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes."),
-        ("Le site est-il indexable ?", "Oui. La version publique autorise l'indexation et publie un sitemap propre."),
     ]
     faq_schema = {
         "@context": "https://schema.org",
@@ -971,7 +985,7 @@ def faq_page():
         ],
     }
     items = "".join(f'<article class="faq-item"><h2>{escape(q)}</h2><p>{escape(a)}</p></article>' for q, a in questions)
-    return layout("faq.html", "FAQ | Cognac Esprit Organic", "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export, les visites et le référencement.", "FAQ Cognac Esprit Organic", "Questions utiles pour Google, les visiteurs et les agents IA.", "Useful questions for Google, visitors and AI agents.", section(items), schemas=[faq_schema])
+    return layout("faq.html", "FAQ | Cognac Esprit Organic", "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export et les visites.", "FAQ Cognac Esprit Organic", "Questions utiles pour les visiteurs et partenaires.", "Useful questions for visitors and partners.", section(items), schemas=[faq_schema])
 
 
 def cocktails_page():

@@ -16,6 +16,14 @@ https://cognac-esprit-organic.com
 Ne jamais utiliser croizet.fr.
 Ne pas confondre Esprit Organic avec une autre maison ou marque.
 
+## Regle permanente d'audit
+
+- Auditer par defaut uniquement le nouveau site public : `https://cognac-esprit-organic.com/`.
+- Ne pas inclure `https://ancien.cognac-esprit-organic.com/` dans les audits du nouveau site.
+- `ancien.cognac-esprit-organic.com` est l'ancien site WordPress conserve pour memoire.
+- Ne verifier `ancien.cognac-esprit-organic.com` que si l'utilisateur le demande explicitement, ou pour confirmer ponctuellement qu'il reste non indexable.
+- Quand un audit mentionne "le site" ou "Cognac Esprit Organic", comprendre : le nouveau site sur `cognac-esprit-organic.com`, pas l'ancien WordPress.
+
 ## Regle OVH permanente
 
 - Le nouveau site refait dans ce depot GitHub doit etre le site public principal.

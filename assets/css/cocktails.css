@@ -217,6 +217,54 @@
   filter: saturate(1.02) contrast(1.03);
 }
 
+.cocktail-slideshow {
+  position: relative;
+  width: 100%;
+  min-height: inherit;
+}
+
+.cocktail-slideshow .cocktail-slide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  animation: cocktail-slide-fade 6s ease-in-out infinite;
+}
+
+.cocktail-slideshow .cocktail-slide-current {
+  position: relative;
+}
+
+.cocktail-slideshow .cocktail-slide-next {
+  animation-delay: 3s;
+}
+
+@keyframes cocktail-slide-fade {
+  0%,
+  42% {
+    opacity: 1;
+  }
+
+  50%,
+  92% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cocktail-slideshow .cocktail-slide {
+    animation: none;
+    opacity: 1;
+  }
+
+  .cocktail-slideshow .cocktail-slide-next {
+    display: none;
+  }
+}
+
 .cocktail-showcase.golden .cocktail-art img {
   object-position: center center;
 }

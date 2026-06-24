@@ -218,9 +218,10 @@
 }
 
 .cocktail-slideshow {
-  position: relative;
-  width: 100%;
-  min-height: inherit;
+  position: absolute;
+  inset: 0;
+  width: auto;
+  min-height: 0;
 }
 
 .cocktail-slideshow .cocktail-slide {
@@ -231,7 +232,7 @@
 }
 
 .cocktail-slideshow .cocktail-slide-current {
-  position: relative;
+  position: absolute;
 }
 
 .cocktail-slideshow .cocktail-slide-next {

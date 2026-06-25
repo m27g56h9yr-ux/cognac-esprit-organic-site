@@ -1289,6 +1289,19 @@ p { margin: 18px 0 0; }
   height: auto;
   object-fit: contain;
 }
+.pineau-rouge-detail .pineau-rouge-scene {
+  background: #fff !important;
+}
+.pineau-rouge-detail .pineau-rouge-scene::before {
+  content: none !important;
+  display: none !important;
+}
+.pineau-rouge-detail .pineau-rouge-scene img {
+  width: 20.43% !important;
+  height: auto !important;
+  max-height: none !important;
+  margin-top: 4.125% !important;
+}
 .product-info-block {
   display: grid;
   grid-template-rows: auto auto auto;

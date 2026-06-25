@@ -24,65 +24,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/styles.css?v=20260625-bottle-menu01">
-  <style>
-    .pineau-rouge-detail .pineau-rouge-scene {
-      position: relative;
-      min-height: 0;
-      aspect-ratio: 1 / 1;
-      display: grid;
-      place-items: start center;
-      overflow: hidden;
-      background: #fff url("../../assets/img/old-site/visuel_pineau.jpg") top center / 100% auto no-repeat;
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: 0;
-      background: #fff;
-      -webkit-mask: url("../../assets/img/products/pineau-rouge.png") center 4.125% / 20.43% auto no-repeat;
-      mask: url("../../assets/img/products/pineau-rouge.png") center 4.125% / 20.43% auto no-repeat;
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene img {
-      position: relative;
-      z-index: 1;
-      width: 20.43%;
-      height: auto;
-      max-height: none;
-      margin-top: 4.125%;
-      object-fit: contain;
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene.is-label {
-      aspect-ratio: auto;
-      place-items: center;
-      background: var(--product-gallery);
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene.is-label::before {
-      display: none;
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene.is-label img {
-      width: 100%;
-      height: auto;
-      max-height: none;
-      margin-top: 0;
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene-thumb {
-      min-height: 118px;
-      background: #fff url("../../assets/img/old-site/visuel_pineau.jpg") center / cover no-repeat;
-    }
-
-    .pineau-rouge-detail .pineau-rouge-scene-thumb img {
-      width: 40%;
-      max-height: 112px;
-      object-fit: contain;
-    }
-  </style>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Cognac Esprit Organic","url":"https://cognac-esprit-organic.com/","email":"Cognac@mdpierre.com","telephone":"+33 5 45 35 88 10","address":{"@type":"PostalAddress","streetAddress":"30 Rue d'Angoulême","postalCode":"16200","addressLocality":"Triac-Lautrait","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"@id":"https://cognac-esprit-organic.com/#organization"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Startsida","item":"https://cognac-esprit-organic.com/sv/"},{"@type":"ListItem","position":2,"name":"Röd Pineau","item":"https://cognac-esprit-organic.com/sv/produits/pineau-rouge.html"}],"@id":"https://cognac-esprit-organic.com/sv/produits/pineau-rouge.html#breadcrumb"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Röd Pineau","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"category":"Röd Pineau des Charentes","image":"https://cognac-esprit-organic.com/assets/img/products/pineau-rouge.png","description":"Röd Pineau des Charentes gjord med Merlot och Ugni Blanc, med ett fruktigt, mjukt och generöst uttryck.","@id":"https://cognac-esprit-organic.com/sv/produits/pineau-rouge.html#product","manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"countryOfOrigin":"France"}</script>
@@ -116,10 +57,10 @@
 </section>
 <section class="product-old-detail pineau-rouge-detail" style="--product-tone: #6b4d13; --product-gallery: #eae7db; --product-top: #565083; --product-mid: #3e3b59; --product-low: #6e6baf; --product-accent: #ecb038;">
   <div class="product-gallery-rail">
-    <button class="pineau-rouge-scene-thumb" type="button" data-gallery-thumb data-gallery-target="../../assets/img/products/pineau-rouge.png" data-gallery-scene="pineau-rouge" aria-label="Visa bild 1 av Röd Pineau"><img src="../../assets/img/products/pineau-rouge.png" alt="Röd Pineau Cognac Esprit Organic-flaska" loading="lazy" width="416" height="1900"></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/products/pineau-rouge-label.png" aria-label="Visa bild 2 av Röd Pineau"><img src="../../assets/img/products/pineau-rouge-label.png" alt="Röd Pineau Cognac Esprit Organic-etikett" loading="lazy" width="1600" height="1600"></button>
+    <button type="button" data-gallery-thumb data-gallery-target="../../assets/img/products/pineau-rouge-scene.png" aria-label="Visa bild 1 av Röd Pineau"><img src="../../assets/img/products/pineau-rouge-scene.png" alt="Röd Pineau Cognac Esprit Organic-flaska" loading="lazy" width="1600" height="1600"></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/products/pineau-rouge-label.png" aria-label="Visa bild 2 av Röd Pineau"><img src="../../assets/img/products/pineau-rouge-label.png" alt="Röd Pineau Cognac Esprit Organic-etikett" loading="lazy" width="1600" height="1600"></button>
   </div>
-  <div class="product-scene pineau-rouge-scene" data-pineau-rouge-scene>
-    <img src="../../assets/img/products/pineau-rouge.png" alt="Visuel Röd Pineau" data-gallery-main width="416" height="1900">
+  <div class="product-scene">
+    <img src="../../assets/img/products/pineau-rouge-scene.png" alt="Visuel Röd Pineau" data-gallery-main width="1600" height="1600">
   </div>
   <div class="product-info-block">
     <div class="product-description">
@@ -174,15 +115,5 @@
     </div>
   </footer>
   <script src="../../assets/js/main.js?v=20260612-pineau-rouge-mask02"></script>
-  <script>
-    document.querySelectorAll(".pineau-rouge-detail [data-gallery-thumb]").forEach((button) => {
-      button.addEventListener("click", () => {
-        const detail = button.closest(".pineau-rouge-detail");
-        const scene = detail && detail.querySelector("[data-pineau-rouge-scene]");
-        if (!scene) return;
-        scene.classList.toggle("is-label", button.dataset.galleryScene !== "pineau-rouge");
-      });
-    });
-  </script>
 </body>
 </html>

@@ -434,7 +434,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge03">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260625-bottle-menu01">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -486,7 +486,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260611-pineau-rouge03">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260625-bottle-menu01">
 </head>
 <body>
   <main class="redirect-page">
@@ -2185,23 +2185,33 @@ p { margin: 18px 0 0; }
 }
 .bottle-menu {
   display: flex;
-  justify-content: center;
-  align-items: end;
-  gap: clamp(16px, 3vw, 42px);
-  padding: 18px 0;
+  justify-content: flex-start;
+  align-items: flex-start;
+  gap: 0;
+  padding: 80px 0 0 10%;
+}
+.bottle-menu a {
+  flex: 0 0 auto;
+  margin-right: 30px;
 }
 .bottle-menu img {
-  height: 82px;
-  width: auto;
+  width: 70px;
+  height: auto;
   transition: transform .35s ease;
 }
 .bottle-menu a:hover img {
-  transform: translateY(-18px);
+  transform: translateY(-28px);
 }
 .product-menu-strip {
+  height: 150px;
   padding: 0;
   background: #ebe7d9;
-  border-bottom: 2px solid #fff;
+  border-bottom: 0;
+  overflow: hidden;
+}
+.product-menu-strip .section-inner {
+  width: 100%;
+  margin: 0;
 }
 .product-old-detail {
   display: grid;
@@ -2677,7 +2687,19 @@ thead th {
   .bottle-menu {
     overflow-x: auto;
     justify-content: flex-start;
-    padding-inline: 20px;
+    padding: 18px 20px 0;
+  }
+  .bottle-menu a {
+    margin-right: 22px;
+  }
+  .bottle-menu img {
+    width: 59px;
+  }
+  .bottle-menu a:hover img {
+    transform: translateY(-18px);
+  }
+  .product-menu-strip {
+    height: 100px;
   }
   .legacy-gallery {
     grid-template-columns: 1fr;

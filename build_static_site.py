@@ -282,19 +282,131 @@ PRODUCT_EXTRAS = {
         "gallery": ["assets/img/products/pineau-rouge-label.png"],
         "colors": ["#565083", "#3e3b59", "#6e6baf"],
         "accent": "#ecb038",
-        "nutrition_placeholder": "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.",
     },
 }
 
-NUTRITION_IMAGES = {
-    "fondation-vs": "assets/img/old-site/nutrition/tab_vs_fr.png",
-    "conviction-vsop": "assets/img/old-site/nutrition/tab_vsop_fr.png",
-    "cohesion-napoleon": "assets/img/old-site/nutrition/tab_napo_fr.png",
-    "transmission-xo": "assets/img/old-site/nutrition/tab_xo_fr.png",
-    "xxo": "assets/img/old-site/nutrition/tab_xxo_fr.png",
-    "single-cask": "assets/img/old-site/nutrition/tab_single_fr.png",
-    "pineau": "assets/img/old-site/nutrition/tab_pineau_fr.png",
+COGNAC_NUTRITION_ROWS = [
+    ("energy", "Valeur énergétique", "Energy", "", ""),
+    ("alcohol", "Alcool", "Alcohol", "", ""),
+    ("fat", "Matières grasses", "Fat", "0 g", "0 g"),
+    ("saturates", "dont acides gras saturés", "of which saturates", "0 g", "0 g"),
+    ("carbs", "Glucides", "Carbohydrate", "0 g", "0,3 g"),
+    ("sugars", "dont sucres", "of which sugars", "0 g", "0,3 g"),
+    ("protein", "Protéines", "Protein", "0 g", "0 g"),
+    ("salt", "Sel", "Salt", "0 g", "0 g"),
+]
+
+PINEAU_NUTRITION_ROWS = [
+    ("energy", "Valeur énergétique", "Energy", "", ""),
+    ("alcohol", "Alcool", "Alcohol", "4,14 g", "13,8 g"),
+    ("fat", "Matières grasses", "Fat", "0,5 g", "0,5 g"),
+    ("saturates", "dont acides gras saturés", "of which saturates", "0,5 g", "0,5 g"),
+    ("carbs", "Glucides", "Carbohydrate", "4,2 g", "14 g"),
+    ("sugars", "dont sucres", "of which sugars", "4,2 g", "14 g"),
+    ("protein", "Protéines", "Protein", "0,5 g", "0,5 g"),
+    ("salt", "Sel", "Salt", "0 g", "0 g"),
+]
+
+PINEAU_ROUGE_NUTRITION_ROWS = [
+    ("energy", "Valeur énergétique", "Energy", "", ""),
+    ("alcohol", "Alcool", "Alcohol", "4,14 g", "13,8 g"),
+    ("fat", "Matières grasses", "Fat", "0,5 g", "0,5 g"),
+    ("saturates", "dont acides gras saturés", "of which saturates", "0,5 g", "0,5 g"),
+    ("carbs", "Glucides", "Carbohydrate", "4,8 g", "16 g"),
+    ("sugars", "dont sucres", "of which sugars", "4,8 g", "16 g"),
+    ("protein", "Protéines", "Protein", "0,5 g", "0,5 g"),
+    ("salt", "Sel", "Salt", "0 g", "0 g"),
+]
+
+NUTRITION_VALUES = {
+    "fondation-vs": {
+        "rows": [(key, fr, en, "279 kJ / 68 kcal" if key == "energy" else ("9,5 g" if key == "alcohol" else per_30), "931 kJ / 225 kcal" if key == "energy" else ("31,6 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
+        "ingredients_fr": "Vin distillé ; eau ; colorant (caramel)",
+        "ingredients_en": "Distilled wine; water; colouring (caramel)",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "conviction-vsop": {
+        "rows": [(key, fr, en, "279 kJ / 68 kcal" if key == "energy" else ("9,5 g" if key == "alcohol" else per_30), "931 kJ / 225 kcal" if key == "energy" else ("31,6 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
+        "ingredients_fr": "Vin distillé ; eau ; colorant (caramel)",
+        "ingredients_en": "Distilled wine; water; colouring (caramel)",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "cohesion-napoleon": {
+        "rows": [(key, fr, en, "285 kJ / 68 kcal" if key == "energy" else ("9,5 g" if key == "alcohol" else per_30), "951 kJ / 227 kcal" if key == "energy" else ("31,6 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
+        "ingredients_fr": "Vin distillé ; eau ; colorant (caramel)",
+        "ingredients_en": "Distilled wine; water; colouring (caramel)",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "transmission-xo": {
+        "rows": [(key, fr, en, "285 kJ / 68 kcal" if key == "energy" else ("9,5 g" if key == "alcohol" else per_30), "951 kJ / 227 kcal" if key == "energy" else ("31,6 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
+        "ingredients_fr": "Vin distillé ; eau ; colorant (caramel)",
+        "ingredients_en": "Distilled wine; water; colouring (caramel)",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "xxo": {
+        "rows": [(key, fr, en, "285 kJ / 68 kcal" if key == "energy" else ("10,2 g" if key == "alcohol" else per_30), "951 kJ / 227 kcal" if key == "energy" else ("34,3 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
+        "ingredients_fr": "Vin distillé ; eau ; colorant (caramel)",
+        "ingredients_en": "Distilled wine; water; colouring (caramel)",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "single-cask": {
+        "rows": [(key, fr, en, "285 kJ / 68 kcal" if key == "energy" else ("12,1 g" if key == "alcohol" else per_30), "951 kJ / 227 kcal" if key == "energy" else ("40,6 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
+        "ingredients_fr": "Vin distillé ; eau ; colorant (caramel)",
+        "ingredients_en": "Distilled wine; water; colouring (caramel)",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "pineau": {
+        "rows": [(key, fr, en, "198 kJ / 46,2 kcal" if key == "energy" else per_30, "660 kJ / 154 kcal" if key == "energy" else per_100) for key, fr, en, per_30, per_100 in PINEAU_NUTRITION_ROWS],
+        "ingredients_fr": "Moût de raisin ; eau-de-vie de Cognac",
+        "ingredients_en": "Grape must; Cognac eau-de-vie",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
+    "pineau-rouge": {
+        "rows": [(key, fr, en, "196,5 kJ / 47,1 kcal" if key == "energy" else per_30, "655 kJ / 157 kcal" if key == "energy" else per_100) for key, fr, en, per_30, per_100 in PINEAU_ROUGE_NUTRITION_ROWS],
+        "ingredients_fr": "Moût de raisin ; eau-de-vie de Cognac",
+        "ingredients_en": "Grape must; Cognac eau-de-vie",
+        "statement_fr": "Sans sulfites ajoutés",
+        "statement_en": "No added sulphites",
+    },
 }
+
+
+def bilingual(fr: str, en: str) -> str:
+    return f'<span data-fr>{escape(fr)}</span><span data-en>{escape(en)}</span>'
+
+
+def nutrition_table(slug: str, product_name: str) -> str:
+    nutrition = NUTRITION_VALUES[slug]
+    rows = "".join(
+        f"<tr><th>{bilingual(row_fr, row_en)}</th><td>{escape(per_30)}</td><td>{escape(per_100)}</td></tr>"
+        for _, row_fr, row_en, per_30, per_100 in nutrition["rows"]
+    )
+    return f"""
+        <div class="nutrition-table-wrap">
+          <table class="nutrition-table">
+            <caption>{bilingual("Valeurs nutritionnelles moyennes", "Average nutritional values")}</caption>
+            <thead>
+              <tr>
+                <th>{bilingual("Nutriment", "Nutrient")}</th>
+                <th>{bilingual("Pour 30 ml", "Per 30 ml")}</th>
+                <th>{bilingual("Pour 100 ml", "Per 100 ml")}</th>
+              </tr>
+            </thead>
+            <tbody>{rows}</tbody>
+          </table>
+        </div>
+        <div class="nutrition-meta">
+          <p><strong>{bilingual("Ingrédients", "Ingredients")}</strong><span>{bilingual(nutrition["ingredients_fr"], nutrition["ingredients_en"])}</span></p>
+          <p><strong>{bilingual("Mention", "Statement")}</strong><span>{bilingual(nutrition["statement_fr"], nutrition["statement_en"])}</span></p>
+        </div>
+"""
 
 
 def rel_prefix(path: str) -> str:
@@ -665,7 +777,7 @@ def product_page(product):
     story = extra.get("story", product["short"])
     degustation_title = extra.get("degustation_title", "Dégustation")
     degustation_text = extra.get("degustation_text", product["short"])
-    nutrition_image = NUTRITION_IMAGES.get(product["slug"], "")
+    nutrition = NUTRITION_VALUES.get(product["slug"])
     nutrition_placeholder = extra.get("nutrition_placeholder", "")
     sensory_items = "".join(
         f'<li><span>{escape(label)} :</span><strong>{escape(value)}</strong></li>'
@@ -685,14 +797,14 @@ def product_page(product):
       <button class="nutrition-link" type="button" data-nutrition-open data-fr>Valeurs nutritionnelles</button>
       <button class="nutrition-link" type="button" data-nutrition-open data-en>Nutritional values</button>
 """
-    if nutrition_image:
+    if nutrition:
         nutrition_controls += f"""
       <dialog class="nutrition-dialog" data-nutrition-dialog>
         <form method="dialog">
           <button type="submit" aria-label="Fermer">×</button>
         </form>
         <h2>Valeurs nutritionnelles - {escape(product["name"])}</h2>
-        <img src="{prefix}{nutrition_image}" alt="Valeurs nutritionnelles {escape(product["name"])}" loading="lazy">
+{nutrition_table(product["slug"], product["name"])}
       </dialog>
 """
     elif nutrition_placeholder:
@@ -1040,30 +1152,31 @@ def gallery_page():
 
 
 def nutrition_page():
-    rows = "".join(
-        f"<tr><th>{escape(p['name'])}</th><td>{escape(p['category'])}</td><td data-fr>À intégrer depuis les données validées.</td><td data-en>To be added from approved data.</td></tr>"
-        for p in PRODUCTS
-    )
+    cards = []
+    for product in PRODUCTS:
+        if product["slug"] in NUTRITION_VALUES:
+            cards.append(
+                f"""
+      <article class="nutrition-card">
+        <h3>{escape(product["name"])}</h3>
+        <p>{escape(product["category"])}</p>
+{nutrition_table(product["slug"], product["name"])}
+      </article>
+"""
+            )
     body = f"""
 <section>
   <div class="section-inner">
     <p class="eyebrow">Nutrition</p>
-    <h2 data-fr>Tableaux accessibles à compléter</h2>
-    <h2 data-en>Accessible tables to complete</h2>
-    <p data-fr>Les anciens tableaux existaient sous forme d'images. Cette nouvelle page prépare une version HTML accessible, lisible par Google, les lecteurs d'écran et les agents IA. Les chiffres seront ajoutés uniquement après validation.</p>
-    <p data-en>The previous tables existed as images. This new page prepares accessible HTML tables, readable by Google, screen readers and AI agents. Figures will be added only after approval.</p>
-    <div class="table-wrap">
-      <table>
-        <caption data-fr>Valeurs nutritionnelles à compléter par produit</caption>
-        <caption data-en>Nutritional values to complete by product</caption>
-        <thead><tr><th>Produit</th><th>Catégorie</th><th data-fr>Statut</th><th data-en>Status</th></tr></thead>
-        <tbody>{rows}</tbody>
-      </table>
-    </div>
+    <h2 data-fr>Valeurs nutritionnelles par produit</h2>
+    <h2 data-en>Nutritional values by product</h2>
+    <p data-fr>Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.</p>
+    <p data-en>Values are shown per 30 ml and per 100 ml, with energy displayed in the regulatory kJ / kcal order.</p>
+    <div class="nutrition-list">{''.join(cards)}</div>
   </div>
 </section>
 """
-    return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic à recréer en HTML accessible après validation des données.", "Valeurs nutritionnelles", "Une page prête pour remplacer les anciens tableaux en image par du HTML accessible.", "A page ready to replace old image tables with accessible HTML.", body, image="assets/img/brand/hero-old-vine.jpg")
+    return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic par produit, pour 30 ml et 100 ml.", "Valeurs nutritionnelles", "Les tableaux nutritionnels Esprit Organic avec l'énergie en kJ / kcal.", "Cognac Esprit Organic nutritional tables with energy shown in kJ / kcal.", body, image="assets/img/brand/hero-old-vine.jpg")
 
 
 def legal_page():
@@ -2420,6 +2533,62 @@ p { margin: 18px 0 0; }
   color: #522e03;
   font-family: "Roboto Slab", Georgia, serif;
   font-size: clamp(1.35rem, 2.4vw, 2.4rem);
+}
+.nutrition-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(82,46,3,.18);
+  background: #fff;
+}
+.nutrition-table {
+  min-width: 620px;
+}
+.nutrition-table caption {
+  padding: 16px 18px;
+}
+.nutrition-table th,
+.nutrition-table td {
+  padding: 13px 16px;
+  border-top: 1px solid rgba(82,46,3,.14);
+}
+.nutrition-table tbody th {
+  font-weight: 700;
+}
+.nutrition-meta {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(82,46,3,.14);
+}
+.nutrition-meta p {
+  display: grid;
+  grid-template-columns: minmax(120px, .34fr) 1fr;
+  gap: 14px;
+  margin: 0;
+}
+.nutrition-meta strong {
+  color: #683f09;
+}
+.nutrition-list {
+  display: grid;
+  gap: 28px;
+  margin-top: 34px;
+}
+.nutrition-card {
+  padding: clamp(20px, 3vw, 30px);
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.nutrition-card h3 {
+  margin: 0 0 6px;
+  color: #683f09;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+.nutrition-card > p {
+  margin: 0 0 18px;
+  color: var(--muted);
 }
 .nutrition-dialog img {
   width: 100%;

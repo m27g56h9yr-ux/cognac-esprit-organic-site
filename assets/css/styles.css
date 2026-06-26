@@ -1480,6 +1480,62 @@ p { margin: 18px 0 0; }
   font-family: "Roboto Slab", Georgia, serif;
   font-size: clamp(1.35rem, 2.4vw, 2.4rem);
 }
+.nutrition-table-wrap {
+  overflow-x: auto;
+  border: 1px solid rgba(82,46,3,.18);
+  background: #fff;
+}
+.nutrition-table {
+  min-width: 620px;
+}
+.nutrition-table caption {
+  padding: 16px 18px;
+}
+.nutrition-table th,
+.nutrition-table td {
+  padding: 13px 16px;
+  border-top: 1px solid rgba(82,46,3,.14);
+}
+.nutrition-table tbody th {
+  font-weight: 700;
+}
+.nutrition-meta {
+  display: grid;
+  gap: 10px;
+  margin-top: 18px;
+  padding: 16px 18px;
+  background: rgba(255,255,255,.62);
+  border: 1px solid rgba(82,46,3,.14);
+}
+.nutrition-meta p {
+  display: grid;
+  grid-template-columns: minmax(120px, .34fr) 1fr;
+  gap: 14px;
+  margin: 0;
+}
+.nutrition-meta strong {
+  color: #683f09;
+}
+.nutrition-list {
+  display: grid;
+  gap: 28px;
+  margin-top: 34px;
+}
+.nutrition-card {
+  padding: clamp(20px, 3vw, 30px);
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.nutrition-card h3 {
+  margin: 0 0 6px;
+  color: #683f09;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(1.25rem, 2vw, 1.8rem);
+}
+.nutrition-card > p {
+  margin: 0 0 18px;
+  color: var(--muted);
+}
 .nutrition-dialog img {
   width: 100%;
   height: auto;

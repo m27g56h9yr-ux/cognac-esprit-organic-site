@@ -983,7 +983,6 @@ const pineauProductTranslations = {
     "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Fruity and generous, with cherry, blackberry and candied red fruit",
     "Souple, rond, fruité, avec une belle fraîcheur": "Supple, round and fruity, with fine freshness",
     "Gourmande, fruitée, légèrement épicée": "Generous, fruity and lightly spicy",
-    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Nutritional values to add once the official red Pineau product sheet is available.",
     "Valeurs nutritionnelles - Pineau blanc": "Nutritional values - White Pineau",
     "Valeurs nutritionnelles - Pineau rouge": "Nutritional values - Red Pineau"
   },
@@ -1000,7 +999,6 @@ const pineauProductTranslations = {
     "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Frugtig og generøs med kirsebær, brombær og kandiserede røde frugter",
     "Souple, rond, fruité, avec une belle fraîcheur": "Smidig, rund og frugtig med fin friskhed",
     "Gourmande, fruitée, légèrement épicée": "Generøs, frugtig og let krydret",
-    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Næringsværdier tilføjes, når den officielle produktfiche for rød Pineau er klar.",
     "Valeurs nutritionnelles - Pineau blanc": "Næringsværdier - Hvid Pineau",
     "Valeurs nutritionnelles - Pineau rouge": "Næringsværdier - Rød Pineau"
   },
@@ -1017,7 +1015,6 @@ const pineauProductTranslations = {
     "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Fruktig og fyldig med kirsebær, bjørnebær og kandiserte røde frukter",
     "Souple, rond, fruité, avec une belle fraîcheur": "Myk, rund og fruktig med fin friskhet",
     "Gourmande, fruitée, légèrement épicée": "Fyldig, fruktig og lett krydret",
-    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Næringsverdier legges til når den offisielle produktfiche for rød Pineau er klar.",
     "Valeurs nutritionnelles - Pineau blanc": "Næringsverdier - Hvit Pineau",
     "Valeurs nutritionnelles - Pineau rouge": "Næringsverdier - Rød Pineau"
   },
@@ -1034,13 +1031,127 @@ const pineauProductTranslations = {
     "Fruité et gourmand, autour de la cerise, de la mûre et des fruits rouges confits": "Fruktig och generös med körsbär, björnbär och kanderade röda frukter",
     "Souple, rond, fruité, avec une belle fraîcheur": "Mjuk, rund och fruktig med fin friskhet",
     "Gourmande, fruitée, légèrement épicée": "Generös, fruktig och lätt kryddig",
-    "Valeurs nutritionnelles à ajouter dès réception de la fiche produit Pineau rouge.": "Näringsvärden läggs till när den officiella produktinformationen för röd Pineau finns klar.",
     "Valeurs nutritionnelles - Pineau blanc": "Näringsvärden - Vit Pineau",
     "Valeurs nutritionnelles - Pineau rouge": "Näringsvärden - Röd Pineau"
   }
 };
 
 Object.entries(pineauProductTranslations).forEach(([lang, dictionary]) => {
+  Object.assign(translations[lang], dictionary);
+});
+
+const nutritionTranslations = {
+  en: {
+    "Valeurs nutritionnelles moyennes": "Average nutritional values",
+    "Valeurs nutritionnelles par produit": "Nutritional values by product",
+    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Values are shown per 30 ml and per 100 ml, with energy displayed in the regulatory kJ / kcal order.",
+    "Nutriment": "Nutrient",
+    "Pour 30 ml": "Per 30 ml",
+    "Pour 100 ml": "Per 100 ml",
+    "Valeur énergétique": "Energy",
+    "Alcool": "Alcohol",
+    "Matières grasses": "Fat",
+    "dont acides gras saturés": "of which saturates",
+    "Glucides": "Carbohydrate",
+    "dont sucres": "of which sugars",
+    "Protéines": "Protein",
+    "Sel": "Salt",
+    "Ingrédients": "Ingredients",
+    "Mention": "Statement",
+    "Vin distillé ; eau ; colorant (caramel)": "Distilled wine; water; colouring (caramel)",
+    "Moût de raisin ; eau-de-vie de Cognac": "Grape must; Cognac eau-de-vie",
+    "Sans sulfites ajoutés": "No added sulphites",
+    "Valeurs nutritionnelles - Fondation VS": "Nutritional values - Fondation VS",
+    "Valeurs nutritionnelles - Conviction VSOP": "Nutritional values - Conviction VSOP",
+    "Valeurs nutritionnelles - Cohesion Napoléon": "Nutritional values - Cohesion Napoléon",
+    "Valeurs nutritionnelles - Transmission XO": "Nutritional values - Transmission XO",
+    "Valeurs nutritionnelles - XXO": "Nutritional values - XXO",
+    "Valeurs nutritionnelles - Single Cask": "Nutritional values - Single Cask"
+  },
+  da: {
+    "Valeurs nutritionnelles moyennes": "Gennemsnitlige næringsværdier",
+    "Valeurs nutritionnelles par produit": "Næringsværdier efter produkt",
+    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Værdierne vises pr. 30 ml og pr. 100 ml, med energi i rækkefølgen kJ / kcal.",
+    "Nutriment": "Næringsstof",
+    "Pour 30 ml": "Pr. 30 ml",
+    "Pour 100 ml": "Pr. 100 ml",
+    "Valeur énergétique": "Energi",
+    "Alcool": "Alkohol",
+    "Matières grasses": "Fedt",
+    "dont acides gras saturés": "heraf mættede fedtsyrer",
+    "Glucides": "Kulhydrat",
+    "dont sucres": "heraf sukkerarter",
+    "Protéines": "Protein",
+    "Sel": "Salt",
+    "Ingrédients": "Ingredienser",
+    "Mention": "Oplysning",
+    "Vin distillé ; eau ; colorant (caramel)": "Destilleret vin; vand; farvestof (karamel)",
+    "Moût de raisin ; eau-de-vie de Cognac": "Druemost; Cognac eau-de-vie",
+    "Sans sulfites ajoutés": "Uden tilsatte sulfitter",
+    "Valeurs nutritionnelles - Fondation VS": "Næringsværdier - Fondation VS",
+    "Valeurs nutritionnelles - Conviction VSOP": "Næringsværdier - Conviction VSOP",
+    "Valeurs nutritionnelles - Cohesion Napoléon": "Næringsværdier - Cohesion Napoléon",
+    "Valeurs nutritionnelles - Transmission XO": "Næringsværdier - Transmission XO",
+    "Valeurs nutritionnelles - XXO": "Næringsværdier - XXO",
+    "Valeurs nutritionnelles - Single Cask": "Næringsværdier - Single Cask"
+  },
+  no: {
+    "Valeurs nutritionnelles moyennes": "Gjennomsnittlige næringsverdier",
+    "Valeurs nutritionnelles par produit": "Næringsverdier etter produkt",
+    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Verdiene vises per 30 ml og per 100 ml, med energi i rekkefølgen kJ / kcal.",
+    "Nutriment": "Næringsstoff",
+    "Pour 30 ml": "Per 30 ml",
+    "Pour 100 ml": "Per 100 ml",
+    "Valeur énergétique": "Energi",
+    "Alcool": "Alkohol",
+    "Matières grasses": "Fett",
+    "dont acides gras saturés": "hvorav mettede fettsyrer",
+    "Glucides": "Karbohydrat",
+    "dont sucres": "hvorav sukkerarter",
+    "Protéines": "Protein",
+    "Sel": "Salt",
+    "Ingrédients": "Ingredienser",
+    "Mention": "Opplysning",
+    "Vin distillé ; eau ; colorant (caramel)": "Destillert vin; vann; fargestoff (karamell)",
+    "Moût de raisin ; eau-de-vie de Cognac": "Druemost; Cognac eau-de-vie",
+    "Sans sulfites ajoutés": "Uten tilsatte sulfitter",
+    "Valeurs nutritionnelles - Fondation VS": "Næringsverdier - Fondation VS",
+    "Valeurs nutritionnelles - Conviction VSOP": "Næringsverdier - Conviction VSOP",
+    "Valeurs nutritionnelles - Cohesion Napoléon": "Næringsverdier - Cohesion Napoléon",
+    "Valeurs nutritionnelles - Transmission XO": "Næringsverdier - Transmission XO",
+    "Valeurs nutritionnelles - XXO": "Næringsverdier - XXO",
+    "Valeurs nutritionnelles - Single Cask": "Næringsverdier - Single Cask"
+  },
+  sv: {
+    "Valeurs nutritionnelles moyennes": "Genomsnittliga näringsvärden",
+    "Valeurs nutritionnelles par produit": "Näringsvärden per produkt",
+    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Värdena visas per 30 ml och per 100 ml, med energi i ordningen kJ / kcal.",
+    "Nutriment": "Näringsämne",
+    "Pour 30 ml": "Per 30 ml",
+    "Pour 100 ml": "Per 100 ml",
+    "Valeur énergétique": "Energi",
+    "Alcool": "Alkohol",
+    "Matières grasses": "Fett",
+    "dont acides gras saturés": "varav mättade fettsyror",
+    "Glucides": "Kolhydrat",
+    "dont sucres": "varav sockerarter",
+    "Protéines": "Protein",
+    "Sel": "Salt",
+    "Ingrédients": "Ingredienser",
+    "Mention": "Uppgift",
+    "Vin distillé ; eau ; colorant (caramel)": "Destillerat vin; vatten; färgämne (karamell)",
+    "Moût de raisin ; eau-de-vie de Cognac": "Druvmust; Cognac eau-de-vie",
+    "Sans sulfites ajoutés": "Utan tillsatta sulfiter",
+    "Valeurs nutritionnelles - Fondation VS": "Näringsvärden - Fondation VS",
+    "Valeurs nutritionnelles - Conviction VSOP": "Näringsvärden - Conviction VSOP",
+    "Valeurs nutritionnelles - Cohesion Napoléon": "Näringsvärden - Cohesion Napoléon",
+    "Valeurs nutritionnelles - Transmission XO": "Näringsvärden - Transmission XO",
+    "Valeurs nutritionnelles - XXO": "Näringsvärden - XXO",
+    "Valeurs nutritionnelles - Single Cask": "Näringsvärden - Single Cask"
+  }
+};
+
+Object.entries(nutritionTranslations).forEach(([lang, dictionary]) => {
   Object.assign(translations[lang], dictionary);
 });
 

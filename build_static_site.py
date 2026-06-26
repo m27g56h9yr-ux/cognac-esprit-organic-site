@@ -468,7 +468,7 @@ def json_ld(items):
 
 def nav_html(current: str, prefix: str) -> str:
     product_current = current.startswith("produits/")
-    house_current = current.startswith("production/") or current.startswith("demarche/") or current.startswith("leopold-et-fanny/")
+    house_current = current.startswith("production/") or current.startswith("demarche/") or current.startswith("leopold-et-fanny/") or current.startswith("equipe/")
     range_items = "".join(
         f'<a href="{prefix}produits/{p["slug"]}.html">{escape(p["name"])}</a>'
         for p in PRODUCTS
@@ -477,6 +477,7 @@ def nav_html(current: str, prefix: str) -> str:
         f'<a href="{prefix}production/"><span data-fr>Notre démarche</span><span data-en>Our approach</span></a>'
         f'<a href="{prefix}demarche/"><span data-fr>La production</span><span data-en>Production</span></a>'
         f'<a href="{prefix}leopold-et-fanny/"><span data-fr>Léopold et Fanny</span><span data-en>Léopold and Fanny</span></a>'
+        f'<a href="{prefix}equipe/"><span data-fr>L’équipe</span><span data-en>The team</span></a>'
     )
     visit_current = ' aria-current="page"' if current == "visiter.html" else ""
     product_aria = ' aria-current="page"' if product_current else ""
@@ -688,6 +689,7 @@ def home():
     <span>•••</span>
     <strong data-fr>Depuis 20 ans, Léopold Croizet conduit son vignoble en agriculture biologique. Il distille, élève et met en bouteille sa production à la propriété.</strong>
     <strong data-en>For 20 years, Léopold Croizet has been managing his vineyard in organic agriculture. He distils, ages and bottles production at the estate.</strong>
+    <a class="text-link home-team-link" href="equipe/"><span data-fr>L’équipe</span><span data-en>The team</span></a>
   </div>
 </section>
 <section class="old-grid">
@@ -1017,6 +1019,32 @@ def people_page(path="leopold-et-fanny/index.html"):
 </section>
 """
     return layout(path, "Léopold et Fanny | Cognac Esprit Organic", "Léopold et Fanny Croizet portent Cognac Esprit Organic avec une même passion pour la vigne, le Cognac et la transmission.", "Travailler d’une même passion", "Un héritage passionnant mis au profit des générations futures.", "A passionate heritage serving future generations.", body, image="assets/img/old-site/leopold_croizet.jpg", page_class="legacy-page people-page", show_hero=False)
+
+
+def team_page(path="equipe/index.html"):
+    body = """
+<section class="team-page-content">
+  <h1 class="visually-hidden">Notre équipe</h1>
+  <div class="visually-hidden">
+    <p>Femmes et hommes engagés pour un Cognac biologique d’exception.</p>
+    <p>Cognac Esprit Organic est une maison familiale indépendante engagée dans une viticulture biologique exigeante.</p>
+    <ul>
+      <li>Léopold Croizet, vigneron, distillateur, gérant.</li>
+      <li>Fanny Croizet, assistante ADV et commerciale.</li>
+      <li>Damien Bertrand, directeur commercial export.</li>
+      <li>Thierry Chavagne, chef d’exploitation.</li>
+      <li>Sébastien Gaborit, assistant distillateur tractoriste.</li>
+      <li>Joanna Gaborit, responsable de la mise en bouteille.</li>
+      <li>Stéphanie Beaulieu, assistante de direction comptable.</li>
+      <li>Manoé Amrouche, assistante comptable.</li>
+    </ul>
+  </div>
+  <figure class="team-poster-shell">
+    <img src="../assets/img/team/notre-equipe-cognac-esprit-organic.png" alt="Notre équipe Cognac Esprit Organic : Léopold Croizet, Fanny Croizet, Damien Bertrand, Thierry Chavagne, Sébastien Gaborit, Joanna Gaborit, Stéphanie Beaulieu et Manoé Amrouche." width="2526" height="1786">
+  </figure>
+</section>
+"""
+    return layout(path, "L’équipe | Cognac Esprit Organic", "Notre équipe Cognac Esprit Organic : femmes et hommes engagés pour un Cognac biologique d’exception.", "Notre équipe", "Femmes et hommes engagés pour un Cognac biologique d’exception.", "Women and men committed to exceptional organic Cognac.", body, image="assets/img/team/notre-equipe-cognac-esprit-organic.png", page_class="legacy-page team-page", show_hero=False)
 
 
 def importer_page():
@@ -1495,6 +1523,27 @@ p { margin: 18px 0 0; }
 .faq-item h2 { font-size: clamp(1.35rem, 2.2vw, 2rem); }
 .link-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .link-list a { padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; background: var(--white); }
+.team-page-content {
+  padding: clamp(30px, 5vw, 64px) 0 clamp(54px, 7vw, 90px);
+  background: #f5f3e8;
+}
+.team-poster-shell {
+  width: min(1480px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: clamp(10px, 2vw, 18px);
+  overflow-x: auto;
+  border: 1px solid rgba(94, 61, 35, .18);
+  background: #fbf8ee;
+  box-shadow: 0 20px 50px rgba(23, 19, 15, .12);
+  -webkit-overflow-scrolling: touch;
+}
+.team-poster-shell img {
+  width: 100%;
+  min-width: 940px;
+}
+.cream-signature .home-team-link {
+  margin-top: 22px;
+}
 .site-footer { padding: 70px 0; border-top: 1px solid rgba(255,255,255,.12); background: linear-gradient(rgba(23,19,15,.88), rgba(23,19,15,.88)), url('../img/brand/footer-landscape.jpg') center / cover; color: var(--paper); }
 .footer-grid { width: min(1180px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 .footer-logo { width: 150px; margin-bottom: 14px; }
@@ -2834,6 +2883,18 @@ thead th {
   .text-panel {
     padding: 38px 30px;
   }
+  .team-page-content {
+    padding-top: 22px;
+  }
+  .team-poster-shell {
+    width: 100%;
+    padding: 10px 12px 14px;
+    border-right: 0;
+    border-left: 0;
+  }
+  .team-poster-shell img {
+    min-width: 980px;
+  }
   .old-tile {
     min-height: 430px;
   }
@@ -2961,7 +3022,7 @@ document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
 
 
 def write_static_files():
-    pages = ["index.html", "organic-cognac-producer-france.html", "importers.html", "production/index.html", "demarche/index.html", "contact.html", "faq.html", "visiter.html", "leopold-et-fanny/index.html", "cocktails.html", "galerie.html", "valeurs-nutritionnelles.html", "mentions-legales.html"]
+    pages = ["index.html", "organic-cognac-producer-france.html", "importers.html", "production/index.html", "demarche/index.html", "contact.html", "faq.html", "visiter.html", "leopold-et-fanny/index.html", "equipe/index.html", "cocktails.html", "galerie.html", "valeurs-nutritionnelles.html", "mentions-legales.html"]
     pages += [f"produits/{p['slug']}.html" for p in PRODUCTS]
     sitemap_urls = "\n".join(f"  <url><loc>{page_url(p)}</loc></url>" for p in pages)
     write("sitemap.xml", f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -3009,6 +3070,7 @@ Europe, USA, Canada.
 - Notre démarche : /production/
 - La production : /demarche/
 - Léopold et Fanny : /leopold-et-fanny/
+- L’équipe : /equipe/
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
 - llms.txt : /llms.txt
@@ -3119,6 +3181,8 @@ def main():
     write("visiter.html", visit_page())
     write("leopold-et-fanny/index.html", people_page("leopold-et-fanny/index.html"))
     write("leopold-et-fanny.html", redirect_page("leopold-et-fanny.html", "Léopold et Fanny", "leopold-et-fanny/"))
+    write("equipe/index.html", team_page("equipe/index.html"))
+    write("equipe.html", redirect_page("equipe.html", "L’équipe", "equipe/"))
     write_static_files()
 
 

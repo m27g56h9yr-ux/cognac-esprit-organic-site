@@ -308,6 +308,27 @@ p { margin: 18px 0 0; }
 .faq-item h2 { font-size: clamp(1.35rem, 2.2vw, 2rem); }
 .link-list { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .link-list a { padding: 10px 14px; border: 1px solid var(--line); border-radius: var(--radius); text-decoration: none; background: var(--white); }
+.team-page-content {
+  padding: clamp(30px, 5vw, 64px) 0 clamp(54px, 7vw, 90px);
+  background: #f5f3e8;
+}
+.team-poster-shell {
+  width: min(1480px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: clamp(10px, 2vw, 18px);
+  overflow-x: auto;
+  border: 1px solid rgba(94, 61, 35, .18);
+  background: #fbf8ee;
+  box-shadow: 0 20px 50px rgba(23, 19, 15, .12);
+  -webkit-overflow-scrolling: touch;
+}
+.team-poster-shell img {
+  width: 100%;
+  min-width: 940px;
+}
+.cream-signature .home-team-link {
+  margin-top: 22px;
+}
 .site-footer { padding: 70px 0; border-top: 1px solid rgba(255,255,255,.12); background: linear-gradient(rgba(23,19,15,.88), rgba(23,19,15,.88)), url('../img/brand/footer-landscape.jpg') center / cover; color: var(--paper); }
 .footer-grid { width: min(1180px, calc(100% - 32px)); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
 .footer-logo { width: 150px; margin-bottom: 14px; }
@@ -1779,6 +1800,18 @@ thead th {
   }
   .text-panel {
     padding: 38px 30px;
+  }
+  .team-page-content {
+    padding-top: 22px;
+  }
+  .team-poster-shell {
+    width: 100%;
+    padding: 10px 12px 14px;
+    border-right: 0;
+    border-left: 0;
+  }
+  .team-poster-shell img {
+    min-width: 980px;
   }
   .old-tile {
     min-height: 430px;

@@ -1030,13 +1030,13 @@ def team_page(path="equipe/index.html"):
     <p>Cognac Esprit Organic est une maison familiale indépendante engagée dans une viticulture biologique exigeante.</p>
     <ul>
       <li>Léopold Croizet, vigneron, distillateur, gérant.</li>
-      <li>Fanny Croizet, assistante ADV et commerciale.</li>
+      <li>Fanny Croizet, coordinatrice production et régie douanes.</li>
       <li>Damien Bertrand, directeur commercial export.</li>
       <li>Thierry Chavagne, chef d’exploitation.</li>
-      <li>Sébastien Gaborit, assistant distillateur tractoriste.</li>
+      <li>Sébastien Gaborit, chef d’équipe viticole assistant distillateur.</li>
       <li>Joanna Gaborit, responsable de la mise en bouteille.</li>
-      <li>Stéphanie Beaulieu, assistante de direction comptable.</li>
-      <li>Manoé Amrouche, assistante comptable.</li>
+      <li>Stéphanie Beaulieu, responsable comptable et administrative.</li>
+      <li>Manoé Amrouche, coordinatrice comptable et administrative.</li>
     </ul>
   </div>
   <figure class="team-poster-shell">

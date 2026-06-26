@@ -39,6 +39,7 @@ Europe, USA, Canada.
 - Notre démarche : /production/
 - La production : /demarche/
 - Léopold et Fanny : /leopold-et-fanny/
+- L’équipe : /equipe/
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
 - llms.txt : /llms.txt

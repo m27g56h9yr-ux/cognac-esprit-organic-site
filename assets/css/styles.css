@@ -87,16 +87,25 @@ img { display: block; max-width: 100%; height: auto; }
 .lang-option[aria-current="true"] {
   background: rgba(94, 61, 35, .08);
 }
-.header-bio { display: none; }
-.home-page .header-bio {
+.header-bio-link {
   display: block;
-  width: 112px;
-  height: auto;
+  width: 88px;
   align-self: center;
+  margin-left: 4px;
+  line-height: 0;
+  border-radius: 6px;
+  outline-offset: 4px;
+}
+.header-bio {
+  display: block;
+  width: 100%;
+  height: auto;
   object-fit: contain;
   padding: 0;
-  margin-left: 4px;
   background: transparent;
+}
+.home-page .header-bio-link {
+  width: 112px;
 }
 .nav-links { display: flex; align-items: center; gap: 14px; margin-left: auto; font-size: .94rem; }
 .nav-links a { text-decoration: none; color: var(--muted); padding: 10px 2px; white-space: nowrap; text-transform: uppercase; letter-spacing: .06em; font-size: .78rem; font-weight: 800; }
@@ -449,11 +458,11 @@ p { margin: 18px 0 0; }
   .nav-links { display: flex; width: auto; flex-direction: row; align-items: center; gap: 10px; margin-left: auto; }
   .nav-links .nav-dropdown,
   .nav-links > a,
-  .nav-links .header-bio { display: none; }
+  .nav-links .header-bio-link { display: none; }
   .nav-links.is-open { width: 100%; flex-direction: column; align-items: stretch; gap: 2px; margin-left: 0; order: 10; }
   .nav-links.is-open .nav-dropdown,
   .nav-links.is-open > a { display: block; }
-  .nav-links.is-open .header-bio { display: block; width: 82px; margin-top: 8px; }
+  .nav-links.is-open .header-bio-link { display: block; width: 82px; margin-top: 8px; }
   .nav-links a { padding: 12px 0; }
   .nav-dropdown { padding: 0; }
   .dropdown-menu {
@@ -1401,7 +1410,19 @@ p { margin: 18px 0 0; }
   width: 40%;
   margin-top: 15px;
 }
+.product-medal-link {
+  display: block;
+  width: 100%;
+  line-height: 0;
+  border-radius: 6px;
+  outline-offset: 4px;
+}
+.product-medal-link:hover img,
+.product-medal-link:focus-visible img {
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.2));
+}
 .product-medals img {
+  display: block;
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -1864,5 +1885,207 @@ thead th {
   }
   .legacy-gallery {
     grid-template-columns: 1fr;
+  }
+}
+
+.organic-proof-page {
+  background: #ece8dc;
+}
+.organic-proof-hero {
+  min-height: 72vh;
+  background: linear-gradient(90deg, rgba(23,19,15,.78), rgba(47,74,43,.38), rgba(23,19,15,.08)), var(--hero-image) center / cover;
+}
+.organic-proof-hero .lead {
+  max-width: 680px;
+}
+.organic-proof-intro,
+.organic-proof-note {
+  background: #ebe7d9;
+}
+.organic-proof-intro-grid,
+.organic-proof-note-grid,
+.organic-certification-grid {
+  display: grid;
+  grid-template-columns: minmax(0, .88fr) minmax(320px, 1.12fr);
+  gap: clamp(32px, 6vw, 78px);
+  align-items: center;
+}
+.organic-proof-lead {
+  padding-left: clamp(0px, 4vw, 46px);
+  border-left: 1px solid rgba(94, 61, 35, .22);
+}
+.organic-proof-lead p,
+.organic-proof-note p,
+.organic-certification-band p {
+  max-width: 680px;
+  color: #4f4337;
+  font-size: 1.02rem;
+}
+.organic-proof-cards-section {
+  padding: 2px 0;
+  background: #fff;
+}
+.organic-proof-cards {
+  display: grid;
+  gap: 2px;
+}
+.organic-proof-card {
+  display: grid;
+  grid-template-columns: minmax(300px, .92fr) minmax(0, 1.08fr);
+  min-height: 560px;
+  background: #5e3d23;
+  color: #fff;
+}
+.organic-proof-card.reverse {
+  grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr);
+}
+.organic-proof-card.reverse .organic-proof-card-media {
+  order: 2;
+}
+.organic-proof-card-media {
+  min-height: 100%;
+  overflow: hidden;
+}
+.organic-proof-card-media img {
+  width: 100%;
+  height: 100%;
+  min-height: 560px;
+  object-fit: cover;
+}
+.organic-proof-card-copy {
+  display: grid;
+  align-content: center;
+  padding: clamp(36px, 6vw, 78px);
+  background: linear-gradient(135deg, #4f321d, #2f4a2b);
+}
+.organic-proof-card.reverse .organic-proof-card-copy {
+  background: linear-gradient(135deg, #69550d, #513213);
+}
+.proof-kicker {
+  margin: 0 0 16px;
+  color: #d9bd72;
+  text-transform: uppercase;
+  letter-spacing: .16em;
+  font-size: .74rem;
+  font-weight: 900;
+}
+.organic-proof-card h2 {
+  max-width: 620px;
+  color: #fff;
+  font-size: clamp(2.1rem, 4.6vw, 4.45rem);
+}
+.proof-facts {
+  display: grid;
+  gap: 0;
+  margin: 28px 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(255,255,255,.26);
+}
+.proof-facts li {
+  display: grid;
+  grid-template-columns: minmax(120px, .36fr) 1fr;
+  gap: 18px;
+  padding: 14px 0;
+  border-bottom: 1px solid rgba(255,255,255,.2);
+}
+.proof-facts span {
+  color: rgba(255,255,255,.68);
+  text-transform: uppercase;
+  letter-spacing: .11em;
+  font-size: .68rem;
+  font-weight: 900;
+}
+.proof-facts strong {
+  color: #fff;
+  font-weight: 600;
+}
+.proof-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  align-items: center;
+  margin-top: 30px;
+}
+.proof-links .text-link {
+  color: #fff;
+}
+.organic-certification-band {
+  position: relative;
+  overflow: hidden;
+  background: #ded6c4;
+}
+.organic-ab-mark {
+  display: grid;
+  place-items: center;
+  min-height: 280px;
+  padding: 34px;
+  background: #f5f2e8;
+}
+.organic-ab-mark img {
+  width: min(330px, 72%);
+}
+.organic-chain {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 2px;
+  margin-top: 30px;
+}
+.organic-chain span {
+  min-height: 74px;
+  display: grid;
+  place-items: center;
+  padding: 12px;
+  background: #2f4a2b;
+  color: #fff;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-align: center;
+  text-transform: uppercase;
+}
+.organic-proof-note .link-list {
+  margin-top: 28px;
+}
+@media (max-width: 1060px) {
+  .organic-proof-intro-grid,
+  .organic-proof-note-grid,
+  .organic-certification-grid,
+  .organic-proof-card,
+  .organic-proof-card.reverse {
+    grid-template-columns: 1fr;
+  }
+  .organic-proof-card.reverse .organic-proof-card-media {
+    order: 0;
+  }
+  .organic-proof-lead {
+    padding-left: 0;
+    border-left: 0;
+  }
+  .organic-proof-card,
+  .organic-proof-card-media img {
+    min-height: 0;
+  }
+  .organic-proof-card-media img {
+    aspect-ratio: 16 / 10;
+  }
+}
+@media (max-width: 640px) {
+  .organic-proof-hero {
+    min-height: 62vh;
+    padding: 118px 0 68px;
+  }
+  .organic-proof-card-copy {
+    padding: 34px 24px 42px;
+  }
+  .proof-facts li {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .organic-chain {
+    grid-template-columns: 1fr;
+  }
+  .organic-chain span {
+    min-height: 52px;
   }
 }

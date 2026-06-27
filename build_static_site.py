@@ -12,6 +12,11 @@ CONTACT = {
     "address": "30 Rue d'Angoulême, 16200 Triac-Lautrait, France",
 }
 
+AWARD_PROOF_URLS = {
+    "fondation-vs-sfwsc-2019": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2992-esprit-organic-cognac-fondation-vs-fins-bois-aperitif-cocktail.html",
+    "transmission-xo-wwsa-2022": "https://wineawards.org/womens-wine-spirits-awards-2022-results/",
+}
+
 PRODUCTS = [
     {
         "name": "Fondation VS",
@@ -143,7 +148,13 @@ PRODUCT_EXTRAS = {
             "Palais": "Subtil mélange de fraîcheur et de fruité suivi par la rondeur de notes briochées et vanillées",
             "Finale": "Fraîcheur fruitée de raisin frais et de poire",
         },
-        "medals": ["assets/img/old-site/img_prod_fondation_medaile.png"],
+        "medals": [
+            {
+                "src": "assets/img/old-site/img_prod_fondation_medaile.png",
+                "href": AWARD_PROOF_URLS["fondation-vs-sfwsc-2019"],
+                "label": "preuve de la médaille d'or 2019 au San Francisco World Spirits Competition pour Fondation VS",
+            }
+        ],
         "gallery": ["assets/img/old-site/img_prod_fondation_02.jpg"],
         "colors": ["#557647", "#4e6a3f", "#628552"],
         "accent": "#a3b541",
@@ -202,7 +213,13 @@ PRODUCT_EXTRAS = {
             "Palais": "Explosion de saveurs et d'arômes épicés",
             "Finale": "Épicée de noix de muscade et de cannelle. Le rancio apparait en finale et mentholée",
         },
-        "medals": ["assets/img/old-site/img_prod_fondation_medaille_02.png"],
+        "medals": [
+            {
+                "src": "assets/img/old-site/img_prod_fondation_medaille_02.png",
+                "href": AWARD_PROOF_URLS["transmission-xo-wwsa-2022"],
+                "label": "preuve de la récompense Women's Wine & Spirits Awards pour Transmission XO",
+            }
+        ],
         "gallery": ["assets/img/old-site/img_prod_transmission_02.jpg", "assets/img/old-site/img_prod_transmission_03.jpg"],
         "colors": ["#c78d0b", "#b9780e", "#d09a25"],
         "accent": "#f9d872",
@@ -558,7 +575,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         <img src="{prefix}assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic">
       </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Ouvrir le menu">Menu</button>
-      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">FR</button><div class="lang-menu-panel" role="menu" aria-label="Choisir la langue"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></div>
+      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">FR</button><div class="lang-menu-panel" role="menu" aria-label="Choisir la langue"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><a class="header-bio-link" href="{prefix}agriculture-biologique.html" aria-label="Agriculture biologique"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></a></div>
     </nav>
   </header>
   <main id="contenu">
@@ -650,6 +667,20 @@ def section(content, cls=""):
 
 def split(left, right, cls=""):
     return section(f'<div class="split {cls}"><div>{left}</div><div>{right}</div></div>')
+
+
+def medal_html(medal, product_name: str, prefix: str) -> str:
+    if isinstance(medal, str):
+        src = medal
+        return f'<img src="{prefix}{src}" alt="Récompense {escape(product_name)}" loading="lazy">'
+    src = medal["src"]
+    alt = medal.get("alt", f"Récompense {product_name}")
+    href = medal.get("href")
+    label = medal.get("label", f"Voir la preuve de la récompense {product_name}")
+    image = f'<img src="{prefix}{src}" alt="{escape(alt)}" loading="lazy">'
+    if href:
+        return f'<a class="product-medal-link" href="{escape(href)}" target="_blank" rel="noopener noreferrer" aria-label="{escape(label)}">{image}</a>'
+    return image
 
 
 def write(path, content):
@@ -786,8 +817,8 @@ def product_page(product):
         for label, value in extra.get("sensory", {}).items()
     )
     medals = "".join(
-        f'<img src="{prefix}{src}" alt="Récompense {escape(product["name"])}" loading="lazy">'
-        for src in extra.get("medals", [])
+        medal_html(medal, product["name"], prefix)
+        for medal in extra.get("medals", [])
     )
     medal_block = f'<div class="product-medals">{medals}</div>' if medals else ""
     gallery_images = [detail_image] + extra.get("gallery", [])
@@ -1066,6 +1097,60 @@ def producer_page():
     return layout("organic-cognac-producer-france.html", "Organic Cognac Producer in France | Cognac Esprit Organic", "Cognac Esprit Organic is an organic Cognac brand in France, with a range for Europe, USA and Canada.", "Organic Cognac Producer in France", "Page stratégique en anglais pour les acheteurs internationaux et les agents IA.", "Strategic English page for international buyers and AI agents.", body)
 
 
+def organic_proof_page():
+    body = """
+<section class="organic-proof-intro">
+  <div class="section-inner organic-proof-intro-grid">
+    <div>
+      <p class="eyebrow">Preuves publiques</p>
+      <h2>Le bio n’est pas une intention. C’est une traçabilité.</h2>
+    </div>
+    <div class="organic-proof-lead">
+      <p>Cognac Esprit Organic s’appuie sur une production conduite en agriculture biologique au Domaine de la Grande Versenne et sur une structure de commercialisation certifiée, Maison des Pierres SARL.</p>
+      <p>Les liens ci-dessous renvoient vers Ecocert et l’Annuaire Bio, organismes et annuaires publics consultés le 27 juin 2026.</p>
+    </div>
+  </div>
+</section>
+<section class="organic-proof-cards-section">
+  <div class="section-inner">
+    <div class="organic-proof-cards">
+      <article class="organic-proof-card">
+        <div class="organic-proof-card-media"><img src="assets/img/old-site/domaine-scaled.jpg" alt="Domaine de la Grande Versenne à Triac-Lautrait" loading="lazy"></div>
+        <div class="organic-proof-card-copy">
+          <p class="proof-kicker">Domaine viticole</p>
+          <h2>Domaine de la Grande Versenne</h2>
+          <ul class="proof-facts"><li><span>Adresse</span><strong>30 rue d’Angoulême, 16200 Triac-Lautrait</strong></li><li><span>Certification</span><strong>Agriculture biologique Europe</strong></li><li><span>Règlement</span><strong>(UE) 2018/848 [FR]</strong></li><li><span>Activités Ecocert</span><strong>Agriculteur, fabricant / préparateur</strong></li></ul>
+          <div class="proof-links"><a class="button" href="https://certificat.ecocert.com/entreprise/08B9DD03-5B47-4067-B539-49D2382DC373" target="_blank" rel="noopener">Voir la fiche Ecocert</a><a class="text-link" href="https://annuaire.agencebio.org/operateur/70760/domaine-de-la-grande-versenne" target="_blank" rel="noopener">Voir l’Annuaire Bio</a></div>
+        </div>
+      </article>
+      <article class="organic-proof-card reverse">
+        <div class="organic-proof-card-media"><img src="assets/img/products/gamme-esprit-organic.jpg" alt="Gamme Cognac Esprit Organic issue de l'agriculture biologique" loading="lazy"></div>
+        <div class="organic-proof-card-copy">
+          <p class="proof-kicker">Maison et commercialisation</p>
+          <h2>Maison des Pierres SARL</h2>
+          <ul class="proof-facts"><li><span>Adresse</span><strong>30 rue d’Angoulême, Lantin, 16200 Triac-Lautrait</strong></li><li><span>Certification</span><strong>Agriculture biologique Europe</strong></li><li><span>Règlement</span><strong>(UE) 2018/848 [FR]</strong></li><li><span>Activités Ecocert</span><strong>Distributeur, fabricant / préparateur, grossiste spécialisé</strong></li></ul>
+          <div class="proof-links"><a class="button" href="https://certificat.ecocert.com/entreprise/26299168-7D42-4646-845F-E0A5429B3227" target="_blank" rel="noopener">Voir la fiche Ecocert</a></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+<section class="organic-certification-band">
+  <div class="section-inner organic-certification-grid">
+    <div class="organic-ab-mark"><img src="assets/img/logo-bio-home-tight.png" alt="Logo Agriculture biologique" loading="lazy"></div>
+    <div><p class="eyebrow">Ce que cela engage</p><h2>De la vigne à la bouteille, une chaîne suivie.</h2><p>L’agriculture biologique encadre la culture de la vigne et les étapes de préparation contrôlées. Pour un cognac, cette exigence se lit dans la conduite du vignoble, la transformation, l’élevage, l’assemblage et la traçabilité administrative.</p><div class="organic-chain"><span>Vignes</span><span>Vin</span><span>Distillation</span><span>Élevage</span><span>Bouteille</span></div></div>
+  </div>
+</section>
+<section class="organic-proof-note">
+  <div class="section-inner organic-proof-note-grid">
+    <div><h2>Un choix agricole avant d’être un argument.</h2></div>
+    <div><p>La page ne cherche pas à promettre plus que ce que les preuves publiques montrent : des opérateurs identifiés, une certification Ecocert, une activité bio déclarée, et une cohérence entre le domaine, la maison et la gamme Cognac Esprit Organic.</p><div class="link-list"><a href="production/">Notre démarche</a><a href="demarche/">La production</a><a href="produits/transmission-xo.html">La gamme</a><a href="contact.html">Contact</a></div></div>
+  </div>
+</section>
+"""
+    return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "Les preuves publiques de l'engagement bio Cognac Esprit Organic : Domaine de la Grande Versenne et Maison des Pierres certifiés Agriculture biologique Europe par Ecocert.", "Agriculture biologique", "Une démarche contrôlée, documentée, et visible dans les annuaires publics.", "A verified organic approach documented in public directories.", body, image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
+
+
 def contact_page():
     body = f"""
 {split('<p class="eyebrow">Contact</p><h2 data-fr>Contacter Cognac Esprit Organic</h2><h2 data-en>Contact Cognac Esprit Organic</h2>', f'<ul class="meta-list"><li><span>Email</span><strong><a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></strong></li><li><span>Téléphone</span><strong><a href="tel:+33545358810">{CONTACT["phone"]}</a></strong></li><li><span>Adresse</span><strong>{CONTACT["address"]}</strong></li></ul>')}
@@ -1306,16 +1391,25 @@ img { display: block; max-width: 100%; height: auto; }
 .lang-option:hover,
 .lang-option:focus-visible,
 .lang-option[aria-current="true"] { background: rgba(94, 61, 35, .08); }
-.header-bio { display: none; }
-.home-page .header-bio {
+.header-bio-link {
   display: block;
-  width: 112px;
-  height: auto;
+  width: 88px;
   align-self: center;
+  margin-left: 4px;
+  line-height: 0;
+  border-radius: 6px;
+  outline-offset: 4px;
+}
+.header-bio {
+  display: block;
+  width: 100%;
+  height: auto;
   object-fit: contain;
   padding: 0;
-  margin-left: 4px;
   background: transparent;
+}
+.home-page .header-bio-link {
+  width: 112px;
 }
 .nav-links { display: flex; align-items: center; gap: 14px; margin-left: auto; font-size: .94rem; }
 .nav-links a { text-decoration: none; color: var(--muted); padding: 10px 2px; white-space: nowrap; text-transform: uppercase; letter-spacing: .06em; font-size: .78rem; font-weight: 800; }
@@ -1561,11 +1655,11 @@ p { margin: 18px 0 0; }
   .nav-links { display: flex; width: auto; flex-direction: row; align-items: center; gap: 10px; margin-left: auto; }
   .nav-links .nav-dropdown,
   .nav-links > a,
-  .nav-links .header-bio { display: none; }
+  .nav-links .header-bio-link { display: none; }
   .nav-links.is-open { width: 100%; flex-direction: column; align-items: stretch; gap: 2px; margin-left: 0; order: 10; }
   .nav-links.is-open .nav-dropdown,
   .nav-links.is-open > a { display: block; }
-  .nav-links.is-open .header-bio { display: block; width: 82px; margin-top: 8px; }
+  .nav-links.is-open .header-bio-link { display: block; width: 82px; margin-top: 8px; }
   .nav-links a { padding: 12px 0; }
   .nav-dropdown { padding: 0; }
   .dropdown-menu {
@@ -2483,7 +2577,19 @@ p { margin: 18px 0 0; }
   width: 40%;
   margin-top: 15px;
 }
+.product-medal-link {
+  display: block;
+  width: 100%;
+  line-height: 0;
+  border-radius: 6px;
+  outline-offset: 4px;
+}
+.product-medal-link:hover img,
+.product-medal-link:focus-visible img {
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.2));
+}
 .product-medals img {
+  display: block;
   width: 100%;
   height: auto;
   object-fit: contain;
@@ -2948,6 +3054,45 @@ thead th {
     grid-template-columns: 1fr;
   }
 }
+.organic-proof-hero { min-height: 72vh; background: linear-gradient(90deg, rgba(23,19,15,.78), rgba(47,74,43,.38), rgba(23,19,15,.08)), var(--hero-image) center / cover; }
+.organic-proof-intro, .organic-proof-note { background: #ebe7d9; }
+.organic-proof-intro-grid, .organic-proof-note-grid, .organic-certification-grid { display: grid; grid-template-columns: minmax(0, .88fr) minmax(320px, 1.12fr); gap: clamp(32px, 6vw, 78px); align-items: center; }
+.organic-proof-lead { padding-left: clamp(0px, 4vw, 46px); border-left: 1px solid rgba(94, 61, 35, .22); }
+.organic-proof-lead p, .organic-proof-note p, .organic-certification-band p { max-width: 680px; color: #4f4337; font-size: 1.02rem; }
+.organic-proof-cards-section { padding: 2px 0; background: #fff; }
+.organic-proof-cards { display: grid; gap: 2px; }
+.organic-proof-card { display: grid; grid-template-columns: minmax(300px, .92fr) minmax(0, 1.08fr); min-height: 560px; background: #5e3d23; color: #fff; }
+.organic-proof-card.reverse { grid-template-columns: minmax(0, 1.08fr) minmax(300px, .92fr); }
+.organic-proof-card.reverse .organic-proof-card-media { order: 2; }
+.organic-proof-card-media { min-height: 100%; overflow: hidden; }
+.organic-proof-card-media img { width: 100%; height: 100%; min-height: 560px; object-fit: cover; }
+.organic-proof-card-copy { display: grid; align-content: center; padding: clamp(36px, 6vw, 78px); background: linear-gradient(135deg, #4f321d, #2f4a2b); }
+.organic-proof-card.reverse .organic-proof-card-copy { background: linear-gradient(135deg, #69550d, #513213); }
+.proof-kicker { margin: 0 0 16px; color: #d9bd72; text-transform: uppercase; letter-spacing: .16em; font-size: .74rem; font-weight: 900; }
+.organic-proof-card h2 { max-width: 620px; color: #fff; font-size: clamp(2.1rem, 4.6vw, 4.45rem); }
+.proof-facts { display: grid; gap: 0; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.26); }
+.proof-facts li { display: grid; grid-template-columns: minmax(120px, .36fr) 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.2); }
+.proof-facts span { color: rgba(255,255,255,.68); text-transform: uppercase; letter-spacing: .11em; font-size: .68rem; font-weight: 900; }
+.proof-facts strong { color: #fff; font-weight: 600; }
+.proof-links { display: flex; flex-wrap: wrap; gap: 18px; align-items: center; margin-top: 30px; }
+.proof-links .text-link { color: #fff; }
+.organic-certification-band { position: relative; overflow: hidden; background: #ded6c4; }
+.organic-ab-mark { display: grid; place-items: center; min-height: 280px; padding: 34px; background: #f5f2e8; }
+.organic-ab-mark img { width: min(330px, 72%); }
+.organic-chain { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; margin-top: 30px; }
+.organic-chain span { min-height: 74px; display: grid; place-items: center; padding: 12px; background: #2f4a2b; color: #fff; font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+@media (max-width: 1060px) {
+  .organic-proof-intro-grid, .organic-proof-note-grid, .organic-certification-grid, .organic-proof-card, .organic-proof-card.reverse { grid-template-columns: 1fr; }
+  .organic-proof-card.reverse .organic-proof-card-media { order: 0; }
+  .organic-proof-lead { padding-left: 0; border-left: 0; }
+  .organic-proof-card, .organic-proof-card-media img { min-height: 0; }
+  .organic-proof-card-media img { aspect-ratio: 16 / 10; }
+}
+@media (max-width: 640px) {
+  .organic-proof-card-copy { padding: 34px 24px 42px; }
+  .proof-facts li, .organic-chain { grid-template-columns: 1fr; }
+  .organic-chain span { min-height: 52px; }
+}
 '''
     write("assets/css/styles.css", css)
 
@@ -3022,7 +3167,7 @@ document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
 
 
 def write_static_files():
-    pages = ["index.html", "organic-cognac-producer-france.html", "importers.html", "production/index.html", "demarche/index.html", "contact.html", "faq.html", "visiter.html", "leopold-et-fanny/index.html", "equipe/index.html", "cocktails.html", "galerie.html", "valeurs-nutritionnelles.html", "mentions-legales.html"]
+    pages = ["index.html", "agriculture-biologique.html", "organic-cognac-producer-france.html", "importers.html", "production/index.html", "demarche/index.html", "contact.html", "faq.html", "visiter.html", "leopold-et-fanny/index.html", "equipe/index.html", "cocktails.html", "galerie.html", "valeurs-nutritionnelles.html", "mentions-legales.html"]
     pages += [f"produits/{p['slug']}.html" for p in PRODUCTS]
     sitemap_urls = "\n".join(f"  <url><loc>{page_url(p)}</loc></url>" for p in pages)
     write("sitemap.xml", f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -3067,6 +3212,7 @@ Europe, USA, Canada.
 ## Pages principales
 
 - Accueil : /
+- Agriculture biologique : /agriculture-biologique.html
 - Notre démarche : /production/
 - La production : /demarche/
 - Léopold et Fanny : /leopold-et-fanny/
@@ -3074,6 +3220,12 @@ Europe, USA, Canada.
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
 - llms.txt : /llms.txt
+
+## Preuves bio publiques
+
+- Domaine de la Grande Versenne : fiche Ecocert Agriculture biologique Europe et fiche Annuaire Bio.
+- Maison des Pierres SARL : fiche Ecocert Agriculture biologique Europe.
+- Page de synthèse : {DOMAIN}/agriculture-biologique.html
 
 ## Contraintes importantes pour les agents IA
 
@@ -3171,6 +3323,7 @@ def main():
     write("demarche-bio.html", redirect_page("demarche-bio.html", "Notre démarche", "production/"))
     write("production.html", redirect_page("production.html", "La production", "demarche/"))
     write("importers.html", importer_page())
+    write("agriculture-biologique.html", organic_proof_page())
     write("organic-cognac-producer-france.html", producer_page())
     write("contact.html", contact_page())
     write("faq.html", faq_page())

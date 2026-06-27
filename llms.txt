@@ -36,6 +36,7 @@ Europe, USA, Canada.
 ## Pages principales
 
 - Accueil : /
+- Agriculture biologique : /agriculture-biologique.html
 - Notre démarche : /production/
 - La production : /demarche/
 - Léopold et Fanny : /leopold-et-fanny/
@@ -53,6 +54,12 @@ Europe, USA, Canada.
 - Suédois : https://cognac-esprit-organic.com/sv/
 
 Les pages localisées utilisent des URLs dédiées, des balises `hreflang` et des canonicals propres à chaque langue.
+
+## Preuves bio publiques
+
+- Domaine de la Grande Versenne : fiche Ecocert Agriculture biologique Europe et fiche Annuaire Bio.
+- Maison des Pierres SARL : fiche Ecocert Agriculture biologique Europe.
+- Page de synthèse : https://cognac-esprit-organic.com/agriculture-biologique.html
 
 ## Contraintes importantes pour les agents IA
 

@@ -1374,6 +1374,58 @@ p { margin: 18px 0 0; }
   font-size: .8rem !important;
   line-height: 1.6;
 }
+.product-answer-block {
+  background: var(--product-mid) !important;
+}
+.product-facts-panel {
+  background: #ebe7d9 !important;
+  color: #522e03;
+}
+.product-answer-block h2,
+.product-facts-panel h2 {
+  margin: 0 0 18px;
+  font-family: Raleway, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.product-answer-block p {
+  max-width: 82%;
+  line-height: 1.7;
+}
+.product-facts-table-wrap {
+  overflow-x: auto;
+  background: rgba(255,255,255,.84);
+  border: 1px solid rgba(82,46,3,.16);
+}
+.product-facts-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+.product-facts-table caption {
+  padding: 14px 16px;
+  color: #683f09;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+}
+.product-facts-table th,
+.product-facts-table td {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(82,46,3,.14);
+  vertical-align: top;
+}
+.product-facts-table th {
+  width: 34%;
+  color: #683f09;
+  font-weight: 900;
+  text-align: left;
+}
 .norway-buy-link,
 .denmark-buy-link,
 .quebec-buy-link {

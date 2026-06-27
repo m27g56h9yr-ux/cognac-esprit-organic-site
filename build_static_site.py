@@ -13,7 +13,7 @@ CONTACT = {
 }
 
 AWARD_PROOF_URLS = {
-    "fondation-vs-sfwsc-2019": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2992-esprit-organic-cognac-fondation-vs-fins-bois-aperitif-cocktail.html",
+    "fondation-vs-sfwsc-2019": "https://web.archive.org/web/20200630220024/http://www.sfspiritscomp.com/wp-content/uploads/2020/04/2019-SFWSC-RESULTS-BY-BRAND.pdf",
     "transmission-xo-wwsa-2022": "https://wineawards.org/womens-wine-spirits-awards-2022-results/",
 }
 
@@ -152,7 +152,7 @@ PRODUCT_EXTRAS = {
             {
                 "src": "assets/img/old-site/img_prod_fondation_medaile.png",
                 "href": AWARD_PROOF_URLS["fondation-vs-sfwsc-2019"],
-                "label": "preuve de la médaille d'or 2019 au San Francisco World Spirits Competition pour Fondation VS",
+                "label": "résultats officiels 2019 du San Francisco World Spirits Competition pour Fondation VS",
             }
         ],
         "gallery": ["assets/img/old-site/img_prod_fondation_02.jpg"],
@@ -430,6 +430,16 @@ def rel_prefix(path: str) -> str:
     return "../" if "/" in path else ""
 
 
+def lang_for_path(path: str) -> str:
+    first_segment = path.split("/", 1)[0]
+    return first_segment if first_segment in {"en", "da", "no", "sv"} else "fr"
+
+
+def canonical_home_href(path: str) -> str:
+    lang = lang_for_path(path)
+    return "/" if lang == "fr" else f"/{lang}/"
+
+
 def page_url(path: str) -> str:
     if path == "index.html":
         return DOMAIN + "/"
@@ -571,11 +581,11 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <header class="site-header">
     <nav class="nav" aria-label="Navigation principale">
-      <a class="brand" href="{prefix}index.html" aria-label="Cognac Esprit Organic">
+      <a class="brand" href="{canonical_home_href(path)}" aria-label="Cognac Esprit Organic">
         <img src="{prefix}assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic">
       </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Ouvrir le menu">Menu</button>
-      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">FR</button><div class="lang-menu-panel" role="menu" aria-label="Choisir la langue"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><a class="header-bio-link" href="{prefix}agriculture-biologique.html" aria-label="Agriculture biologique"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></a></div>
+      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">{lang_for_path(path).upper()}</button><div class="lang-menu-panel" role="menu" aria-label="Choisir la langue"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><a class="header-bio-link" href="{prefix}agriculture-biologique.html" aria-label="Agriculture biologique"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></a></div>
     </nav>
   </header>
   <main id="contenu">
@@ -681,6 +691,52 @@ def medal_html(medal, product_name: str, prefix: str) -> str:
     if href:
         return f'<a class="product-medal-link" href="{escape(href)}" target="_blank" rel="noopener noreferrer" aria-label="{escape(label)}">{image}</a>'
     return image
+
+
+def property_value(name: str, value: str):
+    return {"@type": "PropertyValue", "name": name, "value": value}
+
+
+def product_visible_facts(product, sensory: dict, abv: str = ""):
+    facts = [
+        ("Marque", "Cognac Esprit Organic"),
+        ("Produit", product["name"]),
+        ("Catégorie", product["category"]),
+        ("Origine", "France"),
+        ("Profil court", product["short"]),
+    ]
+    if abv:
+        facts.append(("Titre alcoométrique", abv))
+    facts.extend(sensory.items())
+    return facts
+
+
+def product_answer_html(product) -> str:
+    answer = f"Dans la gamme Cognac Esprit Organic, {product['name']} est classé {product['category']} : {product['short']}"
+    slug = product["slug"]
+    return f"""
+    <div class="product-answer-block" aria-labelledby="answer-{escape(slug)}">
+      <h2 id="answer-{escape(slug)}">Réponse courte</h2>
+      <p>{escape(answer)}</p>
+    </div>"""
+
+
+def product_facts_html(product, sensory: dict, abv: str = "") -> str:
+    slug = product["slug"]
+    rows = "".join(
+        f'<tr><th scope="row">{escape(label)}</th><td>{escape(value)}</td></tr>'
+        for label, value in product_visible_facts(product, sensory, abv)
+    )
+    return f"""
+    <div class="product-facts-panel" aria-labelledby="facts-{escape(slug)}">
+      <h2 id="facts-{escape(slug)}">Faits produit</h2>
+      <div class="product-facts-table-wrap">
+        <table class="product-facts-table">
+          <caption>Faits visibles sur la page produit</caption>
+          <tbody>{rows}</tbody>
+        </table>
+      </div>
+    </div>"""
 
 
 def write(path, content):
@@ -790,6 +846,8 @@ def product_page(product):
     colors = extra.get("colors", [product["tone"], product["tone"], product["tone"]])
     gallery_color = extra.get("gallery_color", product["tone"])
     accent = extra.get("accent", "#ffffff")
+    sensory = extra.get("sensory", {})
+    abv = product.get("abv", "")
     schema = {
         "@context": "https://schema.org",
         "@type": "Product",
@@ -802,10 +860,12 @@ def product_page(product):
         "description": product["short"],
         "@id": page_url(f"produits/{product['slug']}.html") + "#product",
     }
-    if product.get("abv"):
-        schema["additionalProperty"] = [
-            {"@type": "PropertyValue", "name": "Alcohol by volume", "value": product["abv"]}
-        ]
+    additional_properties = []
+    if abv:
+        additional_properties.append(property_value("Titre alcoométrique", abv))
+    additional_properties.extend(property_value(label, value) for label, value in sensory.items())
+    if additional_properties:
+        schema["additionalProperty"] = additional_properties
     notes = "".join(f"<li>{escape(note)}</li>" for note in product["notes"])
     story = extra.get("story", product["short"])
     degustation_title = extra.get("degustation_title", "Dégustation")
@@ -814,7 +874,7 @@ def product_page(product):
     nutrition_placeholder = extra.get("nutrition_placeholder", "")
     sensory_items = "".join(
         f'<li><span>{escape(label)} :</span><strong>{escape(value)}</strong></li>'
-        for label, value in extra.get("sensory", {}).items()
+        for label, value in sensory.items()
     )
     medals = "".join(
         medal_html(medal, product["name"], prefix)
@@ -873,6 +933,8 @@ def product_page(product):
       <p class="product-story">{escape(story)}</p>
       {medal_block}
     </div>
+{product_answer_html(product)}
+{product_facts_html(product, sensory, abv)}
     <div class="product-bottle-inline">
       <img src="{prefix}{tasting_image}" alt="Illustration {escape(product['name'])}">
       <div>
@@ -911,7 +973,7 @@ def product_page(product):
 def approach_page(path="production/index.html"):
     body = """
 <section class="legacy-content legacy-vertical">
-  <div class="legacy-breadcrumb"><a href="../index.html">Accueil</a><span>/ Notre démarche</span></div>
+  <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ Notre démarche</span></div>
   <section class="legacy-video-block">
     <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/domaine-scaled.jpg">
       <source src="../assets/video/approach-fins-bois.mp4" type="video/mp4">
@@ -951,7 +1013,7 @@ def approach_page(path="production/index.html"):
 def production_page(path="demarche/index.html"):
     body = f"""
 <section class="legacy-content legacy-vertical production-steps">
-  <div class="legacy-breadcrumb"><a href="../index.html">Accueil</a><span>/ La Production</span></div>
+  <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ La Production</span></div>
   <section class="legacy-video-block">
     <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/IMG_4079-scaled.jpg">
       <source src="../assets/video/production-abeille.mp4" type="video/mp4">
@@ -1018,7 +1080,7 @@ def production_page(path="demarche/index.html"):
 def people_page(path="leopold-et-fanny/index.html"):
     body = """
 <section class="legacy-content legacy-vertical people-content">
-  <div class="legacy-breadcrumb"><a href="../index.html">Accueil</a><span>/ Léopold et Fanny</span></div>
+  <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ Léopold et Fanny</span></div>
   <section class="legacy-video-block">
     <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/leopold_croizet.jpg">
       <source src="../assets/video/people-fond.mp4" type="video/mp4">
@@ -1097,6 +1159,124 @@ def producer_page():
     return layout("organic-cognac-producer-france.html", "Organic Cognac Producer in France | Cognac Esprit Organic", "Cognac Esprit Organic is an organic Cognac brand in France, with a range for Europe, USA and Canada.", "Organic Cognac Producer in France", "Page stratégique en anglais pour les acheteurs internationaux et les agents IA.", "Strategic English page for international buyers and AI agents.", body)
 
 
+def organic_proof_schema(page_path="agriculture-biologique.html", name="Certification biologique et preuves", lang="fr", description="Preuves publiques de certification Agriculture biologique Europe pour le Domaine de la Grande Versenne et Maison des Pierres SARL."):
+    page = page_url(page_path)
+    domaine_url = "https://certificat.ecocert.com/entreprise/08B9DD03-5B47-4067-B539-49D2382DC373"
+    maison_url = "https://certificat.ecocert.com/entreprise/26299168-7D42-4646-845F-E0A5429B3227"
+    annuaire_bio_url = "https://annuaire.agencebio.org/operateur/70760/domaine-de-la-grande-versenne"
+    domaine_id = page + "#domaine-grande-versenne"
+    maison_id = page + "#maison-des-pierres"
+    domaine_cert_id = page + "#certification-domaine-grande-versenne"
+    maison_cert_id = page + "#certification-maison-des-pierres"
+    standard_id = page + "#agriculture-biologique-europe"
+    ecocert_id = "https://certificat.ecocert.com/#organization"
+    return {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": DOMAIN + "/#website",
+                "name": "Cognac Esprit Organic",
+                "url": DOMAIN + "/",
+                "publisher": {"@id": DOMAIN + "/#organization"},
+            },
+            {
+                "@type": "WebPage",
+                "@id": page + "#webpage",
+                "name": name,
+                "alternateName": "Agriculture biologique" if lang == "fr" else "Organic agriculture",
+                "url": page,
+                "description": description,
+                "inLanguage": lang,
+                "dateModified": "2026-06-27",
+                "isPartOf": {"@id": DOMAIN + "/#website"},
+                "publisher": {"@id": DOMAIN + "/#organization"},
+                "about": [
+                    {"@id": domaine_id},
+                    {"@id": maison_id},
+                    {"@id": domaine_cert_id},
+                    {"@id": maison_cert_id},
+                ],
+                "citation": [domaine_url, annuaire_bio_url, maison_url],
+                "mainEntity": {
+                    "@type": "ItemList",
+                    "itemListElement": [
+                        {"@type": "ListItem", "position": 1, "item": {"@id": domaine_cert_id}},
+                        {"@type": "ListItem", "position": 2, "item": {"@id": maison_cert_id}},
+                    ],
+                },
+            },
+            {
+                "@type": "DefinedTerm",
+                "@id": standard_id,
+                "name": "Agriculture biologique Europe",
+                "termCode": "(EU) 2018/848 [FR]",
+                "inDefinedTermSet": {
+                    "@type": "DefinedTermSet",
+                    "name": "Règlement européen de l'agriculture biologique",
+                },
+            },
+            {
+                "@type": "Organization",
+                "@id": ecocert_id,
+                "name": "Ecocert",
+                "url": "https://certificat.ecocert.com/",
+            },
+            {
+                "@type": "Organization",
+                "@id": domaine_id,
+                "name": "Domaine de la Grande Versenne",
+                "url": domaine_url,
+                "identifier": "08B9DD03-5B47-4067-B539-49D2382DC373",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "30 rue d'Angoulême",
+                    "postalCode": "16200",
+                    "addressLocality": "Triac-Lautrait",
+                    "addressCountry": "FR",
+                },
+                "sameAs": [annuaire_bio_url],
+                "hasCertification": {"@id": domaine_cert_id},
+            },
+            {
+                "@type": "Certification",
+                "@id": domaine_cert_id,
+                "name": "Certification Agriculture biologique Europe",
+                "url": domaine_url,
+                "issuedBy": {"@id": ecocert_id},
+                "about": {"@id": standard_id},
+                "description": "Domaine de la Grande Versenne certifié Agriculture biologique Europe selon le règlement (UE) 2018/848 [FR]. Activités Ecocert : agriculteur, fabricant / préparateur.",
+                "validIn": {"@type": "AdministrativeArea", "name": "Union européenne"},
+            },
+            {
+                "@type": "Organization",
+                "@id": maison_id,
+                "name": "Maison des Pierres SARL",
+                "url": maison_url,
+                "identifier": "26299168-7D42-4646-845F-E0A5429B3227",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "30 rue d'Angoulême, Lantin",
+                    "postalCode": "16200",
+                    "addressLocality": "Triac-Lautrait",
+                    "addressCountry": "FR",
+                },
+                "hasCertification": {"@id": maison_cert_id},
+            },
+            {
+                "@type": "Certification",
+                "@id": maison_cert_id,
+                "name": "Certification Agriculture biologique Europe",
+                "url": maison_url,
+                "issuedBy": {"@id": ecocert_id},
+                "about": {"@id": standard_id},
+                "description": "Maison des Pierres SARL certifiée Agriculture biologique Europe selon le règlement (UE) 2018/848 [FR]. Activités Ecocert : distributeur, fabricant / préparateur, grossiste spécialisé.",
+                "validIn": {"@type": "AdministrativeArea", "name": "Union européenne"},
+            },
+        ],
+    }
+
+
 def organic_proof_page():
     body = """
 <section class="organic-proof-intro">
@@ -1148,7 +1328,7 @@ def organic_proof_page():
   </div>
 </section>
 """
-    return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "Les preuves publiques de l'engagement bio Cognac Esprit Organic : Domaine de la Grande Versenne et Maison des Pierres certifiés Agriculture biologique Europe par Ecocert.", "Agriculture biologique", "Une démarche contrôlée, documentée, et visible dans les annuaires publics.", "A verified organic approach documented in public directories.", body, image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
+    return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "Les preuves publiques de l'engagement bio Cognac Esprit Organic : Domaine de la Grande Versenne et Maison des Pierres certifiés Agriculture biologique Europe par Ecocert.", "Agriculture biologique", "Une démarche contrôlée, documentée, et visible dans les annuaires publics.", "A verified organic approach documented in public directories.", body, schemas=[organic_proof_schema()], image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
 
 
 def contact_page():
@@ -2568,6 +2748,58 @@ p { margin: 18px 0 0; }
   margin-top: 14px !important;
   font-size: .8rem !important;
   line-height: 1.6;
+}
+.product-answer-block {
+  background: var(--product-mid) !important;
+}
+.product-facts-panel {
+  background: #ebe7d9 !important;
+  color: #522e03;
+}
+.product-answer-block h2,
+.product-facts-panel h2 {
+  margin: 0 0 18px;
+  font-family: Raleway, sans-serif;
+  font-size: 1.25rem;
+  font-weight: 900;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+.product-answer-block p {
+  max-width: 82%;
+  line-height: 1.7;
+}
+.product-facts-table-wrap {
+  overflow-x: auto;
+  background: rgba(255,255,255,.84);
+  border: 1px solid rgba(82,46,3,.16);
+}
+.product-facts-table {
+  width: 100%;
+  min-width: 520px;
+  border-collapse: collapse;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+  line-height: 1.45;
+}
+.product-facts-table caption {
+  padding: 14px 16px;
+  color: #683f09;
+  font-weight: 900;
+  text-align: left;
+  text-transform: uppercase;
+}
+.product-facts-table th,
+.product-facts-table td {
+  padding: 12px 16px;
+  border-top: 1px solid rgba(82,46,3,.14);
+  vertical-align: top;
+}
+.product-facts-table th {
+  width: 34%;
+  color: #683f09;
+  font-weight: 900;
+  text-align: left;
 }
 .product-medals {
   display: flex;

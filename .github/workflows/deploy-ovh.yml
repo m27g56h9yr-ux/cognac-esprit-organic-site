@@ -35,17 +35,20 @@ jobs:
           set -euo pipefail
           FTP_HOST="ftp.cluster128.hosting.ovh.net"
           FTP_USERNAME="cognacg-siteecgit"
-          TARGET_DIR="${OVH_FTP_TARGET_DIR:-}"
+          TARGET_DIR="${OVH_FTP_TARGET_DIR:-.}"
           TARGET_DIR="${TARGET_DIR%/}"
+          if [ -z "${TARGET_DIR}" ]; then
+            TARGET_DIR="."
+          fi
 
           if [ -z "${OVH_FTP_PASSWORD:-}" ]; then
             echo "Missing required GitHub secret: OVH_FTP_PASSWORD"
             exit 1
           fi
 
-          if [ -z "${TARGET_DIR}" ] || [ "${TARGET_DIR}" = "." ] || [ "${TARGET_DIR}" = ".." ]; then
-            echo "Missing or unsafe GitHub secret: OVH_FTP_TARGET_DIR"
-            echo "Set it to the OVH directory dedicated to the new static site, never to the FTP root or the old WordPress directory."
+          if [ "${TARGET_DIR}" = "/" ] || [ "${TARGET_DIR}" = ".." ]; then
+            echo "Unsafe GitHub secret: OVH_FTP_TARGET_DIR"
+            echo "Set it to the OVH directory dedicated to the new static site, never to the old WordPress directory."
             exit 1
           fi
 
@@ -56,6 +59,23 @@ jobs:
               exit 1
               ;;
           esac
+
+          remote_root_list="$(
+            lftp -u "${FTP_USERNAME},${OVH_FTP_PASSWORD}" "${FTP_HOST}" <<EOF
+          set ftp:ssl-allow no
+          set ftp:list-options -a
+          set net:max-retries 2
+          set net:timeout 20
+          cls -1 "${TARGET_DIR}"
+          bye
+          EOF
+          )"
+
+          if printf '%s\n' "${remote_root_list}" | grep -E '^(wp-config\.php|wp-admin|wp-includes)$' > /dev/null; then
+            echo "Unsafe OVH target: ${TARGET_DIR} contains WordPress core files."
+            echo "Refusing to deploy the static site over the old WordPress installation."
+            exit 1
+          fi
 
           lftp -u "${FTP_USERNAME},${OVH_FTP_PASSWORD}" "${FTP_HOST}" <<EOF
           set ftp:ssl-allow no

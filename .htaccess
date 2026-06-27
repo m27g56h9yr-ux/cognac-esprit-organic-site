@@ -1,15 +1,12 @@
 RewriteEngine On
 Options -MultiViews
 
+# Safety valve: this file belongs to the new public site only.
+# If OVH ever maps the archive host here by mistake, do not redirect it to the main site.
+RewriteCond %{HTTP_HOST} ^ancien\.cognac-esprit-organic\.com$ [NC]
+RewriteRule ^ - [L]
+
 # Redirect legacy duplicate URLs to their canonical destinations.
-RedirectMatch 301 ^/produits/fondation-vs/?$ https://cognac-esprit-organic.com/produits/fondation-vs.html
-RedirectMatch 301 ^/produits/conviction-vsop/?$ https://cognac-esprit-organic.com/produits/conviction-vsop.html
-RedirectMatch 301 ^/produits/cohesion-napoleon/?$ https://cognac-esprit-organic.com/produits/cohesion-napoleon.html
-RedirectMatch 301 ^/produits/transmission-xo/?$ https://cognac-esprit-organic.com/produits/transmission-xo.html
-RedirectMatch 301 ^/produits/xxo/?$ https://cognac-esprit-organic.com/produits/xxo.html
-RedirectMatch 301 ^/produits/single-cask/?$ https://cognac-esprit-organic.com/produits/single-cask.html
-RedirectMatch 301 ^/produits/pineau/?$ https://cognac-esprit-organic.com/produits/pineau.html
-RedirectMatch 301 ^/produits/pineau-rouge/?$ https://cognac-esprit-organic.com/produits/pineau-rouge.html
 RewriteRule ^(.*/)?index\.html$ https://cognac-esprit-organic.com/$1 [R=301,L]
 RewriteRule ^production\.html$ https://cognac-esprit-organic.com/demarche/ [R=301,L]
 RewriteRule ^demarche-bio\.html$ https://cognac-esprit-organic.com/production/ [R=301,L]

@@ -19,6 +19,7 @@ RewriteRule ^produits/xxo/?$ https://cognac-esprit-organic.com/produits/xxo.html
 RewriteRule ^produits/single-cask/?$ https://cognac-esprit-organic.com/produits/single-cask.html [R=301,L]
 RewriteRule ^produits/pineau/?$ https://cognac-esprit-organic.com/produits/pineau.html [R=301,L]
 RewriteRule ^produits/pineau-rouge/?$ https://cognac-esprit-organic.com/produits/pineau-rouge.html [R=301,L]
+RewriteRule ^assets/pdf/fiches-cavistes/cognac-esprit-organic-(fondation-vs|conviction-vsop|cohesion-napoleon|transmission-xo)-fiche-caviste\.pdf$ https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-$1-fiche-degustation.pdf [R=301,L]
 
 # Force the canonical HTTPS host for the public website.
 RewriteCond %{HTTPS} !=on [OR]

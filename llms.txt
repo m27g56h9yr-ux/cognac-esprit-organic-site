@@ -33,16 +33,16 @@ Europe, USA, Canada.
 - Pineau blanc : Pineau des Charentes blanc. Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
 - Pineau rouge : Pineau des Charentes rouge. Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
 
-## Fiches techniques avec ancres directes
+## Données produits avec ancres directes
 
-- Fondation VS : https://cognac-esprit-organic.com/fiches-techniques-produits.html#fondation-vs (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#fondation-vs)
-- Conviction VSOP : https://cognac-esprit-organic.com/fiches-techniques-produits.html#conviction-vsop (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#conviction-vsop)
-- Cohesion Napoléon : https://cognac-esprit-organic.com/fiches-techniques-produits.html#cohesion-napoleon (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#cohesion-napoleon)
-- Transmission XO : https://cognac-esprit-organic.com/fiches-techniques-produits.html#transmission-xo (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#transmission-xo)
-- XXO : https://cognac-esprit-organic.com/fiches-techniques-produits.html#xxo (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#xxo)
-- Single Cask : https://cognac-esprit-organic.com/fiches-techniques-produits.html#single-cask (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#single-cask)
-- Pineau blanc : https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#pineau)
-- Pineau rouge : https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau-rouge (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#pineau-rouge)
+- Fondation VS : https://cognac-esprit-organic.com/fiches-techniques-produits.html#fondation-vs (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#fondation-vs ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#fondation-vs ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#fondation-vs ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#fondation-vs)
+- Conviction VSOP : https://cognac-esprit-organic.com/fiches-techniques-produits.html#conviction-vsop (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#conviction-vsop ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#conviction-vsop ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#conviction-vsop ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#conviction-vsop)
+- Cohesion Napoléon : https://cognac-esprit-organic.com/fiches-techniques-produits.html#cohesion-napoleon (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#cohesion-napoleon ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#cohesion-napoleon ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#cohesion-napoleon ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#cohesion-napoleon)
+- Transmission XO : https://cognac-esprit-organic.com/fiches-techniques-produits.html#transmission-xo (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#transmission-xo ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#transmission-xo ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#transmission-xo ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#transmission-xo)
+- XXO : https://cognac-esprit-organic.com/fiches-techniques-produits.html#xxo (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#xxo ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#xxo ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#xxo ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#xxo)
+- Single Cask : https://cognac-esprit-organic.com/fiches-techniques-produits.html#single-cask (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#single-cask ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#single-cask ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#single-cask ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#single-cask)
+- Pineau blanc : https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#pineau ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#pineau ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#pineau ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#pineau)
+- Pineau rouge : https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau-rouge (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#pineau-rouge ; DA : https://cognac-esprit-organic.com/da/fiches-techniques-produits.html#pineau-rouge ; NO : https://cognac-esprit-organic.com/no/fiches-techniques-produits.html#pineau-rouge ; SV : https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html#pineau-rouge)
 
 ## Fiches dégustation PDF/UA
 
@@ -71,8 +71,11 @@ Europe, USA, Canada.
 - L’équipe : /equipe/
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
-- Fiches techniques produits : /fiches-techniques-produits.html
-- Product fact sheets : /en/fiches-techniques-produits.html
+- Données produits et documents professionnels : /fiches-techniques-produits.html
+- Product data and professional documents : /en/fiches-techniques-produits.html
+- Produktdata og professionelle dokumenter : /da/fiches-techniques-produits.html
+- Produktdata og profesjonelle dokumenter : /no/fiches-techniques-produits.html
+- Produktdata och professionella dokument : /sv/fiches-techniques-produits.html
 - llms.txt : /llms.txt
 
 ## Versions linguistiques

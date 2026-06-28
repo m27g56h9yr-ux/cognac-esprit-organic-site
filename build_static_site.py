@@ -3967,6 +3967,16 @@ Allow: /
 Sitemap: {DOMAIN}/sitemap.xml
 """)
     product_lines = "\n".join(f"- {p['name']} : {p['category']}. {p['short']}" for p in PRODUCTS)
+    technical_anchor_lines = "\n".join(
+        f"- {p['name']} : {DOMAIN}/fiches-techniques-produits.html#{p['slug']} "
+        f"(EN : {DOMAIN}/en/fiches-techniques-produits.html#{p['slug']})"
+        for p in PRODUCTS
+    )
+    tasting_pdf_lines = "\n".join(
+        f"- {p['name']} : {DOMAIN}/{PRODUCT_TRADE_PDFS[p['slug']]['href']} (PDF/UA)"
+        for p in PRODUCTS
+        if p["slug"] in PRODUCT_TRADE_PDFS
+    )
     write("llms.txt", f"""# Cognac Esprit Organic
 
 Domaine officiel : {DOMAIN}
@@ -3994,6 +4004,14 @@ Europe, USA, Canada.
 ## Produits disponibles
 
 {product_lines}
+
+## Fiches techniques avec ancres directes
+
+{technical_anchor_lines}
+
+## Fiches dégustation PDF/UA
+
+{tasting_pdf_lines}
 
 ## Récompenses documentées
 

@@ -33,6 +33,24 @@ Europe, USA, Canada.
 - Pineau blanc : Pineau des Charentes blanc. Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
 - Pineau rouge : Pineau des Charentes rouge. Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
 
+## Fiches techniques avec ancres directes
+
+- Fondation VS : https://cognac-esprit-organic.com/fiches-techniques-produits.html#fondation-vs (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#fondation-vs)
+- Conviction VSOP : https://cognac-esprit-organic.com/fiches-techniques-produits.html#conviction-vsop (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#conviction-vsop)
+- Cohesion Napoléon : https://cognac-esprit-organic.com/fiches-techniques-produits.html#cohesion-napoleon (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#cohesion-napoleon)
+- Transmission XO : https://cognac-esprit-organic.com/fiches-techniques-produits.html#transmission-xo (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#transmission-xo)
+- XXO : https://cognac-esprit-organic.com/fiches-techniques-produits.html#xxo (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#xxo)
+- Single Cask : https://cognac-esprit-organic.com/fiches-techniques-produits.html#single-cask (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#single-cask)
+- Pineau blanc : https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#pineau)
+- Pineau rouge : https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau-rouge (EN : https://cognac-esprit-organic.com/en/fiches-techniques-produits.html#pineau-rouge)
+
+## Fiches dégustation PDF/UA
+
+- Fondation VS : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf (PDF/UA)
+- Conviction VSOP : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation.pdf (PDF/UA)
+- Cohesion Napoléon : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation.pdf (PDF/UA)
+- Transmission XO : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation.pdf (PDF/UA)
+
 ## Récompenses documentées
 
 - Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /fiches-techniques-produits.html.

@@ -1444,7 +1444,7 @@ p { margin: 18px 0 0; }
 .product-award-visual {
   position: relative;
   flex: 0 0 clamp(96px, 9.6vw, 126px);
-  padding-bottom: clamp(30px, 3.5vw, 44px);
+  padding-bottom: clamp(40px, 4.4vw, 58px);
   overflow: hidden;
 }
 .product-award-image,
@@ -1459,13 +1459,16 @@ p { margin: 18px 0 0; }
 }
 .product-award-reflection {
   position: absolute;
-  top: calc(100% - clamp(30px, 3.5vw, 44px) - clamp(12px, 1.35vw, 18px));
+  top: calc(100% - clamp(40px, 4.4vw, 58px) - 4px);
   left: 0;
+  height: clamp(40px, 4.4vw, 58px);
+  object-fit: cover;
+  object-position: bottom;
   transform: scaleY(-1);
-  opacity: .42;
-  filter: blur(.7px);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), rgba(0,0,0,0) 74%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), rgba(0,0,0,0) 74%);
+  opacity: .52;
+  filter: blur(.55px);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.68), rgba(0,0,0,.28) 44%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.68), rgba(0,0,0,.28) 44%, rgba(0,0,0,0) 100%);
 }
 .product-award-copy {
   display: block;
@@ -1503,10 +1506,11 @@ p { margin: 18px 0 0; }
   }
   .product-award-visual {
     flex-basis: 92px;
-    padding-bottom: 34px;
+    padding-bottom: 44px;
   }
   .product-award-reflection {
-    top: calc(100% - 46px);
+    top: calc(100% - 48px);
+    height: 44px;
   }
   .product-award-copy {
     padding-top: 12px;

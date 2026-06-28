@@ -30,13 +30,14 @@ Europe, USA, Canada.
 - Transmission XO : Cognac XO. Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.
 - XXO : Cognac XXO. Premier XXO en agriculture biologique, doux, structuré et très fruité.
 - Single Cask : Cognac Single Cask. Édition limitée, 51 %, sélectionnée par Fanny.
-- Pineau blanc : Pineau des Charentes blanc. Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
-- Pineau rouge : Pineau des Charentes rouge. Issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
+- Pineau blanc : Pineau des Charentes blanc. Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
+- Pineau rouge : Pineau des Charentes rouge. Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
 
 ## Récompenses documentées
 
 - Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /fiches-techniques-produits.html.
 - Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /fiches-techniques-produits.html.
+- Pineau blanc : médaille d'argent au Concours Mondial de Bruxelles 2025 pour Pineau des Charentes Esprit Organic 2011, source liée depuis /fiches-techniques-produits.html.
 
 ## Pages principales
 
@@ -53,6 +54,7 @@ Europe, USA, Canada.
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
 - Fiches techniques produits : /fiches-techniques-produits.html
+- Product fact sheets : /en/fiches-techniques-produits.html
 - llms.txt : /llms.txt
 
 ## Versions linguistiques

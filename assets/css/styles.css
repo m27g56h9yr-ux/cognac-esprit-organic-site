@@ -1487,6 +1487,40 @@ p { margin: 18px 0 0; }
   text-underline-offset: 4px;
   cursor: pointer;
 }
+.product-downloads {
+  width: min(420px, 100%);
+  max-width: 80%;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,.35);
+}
+.product-pdf-link {
+  display: inline-flex !important;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 0 !important;
+  padding: 10px 14px;
+  border: 1px solid rgba(255,255,255,.7);
+  border-radius: 4px;
+  color: #fff;
+  text-decoration: none !important;
+}
+.product-pdf-link:hover,
+.product-pdf-link:focus-visible {
+  background: rgba(255,255,255,.12);
+}
+.product-pdf-link small {
+  font-size: .68rem;
+  font-weight: 500;
+  opacity: .84;
+}
+.product-downloads p {
+  max-width: 100%;
+  margin-top: 8px;
+  font-size: .72rem;
+  opacity: .86;
+}
 .nutrition-dialog {
   width: min(920px, calc(100% - 34px));
   max-height: min(840px, calc(100vh - 34px));

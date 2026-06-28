@@ -22,7 +22,8 @@ Il est aussi possible d'ouvrir `index.html` directement, mais le serveur local r
 
 Le site est prêt pour la mise en ligne :
 
-- `<meta name="robots" content="index,follow">` sur chaque page ;
+- `<meta name="robots" content="index,follow">` sur les pages publiques finalisées ;
+- `<meta name="robots" content="noindex,nofollow">` sur les mentions légales tant que les champs juridiques restent à confirmer ;
 - `robots.txt` autorise l'exploration et référence le sitemap officiel.
 
 ## Fichiers principaux

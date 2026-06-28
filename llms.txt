@@ -4,7 +4,7 @@ Domaine officiel : https://cognac-esprit-organic.com
 
 ## Statut du projet
 
-Ce site est la version publique statique de Cognac Esprit Organic. Les pages autorisent l'indexation et le fichier `robots.txt` publie le sitemap officiel.
+Ce site est la version publique statique de Cognac Esprit Organic. Les pages publiques autorisent l'indexation, sauf les mentions légales laissées en brouillon avec `noindex` temporaire tant que les champs légaux restent à confirmer. Le fichier `robots.txt` publie le sitemap officiel.
 
 ## Identité
 
@@ -33,6 +33,11 @@ Europe, USA, Canada.
 - Pineau blanc : Pineau des Charentes blanc. Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
 - Pineau rouge : Pineau des Charentes rouge. Issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
 
+## Récompenses documentées
+
+- Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /fiches-techniques-produits.html.
+- Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /fiches-techniques-produits.html.
+
 ## Pages principales
 
 - Accueil : /
@@ -47,6 +52,7 @@ Europe, USA, Canada.
 - L’équipe : /equipe/
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
+- Fiches techniques produits : /fiches-techniques-produits.html
 - llms.txt : /llms.txt
 
 ## Versions linguistiques

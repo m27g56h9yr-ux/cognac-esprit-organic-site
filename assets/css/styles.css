@@ -1374,58 +1374,6 @@ p { margin: 18px 0 0; }
   font-size: .8rem !important;
   line-height: 1.6;
 }
-.product-answer-block {
-  background: var(--product-mid) !important;
-}
-.product-facts-panel {
-  background: #ebe7d9 !important;
-  color: #522e03;
-}
-.product-answer-block h2,
-.product-facts-panel h2 {
-  margin: 0 0 18px;
-  font-family: Raleway, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 900;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-.product-answer-block p {
-  max-width: 82%;
-  line-height: 1.7;
-}
-.product-facts-table-wrap {
-  overflow-x: auto;
-  background: rgba(255,255,255,.84);
-  border: 1px solid rgba(82,46,3,.16);
-}
-.product-facts-table {
-  width: 100%;
-  min-width: 520px;
-  border-collapse: collapse;
-  font-family: Raleway, sans-serif;
-  font-size: .78rem;
-  line-height: 1.45;
-}
-.product-facts-table caption {
-  padding: 14px 16px;
-  color: #683f09;
-  font-weight: 900;
-  text-align: left;
-  text-transform: uppercase;
-}
-.product-facts-table th,
-.product-facts-table td {
-  padding: 12px 16px;
-  border-top: 1px solid rgba(82,46,3,.14);
-  vertical-align: top;
-}
-.product-facts-table th {
-  width: 34%;
-  color: #683f09;
-  font-weight: 900;
-  text-align: left;
-}
 .norway-buy-link,
 .denmark-buy-link,
 .quebec-buy-link {
@@ -1629,6 +1577,145 @@ p { margin: 18px 0 0; }
 .nutrition-card > p {
   margin: 0 0 18px;
   color: var(--muted);
+}
+.product-data-page .page-hero {
+  min-height: 46vh;
+  padding: 132px 0 72px;
+  background-position: center 46%;
+}
+.product-data-intro {
+  background: #f8f3e8;
+}
+.technical-hero-image {
+  margin: 30px 0 0;
+  border: 1px solid rgba(94,61,35,.16);
+  background: #fff;
+}
+.technical-hero-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.technical-hero-image figcaption {
+  margin: 0;
+  padding: 12px 16px;
+  color: #5f5144;
+  font-size: .88rem;
+}
+.technical-proof-link {
+  margin-left: 10px;
+  color: #684009;
+  font-weight: 800;
+  text-underline-offset: 3px;
+}
+.technical-award-row td span {
+  color: #3f3328;
+  font-weight: 800;
+}
+.technical-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+.technical-index a {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #522e03;
+  font-size: .78rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.technical-product-list {
+  display: grid;
+  gap: 30px;
+  margin-top: 34px;
+}
+.technical-product-card {
+  padding: clamp(22px, 3.5vw, 38px);
+  border: 1px solid rgba(94,61,35,.18);
+  background: #fff;
+}
+.technical-product-card header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.technical-product-card h2 {
+  color: #522e03;
+  font-size: clamp(1.55rem, 2.6vw, 2.55rem);
+}
+.technical-product-card .tag {
+  margin-top: 8px;
+  color: #69550d;
+  border-color: rgba(105,85,13,.3);
+}
+.technical-product-card .text-link {
+  margin-top: 0;
+  white-space: nowrap;
+}
+.technical-answer {
+  max-width: 860px;
+  margin: 0 0 22px;
+  color: #4a3d31;
+}
+.technical-product-card .nutrition-table {
+  width: 100%;
+  min-width: 760px;
+}
+.technical-product-card .nutrition-table tbody th {
+  width: 26%;
+  color: #683f09;
+}
+.technical-note {
+  margin-top: 28px;
+  padding: 16px 18px;
+  border-left: 4px solid #69550d;
+  background: rgba(255,255,255,.66);
+}
+@media (max-width: 700px) {
+  .technical-product-card {
+    padding: 20px 18px;
+  }
+  .technical-product-card header {
+    display: block;
+  }
+  .technical-product-card .text-link {
+    display: inline-block;
+    margin-top: 12px;
+    white-space: normal;
+  }
+  .technical-product-card .nutrition-table {
+    min-width: 0;
+  }
+  .technical-product-card .nutrition-table tr {
+    display: block;
+  }
+  .technical-product-card .nutrition-table caption,
+  .technical-product-card .nutrition-table tbody th,
+  .technical-product-card .nutrition-table tbody td {
+    display: block;
+    width: auto;
+  }
+  .technical-product-card .nutrition-table caption {
+    padding: 16px 18px;
+  }
+  .technical-product-card .nutrition-table tbody th {
+    padding: 14px 18px 4px;
+    border-bottom: 0;
+  }
+  .technical-product-card .nutrition-table tbody td {
+    padding: 0 18px 14px;
+  }
+  .technical-proof-link {
+    display: block;
+    margin: 6px 0 0;
+  }
 }
 .nutrition-dialog img {
   width: 100%;

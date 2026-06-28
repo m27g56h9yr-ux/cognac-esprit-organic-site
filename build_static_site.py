@@ -302,6 +302,19 @@ PRODUCT_EXTRAS = {
     },
 }
 
+DOCUMENTED_AWARDS = {
+    "fondation-vs": {
+        "name": "San Francisco World Spirits Competition 2019",
+        "proof_label": "Résultats officiels 2019 du San Francisco World Spirits Competition",
+        "url": AWARD_PROOF_URLS["fondation-vs-sfwsc-2019"],
+    },
+    "transmission-xo": {
+        "name": "Women's Wine & Spirits Awards 2022",
+        "proof_label": "Résultats Women's Wine & Spirits Awards 2022",
+        "url": AWARD_PROOF_URLS["transmission-xo-wwsa-2022"],
+    },
+}
+
 COGNAC_NUTRITION_ROWS = [
     ("energy", "Valeur énergétique", "Energy", "", ""),
     ("alcohol", "Alcool", "Alcohol", "", ""),
@@ -522,10 +535,11 @@ def nav_html(current: str, prefix: str) -> str:
 """
 
 
-def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intro_en: str, body: str, schemas=None, image="assets/img/products/gamme-esprit-organic.jpg", page_class="", hero_actions="", hero_video="", show_hero=True):
+def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intro_en: str, body: str, schemas=None, image="assets/img/products/gamme-esprit-organic.jpg", page_class="", hero_actions="", hero_video="", show_hero=True, robots=None):
     prefix = rel_prefix(path)
     canonical = page_url(path)
-    noindex = '<meta name="robots" content="noindex,nofollow">' if NOINDEX else '<meta name="robots" content="index,follow">'
+    robots_content = robots or ("noindex,nofollow" if NOINDEX else "index,follow")
+    noindex = f'<meta name="robots" content="{robots_content}">'
     schema_items = [organization_schema(), breadcrumb_schema(path, h1)]
     if schemas:
         schema_items.extend(schemas)
@@ -574,7 +588,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260625-pineau-clean01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260627-technical-facts01">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -601,6 +615,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       <div class="footer-links">
         <a href="{prefix}produits/transmission-xo.html">Gamme</a>
         <a href="{prefix}cocktails.html">Cocktails</a>
+        <a href="{prefix}fiches-techniques-produits.html">Fiches techniques</a>
       </div>
     </div>
   </footer>
@@ -626,7 +641,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260625-pineau-clean01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260627-technical-facts01">
 </head>
 <body>
   <main class="redirect-page">
@@ -695,48 +710,6 @@ def medal_html(medal, product_name: str, prefix: str) -> str:
 
 def property_value(name: str, value: str):
     return {"@type": "PropertyValue", "name": name, "value": value}
-
-
-def product_visible_facts(product, sensory: dict, abv: str = ""):
-    facts = [
-        ("Marque", "Cognac Esprit Organic"),
-        ("Produit", product["name"]),
-        ("Catégorie", product["category"]),
-        ("Origine", "France"),
-        ("Profil court", product["short"]),
-    ]
-    if abv:
-        facts.append(("Titre alcoométrique", abv))
-    facts.extend(sensory.items())
-    return facts
-
-
-def product_answer_html(product) -> str:
-    answer = f"Dans la gamme Cognac Esprit Organic, {product['name']} est classé {product['category']} : {product['short']}"
-    slug = product["slug"]
-    return f"""
-    <div class="product-answer-block" aria-labelledby="answer-{escape(slug)}">
-      <h2 id="answer-{escape(slug)}">Réponse courte</h2>
-      <p>{escape(answer)}</p>
-    </div>"""
-
-
-def product_facts_html(product, sensory: dict, abv: str = "") -> str:
-    slug = product["slug"]
-    rows = "".join(
-        f'<tr><th scope="row">{escape(label)}</th><td>{escape(value)}</td></tr>'
-        for label, value in product_visible_facts(product, sensory, abv)
-    )
-    return f"""
-    <div class="product-facts-panel" aria-labelledby="facts-{escape(slug)}">
-      <h2 id="facts-{escape(slug)}">Faits produit</h2>
-      <div class="product-facts-table-wrap">
-        <table class="product-facts-table">
-          <caption>Faits visibles sur la page produit</caption>
-          <tbody>{rows}</tbody>
-        </table>
-      </div>
-    </div>"""
 
 
 def write(path, content):
@@ -854,16 +827,12 @@ def product_page(product):
         "name": product["name"],
         "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
         "manufacturer": {"@id": DOMAIN + "/#organization"},
-        "countryOfOrigin": "France",
         "category": product["category"],
         "image": DOMAIN + "/" + product["image"],
         "description": product["short"],
         "@id": page_url(f"produits/{product['slug']}.html") + "#product",
     }
-    additional_properties = []
-    if abv:
-        additional_properties.append(property_value("Titre alcoométrique", abv))
-    additional_properties.extend(property_value(label, value) for label, value in sensory.items())
+    additional_properties = [property_value(label, value) for label, value in sensory.items()]
     if additional_properties:
         schema["additionalProperty"] = additional_properties
     notes = "".join(f"<li>{escape(note)}</li>" for note in product["notes"])
@@ -933,8 +902,6 @@ def product_page(product):
       <p class="product-story">{escape(story)}</p>
       {medal_block}
     </div>
-{product_answer_html(product)}
-{product_facts_html(product, sensory, abv)}
     <div class="product-bottle-inline">
       <img src="{prefix}{tasting_image}" alt="Illustration {escape(product['name'])}">
       <div>
@@ -1143,10 +1110,10 @@ def team_page(path="equipe/index.html"):
 def importer_page():
     body = f"""
 {split('<p class="eyebrow">B2B export</p><h2 data-fr>Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.</h2><h2 data-en>A dedicated page for importers, wine merchants, hospitality, bars, hotels and organic retail networks.</h2>', '<p data-fr>Esprit Organic s’adresse aux marchés export formulés ainsi : Europe, USA, Canada. Cette page reste volontairement factuelle : elle présente la gamme, les informations de contact et les documents à préparer, sans inventer de volumes ni de distributeurs.</p><p data-en>Esprit Organic addresses export markets formulated as: Europe, USA, Canada. This page stays factual: it presents the range, contact details and documents to prepare, without inventing volumes or distributors.</p><a class="button" href="contact.html" data-fr>Demander des informations export</a><a class="button" href="contact.html" data-en>Request export information</a>')}
-{section('<div class="feature-grid"><article><h2>Range</h2><p>VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc, Pineau rouge.</p></article><article><h2>Positioning</h2><p data-fr>Cognac biologique familial, naturel, premium et indépendant.</p><p data-en>Family, natural, premium and independent organic Cognac.</p></article><article><h2>Markets</h2><p>Europe, USA, Canada.</p></article></div>')}
-{section('<h2 data-fr>Documents à préparer</h2><h2 data-en>Documents to prepare</h2><ul class="check-list"><li data-fr>Fiches produits professionnelles.</li><li data-en>Professional product sheets.</li><li data-fr>Photos bouteilles et gamme.</li><li data-en>Bottle and range photographs.</li><li data-fr>Informations réglementaires et nutritionnelles en HTML accessible.</li><li data-en>Regulatory and nutritional information in accessible HTML.</li></ul>')}
+{section('<div class="feature-grid"><article><h2 data-fr>Gamme</h2><h2 data-en>Range</h2><p>VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc, Pineau rouge.</p></article><article><h2 data-fr>Positionnement</h2><h2 data-en>Positioning</h2><p data-fr>Cognac biologique familial, naturel, premium et indépendant.</p><p data-en>Family, natural, premium and independent organic Cognac.</p></article><article><h2 data-fr>Marchés</h2><h2 data-en>Markets</h2><p>Europe, USA, Canada.</p></article></div>')}
+{section('<h2 data-fr>Documents à préparer</h2><h2 data-en>Documents to prepare</h2><ul class="check-list"><li data-fr><a href="fiches-techniques-produits.html">Fiches techniques produits en HTML accessible.</a></li><li data-en><a href="fiches-techniques-produits.html">Product fact sheets in accessible HTML.</a></li><li data-fr>Photos bouteilles et gamme.</li><li data-en>Bottle and range photographs.</li><li data-fr>Informations réglementaires et nutritionnelles en HTML accessible.</li><li data-en>Regulatory and nutritional information in accessible HTML.</li></ul>')}
 """
-    return layout("importers.html", "For Importers | Cognac Esprit Organic", "B2B export page for Cognac Esprit Organic importers in Europe, USA and Canada: organic Cognac range, positioning and contact.", "For Importers", "Une page B2B export pour les marchés Europe, USA, Canada.", "A B2B export page for Europe, USA and Canada.", body)
+    return layout("importers.html", "Importateurs cognac bio | Cognac Esprit Organic", "Page export B2B pour les importateurs de Cognac Esprit Organic en Europe, aux USA et au Canada : gamme bio, positionnement et contact.", "Pour les importateurs", "Une page B2B export pour les marchés Europe, USA, Canada.", "A B2B export page for Europe, USA and Canada.", body)
 
 
 def producer_page():
@@ -1472,29 +1439,164 @@ def nutrition_page():
     return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic par produit, pour 30 ml et 100 ml.", "Valeurs nutritionnelles", "Les tableaux nutritionnels Esprit Organic avec l'énergie en kJ / kcal.", "Cognac Esprit Organic nutritional tables with energy shown in kJ / kcal.", body, image="assets/img/brand/hero-old-vine.jpg")
 
 
+def technical_product_rows(product):
+    extra = PRODUCT_EXTRAS.get(product["slug"], {})
+    rows = [
+        ("Marque", "Cognac Esprit Organic"),
+        ("Produit", product["name"]),
+        ("Catégorie", product["category"]),
+        ("Origine", "France"),
+        ("Profil court", product["short"]),
+    ]
+    if product.get("abv"):
+        rows.append(("Titre alcoométrique", product["abv"]))
+    rows.extend(extra.get("sensory", {}).items())
+    return rows
+
+
+def documented_award(product):
+    return DOCUMENTED_AWARDS.get(product["slug"])
+
+
+def technical_product_item(product):
+    properties = [
+        property_value(label, value)
+        for label, value in technical_product_rows(product)
+        if label not in {"Marque", "Produit", "Catégorie", "Profil court"}
+    ]
+    award = documented_award(product)
+    if award:
+        properties.append(property_value("Récompense documentée", award["proof_label"]))
+    item = {
+        "@type": "Product",
+        "name": product["name"],
+        "url": page_url(f"produits/{product['slug']}.html"),
+        "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
+        "manufacturer": {"@id": DOMAIN + "/#organization"},
+        "category": product["category"],
+        "image": DOMAIN + "/" + product["image"],
+        "description": product["short"],
+        "additionalProperty": properties,
+    }
+    if award:
+        item["award"] = award["name"]
+    return item
+
+
+def technical_product_facts_page():
+    index_links = "".join(
+        f'<a href="#{escape(product["slug"])}">{escape(product["name"])}</a>'
+        for product in PRODUCTS
+    )
+    cards = []
+    for product in PRODUCTS:
+        award = documented_award(product)
+        rows = "".join(
+            f'<tr><th scope="row">{escape(label)}</th><td>{escape(value)}</td></tr>'
+            for label, value in technical_product_rows(product)
+        )
+        if award:
+            rows += (
+                f'<tr class="technical-award-row"><th scope="row">Récompense documentée</th>'
+                f'<td><span>{escape(award["name"])}</span> '
+                f'<a class="technical-proof-link" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">'
+                f'{escape(award["proof_label"])}</a></td></tr>'
+            )
+        cards.append(
+            f"""
+      <article class="technical-product-card" id="{escape(product["slug"])}">
+        <header>
+          <div>
+            <h2>{escape(product["name"])}</h2>
+            <p class="tag">{escape(product["category"])}</p>
+          </div>
+          <a class="text-link" href="produits/{escape(product["slug"])}.html">Voir la fiche produit</a>
+        </header>
+        <p class="technical-answer">{escape(product["name"])} est un produit de la gamme Cognac Esprit Organic, classé {escape(product["category"])}. {escape(product["short"])}</p>
+        <div class="nutrition-table-wrap">
+          <table class="nutrition-table">
+            <caption>Fiche technique produit - {escape(product["name"])}</caption>
+            <tbody>{rows}</tbody>
+          </table>
+        </div>
+      </article>
+"""
+        )
+    item_list = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Fiches techniques produits Cognac Esprit Organic",
+        "itemListElement": [
+            {"@type": "ListItem", "position": index + 1, "item": technical_product_item(product)}
+            for index, product in enumerate(PRODUCTS)
+        ],
+        "@id": page_url("fiches-techniques-produits.html") + "#products",
+    }
+    body = f"""
+<section class="product-data-intro">
+  <div class="section-inner">
+    <p class="eyebrow">Données produit</p>
+    <h2>Fiches techniques pour agents IA et acheteurs professionnels</h2>
+    <p>Cette page regroupe les faits stables des produits Cognac Esprit Organic dans un format lisible par les moteurs, les agents IA et les partenaires B2B. Elle ne remplace pas les fiches commerciales ; elle sert de page de référence technique.</p>
+    <p>Les tableaux ci-dessous n'ajoutent pas de prix, de stock, d'avis client, de certification non affichée, ni de récompense sans preuve consultable.</p>
+    <figure class="technical-hero-image">
+      <img src="assets/img/products/gamme-esprit-organic.jpg" alt="Gamme Cognac Esprit Organic : Fondation VS, Conviction VSOP, Cohesion Napoléon et Transmission XO" width="1800" height="1130" loading="lazy">
+      <figcaption>Gamme Cognac Esprit Organic : fiches commerciales et données techniques reliées dans une même source publique.</figcaption>
+    </figure>
+    <nav class="technical-index" aria-label="Accès rapide aux fiches techniques">{index_links}</nav>
+    <p class="technical-note">Référence export : page reliée depuis les espaces utiles du site pour faciliter la lecture des produits par les partenaires, moteurs et agents IA.</p>
+  </div>
+</section>
+<section>
+  <div class="section-inner">
+    <div class="technical-product-list">{''.join(cards)}</div>
+  </div>
+</section>
+"""
+    return layout(
+        "fiches-techniques-produits.html",
+        "Fiches techniques produits | Cognac Esprit Organic",
+        "Fiches techniques factuelles des produits Cognac Esprit Organic pour moteurs, agents IA et acheteurs professionnels.",
+        "Fiches techniques produits",
+        "Une page de référence factuelle, séparée des fiches commerciales.",
+        "A factual reference page, separate from commercial product pages.",
+        body,
+        schemas=[item_list],
+        image="assets/img/brand/hero-old-vine.jpg",
+        page_class="product-data-page",
+    )
+
+
 def legal_page():
     body = f"""
 <section>
   <div class="section-inner split">
     <div>
       <p class="eyebrow">Informations légales</p>
-      <h2 data-fr>Page provisoire à valider</h2>
-      <h2 data-en>Temporary page to validate</h2>
-      <p data-fr>Cette page rassemble les informations connues sans inventer de mentions juridiques. Elle devra être complétée ou validée avant mise en ligne publique.</p>
-      <p data-en>This page gathers known information without inventing legal statements. It must be completed or validated before public launch.</p>
+      <h2 data-fr>Brouillon à confirmer</h2>
+      <h2 data-en>Draft to confirm</h2>
+      <p data-fr>Les informations confirmées sont limitées aux coordonnées affichées ci-contre. Les mentions légales complètes restent à valider ; cette page est donc en noindex temporaire.</p>
+      <p data-en>Only the contact details shown here are confirmed. The complete legal notice still needs validation, so this page uses a temporary noindex.</p>
     </div>
     <div>
       <ul class="meta-list">
         <li><span>Site</span><strong>{DOMAIN}</strong></li>
+        <li><span>Marque</span><strong>Cognac Esprit Organic</strong></li>
         <li><span>Email</span><strong>{CONTACT['email']}</strong></li>
         <li><span>Téléphone</span><strong>{CONTACT['phone']}</strong></li>
         <li><span>Adresse</span><strong>{CONTACT['address']}</strong></li>
+        <li><span>Éditeur du site</span><strong>à confirmer</strong></li>
+        <li><span>Forme juridique</span><strong>à confirmer</strong></li>
+        <li><span>Numéro d'immatriculation</span><strong>à confirmer</strong></li>
+        <li><span>TVA intracommunautaire</span><strong>à confirmer</strong></li>
+        <li><span>Responsable de publication</span><strong>à confirmer</strong></li>
+        <li><span>Hébergeur</span><strong>à confirmer</strong></li>
       </ul>
     </div>
   </div>
 </section>
 """
-    return layout("mentions-legales.html", "Mentions légales | Cognac Esprit Organic", "Mentions légales provisoires Cognac Esprit Organic à compléter avant publication.", "Mentions légales", "Page provisoire à compléter avant publication officielle.", "Temporary page to complete before official publication.", body, image="assets/img/brand/hero-old-vine.jpg")
+    return layout("mentions-legales.html", "Mentions légales | Cognac Esprit Organic", "Mentions légales Cognac Esprit Organic : informations connues et champs à confirmer.", "Mentions légales", "Informations connues et champs à confirmer avant publication.", "Known information and fields to confirm before publication.", body, image="assets/img/brand/hero-old-vine.jpg", robots="noindex,nofollow")
 
 
 def write_css():
@@ -2749,58 +2851,6 @@ p { margin: 18px 0 0; }
   font-size: .8rem !important;
   line-height: 1.6;
 }
-.product-answer-block {
-  background: var(--product-mid) !important;
-}
-.product-facts-panel {
-  background: #ebe7d9 !important;
-  color: #522e03;
-}
-.product-answer-block h2,
-.product-facts-panel h2 {
-  margin: 0 0 18px;
-  font-family: Raleway, sans-serif;
-  font-size: 1.25rem;
-  font-weight: 900;
-  line-height: 1.2;
-  text-transform: uppercase;
-}
-.product-answer-block p {
-  max-width: 82%;
-  line-height: 1.7;
-}
-.product-facts-table-wrap {
-  overflow-x: auto;
-  background: rgba(255,255,255,.84);
-  border: 1px solid rgba(82,46,3,.16);
-}
-.product-facts-table {
-  width: 100%;
-  min-width: 520px;
-  border-collapse: collapse;
-  font-family: Raleway, sans-serif;
-  font-size: .78rem;
-  line-height: 1.45;
-}
-.product-facts-table caption {
-  padding: 14px 16px;
-  color: #683f09;
-  font-weight: 900;
-  text-align: left;
-  text-transform: uppercase;
-}
-.product-facts-table th,
-.product-facts-table td {
-  padding: 12px 16px;
-  border-top: 1px solid rgba(82,46,3,.14);
-  vertical-align: top;
-}
-.product-facts-table th {
-  width: 34%;
-  color: #683f09;
-  font-weight: 900;
-  text-align: left;
-}
 .product-medals {
   display: flex;
   flex-wrap: wrap;
@@ -2976,6 +3026,145 @@ p { margin: 18px 0 0; }
 .nutrition-card > p {
   margin: 0 0 18px;
   color: var(--muted);
+}
+.product-data-page .page-hero {
+  min-height: 46vh;
+  padding: 132px 0 72px;
+  background-position: center 46%;
+}
+.product-data-intro {
+  background: #f8f3e8;
+}
+.technical-hero-image {
+  margin: 30px 0 0;
+  border: 1px solid rgba(94,61,35,.16);
+  background: #fff;
+}
+.technical-hero-image img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.technical-hero-image figcaption {
+  margin: 0;
+  padding: 12px 16px;
+  color: #5f5144;
+  font-size: .88rem;
+}
+.technical-proof-link {
+  margin-left: 10px;
+  color: #684009;
+  font-weight: 800;
+  text-underline-offset: 3px;
+}
+.technical-award-row td span {
+  color: #3f3328;
+  font-weight: 800;
+}
+.technical-index {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 26px;
+}
+.technical-index a {
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: #522e03;
+  font-size: .78rem;
+  font-weight: 800;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+.technical-product-list {
+  display: grid;
+  gap: 30px;
+  margin-top: 34px;
+}
+.technical-product-card {
+  padding: clamp(22px, 3.5vw, 38px);
+  border: 1px solid rgba(94,61,35,.18);
+  background: #fff;
+}
+.technical-product-card header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 18px;
+}
+.technical-product-card h2 {
+  color: #522e03;
+  font-size: clamp(1.55rem, 2.6vw, 2.55rem);
+}
+.technical-product-card .tag {
+  margin-top: 8px;
+  color: #69550d;
+  border-color: rgba(105,85,13,.3);
+}
+.technical-product-card .text-link {
+  margin-top: 0;
+  white-space: nowrap;
+}
+.technical-answer {
+  max-width: 860px;
+  margin: 0 0 22px;
+  color: #4a3d31;
+}
+.technical-product-card .nutrition-table {
+  width: 100%;
+  min-width: 760px;
+}
+.technical-product-card .nutrition-table tbody th {
+  width: 26%;
+  color: #683f09;
+}
+.technical-note {
+  margin-top: 28px;
+  padding: 16px 18px;
+  border-left: 4px solid #69550d;
+  background: rgba(255,255,255,.66);
+}
+@media (max-width: 700px) {
+  .technical-product-card {
+    padding: 20px 18px;
+  }
+  .technical-product-card header {
+    display: block;
+  }
+  .technical-product-card .text-link {
+    display: inline-block;
+    margin-top: 12px;
+    white-space: normal;
+  }
+  .technical-product-card .nutrition-table {
+    min-width: 0;
+  }
+  .technical-product-card .nutrition-table tr {
+    display: block;
+  }
+  .technical-product-card .nutrition-table caption,
+  .technical-product-card .nutrition-table tbody th,
+  .technical-product-card .nutrition-table tbody td {
+    display: block;
+    width: auto;
+  }
+  .technical-product-card .nutrition-table caption {
+    padding: 16px 18px;
+  }
+  .technical-product-card .nutrition-table tbody th {
+    padding: 14px 18px 4px;
+    border-bottom: 0;
+  }
+  .technical-product-card .nutrition-table tbody td {
+    padding: 0 18px 14px;
+  }
+  .technical-proof-link {
+    display: block;
+    margin: 6px 0 0;
+  }
 }
 .nutrition-dialog img {
   width: 100%;
@@ -3399,7 +3588,7 @@ document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
 
 
 def write_static_files():
-    pages = ["index.html", "agriculture-biologique.html", "organic-cognac-producer-france.html", "importers.html", "production/index.html", "demarche/index.html", "contact.html", "faq.html", "visiter.html", "leopold-et-fanny/index.html", "equipe/index.html", "cocktails.html", "galerie.html", "valeurs-nutritionnelles.html", "mentions-legales.html"]
+    pages = ["index.html", "agriculture-biologique.html", "organic-cognac-producer-france.html", "importers.html", "production/index.html", "demarche/index.html", "contact.html", "faq.html", "visiter.html", "leopold-et-fanny/index.html", "equipe/index.html", "cocktails.html", "galerie.html", "valeurs-nutritionnelles.html", "fiches-techniques-produits.html"]
     pages += [f"produits/{p['slug']}.html" for p in PRODUCTS]
     sitemap_urls = "\n".join(f"  <url><loc>{page_url(p)}</loc></url>" for p in pages)
     write("sitemap.xml", f"""<?xml version="1.0" encoding="UTF-8"?>
@@ -3419,7 +3608,7 @@ Domaine officiel : {DOMAIN}
 
 ## Statut du projet
 
-Ce site est la version publique statique de Cognac Esprit Organic. Les pages autorisent l'indexation et le fichier `robots.txt` publie le sitemap officiel.
+Ce site est la version publique statique de Cognac Esprit Organic. Les pages publiques autorisent l'indexation, sauf les mentions légales laissées en brouillon avec `noindex` temporaire tant que les champs légaux restent à confirmer. Le fichier `robots.txt` publie le sitemap officiel.
 
 ## Identité
 
@@ -3441,6 +3630,11 @@ Europe, USA, Canada.
 
 {product_lines}
 
+## Récompenses documentées
+
+- Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /fiches-techniques-produits.html.
+- Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /fiches-techniques-produits.html.
+
 ## Pages principales
 
 - Accueil : /
@@ -3451,6 +3645,7 @@ Europe, USA, Canada.
 - L’équipe : /equipe/
 - Visiter : /visiter.html
 - Cocktails : /cocktails.html
+- Fiches techniques produits : /fiches-techniques-produits.html
 - llms.txt : /llms.txt
 
 ## Preuves bio publiques
@@ -3490,7 +3685,8 @@ Il est aussi possible d'ouvrir `index.html` directement, mais le serveur local r
 
 Le site est prêt pour la mise en ligne :
 
-- `<meta name="robots" content="index,follow">` sur chaque page ;
+- `<meta name="robots" content="index,follow">` sur les pages publiques finalisées ;
+- `<meta name="robots" content="noindex,nofollow">` sur les mentions légales tant que les champs juridiques restent à confirmer ;
 - `robots.txt` autorise l'exploration et référence le sitemap officiel.
 
 ## Fichiers principaux
@@ -3562,6 +3758,7 @@ def main():
     write("cocktails.html", cocktails_page())
     write("galerie.html", gallery_page())
     write("valeurs-nutritionnelles.html", nutrition_page())
+    write("fiches-techniques-produits.html", technical_product_facts_page())
     write("mentions-legales.html", legal_page())
     write("visiter.html", visit_page())
     write("leopold-et-fanny/index.html", people_page("leopold-et-fanny/index.html"))

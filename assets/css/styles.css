@@ -1465,10 +1465,10 @@ p { margin: 18px 0 0; }
   object-fit: cover;
   object-position: bottom;
   transform: scaleY(-1);
-  opacity: .52;
-  filter: blur(.55px);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.68), rgba(0,0,0,.28) 44%, rgba(0,0,0,0) 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.68), rgba(0,0,0,.28) 44%, rgba(0,0,0,0) 100%);
+  opacity: .46;
+  filter: blur(.65px);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.56), rgba(0,0,0,.24) 58%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.56), rgba(0,0,0,.24) 58%, rgba(0,0,0,0) 100%);
 }
 .product-award-copy {
   display: block;

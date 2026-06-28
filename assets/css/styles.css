@@ -1467,8 +1467,8 @@ p { margin: 18px 0 0; }
   transform: scaleY(-1);
   opacity: .5;
   filter: blur(.45px);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.64) 0%, rgba(0,0,0,.64) 42%, rgba(0,0,0,.25) 82%, rgba(0,0,0,0) 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.64) 0%, rgba(0,0,0,.64) 42%, rgba(0,0,0,.25) 82%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.68) 0%, rgba(0,0,0,.5) 18%, rgba(0,0,0,.24) 42%, rgba(0,0,0,.1) 64%, rgba(0,0,0,.035) 84%, rgba(0,0,0,.008) 94%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.68) 0%, rgba(0,0,0,.5) 18%, rgba(0,0,0,.24) 42%, rgba(0,0,0,.1) 64%, rgba(0,0,0,.035) 84%, rgba(0,0,0,.008) 94%, rgba(0,0,0,0) 100%);
 }
 .product-award-copy {
   display: block;

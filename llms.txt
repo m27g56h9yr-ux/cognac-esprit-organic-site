@@ -46,10 +46,26 @@ Europe, USA, Canada.
 
 ## Fiches dégustation PDF/UA
 
-- Fondation VS : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf (PDF/UA)
-- Conviction VSOP : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation.pdf (PDF/UA)
-- Cohesion Napoléon : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation.pdf (PDF/UA)
-- Transmission XO : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation.pdf (PDF/UA)
+- Fondation VS (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf (PDF/UA)
+- Fondation VS (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-en.pdf (PDF/UA)
+- Fondation VS (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-da.pdf (PDF/UA)
+- Fondation VS (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-no.pdf (PDF/UA)
+- Fondation VS (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-sv.pdf (PDF/UA)
+- Conviction VSOP (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation.pdf (PDF/UA)
+- Conviction VSOP (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-en.pdf (PDF/UA)
+- Conviction VSOP (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-da.pdf (PDF/UA)
+- Conviction VSOP (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-no.pdf (PDF/UA)
+- Conviction VSOP (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-sv.pdf (PDF/UA)
+- Cohesion Napoléon (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation.pdf (PDF/UA)
+- Cohesion Napoléon (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-en.pdf (PDF/UA)
+- Cohesion Napoléon (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-da.pdf (PDF/UA)
+- Cohesion Napoléon (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-no.pdf (PDF/UA)
+- Cohesion Napoléon (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-sv.pdf (PDF/UA)
+- Transmission XO (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation.pdf (PDF/UA)
+- Transmission XO (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-en.pdf (PDF/UA)
+- Transmission XO (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-da.pdf (PDF/UA)
+- Transmission XO (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-no.pdf (PDF/UA)
+- Transmission XO (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-sv.pdf (PDF/UA)
 
 ## Récompenses documentées
 

@@ -153,21 +153,49 @@ PRODUCTS = [
 PRODUCT_TRADE_PDFS = {
     "fondation-vs": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation-sv.pdf",
+        },
         "label": "Fiche dégustation Fondation VS",
         "en_label": "Fondation VS tasting sheet",
     },
     "conviction-vsop": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-sv.pdf",
+        },
         "label": "Fiche dégustation Conviction VSOP",
         "en_label": "Conviction VSOP tasting sheet",
     },
     "cohesion-napoleon": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-sv.pdf",
+        },
         "label": "Fiche dégustation Cohesion Napoléon",
         "en_label": "Cohesion Napoléon tasting sheet",
     },
     "transmission-xo": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-sv.pdf",
+        },
         "label": "Fiche dégustation Transmission XO",
         "en_label": "Transmission XO tasting sheet",
     },
@@ -3978,10 +4006,13 @@ Sitemap: {DOMAIN}/sitemap.xml
         f"SV : {DOMAIN}/sv/fiches-techniques-produits.html#{p['slug']})"
         for p in PRODUCTS
     )
+    tasting_pdf_languages = (("FR", "fr"), ("EN", "en"), ("DA", "da"), ("NO", "no"), ("SV", "sv"))
     tasting_pdf_lines = "\n".join(
-        f"- {p['name']} : {DOMAIN}/{PRODUCT_TRADE_PDFS[p['slug']]['href']} (PDF/UA)"
+        f"- {p['name']} ({label}) : {DOMAIN}/{href} (PDF/UA)"
         for p in PRODUCTS
         if p["slug"] in PRODUCT_TRADE_PDFS
+        for label, lang_code in tasting_pdf_languages
+        for href in [PRODUCT_TRADE_PDFS[p["slug"]]["localized_hrefs"][lang_code]]
     )
     write("llms.txt", f"""# Cognac Esprit Organic
 

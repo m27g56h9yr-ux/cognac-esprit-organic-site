@@ -152,32 +152,24 @@ PRODUCTS = [
 
 PRODUCT_TRADE_PDFS = {
     "fondation-vs": {
-        "href": "assets/pdf/fiches-cavistes/cognac-esprit-organic-fondation-vs-fiche-caviste.pdf",
-        "label": "Fiche caviste Fondation VS",
-        "en_label": "Fondation VS trade sheet",
-        "meta": "PDF, 1 page A4, 393 Ko",
-        "en_meta": "PDF, 1 A4 page, 393 KB",
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf",
+        "label": "Fiche dégustation Fondation VS",
+        "en_label": "Fondation VS tasting sheet",
     },
     "conviction-vsop": {
-        "href": "assets/pdf/fiches-cavistes/cognac-esprit-organic-conviction-vsop-fiche-caviste.pdf",
-        "label": "Fiche caviste Conviction VSOP",
-        "en_label": "Conviction VSOP trade sheet",
-        "meta": "PDF, 1 page A4, 582 Ko",
-        "en_meta": "PDF, 1 A4 page, 582 KB",
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation.pdf",
+        "label": "Fiche dégustation Conviction VSOP",
+        "en_label": "Conviction VSOP tasting sheet",
     },
     "cohesion-napoleon": {
-        "href": "assets/pdf/fiches-cavistes/cognac-esprit-organic-cohesion-napoleon-fiche-caviste.pdf",
-        "label": "Fiche caviste Cohesion Napoléon",
-        "en_label": "Cohesion Napoléon trade sheet",
-        "meta": "PDF, 1 page A4, 395 Ko",
-        "en_meta": "PDF, 1 A4 page, 395 KB",
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation.pdf",
+        "label": "Fiche dégustation Cohesion Napoléon",
+        "en_label": "Cohesion Napoléon tasting sheet",
     },
     "transmission-xo": {
-        "href": "assets/pdf/fiches-cavistes/cognac-esprit-organic-transmission-xo-fiche-caviste.pdf",
-        "label": "Fiche caviste Transmission XO",
-        "en_label": "Transmission XO trade sheet",
-        "meta": "PDF, 1 page A4, 506 Ko",
-        "en_meta": "PDF, 1 A4 page, 506 KB",
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation.pdf",
+        "label": "Fiche dégustation Transmission XO",
+        "en_label": "Transmission XO tasting sheet",
     },
 }
 
@@ -1019,13 +1011,9 @@ def product_page(product):
         trade_pdf_download = f"""
       <div class="product-downloads">
         <a class="product-pdf-link" href="{prefix}{escape(trade_pdf["href"])}" type="application/pdf" download aria-label="Télécharger {escape(trade_pdf["label"])} au format PDF">
-          <span data-fr>Télécharger la fiche caviste PDF</span>
-          <span data-en>Download trade PDF sheet</span>
-          <small data-fr>{escape(trade_pdf["meta"])}</small>
-          <small data-en>{escape(trade_pdf["en_meta"])}</small>
+          <span data-fr>Fiche dégustation</span>
+          <span data-en>Tasting sheet</span>
         </a>
-        <p data-fr>Fiche A4 destinée aux cavistes et partenaires professionnels.</p>
-        <p data-en>A4 sheet for wine merchants and trade partners.</p>
       </div>
 """
     section_class = f'product-old-detail {extra.get("section_class", "")}'.strip()
@@ -3277,38 +3265,18 @@ p { margin: 18px 0 0; }
   cursor: pointer;
 }
 .product-downloads {
-  width: min(420px, 100%);
-  max-width: 80%;
-  margin-top: 24px;
-  padding-top: 20px;
-  border-top: 1px solid rgba(255,255,255,.35);
+  margin-top: 12px;
 }
 .product-pdf-link {
-  display: inline-flex !important;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 12px;
+  display: inline-block !important;
   margin-top: 0 !important;
-  padding: 10px 14px;
-  border: 1px solid rgba(255,255,255,.7);
-  border-radius: 4px;
+  padding: 0;
+  border: 0;
   color: #fff;
-  text-decoration: none !important;
-}
-.product-pdf-link:hover,
-.product-pdf-link:focus-visible {
-  background: rgba(255,255,255,.12);
-}
-.product-pdf-link small {
-  font-size: .68rem;
-  font-weight: 500;
-  opacity: .84;
-}
-.product-downloads p {
-  max-width: 100%;
-  margin-top: 8px;
-  font-size: .72rem;
-  opacity: .86;
+  font-size: .84rem;
+  font-weight: 800;
+  text-decoration: underline !important;
+  text-underline-offset: 4px;
 }
 .nutrition-dialog {
   width: min(920px, calc(100% - 34px));

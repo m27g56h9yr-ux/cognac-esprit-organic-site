@@ -1444,7 +1444,7 @@ p { margin: 18px 0 0; }
 .product-award-visual {
   position: relative;
   flex: 0 0 clamp(96px, 9.6vw, 126px);
-  padding-bottom: clamp(38px, 4.2vw, 54px);
+  padding-bottom: clamp(26px, 3vw, 38px);
   overflow: hidden;
 }
 .product-award-image,
@@ -1459,16 +1459,16 @@ p { margin: 18px 0 0; }
 }
 .product-award-reflection {
   position: absolute;
-  top: calc(100% - clamp(38px, 4.2vw, 54px) - 4px);
+  top: calc(100% - clamp(26px, 3vw, 38px) - 3px);
   left: 0;
-  height: clamp(38px, 4.2vw, 54px);
+  height: clamp(26px, 3vw, 38px);
   object-fit: cover;
   object-position: bottom;
   transform: scaleY(-1);
-  opacity: .44;
-  filter: blur(.75px);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.58) 0%, rgba(0,0,0,.58) 34%, rgba(0,0,0,.24) 72%, rgba(0,0,0,0) 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.58) 0%, rgba(0,0,0,.58) 34%, rgba(0,0,0,.24) 72%, rgba(0,0,0,0) 100%);
+  opacity: .5;
+  filter: blur(.45px);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.64) 0%, rgba(0,0,0,.64) 42%, rgba(0,0,0,.25) 82%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.64) 0%, rgba(0,0,0,.64) 42%, rgba(0,0,0,.25) 82%, rgba(0,0,0,0) 100%);
 }
 .product-award-copy {
   display: block;
@@ -1506,11 +1506,11 @@ p { margin: 18px 0 0; }
   }
   .product-award-visual {
     flex-basis: 92px;
-    padding-bottom: 42px;
+    padding-bottom: 30px;
   }
   .product-award-reflection {
-    top: calc(100% - 46px);
-    height: 42px;
+    top: calc(100% - 33px);
+    height: 30px;
   }
   .product-award-copy {
     padding-top: 12px;

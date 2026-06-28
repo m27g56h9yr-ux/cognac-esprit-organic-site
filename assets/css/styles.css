@@ -1430,7 +1430,7 @@ p { margin: 18px 0 0; }
 .product-award-link {
   display: inline-flex;
   align-items: flex-start;
-  gap: clamp(18px, 2.2vw, 34px);
+  gap: clamp(18px, 2vw, 30px);
   width: 100%;
   color: #fff;
   text-decoration: none;
@@ -1443,8 +1443,9 @@ p { margin: 18px 0 0; }
 }
 .product-award-visual {
   position: relative;
-  flex: 0 0 clamp(120px, 13vw, 168px);
-  padding-bottom: clamp(44px, 5vw, 68px);
+  flex: 0 0 clamp(96px, 9.6vw, 126px);
+  padding-bottom: clamp(30px, 3.5vw, 44px);
+  overflow: hidden;
 }
 .product-award-image,
 .product-award-reflection {
@@ -1458,20 +1459,20 @@ p { margin: 18px 0 0; }
 }
 .product-award-reflection {
   position: absolute;
-  top: calc(100% - clamp(44px, 5vw, 68px));
+  top: calc(100% - clamp(30px, 3.5vw, 44px) - clamp(12px, 1.35vw, 18px));
   left: 0;
   transform: scaleY(-1);
-  opacity: .3;
-  filter: blur(1px);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.6), rgba(0,0,0,0));
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.6), rgba(0,0,0,0));
+  opacity: .42;
+  filter: blur(.7px);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), rgba(0,0,0,0) 74%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.72), rgba(0,0,0,0) 74%);
 }
 .product-award-copy {
   display: block;
   flex: 1 1 0;
   min-width: 0;
   max-width: 330px;
-  padding-top: clamp(18px, 2vw, 34px);
+  padding-top: clamp(12px, 1.35vw, 22px);
   color: rgba(255,255,255,.92);
   font-family: Montserrat, sans-serif;
   text-transform: uppercase;
@@ -1484,37 +1485,37 @@ p { margin: 18px 0 0; }
   overflow-wrap: break-word;
 }
 .product-award-copy strong {
-  font-size: clamp(1rem, 1.8vw, 1.62rem);
+  font-size: clamp(.98rem, 1.45vw, 1.34rem);
   font-weight: 500;
   line-height: 1.25;
   letter-spacing: .02em;
 }
 .product-award-copy span {
   margin-top: 4px;
-  font-size: clamp(1rem, 1.65vw, 1.48rem);
+  font-size: clamp(.98rem, 1.45vw, 1.34rem);
   font-weight: 800;
   line-height: 1.2;
   letter-spacing: .01em;
 }
 @media (max-width: 520px) {
   .product-award-link {
-    gap: 14px;
+    gap: 13px;
   }
   .product-award-visual {
-    flex-basis: 112px;
-    padding-bottom: 46px;
+    flex-basis: 92px;
+    padding-bottom: 34px;
   }
   .product-award-reflection {
     top: calc(100% - 46px);
   }
   .product-award-copy {
-    padding-top: 18px;
+    padding-top: 12px;
   }
   .product-award-copy strong {
-    font-size: .88rem;
+    font-size: .82rem;
   }
   .product-award-copy span {
-    font-size: .86rem;
+    font-size: .82rem;
   }
 }
 .product-medals img {

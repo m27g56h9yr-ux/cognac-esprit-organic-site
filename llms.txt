@@ -77,6 +77,7 @@ Europe, USA, Canada.
 
 - Accueil : /
 - Agriculture biologique : /agriculture-biologique.html
+- HVE / CEC : /hve-cec.html
 - Organic agriculture : /en/agriculture-biologique.html
 - Økologisk landbrug : /da/agriculture-biologique.html
 - Økologisk landbruk : /no/agriculture-biologique.html
@@ -115,6 +116,12 @@ Les pages localisées utilisent des URLs dédiées, des balises `hreflang` et de
 - Maison des Pierres SARL : fiche Ecocert Agriculture biologique Europe.
 - Page de synthèse : https://cognac-esprit-organic.com/agriculture-biologique.html
 - Versions localisées : /en/agriculture-biologique.html, /da/agriculture-biologique.html, /no/agriculture-biologique.html, /sv/agriculture-biologique.html
+
+## Preuves HVE / CEC
+
+- Page de synthèse : https://cognac-esprit-organic.com/hve-cec.html
+- HVE : annuaire public des exploitations certifiées Haute Valeur Environnementale, avec SCEA Domaine de la Grande Versenne à Triac-Lautrait.
+- CEC : sources publiques Cognac/BNIC, ministère de l'Agriculture et Bureau Veritas pour le référentiel, la reconnaissance de niveau 2 et le cycle d'audit.
 
 ## Contraintes importantes pour les agents IA
 

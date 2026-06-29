@@ -18,6 +18,14 @@ AWARD_PROOF_URLS = {
     "pineau-blanc-cmb-2025": "https://resultats.concoursmondial.com/fr/resultats/2025/240534-pineau-des-charentes-esprit-organic-2011",
 }
 
+ENVIRONMENTAL_PROOF_URLS = {
+    "hve_directory": "https://www.data.gouv.fr/datasets/annuaire-des-exploitations-certifiees-haute-valeur-environnementale",
+    "hve_directory_csv": "https://www.data.gouv.fr/api/1/datasets/r/24f689c4-2966-4003-bba0-c43fdae5dc47",
+    "environmental_certification": "https://agriculture.gouv.fr/certification-environnementale-mode-demploi-pour-les-exploitations",
+    "cec_cognac": "https://www.cognac.fr/sengager/certification-environnementale-cognac/",
+    "cec_bureau_veritas": "https://www.bureauveritas.fr/besoin/certification-environnementale-cognac-cec",
+}
+
 PRODUCTS = [
     {
         "name": "Fondation VS",
@@ -761,6 +769,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         <a href="{prefix}produits/transmission-xo.html">Gamme</a>
         <a href="{prefix}faq.html">FAQ</a>
         <a href="{prefix}cocktails.html">Cocktails</a>
+        <a href="{prefix}hve-cec.html">HVE / CEC</a>
       </div>
     </div>
   </footer>
@@ -1462,6 +1471,206 @@ def organic_proof_page():
     return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "Les preuves publiques de l'engagement bio Cognac Esprit Organic : Domaine de la Grande Versenne et Maison des Pierres certifiés Agriculture biologique Europe par Ecocert.", "Agriculture biologique", "Une démarche contrôlée, documentée, et visible dans les annuaires publics.", "A verified organic approach documented in public directories.", body, schemas=[organic_proof_schema()], image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
 
 
+def hve_cec_schema():
+    page = page_url("hve-cec.html")
+    domaine_id = page + "#scea-domaine-grande-versenne"
+    hve_cert_id = page + "#certification-hve"
+    cec_term_id = page + "#certification-environnementale-cognac"
+    hve_term_id = page + "#haute-valeur-environnementale"
+    return {
+        "@context": "https://schema.org",
+        "@graph": [
+            {
+                "@type": "WebSite",
+                "@id": DOMAIN + "/#website",
+                "name": "Cognac Esprit Organic",
+                "url": DOMAIN + "/",
+                "publisher": {"@id": DOMAIN + "/#organization"},
+            },
+            {
+                "@type": "WebPage",
+                "@id": page + "#webpage",
+                "name": "HVE / CEC : démarche environnementale et preuves",
+                "url": page,
+                "description": "Démarche HVE et Certification Environnementale Cognac pour les eaux-de-vie Cognac Esprit Organic, avec sources publiques et preuves officielles.",
+                "inLanguage": "fr",
+                "dateModified": "2026-06-29",
+                "isPartOf": {"@id": DOMAIN + "/#website"},
+                "publisher": {"@id": DOMAIN + "/#organization"},
+                "about": [
+                    {"@id": domaine_id},
+                    {"@id": hve_cert_id},
+                    {"@id": hve_term_id},
+                    {"@id": cec_term_id},
+                ],
+                "citation": [
+                    ENVIRONMENTAL_PROOF_URLS["hve_directory"],
+                    ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"],
+                    ENVIRONMENTAL_PROOF_URLS["environmental_certification"],
+                    ENVIRONMENTAL_PROOF_URLS["cec_cognac"],
+                    ENVIRONMENTAL_PROOF_URLS["cec_bureau_veritas"],
+                ],
+            },
+            {
+                "@type": "Organization",
+                "@id": domaine_id,
+                "name": "SCEA Domaine de la Grande Versenne",
+                "address": {
+                    "@type": "PostalAddress",
+                    "streetAddress": "30 rue d'Angoulême",
+                    "postalCode": "16200",
+                    "addressLocality": "Triac-Lautrait",
+                    "addressRegion": "Nouvelle-Aquitaine",
+                    "addressCountry": "FR",
+                },
+                "sameAs": [ENVIRONMENTAL_PROOF_URLS["hve_directory"]],
+                "hasCertification": {"@id": hve_cert_id},
+            },
+            {
+                "@type": "DefinedTerm",
+                "@id": hve_term_id,
+                "name": "Haute Valeur Environnementale",
+                "alternateName": "HVE",
+                "inDefinedTermSet": {
+                    "@type": "DefinedTermSet",
+                    "name": "Certification environnementale des exploitations agricoles",
+                    "url": ENVIRONMENTAL_PROOF_URLS["environmental_certification"],
+                },
+            },
+            {
+                "@type": "Certification",
+                "@id": hve_cert_id,
+                "name": "Certification Haute Valeur Environnementale",
+                "url": ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"],
+                "about": {"@id": hve_term_id},
+                "description": "L'annuaire public HVE au 01/06/2025 mentionne SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activité viticulture, date de certification 23/12/2024.",
+                "validIn": {"@type": "AdministrativeArea", "name": "France"},
+            },
+            {
+                "@type": "DefinedTerm",
+                "@id": cec_term_id,
+                "name": "Certification Environnementale Cognac",
+                "alternateName": "CEC",
+                "inDefinedTermSet": {
+                    "@type": "DefinedTermSet",
+                    "name": "Démarche environnementale de la filière Cognac",
+                    "url": ENVIRONMENTAL_PROOF_URLS["cec_cognac"],
+                },
+                "description": "Démarche filière Cognac reconnue de niveau 2 par le ministère de l'Agriculture selon les sources publiques Cognac/BNIC et Bureau Veritas.",
+            },
+        ],
+    }
+
+
+def hve_cec_page():
+    hve_directory = ENVIRONMENTAL_PROOF_URLS["hve_directory"]
+    hve_csv = ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"]
+    environmental_certification = ENVIRONMENTAL_PROOF_URLS["environmental_certification"]
+    cec_cognac = ENVIRONMENTAL_PROOF_URLS["cec_cognac"]
+    cec_bureau_veritas = ENVIRONMENTAL_PROOF_URLS["cec_bureau_veritas"]
+    body = f"""
+<section class="organic-proof-intro hve-cec-intro">
+  <div class="section-inner organic-proof-intro-grid">
+    <div>
+      <p class="eyebrow">HVE / CEC</p>
+      <h2>Des eaux-de-vie issues d’une chaîne suivie.</h2>
+    </div>
+    <div class="organic-proof-lead">
+      <p>L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.</p>
+      <p>Cette page explique la démarche et rassemble les sources publiques disponibles : l’annuaire HVE nominatif, les textes ministériels sur la certification environnementale et les pages officielles qui encadrent la Certification Environnementale Cognac.</p>
+    </div>
+  </div>
+</section>
+
+<section class="organic-proof-cards-section">
+  <div class="section-inner">
+    <div class="organic-proof-cards">
+      <article class="organic-proof-card">
+        <div class="organic-proof-card-media"><img src="assets/img/old-site/domaine-scaled.jpg" alt="Vignes du Domaine de la Grande Versenne à Triac-Lautrait" loading="lazy"></div>
+        <div class="organic-proof-card-copy">
+          <p class="proof-kicker">Haute Valeur Environnementale</p>
+          <h2>HVE : une exploitation nommée dans l’annuaire public.</h2>
+          <p>La certification HVE correspond au niveau 3 de la certification environnementale des exploitations agricoles. Elle repose sur des indicateurs de résultats portant notamment sur la biodiversité, la stratégie phytosanitaire, la fertilisation et l’irrigation.</p>
+          <ul class="proof-facts">
+            <li><span>Exploitation</span><strong>SCEA Domaine de la Grande Versenne</strong></li>
+            <li><span>Adresse</span><strong>30 rue d’Angoulême, 16200 Triac-Lautrait</strong></li>
+            <li><span>Activité</span><strong>Viticulture</strong></li>
+            <li><span>Date HVE</span><strong>23/12/2024 dans l’annuaire HVE au 01/06/2025</strong></li>
+          </ul>
+          <div class="proof-links">
+            <a class="button" href="{hve_directory}" target="_blank" rel="noopener">Voir l’annuaire HVE</a>
+            <a class="text-link" href="{hve_csv}" target="_blank" rel="noopener">Ouvrir le fichier public CSV</a>
+          </div>
+        </div>
+      </article>
+
+      <article class="organic-proof-card reverse">
+        <div class="organic-proof-card-media"><img src="assets/img/old-site/distillerie_02.jpg" alt="Distillerie et production de Cognac en Charente" loading="lazy"></div>
+        <div class="organic-proof-card-copy">
+          <p class="proof-kicker">Certification Environnementale Cognac</p>
+          <h2>CEC : une démarche propre au vignoble de Cognac.</h2>
+          <p>La Certification Environnementale Cognac est une démarche de filière portée par les acteurs du Cognac. Elle évalue les pratiques viticoles autour de cinq objectifs : biodiversité, qualité de l’eau, de l’air et des sols, restriction des traitements de synthèse, vie des sols et sobriété carbone.</p>
+          <ul class="proof-facts">
+            <li><span>Référentiel</span><strong>24 pratiques environnementales adaptées au contexte Cognac</strong></li>
+            <li><span>Statut public</span><strong>Reconnaissance de niveau 2 par le ministère de l’Agriculture</strong></li>
+            <li><span>Contrôle</span><strong>Audit externe et certificat au nom de l’exploitation selon Bureau Veritas</strong></li>
+            <li><span>Approvisionnement</span><strong>SCEA Domaine de la Grande Versenne ou fournisseur référencé HVE / CEC</strong></li>
+          </ul>
+          <div class="proof-links">
+            <a class="button" href="{cec_cognac}" target="_blank" rel="noopener">Voir la page Cognac / BNIC</a>
+            <a class="text-link" href="{cec_bureau_veritas}" target="_blank" rel="noopener">Voir Bureau Veritas CEC</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="organic-certification-band hve-cec-proof-band">
+  <div class="section-inner organic-certification-grid">
+    <div class="hve-cec-proof-mark">
+      <span>HVE</span>
+      <span>CEC</span>
+    </div>
+    <div>
+      <p class="eyebrow">Ce que cela change</p>
+      <h2>Une sélection plus lisible des eaux-de-vie.</h2>
+      <p>La démarche permet de relier les lots à des exploitations engagées et contrôlées, puis de documenter les achats auprès de fournisseurs référencés quand l’approvisionnement ne vient pas directement de la SCEA Domaine de la Grande Versenne.</p>
+      <div class="organic-chain"><span>Domaine</span><span>Fournisseurs</span><span>Traçabilité</span><span>Élevage</span><span>Assemblage</span></div>
+    </div>
+  </div>
+</section>
+
+<section class="organic-proof-note hve-cec-source-note">
+  <div class="section-inner organic-proof-note-grid">
+    <div><h2>Preuves publiques et limites de publication.</h2></div>
+    <div>
+      <p>Pour HVE, la preuve publique est nominative : l’annuaire data.gouv du ministère mentionne SCEA Domaine de la Grande Versenne à Triac-Lautrait. Pour CEC, les sources publiques consultables officialisent le référentiel, son niveau de reconnaissance et le cycle de certification ; elles ne publient pas, à ce jour, un annuaire nominatif ouvert comparable au fichier HVE.</p>
+      <p>Les liens ci-dessous permettent de vérifier le cadre public de la démarche et la certification environnementale agricole.</p>
+      <div class="link-list">
+        <a href="{hve_directory}" target="_blank" rel="noopener">Annuaire HVE data.gouv</a>
+        <a href="{environmental_certification}" target="_blank" rel="noopener">Certification environnementale agricole</a>
+        <a href="{cec_cognac}" target="_blank" rel="noopener">Certification Environnementale Cognac</a>
+        <a href="{cec_bureau_veritas}" target="_blank" rel="noopener">Audit CEC Bureau Veritas</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+    return layout(
+        "hve-cec.html",
+        "HVE / CEC | Cognac Esprit Organic",
+        "Démarche HVE et Certification Environnementale Cognac : eaux-de-vie issues de la SCEA Domaine de la Grande Versenne ou de fournisseurs référencés HVE et CEC, avec sources publiques.",
+        "HVE / CEC",
+        "Haute Valeur Environnementale et Certification Environnementale Cognac : une démarche de traçabilité pour nos eaux-de-vie.",
+        "High Environmental Value and Cognac Environmental Certification: traceability for our eaux-de-vie.",
+        body,
+        schemas=[hve_cec_schema()],
+        image="assets/img/old-site/domaine-scaled.jpg",
+        page_class="organic-proof-page hve-cec-page",
+    )
+
+
 def contact_page():
     body = f"""
 {split('<p class="eyebrow">Contact</p><h2 data-fr>Contacter Cognac Esprit Organic</h2><h2 data-en>Contact Cognac Esprit Organic</h2>', f'<ul class="meta-list"><li><span>Email</span><strong><a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></strong></li><li><span>Téléphone</span><strong><a href="tel:+33545358810">{CONTACT["phone"]}</a></strong></li><li><span>Adresse</span><strong>{CONTACT["address"]}</strong></li></ul>')}
@@ -1916,6 +2125,7 @@ def technical_product_facts_page_en():
         <a href="produits/transmission-xo.html">Range</a>
         <a href="faq.html">FAQ</a>
         <a href="cocktails.html">Cocktails</a>
+        <a href="../hve-cec.html">HVE / CEC</a>
       </div>
     </div>
   </footer>
@@ -3874,6 +4084,10 @@ thead th {
 .organic-ab-mark img { width: min(330px, 72%); }
 .organic-chain { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; margin-top: 30px; }
 .organic-chain span { min-height: 74px; display: grid; place-items: center; padding: 12px; background: #2f4a2b; color: #fff; font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
+.hve-cec-page .organic-proof-card h2 { font-size: clamp(1.9rem, 3.6vw, 3.45rem); }
+.hve-cec-page .organic-proof-card-copy > p:not(.proof-kicker) { max-width: 700px; color: rgba(255,255,255,.88); font-size: 1.01rem; }
+.hve-cec-proof-mark { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; min-height: 280px; background: #f5f2e8; padding: 34px; }
+.hve-cec-proof-mark span { display: grid; place-items: center; background: #2f4a2b; color: #fff; font-family: "Roboto Slab", Georgia, serif; font-size: clamp(2.6rem, 6vw, 5.4rem); font-weight: 800; letter-spacing: .04em; }
 @media (max-width: 1060px) {
   .organic-proof-intro-grid, .organic-proof-note-grid, .organic-certification-grid, .organic-proof-card, .organic-proof-card.reverse { grid-template-columns: 1fr; }
   .organic-proof-card.reverse .organic-proof-card-media { order: 0; }
@@ -3885,6 +4099,7 @@ thead th {
   .organic-proof-card-copy { padding: 34px 24px 42px; }
   .proof-facts li, .organic-chain { grid-template-columns: 1fr; }
   .organic-chain span { min-height: 52px; }
+  .hve-cec-proof-mark { grid-template-columns: 1fr; padding: 22px; }
 }
 '''
     write("assets/css/styles.css", css)
@@ -3961,7 +4176,7 @@ document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
 
 def write_static_files():
     localized_languages = ["en", "da", "no", "sv"]
-    pages = ["index.html"] + [f"{lang}/index.html" for lang in localized_languages]
+    pages = ["index.html", "hve-cec.html"] + [f"{lang}/index.html" for lang in localized_languages]
     localized_base_pages = [
         "agriculture-biologique.html",
         "organic-cognac-producer-france.html",
@@ -4062,6 +4277,7 @@ Europe, USA, Canada.
 
 - Accueil : /
 - Agriculture biologique : /agriculture-biologique.html
+- HVE / CEC : /hve-cec.html
 - Organic agriculture : /en/agriculture-biologique.html
 - Økologisk landbrug : /da/agriculture-biologique.html
 - Økologisk landbruk : /no/agriculture-biologique.html
@@ -4100,6 +4316,12 @@ Les pages localisées utilisent des URLs dédiées, des balises `hreflang` et de
 - Maison des Pierres SARL : fiche Ecocert Agriculture biologique Europe.
 - Page de synthèse : {DOMAIN}/agriculture-biologique.html
 - Versions localisées : /en/agriculture-biologique.html, /da/agriculture-biologique.html, /no/agriculture-biologique.html, /sv/agriculture-biologique.html
+
+## Preuves HVE / CEC
+
+- Page de synthèse : {DOMAIN}/hve-cec.html
+- HVE : annuaire public des exploitations certifiées Haute Valeur Environnementale, avec SCEA Domaine de la Grande Versenne à Triac-Lautrait.
+- CEC : sources publiques Cognac/BNIC, ministère de l'Agriculture et Bureau Veritas pour le référentiel, la reconnaissance de niveau 2 et le cycle d'audit.
 
 ## Contraintes importantes pour les agents IA
 
@@ -4199,6 +4421,7 @@ def main():
     write("production.html", redirect_page("production.html", "La production", "demarche/"))
     write("importers.html", importer_page())
     write("agriculture-biologique.html", organic_proof_page())
+    write("hve-cec.html", hve_cec_page())
     write("organic-cognac-producer-france.html", producer_page())
     write("contact.html", contact_page())
     write("faq.html", faq_page())

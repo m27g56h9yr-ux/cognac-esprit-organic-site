@@ -1573,11 +1573,18 @@ def hve_cec_page():
   <div class="section-inner organic-proof-intro-grid">
     <div>
       <p class="eyebrow">HVE / CEC</p>
-      <h2>Des eaux-de-vie issues d’une chaîne suivie.</h2>
+      <h2>Des vignes engagées, des eaux-de-vie mieux tracées.</h2>
     </div>
     <div class="organic-proof-lead">
+      <p class="hve-cec-promise">Un cognac bio, traçable et engagé, des vignes jusqu’au verre.</p>
       <p>L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.</p>
-      <p>Cette page explique la démarche et rassemble les sources publiques disponibles : l’annuaire HVE nominatif, les textes ministériels sur la certification environnementale et les pages officielles qui encadrent la Certification Environnementale Cognac.</p>
+      <div class="link-list hve-cec-public-links" aria-label="Liens publics de preuve HVE et CEC">
+        <a href="{hve_directory}" target="_blank" rel="noopener">Preuve HVE data.gouv</a>
+        <a href="{hve_csv}" target="_blank" rel="noopener">Fichier public HVE</a>
+        <a href="{environmental_certification}" target="_blank" rel="noopener">Ministère de l’Agriculture</a>
+        <a href="{cec_cognac}" target="_blank" rel="noopener">CEC Cognac / BNIC</a>
+        <a href="{cec_bureau_veritas}" target="_blank" rel="noopener">Audit CEC Bureau Veritas</a>
+      </div>
     </div>
   </div>
 </section>
@@ -1586,7 +1593,7 @@ def hve_cec_page():
   <div class="section-inner">
     <div class="organic-proof-cards">
       <article class="organic-proof-card">
-        <div class="organic-proof-card-media"><img src="assets/img/old-site/domaine-scaled.jpg" alt="Vignes du Domaine de la Grande Versenne à Triac-Lautrait" loading="lazy"></div>
+        <div class="organic-proof-card-media"><img src="assets/img/old-site/img_home_vigne.jpg" alt="Paysage viticole du Domaine de la Grande Versenne à Triac-Lautrait" loading="lazy"></div>
         <div class="organic-proof-card-copy">
           <p class="proof-kicker">Haute Valeur Environnementale</p>
           <h2>HVE : une exploitation nommée dans l’annuaire public.</h2>
@@ -1605,7 +1612,7 @@ def hve_cec_page():
       </article>
 
       <article class="organic-proof-card reverse">
-        <div class="organic-proof-card-media"><img src="assets/img/old-site/distillerie_02.jpg" alt="Distillerie et production de Cognac en Charente" loading="lazy"></div>
+        <div class="organic-proof-card-media"><img src="assets/img/brand/hero-old-vine.jpg" alt="Vieilles vignes dans le vignoble de Cognac" loading="lazy"></div>
         <div class="organic-proof-card-copy">
           <p class="proof-kicker">Certification Environnementale Cognac</p>
           <h2>CEC : une démarche propre au vignoble de Cognac.</h2>
@@ -1643,12 +1650,13 @@ def hve_cec_page():
 
 <section class="organic-proof-note hve-cec-source-note">
   <div class="section-inner organic-proof-note-grid">
-    <div><h2>Preuves publiques et limites de publication.</h2></div>
+    <div><h2>Des engagements visibles, des preuves accessibles.</h2></div>
     <div>
-      <p>Pour HVE, la preuve publique est nominative : l’annuaire data.gouv du ministère mentionne SCEA Domaine de la Grande Versenne à Triac-Lautrait. Pour CEC, les sources publiques consultables officialisent le référentiel, son niveau de reconnaissance et le cycle de certification ; elles ne publient pas, à ce jour, un annuaire nominatif ouvert comparable au fichier HVE.</p>
-      <p>Les liens ci-dessous permettent de vérifier le cadre public de la démarche et la certification environnementale agricole.</p>
+      <p>Nos engagements se vérifient simplement : HVE dans l’annuaire public, CEC auprès des sources officielles de la filière Cognac.</p>
+      <p>La HVE de la SCEA Domaine de la Grande Versenne est nominative sur data.gouv. Pour la CEC, les sites publics du BNIC et de Bureau Veritas détaillent le référentiel, sa reconnaissance et le contrôle ; aucun annuaire nominatif ouvert équivalent au fichier HVE n’est publié à ce jour.</p>
       <div class="link-list">
         <a href="{hve_directory}" target="_blank" rel="noopener">Annuaire HVE data.gouv</a>
+        <a href="{hve_csv}" target="_blank" rel="noopener">Fichier public HVE</a>
         <a href="{environmental_certification}" target="_blank" rel="noopener">Certification environnementale agricole</a>
         <a href="{cec_cognac}" target="_blank" rel="noopener">Certification Environnementale Cognac</a>
         <a href="{cec_bureau_veritas}" target="_blank" rel="noopener">Audit CEC Bureau Veritas</a>
@@ -1660,13 +1668,13 @@ def hve_cec_page():
     return layout(
         "hve-cec.html",
         "HVE / CEC | Cognac Esprit Organic",
-        "Démarche HVE et Certification Environnementale Cognac : eaux-de-vie issues de la SCEA Domaine de la Grande Versenne ou de fournisseurs référencés HVE et CEC, avec sources publiques.",
+        "HVE / CEC : des eaux-de-vie bio, traçables et engagées, avec liens publics vers data.gouv, le ministère, le BNIC et Bureau Veritas.",
         "HVE / CEC",
-        "Haute Valeur Environnementale et Certification Environnementale Cognac : une démarche de traçabilité pour nos eaux-de-vie.",
+        "Des eaux-de-vie sélectionnées avec exigence, des vignes jusqu’au verre.",
         "High Environmental Value and Cognac Environmental Certification: traceability for our eaux-de-vie.",
         body,
         schemas=[hve_cec_schema()],
-        image="assets/img/old-site/domaine-scaled.jpg",
+        image="assets/img/old-site/img_home_vigne.jpg",
         page_class="organic-proof-page hve-cec-page",
     )
 
@@ -4073,6 +4081,9 @@ thead th {
 .organic-proof-card.reverse .organic-proof-card-copy { background: linear-gradient(135deg, #69550d, #513213); }
 .proof-kicker { margin: 0 0 16px; color: #d9bd72; text-transform: uppercase; letter-spacing: .16em; font-size: .74rem; font-weight: 900; }
 .organic-proof-card h2 { max-width: 620px; color: #fff; font-size: clamp(2.1rem, 4.6vw, 4.45rem); }
+.hve-cec-page .hve-cec-promise { max-width: 650px; color: #2f4a2b; font-size: clamp(1.35rem, 2.3vw, 1.85rem); line-height: 1.16; font-weight: 900; }
+.hve-cec-page .hve-cec-public-links { gap: 10px; margin-top: 24px; }
+.hve-cec-page .hve-cec-public-links a { background: #f8f4ea; border-color: rgba(94, 61, 35, .24); }
 .proof-facts { display: grid; gap: 0; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.26); }
 .proof-facts li { display: grid; grid-template-columns: minmax(120px, .36fr) 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.2); }
 .proof-facts span { color: rgba(255,255,255,.68); text-transform: uppercase; letter-spacing: .11em; font-size: .68rem; font-weight: 900; }

@@ -2367,6 +2367,21 @@ thead th {
   color: #fff;
   font-size: clamp(2.1rem, 4.6vw, 4.45rem);
 }
+.hve-cec-page .hve-cec-promise {
+  max-width: 650px;
+  color: #2f4a2b;
+  font-size: clamp(1.35rem, 2.3vw, 1.85rem);
+  line-height: 1.16;
+  font-weight: 900;
+}
+.hve-cec-page .hve-cec-public-links {
+  gap: 10px;
+  margin-top: 24px;
+}
+.hve-cec-page .hve-cec-public-links a {
+  background: #f8f4ea;
+  border-color: rgba(94, 61, 35, .24);
+}
 .proof-facts {
   display: grid;
   gap: 0;

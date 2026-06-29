@@ -351,6 +351,9 @@ p { margin: 18px 0 0; }
   gap: 8px;
   margin-top: 24px;
 }
+.faq-aside nav:first-child {
+  margin-top: 0;
+}
 .faq-aside a {
   color: var(--brand-dark);
   font-weight: 700;

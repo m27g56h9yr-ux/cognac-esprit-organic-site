@@ -1465,10 +1465,10 @@ p { margin: 18px 0 0; }
   object-fit: cover;
   object-position: bottom;
   transform: scaleY(-1);
-  opacity: .5;
+  opacity: .54;
   filter: blur(.45px);
-  mask-image: linear-gradient(to bottom, rgba(0,0,0,.7) 0%, rgba(0,0,0,.7) 34%, rgba(0,0,0,.46) 56%, rgba(0,0,0,.16) 76%, rgba(0,0,0,.035) 92%, rgba(0,0,0,0) 100%);
-  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.7) 0%, rgba(0,0,0,.7) 34%, rgba(0,0,0,.46) 56%, rgba(0,0,0,.16) 76%, rgba(0,0,0,.035) 92%, rgba(0,0,0,0) 100%);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.82) 0%, rgba(0,0,0,.82) 40%, rgba(0,0,0,.54) 58%, rgba(0,0,0,.2) 76%, rgba(0,0,0,.045) 91%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.82) 0%, rgba(0,0,0,.82) 40%, rgba(0,0,0,.54) 58%, rgba(0,0,0,.2) 76%, rgba(0,0,0,.045) 91%, rgba(0,0,0,0) 100%);
 }
 .product-award-copy {
   display: block;

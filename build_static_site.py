@@ -759,11 +759,12 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       </div>
       <div class="footer-links">
         <a href="{prefix}produits/transmission-xo.html">Gamme</a>
+        <a href="{prefix}faq.html">FAQ</a>
         <a href="{prefix}cocktails.html">Cocktails</a>
       </div>
     </div>
   </footer>
-  <script src="{prefix}assets/js/main.js?v=20260611-pineau-rouge03"></script>
+  <script src="{prefix}assets/js/main.js?v=20260629-faq01"></script>
 </body>
 </html>
 """
@@ -1913,11 +1914,12 @@ def technical_product_facts_page_en():
       </div>
       <div class="footer-links">
         <a href="produits/transmission-xo.html">Range</a>
+        <a href="faq.html">FAQ</a>
         <a href="cocktails.html">Cocktails</a>
       </div>
     </div>
   </footer>
-  <script src="../assets/js/main.js?v=20260611-pineau-rouge03"></script>
+  <script src="../assets/js/main.js?v=20260629-faq01"></script>
 </body>
 </html>
 """
@@ -4069,6 +4071,11 @@ Europe, USA, Canada.
 - Léopold et Fanny : /leopold-et-fanny/
 - L’équipe : /equipe/
 - Visiter : /visiter.html
+- FAQ Cognac Esprit Organic : /faq.html
+- Organic Cognac FAQ : /en/faq.html
+- FAQ om økologisk Cognac : /da/faq.html
+- FAQ om økologisk Cognac : /no/faq.html
+- FAQ om ekologisk Cognac : /sv/faq.html
 - Cocktails : /cocktails.html
 - Données produits et documents professionnels : /fiches-techniques-produits.html
 - Product data and professional documents : /en/fiches-techniques-produits.html

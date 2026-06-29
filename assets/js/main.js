@@ -172,6 +172,11 @@ function renderFooterEnhancements(lang) {
     instagramLink.rel = "noopener";
     instagramLink.className = "footer-social-link";
     instagramLink.dataset.footerInstagram = "true";
+  }
+  const faqFooterLink = footerLinks && footerLinks.querySelector('a[href$="faq.html"]');
+  if (instagramLink && footerLinks && faqFooterLink && instagramLink.nextElementSibling !== faqFooterLink) {
+    footerLinks.insertBefore(instagramLink, faqFooterLink);
+  } else if (instagramLink && footerLinks && !footerLinks.contains(instagramLink)) {
     footerLinks.appendChild(instagramLink);
   }
   if (instagramLink) {

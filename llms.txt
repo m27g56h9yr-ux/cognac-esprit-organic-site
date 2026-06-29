@@ -86,6 +86,11 @@ Europe, USA, Canada.
 - Léopold et Fanny : /leopold-et-fanny/
 - L’équipe : /equipe/
 - Visiter : /visiter.html
+- FAQ Cognac Esprit Organic : /faq.html
+- Organic Cognac FAQ : /en/faq.html
+- FAQ om økologisk Cognac : /da/faq.html
+- FAQ om økologisk Cognac : /no/faq.html
+- FAQ om ekologisk Cognac : /sv/faq.html
 - Cocktails : /cocktails.html
 - Données produits et documents professionnels : /fiches-techniques-produits.html
 - Product data and professional documents : /en/fiches-techniques-produits.html

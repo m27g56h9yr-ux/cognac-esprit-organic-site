@@ -10,8 +10,10 @@ from pypdf import PdfReader, PdfWriter
 from pypdf.generic import (
     ArrayObject,
     BooleanObject,
+    DecodedStreamObject,
     DictionaryObject,
     NameObject,
+    NumberObject,
     TextStringObject,
 )
 from reportlab.lib.pagesizes import A4
@@ -462,14 +464,35 @@ def draw_logo(c: canvas.Canvas) -> None:
     c.line(244, 759, 285, 759)
 
 
+def xmp_metadata(title: str) -> bytes:
+    return f"""<?xpacket begin="\ufeff" id="W5M0MpCehiHzreSzNTczkc9d"?>
+<x:xmpmeta xmlns:x="adobe:ns:meta/" x:xmptk="pypdf">
+ <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+  <rdf:Description rdf:about="" xmlns:pdfuaid="http://www.aiim.org/pdfua/ns/id/" pdfuaid:part="1"/>
+  <rdf:Description rdf:about="" xmlns:dc="http://purl.org/dc/elements/1.1/">
+   <dc:title><rdf:Alt><rdf:li xml:lang="x-default">{title}</rdf:li></rdf:Alt></dc:title>
+  </rdf:Description>
+ </rdf:RDF>
+</x:xmpmeta>
+<?xpacket end="w"?>""".encode("utf-8")
+
+
 def add_tags(src: Path, dest: Path, product_name: str, lang: str) -> None:
     reader = PdfReader(str(src))
     writer = PdfWriter()
-    for page in reader.pages:
-        writer.add_page(page)
-
+    page_refs = []
+    parent_tree_nums = ArrayObject()
     lang_cfg = LANG[lang]
     title = f"Cognac Esprit Organic - {product_name} - {lang_cfg['metadata_label']} PDF/UA"
+
+    for page_index, page in enumerate(reader.pages):
+        stream = DecodedStreamObject()
+        stream.set_data(b"/P <</MCID 0>> BDC\n" + page.get_contents().get_data() + b"\nEMC\n")
+        page[NameObject("/Contents")] = writer._add_object(stream)
+        writer.add_page(page)
+        writer.pages[page_index][NameObject("/StructParents")] = NumberObject(page_index)
+        page_refs.append(writer.pages[page_index].indirect_reference)
+
     writer.add_metadata(
         {
             "/Title": title,
@@ -480,6 +503,53 @@ def add_tags(src: Path, dest: Path, product_name: str, lang: str) -> None:
         }
     )
     root = writer._root_object
+
+    struct_root = DictionaryObject({NameObject("/Type"): NameObject("/StructTreeRoot")})
+    struct_root_ref = writer._add_object(struct_root)
+    document = DictionaryObject(
+        {
+            NameObject("/Type"): NameObject("/StructElem"),
+            NameObject("/S"): NameObject("/Document"),
+            NameObject("/P"): struct_root_ref,
+            NameObject("/Lang"): TextStringObject(lang_cfg["pdf_lang"]),
+        }
+    )
+    document_ref = writer._add_object(document)
+    document_children = ArrayObject()
+    for page_index, page_ref in enumerate(page_refs):
+        paragraph = DictionaryObject(
+            {
+                NameObject("/Type"): NameObject("/StructElem"),
+                NameObject("/S"): NameObject("/P"),
+                NameObject("/P"): document_ref,
+                NameObject("/Pg"): page_ref,
+                NameObject("/K"): NumberObject(0),
+            }
+        )
+        paragraph_ref = writer._add_object(paragraph)
+        document_children.append(paragraph_ref)
+        parent_array_ref = writer._add_object(ArrayObject([paragraph_ref]))
+        parent_tree_nums.extend([NumberObject(page_index), parent_array_ref])
+    document[NameObject("/K")] = document_children
+    parent_tree_ref = writer._add_object(
+        DictionaryObject({NameObject("/Nums"): parent_tree_nums})
+    )
+    struct_root.update(
+        {
+            NameObject("/K"): document_ref,
+            NameObject("/ParentTree"): parent_tree_ref,
+            NameObject("/ParentTreeNextKey"): NumberObject(len(page_refs)),
+        }
+    )
+
+    metadata = DecodedStreamObject()
+    metadata.set_data(xmp_metadata(title))
+    metadata.update(
+        {
+            NameObject("/Type"): NameObject("/Metadata"),
+            NameObject("/Subtype"): NameObject("/XML"),
+        }
+    )
     root.update(
         {
             NameObject("/Lang"): TextStringObject(lang_cfg["pdf_lang"]),
@@ -489,15 +559,11 @@ def add_tags(src: Path, dest: Path, product_name: str, lang: str) -> None:
                     NameObject("/Suspects"): BooleanObject(False),
                 }
             ),
-            NameObject("/StructTreeRoot"): DictionaryObject(
-                {
-                    NameObject("/Type"): NameObject("/StructTreeRoot"),
-                    NameObject("/K"): ArrayObject(),
-                }
-            ),
             NameObject("/ViewerPreferences"): DictionaryObject(
                 {NameObject("/DisplayDocTitle"): BooleanObject(True)}
             ),
+            NameObject("/StructTreeRoot"): struct_root_ref,
+            NameObject("/Metadata"): writer._add_object(metadata),
         }
     )
     with dest.open("wb") as fh:

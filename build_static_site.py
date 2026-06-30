@@ -56,6 +56,18 @@ PRODUCTS = [
         "volume": "700 ml",
         "abv": "40 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
+        "gtin_variants": [
+            {
+                "name": "Cognac Esprit Organic Conviction VSOP 35 cl",
+                "size": "350 ml",
+                "gtin13": "3322870011601",
+            },
+            {
+                "name": "Caisse Cognac Esprit Organic Conviction VSOP 12 x 35 cl",
+                "size": "12 x 350 ml",
+                "gtin13": "3322870011618",
+            },
+        ],
     },
     {
         "name": "Cohesion Napoléon",
@@ -1011,6 +1023,9 @@ def product_page(product):
         "description": product["short"],
         "@id": page_url(f"produits/{product['slug']}.html") + "#product",
     }
+    variants = product_gtin_variants(product, schema["@id"])
+    if variants:
+        schema["hasVariant"] = variants
     additional_properties = [property_value(label, value) for label, value in sensory.items()]
     if additional_properties:
         schema["additionalProperty"] = additional_properties
@@ -1857,6 +1872,7 @@ def technical_product_rows(product, lang="fr"):
             ("Alcohol by volume", english_abv(product["abv"])),
             ("Grape varieties", product["grapes"]),
         ]
+        rows.extend(gtin_variant_rows(product, lang))
         rows.extend(EN_SENSORY.get(product["slug"], {}).items())
         return rows
     rows = [
@@ -1869,7 +1885,33 @@ def technical_product_rows(product, lang="fr"):
         ("Titre alcoométrique", product["abv"]),
         ("Cépages", product["grapes"]),
     ]
+    rows.extend(gtin_variant_rows(product, lang))
     rows.extend(extra.get("sensory", {}).items())
+    return rows
+
+
+def product_gtin_variants(product, parent_id):
+    variants = []
+    for variant in product.get("gtin_variants", []):
+        variants.append({
+            "@type": "Product",
+            "name": variant["name"],
+            "size": variant["size"],
+            "gtin13": variant["gtin13"],
+            "isVariantOf": {"@id": parent_id},
+        })
+    return variants
+
+
+def gtin_variant_rows(product, lang="fr"):
+    rows = []
+    for variant in product.get("gtin_variants", []):
+        label = (
+            f"GTIN {variant['size']} variant"
+            if lang == "en"
+            else f"GTIN variante {variant['size']}"
+        )
+        rows.append((label, variant["gtin13"]))
     return rows
 
 
@@ -1935,6 +1977,9 @@ def technical_product_item(product, lang="fr"):
         "size": product["volume"],
         "additionalProperty": properties,
     }
+    variants = product_gtin_variants(product, item["@id"] if "@id" in item else item["url"] + "#product")
+    if variants:
+        item["hasVariant"] = variants
     if award:
         item["award"] = technical_award_name(award, lang)
     if product["slug"] in PRODUCT_TRADE_PDFS:

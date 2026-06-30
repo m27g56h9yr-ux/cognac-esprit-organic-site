@@ -207,6 +207,30 @@ PRODUCT_TRADE_PDFS = {
         "label": "Fiche dégustation Transmission XO",
         "en_label": "Transmission XO tasting sheet",
     },
+    "single-cask": {
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation.pdf",
+        },
+        "label": "Fiche dégustation Single Cask",
+        "en_label": "Single Cask tasting sheet",
+    },
+    "pineau": {
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation.pdf",
+        },
+        "label": "Fiche dégustation Pineau blanc",
+        "en_label": "White Pineau tasting sheet",
+    },
+    "pineau-rouge": {
+        "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation.pdf",
+        "localized_hrefs": {
+            "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation.pdf",
+        },
+        "label": "Fiche dégustation Pineau rouge",
+        "en_label": "Red Pineau tasting sheet",
+    },
 }
 
 NAV = [
@@ -1873,6 +1897,21 @@ def documented_award(product):
     return DOCUMENTED_AWARDS.get(product["slug"])
 
 
+def trade_pdf_href(slug, lang="fr"):
+    trade_pdf = PRODUCT_TRADE_PDFS.get(slug)
+    if not trade_pdf:
+        return ""
+    localized_hrefs = trade_pdf.get("localized_hrefs", {})
+    return localized_hrefs.get(lang) or localized_hrefs.get("fr") or trade_pdf["href"]
+
+
+def trade_pdf_label(slug, lang="fr"):
+    trade_pdf = PRODUCT_TRADE_PDFS.get(slug)
+    if not trade_pdf:
+        return ""
+    return trade_pdf.get("en_label") if lang == "en" else trade_pdf["label"]
+
+
 def technical_product_item(product, lang="fr"):
     excluded = {"Brand", "Product", "Category", "Short profile"} if lang == "en" else {"Marque", "Produit", "Catégorie", "Profil court"}
     properties = [
@@ -1898,6 +1937,13 @@ def technical_product_item(product, lang="fr"):
     }
     if award:
         item["award"] = technical_award_name(award, lang)
+    if product["slug"] in PRODUCT_TRADE_PDFS:
+        item["subjectOf"] = {
+            "@type": "DigitalDocument",
+            "name": trade_pdf_label(product["slug"], lang),
+            "encodingFormat": "application/pdf",
+            "url": DOMAIN + "/" + trade_pdf_href(product["slug"], lang),
+        }
     return item
 
 
@@ -1942,6 +1988,15 @@ def technical_product_cards(lang="fr"):
                 f'<td><span>{escape(technical_award_name(award, lang))}</span> '
                 f'<a class="technical-proof-link" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">'
                 f'{escape(technical_award_proof_label(award, lang))}</a></td></tr>'
+            )
+        if product["slug"] in PRODUCT_TRADE_PDFS:
+            pdf_label = "PDF tasting sheet" if lang == "en" else "Fiche PDF"
+            pdf_link_text = "Download the tasting sheet" if lang == "en" else "Télécharger la fiche dégustation"
+            pdf_href = trade_pdf_href(product["slug"], lang)
+            rows += (
+                f'<tr><th scope="row">{escape(pdf_label)}</th>'
+                f'<td><a class="technical-proof-link" href="{asset_prefix}{escape(pdf_href)}" '
+                f'type="application/pdf" download>{escape(pdf_link_text)}</a></td></tr>'
             )
         category = english_category(product) if lang == "en" else product["category"]
         short = product["en_short"] if lang == "en" else product["short"]
@@ -4234,13 +4289,12 @@ Sitemap: {DOMAIN}/sitemap.xml
         f"SV : {DOMAIN}/sv/fiches-techniques-produits.html#{p['slug']})"
         for p in PRODUCTS
     )
-    tasting_pdf_languages = (("FR", "fr"), ("EN", "en"), ("DA", "da"), ("NO", "no"), ("SV", "sv"))
     tasting_pdf_lines = "\n".join(
         f"- {p['name']} ({label}) : {DOMAIN}/{href} (PDF/UA)"
         for p in PRODUCTS
         if p["slug"] in PRODUCT_TRADE_PDFS
-        for label, lang_code in tasting_pdf_languages
-        for href in [PRODUCT_TRADE_PDFS[p["slug"]]["localized_hrefs"][lang_code]]
+        for lang_code, href in PRODUCT_TRADE_PDFS[p["slug"]]["localized_hrefs"].items()
+        for label in [lang_code.upper()]
     )
     write("llms.txt", f"""# Cognac Esprit Organic
 

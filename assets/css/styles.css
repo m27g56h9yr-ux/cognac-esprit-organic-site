@@ -1713,6 +1713,48 @@ p { margin: 18px 0 0; }
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.product-details-discreet {
+  margin-top: 18px;
+  max-width: 80%;
+  color: rgba(255,255,255,.88);
+  font-family: Raleway, sans-serif;
+  font-size: .8rem;
+}
+.product-details-discreet summary {
+  display: inline-block;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.product-details-discreet summary::marker {
+  color: rgba(255,255,255,.72);
+}
+.product-details-discreet dl {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.product-details-discreet div {
+  display: grid;
+  grid-template-columns: minmax(115px, .42fr) 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+.product-details-discreet dt,
+.product-details-discreet dd {
+  margin: 0;
+}
+.product-details-discreet dt {
+  color: rgba(255,255,255,.66);
+  font-weight: 800;
+}
+.product-details-discreet dd {
+  color: #fff;
+  font-weight: 300;
+}
 .nutrition-link {
   display: inline-block;
   margin-top: 28px;
@@ -2252,10 +2294,15 @@ thead th {
     padding: 34px 28px;
   }
   .product-info-block p,
-  .product-sensory li {
+  .product-sensory li,
+  .product-details-discreet {
     max-width: 100%;
   }
   .product-sensory li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .product-details-discreet div {
     grid-template-columns: 1fr;
     gap: 2px;
   }

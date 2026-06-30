@@ -223,6 +223,10 @@ PRODUCT_TRADE_PDFS = {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation.pdf",
         "localized_hrefs": {
             "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-sv.pdf",
         },
         "label": "Fiche dégustation Single Cask",
         "en_label": "Single Cask tasting sheet",
@@ -231,6 +235,10 @@ PRODUCT_TRADE_PDFS = {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation.pdf",
         "localized_hrefs": {
             "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-sv.pdf",
         },
         "label": "Fiche dégustation Pineau blanc",
         "en_label": "White Pineau tasting sheet",
@@ -239,9 +247,34 @@ PRODUCT_TRADE_PDFS = {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation.pdf",
         "localized_hrefs": {
             "fr": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation.pdf",
+            "en": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-en.pdf",
+            "da": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-da.pdf",
+            "no": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-no.pdf",
+            "sv": "assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-sv.pdf",
         },
         "label": "Fiche dégustation Pineau rouge",
         "en_label": "Red Pineau tasting sheet",
+    },
+}
+
+PRODUCT_DETAILS_I18N = {
+    "fr": {
+        "summary": "Détails produit",
+        "category": "Catégorie",
+        "origin": "Origine",
+        "volume": "Contenance",
+        "abv": "Titre alcoométrique",
+        "grapes": "Cépages",
+        "origin_value": "France",
+    },
+    "en": {
+        "summary": "Product details",
+        "category": "Category",
+        "origin": "Origin",
+        "volume": "Bottle size",
+        "abv": "Alcohol by volume",
+        "grapes": "Grape varieties",
+        "origin_value": "France",
     },
 }
 
@@ -1021,12 +1054,14 @@ def product_page(product):
         "category": product["category"],
         "image": DOMAIN + "/" + product["image"],
         "description": product["short"],
+        "size": product["volume"],
         "@id": page_url(f"produits/{product['slug']}.html") + "#product",
     }
     variants = product_gtin_variants(product, schema["@id"])
     if variants:
         schema["hasVariant"] = variants
-    additional_properties = [property_value(label, value) for label, value in sensory.items()]
+    additional_properties = [property_value(label, value) for label, value in product_detail_schema_rows(product, "fr")]
+    additional_properties.extend(property_value(label, value) for label, value in sensory.items())
     if additional_properties:
         schema["additionalProperty"] = additional_properties
     if trade_pdf:
@@ -1046,6 +1081,7 @@ def product_page(product):
         f'<li><span>{escape(label)} :</span><strong>{escape(value)}</strong></li>'
         for label, value in sensory.items()
     )
+    details_block = product_details_block(product)
     medals = "".join(
         medal_html(medal, product["name"], prefix)
         for medal in extra.get("medals", [])
@@ -1128,6 +1164,7 @@ def product_page(product):
       <ul>
         {sensory_items}
       </ul>
+      {details_block}
       {nutrition_controls}
       {trade_pdf_download}
     </div>
@@ -1925,6 +1962,60 @@ def english_category(product):
 
 def english_abv(value):
     return value.replace(",", ".").replace(" %", "%")
+
+
+def product_detail_value(product, key, lang="fr"):
+    if key == "category":
+        return english_category(product) if lang == "en" else product["category"]
+    if key == "origin":
+        return PRODUCT_DETAILS_I18N[lang]["origin_value"]
+    if key == "volume":
+        return product["volume"]
+    if key == "abv":
+        return english_abv(product["abv"]) if lang == "en" else product["abv"]
+    if key == "grapes":
+        return product["grapes"]
+    return ""
+
+
+def product_detail_rows(product, lang="fr"):
+    labels = PRODUCT_DETAILS_I18N[lang]
+    return [
+        (labels["category"], product_detail_value(product, "category", lang)),
+        (labels["origin"], product_detail_value(product, "origin", lang)),
+        (labels["volume"], product_detail_value(product, "volume", lang)),
+        (labels["abv"], product_detail_value(product, "abv", lang)),
+        (labels["grapes"], product_detail_value(product, "grapes", lang)),
+    ]
+
+
+def product_detail_schema_rows(product, lang="fr"):
+    return [
+        (label, value)
+        for label, value in product_detail_rows(product, lang)
+        if label != PRODUCT_DETAILS_I18N[lang]["category"]
+    ]
+
+
+def product_details_block(product):
+    rows = "".join(
+        f"""
+        <div>
+          <dt><span data-fr>{escape(fr_label)}</span><span data-en>{escape(en_label)}</span></dt>
+          <dd><span data-fr>{escape(fr_value)}</span><span data-en>{escape(en_value)}</span></dd>
+        </div>"""
+        for (fr_label, fr_value), (en_label, en_value) in zip(
+            product_detail_rows(product, "fr"),
+            product_detail_rows(product, "en"),
+        )
+    )
+    return f"""
+      <details class="product-details-discreet">
+        <summary><span data-fr>{PRODUCT_DETAILS_I18N["fr"]["summary"]}</span><span data-en>{PRODUCT_DETAILS_I18N["en"]["summary"]}</span></summary>
+        <dl>{rows}
+        </dl>
+      </details>
+"""
 
 
 def technical_award_name(award, lang):
@@ -3598,6 +3689,48 @@ p { margin: 18px 0 0; }
   text-decoration: underline;
   text-underline-offset: 4px;
 }
+.product-details-discreet {
+  margin-top: 18px;
+  max-width: 80%;
+  color: rgba(255,255,255,.88);
+  font-family: Raleway, sans-serif;
+  font-size: .8rem;
+}
+.product-details-discreet summary {
+  display: inline-block;
+  cursor: pointer;
+  color: #fff;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.product-details-discreet summary::marker {
+  color: rgba(255,255,255,.72);
+}
+.product-details-discreet dl {
+  display: grid;
+  gap: 6px;
+  margin: 12px 0 0;
+  padding: 0;
+}
+.product-details-discreet div {
+  display: grid;
+  grid-template-columns: minmax(115px, .42fr) 1fr;
+  gap: 12px;
+  align-items: baseline;
+}
+.product-details-discreet dt,
+.product-details-discreet dd {
+  margin: 0;
+}
+.product-details-discreet dt {
+  color: rgba(255,255,255,.66);
+  font-weight: 800;
+}
+.product-details-discreet dd {
+  color: #fff;
+  font-weight: 300;
+}
 .nutrition-link {
   display: inline-block;
   margin-top: 28px;
@@ -4137,10 +4270,15 @@ thead th {
     padding: 34px 28px;
   }
   .product-info-block p,
-  .product-sensory li {
+  .product-sensory li,
+  .product-details-discreet {
     max-width: 100%;
   }
   .product-sensory li {
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+  .product-details-discreet div {
     grid-template-columns: 1fr;
     gap: 2px;
   }

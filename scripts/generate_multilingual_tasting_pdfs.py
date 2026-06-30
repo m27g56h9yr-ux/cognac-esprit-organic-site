@@ -342,6 +342,211 @@ PRODUCTS = {
             },
         },
     },
+    "single-cask": {
+        "name": "Single Cask",
+        "title": "SINGLE CASK",
+        "color": "#d7822f",
+        "product_image": "assets/img/old-site/SINGLE-CASK.jpg",
+        "tasting_image": "assets/img/old-site/SINGLE-CASK_tonneau.jpg",
+        "translations": {
+            "en": {
+                "subtitle": "LIMITED CASK-STRENGTH COGNAC",
+                "story": (
+                    "Offered as a limited edition, this cask-strength Cognac was selected by Fanny, our cellar master, "
+                    "for its intrinsic qualities and strong aromatic potential. The eaux-de-vie from this exceptional vintage "
+                    "began ageing in new French oak barrels with mixed grain, then finished developing in old red barrels so "
+                    "time, oxidation and evaporation could shape a melted, harmonious and rich aromatic palette."
+                ),
+                "tasting_title": "NATURALLY WOODY, BOTTLED AT 51%",
+                "tasting_body": (
+                    "A single barrel was chosen for its aromatic richness and the softness of its aromas. No wood extract or sugar "
+                    "was added. It was gently reduced with distilled water and bottled at 51%."
+                ),
+            },
+            "da": {
+                "subtitle": "BEGRÆNSET COGNAC VED FADSTYRKE",
+                "story": (
+                    "Denne Cognac ved fadstyrke tilbydes i begrænset udgave og er udvalgt af Fanny, vores kældermester, "
+                    "for sine egne kvaliteter og sit stærke aromatiske potentiale. Eaux-de-vie fra denne særlige årgang begyndte "
+                    "lagringen på nye franske egetræsfade med blandede årer og modnede derefter videre i gamle røde fade, hvor tid, "
+                    "oxidation og fordampning kunne skabe en smeltet, harmonisk og rig aromatisk palet."
+                ),
+                "tasting_title": "NATURLIGT TRÆPRÆGET, AFTAPPET VED 51%",
+                "tasting_body": (
+                    "Et enkelt fad blev udvalgt for sin aromatiske rigdom og duftenes blødhed. Der er hverken tilsat træekstrakt "
+                    "eller sukker. Den er nænsomt reduceret med destilleret vand og aftappet ved 51%."
+                ),
+            },
+            "no": {
+                "subtitle": "BEGRENSET COGNAC VED FATSTYRKE",
+                "story": (
+                    "Denne Cognacen ved fatstyrke tilbys i begrenset utgave og er valgt ut av Fanny, vår kjellermester, "
+                    "for sine egne kvaliteter og sitt sterke aromatiske potensial. Eaux-de-vie fra denne særlige årgangen begynte "
+                    "lagringen på nye franske eikefat med blandet årring og modnet deretter videre i gamle røde fat, der tid, "
+                    "oksidasjon og fordamping kunne skape en smeltet, harmonisk og rik aromatisk palett."
+                ),
+                "tasting_title": "NATURLIG TREPREGET, TAPPET VED 51%",
+                "tasting_body": (
+                    "Ett enkelt fat ble valgt for sin aromatiske rikdom og de myke aromaene. Det er verken tilsatt treekstrakt "
+                    "eller sukker. Den er skånsomt redusert med destillert vann og tappet ved 51%."
+                ),
+            },
+            "sv": {
+                "subtitle": "BEGRÄNSAD COGNAC VID FATSTYRKA",
+                "story": (
+                    "Denna Cognac vid fatstyrka erbjuds i begränsad upplaga och har valts ut av Fanny, vår källarmästare, "
+                    "för sina egna kvaliteter och sin starka aromatiska potential. Eaux-de-vie från denna särskilda årgång började "
+                    "lagras på nya franska ekfat med blandad ådring och fick sedan mogna vidare i gamla röda fat, där tid, oxidation "
+                    "och avdunstning kunde forma en smält, harmonisk och rik aromatisk palett."
+                ),
+                "tasting_title": "NATURLIGT TRÄPRÄGLAD, BUTELJERAD VID 51%",
+                "tasting_body": (
+                    "Ett enda fat valdes för sin aromatiska rikedom och dofternas mjukhet. Varken träextrakt eller socker har "
+                    "tillsatts. Den är varsamt reducerad med destillerat vatten och buteljerad vid 51%."
+                ),
+            },
+        },
+    },
+    "pineau": {
+        "name": "Pineau blanc",
+        "title": "PINEAU BLANC",
+        "color": "#b68b2b",
+        "product_image": "assets/img/products/pineau.jpg",
+        "tasting_image": "assets/img/product-scenes/pineau-01.jpg",
+        "translations": {
+            "en": {
+                "subtitle": "ORGANIC WHITE PINEAU DES CHARENTES",
+                "story": (
+                    "This white Pineau des Charentes is made from Cognac eaux-de-vie and grape must from Colombard and Ugni Blanc. "
+                    "It has aged for many years in oak casks, giving it an amber, brilliant colour and a generous profile."
+                ),
+                "tasting_title": "RICH, GENEROUS AND STRUCTURED",
+                "tasting_body": (
+                    "The palate shows candied fruit and vanilla notes. It is a rich and generous Pineau, well structured, "
+                    "with intense and harmonious notes."
+                ),
+            },
+            "da": {
+                "subtitle": "ØKOLOGISK HVID PINEAU DES CHARENTES",
+                "story": (
+                    "Denne hvide Pineau des Charentes fremstilles af Cognac-eaux-de-vie og druemost fra Colombard og Ugni Blanc. "
+                    "Den har lagret i mange år på egetræsfade, hvilket giver den en ravfarvet, klar farve og en generøs profil."
+                ),
+                "tasting_title": "RIG, GENERØS OG STRUKTURERET",
+                "tasting_body": (
+                    "I munden finder man noter af kandiseret frugt og vanilje. Det er en rig og generøs Pineau, velstruktureret "
+                    "med intense og harmoniske noter."
+                ),
+            },
+            "no": {
+                "subtitle": "ØKOLOGISK HVIT PINEAU DES CHARENTES",
+                "story": (
+                    "Denne hvite Pineau des Charentes lages av Cognac-eaux-de-vie og druemost fra Colombard og Ugni Blanc. "
+                    "Den har modnet i mange år på eikefat, noe som gir den en ravfarget, klar farge og en generøs profil."
+                ),
+                "tasting_title": "RIK, GENERØS OG STRUKTURERT",
+                "tasting_body": (
+                    "I munnen finner man toner av kandisert frukt og vanilje. Det er en rik og generøs Pineau, godt strukturert "
+                    "med intense og harmoniske toner."
+                ),
+            },
+            "sv": {
+                "subtitle": "EKOLOGISK VIT PINEAU DES CHARENTES",
+                "story": (
+                    "Denna vita Pineau des Charentes görs av Cognac-eaux-de-vie och druvmust från Colombard och Ugni Blanc. "
+                    "Den har lagrats i många år på ekfat, vilket ger den en bärnstensfärgad, klar färg och en generös profil."
+                ),
+                "tasting_title": "RIK, GENERÖS OCH STRUKTURERAD",
+                "tasting_body": (
+                    "I munnen finns toner av kanderad frukt och vanilj. Det är en rik och generös Pineau, välstrukturerad "
+                    "med intensiva och harmoniska toner."
+                ),
+            },
+        },
+    },
+    "pineau-rouge": {
+        "name": "Pineau rouge",
+        "title": "PINEAU ROUGE",
+        "color": "#a4433e",
+        "product_image": "assets/img/products/pineau-rouge.png",
+        "tasting_image": "assets/img/products/pineau-rouge-scene-floral-clean.png",
+        "translations": {
+            "en": {
+                "subtitle": "ORGANIC RED PINEAU DES CHARENTES",
+                "story": (
+                    "Red Pineau des Charentes extends the Esprit Organic range in a more colourful register: a round, fresh and fruity "
+                    "palate, intended for aperitifs, fruit desserts or a lightly chilled serve."
+                ),
+                "tasting_title": "SUPPLE, FRESH AND FRUITY",
+                "tasting_body": (
+                    "Made with Merlot and Ugni Blanc, it expresses cherry, blackberry and candied red fruit. The palate is supple and "
+                    "round, with fine freshness and a generous, lightly spicy finish."
+                ),
+            },
+            "da": {
+                "subtitle": "ØKOLOGISK RØD PINEAU DES CHARENTES",
+                "story": (
+                    "Rød Pineau des Charentes forlænger Esprit Organic-serien i et mere farverigt udtryk: en rund, frisk og frugtig "
+                    "mund, tænkt til aperitif, frugtdesserter eller servering let afkølet."
+                ),
+                "tasting_title": "SMIDIG, FRISK OG FRUGTIG",
+                "tasting_body": (
+                    "Fremstillet med Merlot og Ugni Blanc udtrykker den kirsebær, brombær og kandiserede røde frugter. Munden er "
+                    "smidig og rund med fin friskhed og en generøs, let krydret afslutning."
+                ),
+            },
+            "no": {
+                "subtitle": "ØKOLOGISK RØD PINEAU DES CHARENTES",
+                "story": (
+                    "Rød Pineau des Charentes forlenger Esprit Organic-serien i et mer fargerikt uttrykk: en rund, frisk og fruktig "
+                    "munn, laget for aperitiff, fruktdesserter eller servering lett avkjølt."
+                ),
+                "tasting_title": "MYK, FRISK OG FRUKTIG",
+                "tasting_body": (
+                    "Laget med Merlot og Ugni Blanc uttrykker den kirsebær, bjørnebær og kandiserte røde frukter. Munnen er myk "
+                    "og rund, med fin friskhet og en generøs, lett krydret avslutning."
+                ),
+            },
+            "sv": {
+                "subtitle": "EKOLOGISK RÖD PINEAU DES CHARENTES",
+                "story": (
+                    "Röd Pineau des Charentes förlänger Esprit Organic-sortimentet i ett mer färgstarkt uttryck: en rund, frisk och "
+                    "fruktig mun, tänkt för aperitif, fruktdesserter eller servering lätt kyld."
+                ),
+                "tasting_title": "MJUK, FRISK OCH FRUKTIG",
+                "tasting_body": (
+                    "Gjord med Merlot och Ugni Blanc uttrycker den körsbär, björnbär och kanderade röda frukter. Munnens uttryck är "
+                    "mjukt och runt, med fin friskhet och en generös, lätt kryddig avslutning."
+                ),
+            },
+        },
+    },
+}
+
+
+TECHNICAL_PROPERTY_LABELS = {
+    "Catégorie",
+    "Origine",
+    "Contenance",
+    "Titre alcoométrique",
+    "Cépages",
+    "Category",
+    "Origin",
+    "Bottle size",
+    "Alcohol by volume",
+    "ABV",
+    "Grape varieties",
+    "Kategori",
+    "Oprindelse",
+    "Indhold",
+    "Alkoholprocent",
+    "Druesorter",
+    "Opprinnelse",
+    "Innhold",
+    "Ursprung",
+    "Volym",
+    "Alkoholhalt",
+    "Druvsorter",
 }
 
 
@@ -575,7 +780,11 @@ def draw_pdf(slug: str, lang: str) -> Path:
     strings = product["translations"][lang]
     lang_cfg = LANG[lang]
     product_data = product_json(slug, lang)
-    sensory = product_data.get("additionalProperty", [])
+    sensory = [
+        item
+        for item in product_data.get("additionalProperty", [])
+        if item.get("name") not in TECHNICAL_PROPERTY_LABELS
+    ]
 
     final = OUT_DIR / f"cognac-esprit-organic-{slug}-fiche-degustation-{lang_cfg['filename_suffix']}.pdf"
     with tempfile.NamedTemporaryFile(suffix=".pdf", dir=TMP_DIR, delete=False) as temp:

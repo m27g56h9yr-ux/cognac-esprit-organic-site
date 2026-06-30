@@ -67,8 +67,20 @@ Europe, USA, Canada.
 - Transmission XO (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-no.pdf (PDF/UA)
 - Transmission XO (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-sv.pdf (PDF/UA)
 - Single Cask (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation.pdf (PDF/UA)
+- Single Cask (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-en.pdf (PDF/UA)
+- Single Cask (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-da.pdf (PDF/UA)
+- Single Cask (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-no.pdf (PDF/UA)
+- Single Cask (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-single-cask-fiche-degustation-sv.pdf (PDF/UA)
 - Pineau blanc (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation.pdf (PDF/UA)
+- Pineau blanc (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-en.pdf (PDF/UA)
+- Pineau blanc (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-da.pdf (PDF/UA)
+- Pineau blanc (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-no.pdf (PDF/UA)
+- Pineau blanc (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-sv.pdf (PDF/UA)
 - Pineau rouge (FR) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation.pdf (PDF/UA)
+- Pineau rouge (EN) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-en.pdf (PDF/UA)
+- Pineau rouge (DA) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-da.pdf (PDF/UA)
+- Pineau rouge (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-no.pdf (PDF/UA)
+- Pineau rouge (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-sv.pdf (PDF/UA)
 
 ## Récompenses documentées
 

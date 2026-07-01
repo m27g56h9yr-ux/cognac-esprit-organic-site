@@ -45,6 +45,13 @@ PRODUCTS = [
         "abv": "40 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
         "gtin13": "3322870010826",
+        "gtin_variants": [
+            {
+                "name": "Caisse Cognac Esprit Organic Fondation VS 70 cl",
+                "size": "caisse 700 ml",
+                "gtin13": "3322870011021",
+            },
+        ],
     },
     {
         "name": "Conviction VSOP",
@@ -61,8 +68,13 @@ PRODUCTS = [
         "volume_options": ["700 ml", "350 ml"],
         "abv": "40 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
-        "gtin13": "3322870010833",
+        "gtin13": "3322870010840",
         "gtin_variants": [
+            {
+                "name": "Caisse Cognac Esprit Organic Conviction VSOP 70 cl",
+                "size": "caisse 700 ml",
+                "gtin13": "3322870011038",
+            },
             {
                 "name": "Cognac Esprit Organic Conviction VSOP 35 cl",
                 "size": "350 ml",
@@ -89,7 +101,14 @@ PRODUCTS = [
         "volume": "700 ml",
         "abv": "40 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
-        "gtin13": "3322870010840",
+        "gtin13": "3322870010833",
+        "gtin_variants": [
+            {
+                "name": "Caisse Cognac Esprit Organic Cohesion Napoléon 70 cl",
+                "size": "caisse 700 ml",
+                "gtin13": "3322870011045",
+            },
+        ],
     },
     {
         "name": "Transmission XO",
@@ -107,6 +126,13 @@ PRODUCTS = [
         "abv": "40 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
         "gtin13": "3322870010857",
+        "gtin_variants": [
+            {
+                "name": "Caisse Cognac Esprit Organic Transmission XO 70 cl",
+                "size": "caisse 700 ml",
+                "gtin13": "3322870011052",
+            },
+        ],
     },
     {
         "name": "XXO",
@@ -124,6 +150,14 @@ PRODUCTS = [
         "volume": "700 ml",
         "abv": "43,5 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
+        "gtin13": "3322870011427",
+        "gtin_variants": [
+            {
+                "name": "Caisse Cognac Esprit Organic XXO 70 cl",
+                "size": "caisse 700 ml",
+                "gtin13": "3322870011434",
+            },
+        ],
     },
     {
         "name": "Single Cask",
@@ -141,6 +175,14 @@ PRODUCTS = [
         "volume": "700 ml",
         "abv": "51 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
+        "gtin13": "3322870011458",
+        "gtin_variants": [
+            {
+                "name": "Caisse Cognac Esprit Organic Single Cask n°1 70 cl",
+                "size": "caisse 700 ml",
+                "gtin13": "3322870011465",
+            },
+        ],
     },
     {
         "name": "Pineau blanc",
@@ -175,6 +217,14 @@ PRODUCTS = [
         "volume": "750 ml",
         "abv": "17,5 % vol",
         "grapes": "Merlot, Ugni Blanc",
+        "gtin13": "3322870011557",
+        "gtin_variants": [
+            {
+                "name": "Caisse Pineau Rouge des Charentes Esprit Organic 75 cl",
+                "size": "caisse 750 ml",
+                "gtin13": "3322870011564",
+            },
+        ],
     },
 ]
 
@@ -2023,6 +2073,10 @@ def gtin_volume_group(value):
     value = value or ""
     if "350 ml" in value or "35 cl" in value:
         return "350 ml"
+    if "700 ml" in value or "70 cl" in value:
+        return "700 ml"
+    if "750 ml" in value or "75 cl" in value:
+        return "750 ml"
     return value
 
 
@@ -2446,6 +2500,180 @@ def technical_product_facts_page_en():
 </body>
 </html>
 """
+
+
+def product_by_slug(slug):
+    return next((product for product in PRODUCTS if product["slug"] == slug), None)
+
+
+def product_gtin_property_values(product, variant_label="GTIN variant"):
+    values = []
+    if product.get("gtin13"):
+        values.append(property_value("GTIN", product["gtin13"]))
+    for variant in product.get("gtin_variants", []):
+        values.append(property_value(f"{variant_label} {variant['size']}", variant["gtin13"]))
+    return values
+
+
+def remove_gtin_properties(properties):
+    if not properties:
+        return []
+    if isinstance(properties, dict):
+        properties = [properties]
+    return [
+        prop
+        for prop in properties
+        if not str(prop.get("name", "")).strip().upper().startswith("GTIN")
+    ]
+
+
+def sync_product_schema_object(obj, product, parent_id):
+    if not isinstance(obj, dict) or obj.get("@type") != "Product":
+        return obj
+    obj["additionalProperty"] = remove_gtin_properties(obj.get("additionalProperty"))
+    obj["additionalProperty"].extend(product_gtin_property_values(product))
+    if not obj["additionalProperty"]:
+        obj.pop("additionalProperty", None)
+    if product.get("gtin13"):
+        obj["gtin13"] = product["gtin13"]
+    else:
+        obj.pop("gtin13", None)
+    variants = product_gtin_variants(product, parent_id)
+    if variants:
+        obj["hasVariant"] = variants
+    else:
+        obj.pop("hasVariant", None)
+    return obj
+
+
+def sync_product_json_ld(html, product, page_path):
+    script_re = re.compile(
+        r'(<script[^>]+type=["\']application/ld\+json["\'][^>]*>)([\s\S]*?)(</script>)',
+        re.IGNORECASE,
+    )
+
+    def replace(match):
+        raw = match.group(2)
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            return match.group(0)
+
+        changed = False
+        if product and isinstance(data, dict) and data.get("@type") == "Product":
+            parent_id = data.get("@id") or page_url(page_path) + "#product"
+            data = sync_product_schema_object(data, product, parent_id)
+            changed = True
+        elif isinstance(data, dict) and data.get("@type") == "ItemList":
+            for element in data.get("itemListElement", []):
+                item = element.get("item") if isinstance(element, dict) else None
+                if not isinstance(item, dict):
+                    continue
+                slug = item.get("url", "").split("/produits/")[-1].removesuffix(".html")
+                source = product_by_slug(slug)
+                if source:
+                    parent_id = item.get("@id") or item.get("url", page_url(page_path)) + "#product"
+                    sync_product_schema_object(item, source, parent_id)
+                    changed = True
+
+        if not changed:
+            return match.group(0)
+        return match.group(1) + json.dumps(data, ensure_ascii=False, separators=(",", ":")) + match.group(3)
+
+    return script_re.sub(replace, html)
+
+
+def localized_gtin_detail_rows(product):
+    rows = []
+    if product.get("gtin13"):
+        rows.append(
+            f"""
+        <div data-gtin-for-volume="{escape(product["volume"])}">
+          <dt>GTIN</dt>
+          <dd>{escape(product["gtin13"])}</dd>
+        </div>"""
+        )
+    for variant in product.get("gtin_variants", []):
+        group = gtin_volume_group(variant.get("size", ""))
+        hidden = " hidden" if group != product["volume"] else ""
+        rows.append(
+            f"""
+        <div data-gtin-for-volume="{escape(group)}"{hidden}>
+          <dt>GTIN {escape(variant["size"])} variant</dt>
+          <dd>{escape(variant["gtin13"])}</dd>
+        </div>"""
+        )
+    return "".join(rows)
+
+
+def sync_product_detail_rows(html, product):
+    details_re = re.compile(
+        r'(<details class="product-details-discreet"[\s\S]*?<dl>)([\s\S]*?)(</dl>)',
+        re.IGNORECASE,
+    )
+    gtin_row_re = re.compile(
+        r'\s*<div(?:\s+[^>]*)?>\s*<dt>GTIN[\s\S]*?</div>',
+        re.IGNORECASE,
+    )
+
+    def replace(match):
+        rows = gtin_row_re.sub("", match.group(2)).rstrip()
+        return match.group(1) + rows + localized_gtin_detail_rows(product) + "\n        " + match.group(3)
+
+    return details_re.sub(replace, html, count=1)
+
+
+def localized_technical_gtin_rows(product):
+    rows = []
+    if product.get("gtin13"):
+        rows.append(f'<tr><th scope="row">GTIN</th><td>{escape(product["gtin13"])}</td></tr>')
+    for variant in product.get("gtin_variants", []):
+        rows.append(
+            f'<tr><th scope="row">GTIN variant {escape(variant["size"])}</th>'
+            f'<td>{escape(variant["gtin13"])}</td></tr>'
+        )
+    return "".join(rows)
+
+
+def sync_localized_technical_tables(html):
+    for product in PRODUCTS:
+        article_re = re.compile(
+            rf'(<article class="technical-product-card" id="{re.escape(product["slug"])}"[\s\S]*?<tbody>)([\s\S]*?)(</tbody>)',
+            re.IGNORECASE,
+        )
+        gtin_row_re = re.compile(
+            r'\s*<tr><th scope="row">GTIN[\s\S]*?</tr>',
+            re.IGNORECASE,
+        )
+
+        def replace(match):
+            rows = gtin_row_re.sub("", match.group(2)).rstrip()
+            return match.group(1) + rows + localized_technical_gtin_rows(product) + match.group(3)
+
+        html = article_re.sub(replace, html, count=1)
+    return html
+
+
+def sync_localized_product_data():
+    localized_languages = ["en", "da", "no", "sv"]
+    for lang in localized_languages:
+        for product in PRODUCTS:
+            path = ROOT / lang / "produits" / f"{product['slug']}.html"
+            if not path.exists():
+                continue
+            rel_path = f"{lang}/produits/{product['slug']}.html"
+            html = path.read_text(encoding="utf-8")
+            html = sync_product_json_ld(html, product, rel_path)
+            html = sync_product_detail_rows(html, product)
+            path.write_text(html, encoding="utf-8")
+
+        technical_path = ROOT / lang / "fiches-techniques-produits.html"
+        if technical_path.exists() and lang != "en":
+            rel_path = f"{lang}/fiches-techniques-produits.html"
+            html = technical_path.read_text(encoding="utf-8")
+            html = sync_product_json_ld(html, None, rel_path)
+            html = sync_localized_technical_tables(html)
+            technical_path.write_text(html, encoding="utf-8")
 
 
 def legal_page():
@@ -4961,6 +5189,7 @@ def main():
     write("equipe/index.html", team_page("equipe/index.html"))
     write("equipe.html", redirect_page("equipe.html", "L’équipe", "equipe/"))
     write_static_files()
+    sync_localized_product_data()
 
 
 if __name__ == "__main__":

@@ -1980,13 +1980,15 @@ def product_detail_value(product, key, lang="fr"):
 
 def product_detail_rows(product, lang="fr"):
     labels = PRODUCT_DETAILS_I18N[lang]
-    return [
+    rows = [
         (labels["category"], product_detail_value(product, "category", lang)),
         (labels["origin"], product_detail_value(product, "origin", lang)),
         (labels["volume"], product_detail_value(product, "volume", lang)),
         (labels["abv"], product_detail_value(product, "abv", lang)),
         (labels["grapes"], product_detail_value(product, "grapes", lang)),
     ]
+    rows.extend(gtin_variant_rows(product, lang))
+    return rows
 
 
 def product_detail_schema_rows(product, lang="fr"):

@@ -1273,3 +1273,61 @@ document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
     }
   });
 });
+
+function closeVolumeSelector(selector) {
+  const toggle = selector.querySelector("[data-volume-toggle]");
+  const options = selector.querySelector("[data-volume-options]");
+  if (options) options.hidden = true;
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
+}
+
+function selectProductVolume(selector, volume) {
+  const selected = selector.querySelector("[data-selected-volume]");
+  if (selected) selected.textContent = volume;
+  selector.querySelectorAll("[data-volume-option]").forEach((option) => {
+    option.setAttribute("aria-selected", String(option.dataset.volumeOption === volume));
+  });
+  const details = selector.closest(".product-details-discreet");
+  if (details) {
+    details.querySelectorAll("[data-gtin-for-volume]").forEach((row) => {
+      row.hidden = row.dataset.gtinForVolume !== volume;
+    });
+  }
+}
+
+document.querySelectorAll("[data-volume-selector]").forEach((selector) => {
+  const toggle = selector.querySelector("[data-volume-toggle]");
+  const options = selector.querySelector("[data-volume-options]");
+  if (!toggle || !options) return;
+
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const willOpen = options.hidden;
+    document.querySelectorAll("[data-volume-selector]").forEach((other) => {
+      if (other !== selector) closeVolumeSelector(other);
+    });
+    options.hidden = !willOpen;
+    toggle.setAttribute("aria-expanded", String(willOpen));
+  });
+
+  selector.querySelectorAll("[data-volume-option]").forEach((option) => {
+    option.addEventListener("click", (event) => {
+      event.stopPropagation();
+      selectProductVolume(selector, option.dataset.volumeOption || option.textContent.trim());
+      closeVolumeSelector(selector);
+      toggle.focus();
+    });
+  });
+
+  const initial = selector.querySelector('[data-volume-option][aria-selected="true"]');
+  if (initial) selectProductVolume(selector, initial.dataset.volumeOption || initial.textContent.trim());
+});
+
+document.addEventListener("click", () => {
+  document.querySelectorAll("[data-volume-selector]").forEach(closeVolumeSelector);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  document.querySelectorAll("[data-volume-selector]").forEach(closeVolumeSelector);
+});

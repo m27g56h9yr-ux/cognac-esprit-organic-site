@@ -6,6 +6,8 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
+CSS_VERSION = "20260701-vsop-volume01"
+JS_VERSION = "20260701-vsop-volume01"
 
 CONTACT = {
     "email": "Cognac@mdpierre.com",
@@ -56,6 +58,7 @@ PRODUCTS = [
         "menu": "assets/img/product-menu/vsop.png",
         "tone": "#5e3d23",
         "volume": "700 ml",
+        "volume_options": ["700 ml", "350 ml"],
         "abv": "40 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
         "gtin13": "3322870010833",
@@ -852,7 +855,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260701-detail01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v={CSS_VERSION}">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -884,7 +887,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
       </div>
     </div>
   </footer>
-  <script src="{prefix}assets/js/main.js?v=20260629-faq01"></script>
+  <script src="{prefix}assets/js/main.js?v={JS_VERSION}"></script>
 </body>
 </html>
 """
@@ -906,7 +909,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260701-detail01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v={CSS_VERSION}">
 </head>
 <body>
   <main class="redirect-page">
@@ -2012,6 +2015,79 @@ def product_detail_rows(product, lang="fr"):
     return rows
 
 
+def product_has_volume_selector(product):
+    return len(product.get("volume_options", [])) > 1
+
+
+def gtin_volume_group(value):
+    value = value or ""
+    if "350 ml" in value or "35 cl" in value:
+        return "350 ml"
+    return value
+
+
+def volume_selector_html(product):
+    default_volume = product["volume"]
+    options = "".join(
+        f'<button type="button" role="option" data-volume-option="{escape(option)}" aria-selected="{str(option == default_volume).lower()}">{escape(option)}</button>'
+        for option in product.get("volume_options", [])
+    )
+    return f"""
+            <div class="product-volume-select" data-volume-selector>
+              <button type="button" class="product-volume-select-toggle" data-volume-toggle aria-haspopup="listbox" aria-expanded="false" aria-label="Choisir la contenance">
+                <span data-selected-volume>{escape(default_volume)}</span>
+              </button>
+              <div class="product-volume-options" data-volume-options role="listbox" aria-label="Contenances disponibles" hidden>
+                {options}
+              </div>
+            </div>"""
+
+
+def product_detail_row_html(fr_label, en_label, fr_value="", en_value="", attrs="", custom_value_html=""):
+    value_html = custom_value_html or f"<span data-fr>{escape(fr_value)}</span><span data-en>{escape(en_value)}</span>"
+    return f"""
+        <div{attrs}>
+          <dt><span data-fr>{escape(fr_label)}</span><span data-en>{escape(en_label)}</span></dt>
+          <dd>{value_html}</dd>
+        </div>"""
+
+
+def product_detail_rows_html(product):
+    fr_labels = PRODUCT_DETAILS_I18N["fr"]
+    en_labels = PRODUCT_DETAILS_I18N["en"]
+    rows = []
+    for key in ["category", "origin", "volume", "abv", "grapes"]:
+        custom_value = ""
+        if key == "volume" and product_has_volume_selector(product):
+            custom_value = volume_selector_html(product)
+        rows.append(product_detail_row_html(
+            fr_labels[key],
+            en_labels[key],
+            product_detail_value(product, key, "fr"),
+            product_detail_value(product, key, "en"),
+            custom_value_html=custom_value,
+        ))
+    if product.get("gtin13"):
+        rows.append(product_detail_row_html(
+            "GTIN",
+            "GTIN",
+            product["gtin13"],
+            product["gtin13"],
+            f' data-gtin-for-volume="{escape(product["volume"])}"',
+        ))
+    for variant in product.get("gtin_variants", []):
+        group = gtin_volume_group(variant.get("size", ""))
+        hidden = " hidden" if group != product["volume"] else ""
+        rows.append(product_detail_row_html(
+            f"GTIN variante {variant['size']}",
+            f"GTIN {variant['size']} variant",
+            variant["gtin13"],
+            variant["gtin13"],
+            f' data-gtin-for-volume="{escape(group)}"{hidden}',
+        ))
+    return "".join(rows)
+
+
 def product_detail_schema_rows(product, lang="fr"):
     return [
         (label, value)
@@ -2022,17 +2098,7 @@ def product_detail_schema_rows(product, lang="fr"):
 
 def product_details_block(product):
     extra = PRODUCT_EXTRAS.get(product["slug"], {})
-    rows = "".join(
-        f"""
-        <div>
-          <dt><span data-fr>{escape(fr_label)}</span><span data-en>{escape(en_label)}</span></dt>
-          <dd><span data-fr>{escape(fr_value)}</span><span data-en>{escape(en_value)}</span></dd>
-        </div>"""
-        for (fr_label, fr_value), (en_label, en_value) in zip(
-            product_detail_rows(product, "fr"),
-            product_detail_rows(product, "en"),
-        )
-    )
+    rows = product_detail_rows_html(product)
     nutrition = NUTRITION_VALUES.get(product["slug"])
     nutrition_placeholder = extra.get("nutrition_placeholder", "")
     if nutrition:
@@ -3800,6 +3866,71 @@ p { margin: 18px 0 0; }
   color: #fff;
   font-weight: 300;
 }
+.product-volume-select {
+  position: relative;
+  display: inline-block;
+}
+.product-volume-select-toggle {
+  min-height: 0;
+  padding: 0 20px 2px 0;
+  border: 0;
+  border-bottom: 1px solid rgba(255,255,255,.56);
+  border-radius: 0;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.product-volume-select-toggle::after {
+  content: "";
+  position: absolute;
+  right: 1px;
+  top: 50%;
+  width: 7px;
+  height: 7px;
+  border-right: 1px solid rgba(255,255,255,.8);
+  border-bottom: 1px solid rgba(255,255,255,.8);
+  transform: translateY(-65%) rotate(45deg);
+}
+.product-volume-options {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  z-index: 6;
+  min-width: 112px;
+  padding: 6px;
+  border: 1px solid rgba(255,255,255,.28);
+  background: rgba(40, 25, 14, .96);
+  box-shadow: 0 18px 34px rgba(0,0,0,.22);
+}
+.product-volume-options[hidden],
+.product-details-discreet [hidden] {
+  display: none !important;
+}
+.product-volume-options button {
+  width: 100%;
+  min-height: 0;
+  display: block;
+  padding: 7px 9px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: rgba(255,255,255,.82);
+  font: inherit;
+  font-weight: 500;
+  text-align: left;
+  cursor: pointer;
+}
+.product-volume-options button:hover,
+.product-volume-options button:focus-visible,
+.product-volume-options button[aria-selected="true"] {
+  background: rgba(255,255,255,.12);
+  color: #fff;
+}
+.product-volume-options button[aria-selected="true"] {
+  font-weight: 800;
+}
 .product-details-discreet .nutrition-table-wrap {
   border-color: rgba(255,255,255,.28);
   background: rgba(255,255,255,.94);
@@ -4505,6 +4636,64 @@ document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
       main.src = next;
     }
   });
+});
+
+function closeVolumeSelector(selector) {
+  const toggle = selector.querySelector("[data-volume-toggle]");
+  const options = selector.querySelector("[data-volume-options]");
+  if (options) options.hidden = true;
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
+}
+
+function selectProductVolume(selector, volume) {
+  const selected = selector.querySelector("[data-selected-volume]");
+  if (selected) selected.textContent = volume;
+  selector.querySelectorAll("[data-volume-option]").forEach((option) => {
+    option.setAttribute("aria-selected", String(option.dataset.volumeOption === volume));
+  });
+  const details = selector.closest(".product-details-discreet");
+  if (details) {
+    details.querySelectorAll("[data-gtin-for-volume]").forEach((row) => {
+      row.hidden = row.dataset.gtinForVolume !== volume;
+    });
+  }
+}
+
+document.querySelectorAll("[data-volume-selector]").forEach((selector) => {
+  const toggle = selector.querySelector("[data-volume-toggle]");
+  const options = selector.querySelector("[data-volume-options]");
+  if (!toggle || !options) return;
+
+  toggle.addEventListener("click", (event) => {
+    event.stopPropagation();
+    const willOpen = options.hidden;
+    document.querySelectorAll("[data-volume-selector]").forEach((other) => {
+      if (other !== selector) closeVolumeSelector(other);
+    });
+    options.hidden = !willOpen;
+    toggle.setAttribute("aria-expanded", String(willOpen));
+  });
+
+  selector.querySelectorAll("[data-volume-option]").forEach((option) => {
+    option.addEventListener("click", (event) => {
+      event.stopPropagation();
+      selectProductVolume(selector, option.dataset.volumeOption || option.textContent.trim());
+      closeVolumeSelector(selector);
+      toggle.focus();
+    });
+  });
+
+  const initial = selector.querySelector('[data-volume-option][aria-selected="true"]');
+  if (initial) selectProductVolume(selector, initial.dataset.volumeOption || initial.textContent.trim());
+});
+
+document.addEventListener("click", () => {
+  document.querySelectorAll("[data-volume-selector]").forEach(closeVolumeSelector);
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key !== "Escape") return;
+  document.querySelectorAll("[data-volume-selector]").forEach(closeVolumeSelector);
 });
 
 """)

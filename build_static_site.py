@@ -200,6 +200,7 @@ PRODUCTS = [
         "volume": "750 ml",
         "abv": "17,5 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
+        "gtin13": "3322870002227",
     },
     {
         "name": "Pineau rouge",

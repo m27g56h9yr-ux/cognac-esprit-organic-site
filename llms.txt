@@ -82,11 +82,17 @@ Europe, USA, Canada.
 - Pineau rouge (NO) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-no.pdf (PDF/UA)
 - Pineau rouge (SV) : https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-rouge-fiche-degustation-sv.pdf (PDF/UA)
 
+## Valeurs nutritionnelles
+
+- Page de synthèse : /valeurs-nutritionnelles.html
+- Source affichée : CodeOnline GS1 France, données produits Cognac Esprit Organic.
+
 ## Récompenses documentées
 
-- Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /fiches-techniques-produits.html.
-- Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /fiches-techniques-produits.html.
-- Pineau blanc : médaille d'argent au Concours Mondial de Bruxelles 2025 pour Pineau des Charentes Esprit Organic 2011, source liée depuis /fiches-techniques-produits.html.
+- Page de synthèse : /recompenses.html
+- Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /recompenses.html.
+- Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /recompenses.html.
+- Pineau blanc : médaille d'argent au Concours Mondial de Bruxelles 2025 pour Pineau des Charentes Esprit Organic 2011, source liée depuis /recompenses.html.
 
 ## Pages principales
 
@@ -103,6 +109,7 @@ Europe, USA, Canada.
 - L’équipe : /equipe/
 - Visiter : /visiter.html
 - FAQ Cognac Esprit Organic : /faq.html
+- Récompenses Cognac Esprit Organic : /recompenses.html
 - Organic Cognac FAQ : /en/faq.html
 - FAQ om økologisk Cognac : /da/faq.html
 - FAQ om økologisk Cognac : /no/faq.html

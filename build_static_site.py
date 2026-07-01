@@ -47,8 +47,8 @@ PRODUCTS = [
         "gtin13": "3322870010826",
         "gtin_variants": [
             {
-                "name": "Caisse Cognac Esprit Organic Fondation VS 70 cl",
-                "size": "caisse 700 ml",
+                "name": "Caisse Cognac Esprit Organic Fondation VS 6 x 70 cl",
+                "size": "6 x 700 ml",
                 "gtin13": "3322870011021",
             },
         ],
@@ -71,8 +71,8 @@ PRODUCTS = [
         "gtin13": "3322870010840",
         "gtin_variants": [
             {
-                "name": "Caisse Cognac Esprit Organic Conviction VSOP 70 cl",
-                "size": "caisse 700 ml",
+                "name": "Caisse Cognac Esprit Organic Conviction VSOP 6 x 70 cl",
+                "size": "6 x 700 ml",
                 "gtin13": "3322870011038",
             },
             {
@@ -104,8 +104,8 @@ PRODUCTS = [
         "gtin13": "3322870010833",
         "gtin_variants": [
             {
-                "name": "Caisse Cognac Esprit Organic Cohesion Napoléon 70 cl",
-                "size": "caisse 700 ml",
+                "name": "Caisse Cognac Esprit Organic Cohesion Napoléon 6 x 70 cl",
+                "size": "6 x 700 ml",
                 "gtin13": "3322870011045",
             },
         ],
@@ -128,8 +128,8 @@ PRODUCTS = [
         "gtin13": "3322870010857",
         "gtin_variants": [
             {
-                "name": "Caisse Cognac Esprit Organic Transmission XO 70 cl",
-                "size": "caisse 700 ml",
+                "name": "Caisse Cognac Esprit Organic Transmission XO 6 x 70 cl",
+                "size": "6 x 700 ml",
                 "gtin13": "3322870011052",
             },
         ],
@@ -153,8 +153,8 @@ PRODUCTS = [
         "gtin13": "3322870011427",
         "gtin_variants": [
             {
-                "name": "Caisse Cognac Esprit Organic XXO 70 cl",
-                "size": "caisse 700 ml",
+                "name": "Caisse Cognac Esprit Organic XXO 6 x 70 cl",
+                "size": "6 x 700 ml",
                 "gtin13": "3322870011434",
             },
         ],
@@ -178,8 +178,8 @@ PRODUCTS = [
         "gtin13": "3322870011458",
         "gtin_variants": [
             {
-                "name": "Caisse Cognac Esprit Organic Single Cask n°1 70 cl",
-                "size": "caisse 700 ml",
+                "name": "Caisse Cognac Esprit Organic Single Cask n°1 6 x 70 cl",
+                "size": "6 x 700 ml",
                 "gtin13": "3322870011465",
             },
         ],
@@ -220,8 +220,8 @@ PRODUCTS = [
         "gtin13": "3322870011557",
         "gtin_variants": [
             {
-                "name": "Caisse Pineau Rouge des Charentes Esprit Organic 75 cl",
-                "size": "caisse 750 ml",
+                "name": "Caisse Pineau Rouge des Charentes Esprit Organic 6 x 75 cl",
+                "size": "6 x 750 ml",
                 "gtin13": "3322870011564",
             },
         ],
@@ -627,6 +627,9 @@ PINEAU_ROUGE_NUTRITION_ROWS = [
     ("salt", "Sel", "Salt", "0 g", "0 g"),
 ]
 
+NUTRITION_SOURCE_FR = "CodeOnline GS1 France, données produits Cognac Esprit Organic."
+NUTRITION_SOURCE_EN = "CodeOnline GS1 France, Cognac Esprit Organic product data."
+
 NUTRITION_VALUES = {
     "fondation-vs": {
         "rows": [(key, fr, en, "279 kJ / 68 kcal" if key == "energy" else ("9,5 g" if key == "alcohol" else per_30), "931 kJ / 225 kcal" if key == "energy" else ("31,6 g" if key == "alcohol" else per_100)) for key, fr, en, per_30, per_100 in COGNAC_NUTRITION_ROWS],
@@ -751,6 +754,7 @@ def nutrition_table(slug: str, product_name: str) -> str:
         <div class="nutrition-meta">
           <p><strong>{bilingual("Ingrédients", "Ingredients")}</strong><span>{bilingual(nutrition["ingredients_fr"], nutrition["ingredients_en"])}</span></p>
           <p><strong>{bilingual("Mention", "Statement")}</strong><span>{bilingual(nutrition["statement_fr"], nutrition["statement_en"])}</span></p>
+          <p><strong>{bilingual("Source", "Source")}</strong><span>{bilingual(NUTRITION_SOURCE_FR, NUTRITION_SOURCE_EN)}</span></p>
         </div>
 """
 
@@ -1866,23 +1870,221 @@ def simple_page(path, title, desc, h1, intro_fr, intro_en, body):
     return layout(path, title, desc, h1, intro_fr, intro_en, body)
 
 
+FAQ_REWARDS_ID = "faq-q43"
+
+FAQ_GROUPS_FR = [
+    ("faq-comprendre", "Comprendre le cognac", [
+        ("faq-q1", "Qu’est-ce que le cognac ?", "Le cognac est une eau-de-vie de vin produite dans l’aire d’appellation Cognac. Il est élaboré à partir de vins blancs, distillé puis élevé en fûts de chêne avant l’assemblage."),
+        ("faq-q2", "Le cognac est-il un whisky ou un brandy ?", "Le cognac n’est pas un whisky : il vient du raisin et non de céréales maltées. Il appartient à la famille des brandies, mais il répond aux règles spécifiques de l’appellation Cognac."),
+        ("faq-q3", "D’où vient Cognac Esprit Organic ?", "Cognac Esprit Organic est situé à Triac-Lautrait, en Charente, à l’adresse 30 Rue d’Angoulême, 16200 Triac-Lautrait, France."),
+        ("faq-q4", "Qui a inventé le cognac ?", "Le cognac n’a pas un inventeur unique. Il est né progressivement dans la région de Cognac, avec la distillation des vins charentais puis l’élevage en fûts de chêne."),
+        ("faq-q5", "Comment fabrique-t-on un cognac ?", "Un cognac est issu d’un vin blanc distillé, puis d’un vieillissement en fût de chêne. Les eaux-de-vie sont ensuite sélectionnées et assemblées pour obtenir le style recherché."),
+        ("faq-q6", "Quels cépages sont utilisés par Cognac Esprit Organic ?", "Les fiches produits indiquent Ugni Blanc, Colombard et Folle Blanche pour la gamme de cognacs. Les Pineaux suivent leurs propres assemblages, détaillés dans les fiches produits."),
+    ]),
+    ("faq-bio", "Production et démarche biologique", [
+        ("faq-q7", "Que signifie “agriculture biologique” pour Cognac Esprit Organic ?", "La démarche biologique couvre les informations visibles sur le site, notamment les opérateurs Domaine de la Grande Versenne et Maison des Pierres SARL, avec une certification Agriculture biologique Europe publiée par Ecocert."),
+        ("faq-q8", "Qui certifie la démarche biologique ?", "Les preuves publiques visibles sur le site renvoient à Ecocert pour le Domaine de la Grande Versenne et Maison des Pierres SARL, ainsi qu’à l’Annuaire Bio pour le domaine."),
+        ("faq-q9", "Qu’est-ce que la HVE ?", "HVE signifie Haute Valeur Environnementale. C’est une certification française qui reconnaît des pratiques agricoles attentives à la biodiversité, à l’eau, aux sols et à la limitation des pressions sur l’environnement. Pour Cognac Esprit Organic, la preuve environnementale visible sur ce site reste la démarche biologique certifiée par Ecocert."),
+        ("faq-q10", "Qu’est-ce que la CEC ?", "CEC signifie Certification Environnementale Cognac. C’est une démarche environnementale propre à la filière Cognac, adaptée au vignoble charentais et à la production d’eaux-de-vie. Elle ne doit pas être confondue avec la certification Agriculture biologique Europe publiée pour Cognac Esprit Organic."),
+        ("faq-q11", "Pourquoi le cognac vieillit-il en fût de chêne ?", "Le vieillissement en fût de chêne apporte de la couleur, de la structure et de la complexité aromatique. C’est une étape essentielle de l’identité d’un cognac."),
+        ("faq-q12", "Pourquoi assembler plusieurs eaux-de-vie ?", "L’assemblage permet de construire un profil régulier et cohérent. Le maître de chai choisit des eaux-de-vie complémentaires selon l’âge, le style et l’équilibre recherché."),
+    ]),
+    ("faq-produits", "Choisir un produit", [
+        ("faq-q13", "Quels produits Cognac Esprit Organic sont disponibles ?", "La gamme visible sur le site comprend Fondation VS, Conviction VSOP, Cohesion Napoléon, Transmission XO, XXO, Single Cask, Pineau blanc et Pineau rouge."),
+        ("faq-q14", "Quelle bouteille choisir pour découvrir la gamme ?", "Pour une première découverte, le choix dépend de l’usage : VS ou VSOP pour une approche plus vive, Napoléon ou XO pour davantage de rondeur, XXO ou Single Cask pour une expression plus rare."),
+        ("faq-q15", "Que signifient VS, VSOP, Napoléon, XO et XXO ?", "Ces mentions indiquent l’âge minimal des eaux-de-vie en fût : VS au moins 2 ans, VSOP au moins 4 ans, Napoléon au moins 6 ans, XO au moins 10 ans et XXO au moins 14 ans."),
+        ("faq-q16", "Quelle est la différence entre cognac et Pineau des Charentes ?", "Le cognac est une eau-de-vie de vin vieillie en fût. Le Pineau des Charentes est un vin de liqueur obtenu par assemblage de moût de raisin et de cognac."),
+        ("faq-q17", "Où trouver les détails techniques de chaque produit ?", "Les données produits, les contenances, les degrés d’alcool, les cépages, les récompenses documentées et les liens de fiches PDF sont regroupés dans la page “Données produits et documents professionnels”."),
+        (FAQ_REWARDS_ID, "Quelles sont les médailles et récompenses gagnées par Esprit Organic ?", "Consulter la page Récompenses."),
+        ("faq-q18", "Pourquoi un produit peut-il être indisponible ?", "La disponibilité peut varier selon les lots, les marchés et les réseaux de distribution. Le plus fiable est de contacter la maison pour une demande précise."),
+        ("faq-q19", "Comment prononcer Cognac Esprit Organic ?", "“Cognac” se prononce comme l’appellation française. “Esprit Organic” associe un mot français et le terme anglais Organic, conservé dans le nom de marque."),
+    ]),
+    ("faq-service", "Service, conservation et cocktails", [
+        ("faq-q20", "Comment servir un cognac pur ?", "Un cognac peut être servi pur dans un verre adapté, à température de cave ou de pièce modérée. L’objectif est de laisser les arômes s’ouvrir progressivement."),
+        ("faq-q21", "Comment conserver une bouteille de cognac ?", "Une bouteille de cognac se conserve debout, à l’abri de la lumière, de la chaleur et des fortes variations de température. Après ouverture, il faut bien refermer la bouteille."),
+        ("faq-q22", "Le cognac peut-il se périmer ?", "Le cognac ne vieillit plus en bouteille comme il le fait en fût. Une bouteille bien conservée reste stable, mais une longue ouverture peut modifier progressivement l’expression aromatique."),
+        ("faq-q23", "Faut-il mettre le cognac au réfrigérateur ?", "Le réfrigérateur n’est pas nécessaire pour un service classique. Une température trop froide peut réduire la perception des arômes."),
+        ("faq-q24", "Peut-on servir le cognac sur glace ?", "Oui, selon le style recherché. La glace peut adoucir la perception alcoolique, mais elle dilue aussi progressivement le cognac."),
+        ("faq-q25", "Peut-on utiliser Cognac Esprit Organic en cocktail ?", "Oui. Le site propose une page Cocktails pour inspirer des services simples autour de Cognac Esprit Organic, sans remplacer les fiches techniques des produits."),
+        ("faq-q26", "Quels mélanges simples fonctionnent avec le cognac ?", "Selon le style du cognac, on peut l’associer à des ingrédients frais, toniques ou fruités. Les recettes précises doivent être vérifiées sur la page Cocktails du site."),
+        ("faq-q27", "Quel cocktail conseiller pour débuter ?", "Pour débuter, choisissez une recette courte et lisible, avec peu d’ingrédients, afin de garder le cognac au centre du verre."),
+        ("faq-q28", "Avec quoi accorder un cognac ?", "Les accords dépendent du profil du cognac : fruit, épices, bois, rondeur ou puissance. Les fiches produits et les conseils de la maison restent les meilleures références."),
+        ("faq-q29", "Le cognac contient-il du gluten ou des allergènes ?", "Pour toute contrainte alimentaire ou allergène, il faut consulter les fiches produits disponibles et contacter la maison. La FAQ ne remplace pas une vérification réglementaire ou médicale."),
+        ("faq-q30", "Quelles informations nutritionnelles faut-il vérifier ?", "Le site dispose d’une page de valeurs nutritionnelles par produit. Elle doit être consultée pour les informations quantitatives disponibles."),
+        ("faq-q31", "Les produits sont-ils végétaliens, casher ou certifiés autrement ?", "Les pages visibles documentent la démarche biologique et les preuves Ecocert. Aucune autre certification de type casher ou végétalien ne doit être déduite sans document officiel fourni par la maison."),
+    ]),
+    ("faq-visite", "Visite, achat et contact", [
+        ("faq-q32", "Peut-on visiter Cognac Esprit Organic à Triac-Lautrait ?", "Oui, le site présente une page de visite pour accueillir les personnes intéressées par la maison et son territoire."),
+        ("faq-q33", "Comment réserver une visite ?", "Le plus simple est de contacter la maison par e-mail ou par téléphone avant de venir, afin de confirmer les disponibilités."),
+        ("faq-q34", "Faut-il réserver à l’avance ?", "Oui, il est préférable de réserver à l’avance, surtout pour un groupe, afin que l’accueil soit confirmé et organisé."),
+        ("faq-q35", "Où se situe la maison ?", "La maison est située au 30 Rue d’Angoulême, 16200 Triac-Lautrait, France."),
+        ("faq-q36", "Quels sont les jours et horaires de visite ?", "Les informations visibles indiquent des visites du lundi au vendredi, 10h-12h ou 14h-17h, d’une durée d’environ 1 heure, avec un maximum de 10 personnes."),
+        ("faq-q37", "Où acheter ou retirer une bouteille ?", "Pour une demande d’achat, de disponibilité ou de retrait, il faut contacter Cognac Esprit Organic afin d’obtenir l’information adaptée au produit et au pays concernés."),
+        ("faq-q38", "Comment contacter Cognac Esprit Organic ?", "La maison est joignable par e-mail à Cognac@mdpierre.com et par téléphone au +33 5 45 35 88 10."),
+        ("faq-q39", "Que fournir pour une demande professionnelle ?", "Pour une demande caviste, importateur ou distributeur, indiquez le pays, le type d’activité, les produits souhaités, les volumes envisagés et vos coordonnées professionnelles."),
+        ("faq-q40", "La maison estime-t-elle les anciennes bouteilles ?", "Pour une ancienne bouteille, contactez la maison avec des photos nettes de la bouteille, de l’étiquette, de la capsule et du niveau. La FAQ ne donne pas d’estimation de valeur."),
+        ("faq-q41", "Quels documents existent pour les professionnels ?", "Le site met à disposition des fiches produits, des données techniques et des fiches PDF de dégustation lorsque celles-ci sont publiées."),
+        ("faq-q42", "Où suivre les actualités de la maison ?", "Le site indique le compte Instagram officiel Cognac Esprit Organic dans le pied de page, ainsi que les coordonnées directes de la maison."),
+    ]),
+]
+
+
+def faq_question_answer_html(item_id, answer):
+    if item_id == FAQ_REWARDS_ID:
+        return 'Consulter la <a href="recompenses.html">page Récompenses</a>.'
+    return escape(answer)
+
+
 def faq_page():
     questions = [
-        ("Quels produits Cognac Esprit Organic sont disponibles ?", "Les produits disponibles aujourd’hui sont VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge."),
-        ("Quels marchés export sont visés ?", "La formulation validée est : Europe, USA, Canada."),
-        ("Où se situe Cognac Esprit Organic ?", CONTACT["address"]),
-        ("Quels sont les horaires de visite ?", "Les visites sont possibles lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes."),
+        (item_id, question, answer)
+        for _, _, group_questions in FAQ_GROUPS_FR
+        for item_id, question, answer in group_questions
     ]
     faq_schema = {
         "@context": "https://schema.org",
         "@type": "FAQPage",
         "mainEntity": [
-            {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
-            for q, a in questions
+            {
+                "@type": "Question",
+                "name": question,
+                "acceptedAnswer": {"@type": "Answer", "text": answer},
+                "@id": page_url("faq.html") + f"#{item_id}",
+            }
+            for item_id, question, answer in questions
         ],
+        "@id": page_url("faq.html") + "#faq",
     }
-    items = "".join(f'<article class="faq-item"><h2>{escape(q)}</h2><p>{escape(a)}</p></article>' for q, a in questions)
-    return layout("faq.html", "FAQ | Cognac Esprit Organic", "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export et les visites.", "FAQ Cognac Esprit Organic", "Questions utiles pour les visiteurs et partenaires.", "Useful questions for visitors and partners.", section(items), schemas=[faq_schema])
+    aside_links = "".join(
+        f'<a href="#{escape(group_id)}">{escape(group_title)}</a>'
+        for group_id, group_title, _ in FAQ_GROUPS_FR
+    )
+    groups_html = []
+    for group_id, group_title, group_questions in FAQ_GROUPS_FR:
+        question_items = []
+        for item_id, question, answer in group_questions:
+            open_attr = " open" if item_id == "faq-q1" else ""
+            question_items.append(
+                f'<details class="faq-item" id="{escape(item_id)}"{open_attr}>'
+                f'<summary><h3>{escape(question)}</h3><span class="faq-toggle" aria-hidden="true"></span></summary>'
+                f'<p>{faq_question_answer_html(item_id, answer)}</p></details>'
+            )
+        groups_html.append(
+            f'<section class="faq-group" id="{escape(group_id)}">'
+            f'<h2 class="faq-group-title">{escape(group_title)}</h2>'
+            f'<div class="faq-list">{"".join(question_items)}</div></section>'
+        )
+    body = f"""
+<section class="faq-overview">
+  <div class="section-inner faq-layout">
+    <aside class="faq-aside" aria-label="Repères de la FAQ">
+      <nav aria-label="Thèmes de la FAQ">{aside_links}</nav>
+    </aside>
+    <div>
+      {''.join(groups_html)}
+      <div class="faq-related" aria-label="Pages utiles"><a href="produits/transmission-xo.html">Découvrir la gamme</a><a href="agriculture-biologique.html">Agriculture biologique</a><a href="fiches-techniques-produits.html">Fiches produits</a><a href="visiter.html">Visiter</a><a href="contact.html">Contact</a></div>
+    </div>
+  </div>
+</section>
+"""
+    return layout(
+        "faq.html",
+        "FAQ | Cognac Esprit Organic",
+        "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export, les récompenses, les visites et les informations utiles.",
+        "FAQ Cognac Esprit Organic",
+        "Réponses factuelles sur la maison, la gamme biologique, les visites et les informations utiles aux professionnels.",
+        "Factual answers about the house, the organic range, visits and useful information for professionals.",
+        body,
+        schemas=[faq_schema],
+        image="assets/img/products/gamme-esprit-organic.jpg",
+        page_class="faq-page",
+    )
+
+
+def rewards_item_list():
+    item_list = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "name": "Récompenses documentées Cognac Esprit Organic",
+        "itemListElement": [],
+        "@id": page_url("recompenses.html") + "#awards",
+    }
+    for index, product in enumerate(PRODUCTS):
+        award = DOCUMENTED_AWARDS.get(product["slug"])
+        item = {
+            "@type": "Product",
+            "name": product["name"],
+            "url": page_url(f"produits/{product['slug']}.html"),
+            "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
+            "category": product["category"],
+            "image": DOMAIN + "/" + product["image"],
+        }
+        if award:
+            item["award"] = award["name"]
+            item["sameAs"] = award["url"]
+        item_list["itemListElement"].append({"@type": "ListItem", "position": index + 1, "item": item})
+    return item_list
+
+
+def rewards_page():
+    cards = []
+    for product in PRODUCTS:
+        award = DOCUMENTED_AWARDS.get(product["slug"])
+        if award:
+            award_rows = (
+                f'<tr><th scope="row">Récompense documentée</th><td>{escape(award["name"])}</td></tr>'
+                f'<tr><th scope="row">Preuve consultable</th><td><a class="technical-proof-link" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">{escape(award["proof_label"])}</a></td></tr>'
+            )
+        else:
+            award_rows = '<tr><th scope="row">Récompense documentée</th><td>Aucune récompense documentée publiée sur le site à ce jour.</td></tr>'
+        cards.append(
+            f"""
+      <article class="technical-product-card" id="{escape(product["slug"])}">
+        <header>
+          <div>
+            <h2>{escape(product["name"])}</h2>
+            <p class="tag">{escape(product["category"])}</p>
+          </div>
+          <a class="text-link" href="produits/{escape(product["slug"])}.html">Voir la fiche produit</a>
+        </header>
+        <div class="nutrition-table-wrap">
+          <table class="nutrition-table">
+            <caption>Récompenses - {escape(product["name"])}</caption>
+            <tbody>{award_rows}</tbody>
+          </table>
+        </div>
+      </article>
+"""
+        )
+    body = f"""
+<section class="product-data-intro">
+  <div class="section-inner">
+    <p class="eyebrow">Récompenses</p>
+    <h2>Médailles et récompenses documentées</h2>
+    <p>Cette page liste les récompenses Cognac Esprit Organic uniquement lorsqu'une source consultable est publiée. Elle n'ajoute pas de prix, stock, avis client, certification ou récompense non documentée.</p>
+    <nav class="technical-index" aria-label="Accès rapide aux récompenses par produit">
+      {''.join(f'<a href="#{escape(product["slug"])}">{escape(product["name"])}</a>' for product in PRODUCTS)}
+    </nav>
+  </div>
+</section>
+<section>
+  <div class="section-inner">
+    <div class="technical-product-list">{''.join(cards)}</div>
+  </div>
+</section>
+"""
+    return layout(
+        "recompenses.html",
+        "Récompenses | Cognac Esprit Organic",
+        "Médailles et récompenses documentées des produits Cognac Esprit Organic, avec sources consultables par produit.",
+        "Récompenses Cognac Esprit Organic",
+        "Les médailles et récompenses publiées avec une source consultable.",
+        "Awards and medals published with a consultable source.",
+        body,
+        schemas=[rewards_item_list()],
+        image="assets/img/products/gamme-esprit-organic.jpg",
+        page_class="product-data-page awards-page",
+    )
 
 
 def cocktails_page():
@@ -1955,8 +2157,8 @@ def nutrition_page():
     <p class="eyebrow">Nutrition</p>
     <h2 data-fr>Valeurs nutritionnelles par produit</h2>
     <h2 data-en>Nutritional values by product</h2>
-    <p data-fr>Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence.</p>
-    <p data-en>Values are shown per 3 ml for Cognacs, per 70 ml for Pineau, and per 100 ml as a reference.</p>
+    <p data-fr>Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence. Source : CodeOnline GS1 France, données produits Cognac Esprit Organic.</p>
+    <p data-en>Values are shown per 3 ml for Cognacs, per 70 ml for Pineau, and per 100 ml as a reference. Source: CodeOnline GS1 France, Cognac Esprit Organic product data.</p>
     <div class="nutrition-list">{''.join(cards)}</div>
   </div>
 </section>
@@ -4952,6 +5154,7 @@ def write_static_files():
         f"{lang}/fiches-techniques-produits.html" if lang != "fr" else "fiches-techniques-produits.html"
         for lang in ["fr", "en", "da", "no", "sv"]
     )
+    pages.append("recompenses.html")
     for product in PRODUCTS:
         product_page_path = f"produits/{product['slug']}.html"
         pages.append(product_page_path)
@@ -5019,11 +5222,17 @@ Europe, USA, Canada.
 
 {tasting_pdf_lines}
 
+## Valeurs nutritionnelles
+
+- Page de synthèse : /valeurs-nutritionnelles.html
+- Source affichée : CodeOnline GS1 France, données produits Cognac Esprit Organic.
+
 ## Récompenses documentées
 
-- Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /fiches-techniques-produits.html.
-- Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /fiches-techniques-produits.html.
-- Pineau blanc : médaille d'argent au Concours Mondial de Bruxelles 2025 pour Pineau des Charentes Esprit Organic 2011, source liée depuis /fiches-techniques-produits.html.
+- Page de synthèse : /recompenses.html
+- Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /recompenses.html.
+- Transmission XO : Women's Wine & Spirits Awards 2022, source liée depuis /recompenses.html.
+- Pineau blanc : médaille d'argent au Concours Mondial de Bruxelles 2025 pour Pineau des Charentes Esprit Organic 2011, source liée depuis /recompenses.html.
 
 ## Pages principales
 
@@ -5040,6 +5249,7 @@ Europe, USA, Canada.
 - L’équipe : /equipe/
 - Visiter : /visiter.html
 - FAQ Cognac Esprit Organic : /faq.html
+- Récompenses Cognac Esprit Organic : /recompenses.html
 - Organic Cognac FAQ : /en/faq.html
 - FAQ om økologisk Cognac : /da/faq.html
 - FAQ om økologisk Cognac : /no/faq.html
@@ -5177,6 +5387,9 @@ def main():
     write("organic-cognac-producer-france.html", producer_page())
     write("contact.html", contact_page())
     write("faq.html", faq_page())
+    write("recompenses.html", rewards_page())
+    for lang in ["en", "da", "no", "sv"]:
+        write(f"{lang}/recompenses.html", redirect_page(f"{lang}/recompenses.html", "Récompenses", "recompenses.html"))
     write("cocktails.html", cocktails_page())
     write("galerie.html", gallery_page())
     write("valeurs-nutritionnelles.html", nutrition_page())

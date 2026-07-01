@@ -1,6 +1,7 @@
 from html import escape
 import json
 from pathlib import Path
+import re
 
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
@@ -263,7 +264,7 @@ PRODUCT_TRADE_PDFS = {
 
 PRODUCT_DETAILS_I18N = {
     "fr": {
-        "summary": "Détails produit",
+        "summary": "Détail",
         "category": "Catégorie",
         "origin": "Origine",
         "volume": "Contenance",
@@ -272,7 +273,7 @@ PRODUCT_DETAILS_I18N = {
         "origin_value": "France",
     },
     "en": {
-        "summary": "Product details",
+        "summary": "Details",
         "category": "Category",
         "origin": "Origin",
         "volume": "Bottle size",
@@ -637,10 +638,47 @@ def bilingual(fr: str, en: str) -> str:
     return f'<span data-fr>{escape(fr)}</span><span data-en>{escape(en)}</span>'
 
 
+NUTRITION_NUMBER_RE = re.compile(r"-?\d+(?:[,.]\d+)?")
+
+
+def format_scaled_number(value: float) -> str:
+    rounded = round(value, 2)
+    text = f"{rounded:.2f}".rstrip("0").rstrip(".")
+    if text == "-0":
+        text = "0"
+    return text.replace(".", ",")
+
+
+def scale_nutrition_value(value: str, factor: float) -> str:
+    if not value:
+        return value
+
+    def replace_number(match):
+        return format_scaled_number(float(match.group(0).replace(",", ".")) * factor)
+
+    return NUTRITION_NUMBER_RE.sub(replace_number, value)
+
+
+def product_is_pineau(slug: str) -> bool:
+    return slug.startswith("pineau")
+
+
+def nutrition_serving_label(slug: str) -> str:
+    if product_is_pineau(slug):
+        return bilingual("Pour 70 ml", "Per 70 ml")
+    return bilingual("Pour 3 ml", "Per 3 ml")
+
+
+def nutrition_serving_value(slug: str, per_30: str, per_100: str) -> str:
+    if product_is_pineau(slug):
+        return scale_nutrition_value(per_100, 0.7)
+    return scale_nutrition_value(per_30, 0.1)
+
+
 def nutrition_table(slug: str, product_name: str) -> str:
     nutrition = NUTRITION_VALUES[slug]
     rows = "".join(
-        f"<tr><th>{bilingual(row_fr, row_en)}</th><td>{escape(per_30)}</td><td>{escape(per_100)}</td></tr>"
+        f"<tr><th>{bilingual(row_fr, row_en)}</th><td>{escape(nutrition_serving_value(slug, per_30, per_100))}</td><td>{escape(per_100)}</td></tr>"
         for _, row_fr, row_en, per_30, per_100 in nutrition["rows"]
     )
     return f"""
@@ -650,7 +688,7 @@ def nutrition_table(slug: str, product_name: str) -> str:
             <thead>
               <tr>
                 <th>{bilingual("Nutriment", "Nutrient")}</th>
-                <th>{bilingual("Pour 30 ml", "Per 30 ml")}</th>
+                <th>{nutrition_serving_label(slug)}</th>
                 <th>{bilingual("Pour 100 ml", "Per 100 ml")}</th>
               </tr>
             </thead>
@@ -814,7 +852,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260627-technical-facts01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260701-detail01">
   {json_ld(schema_items)}
 </head>
 <body class="{page_class}">
@@ -868,7 +906,7 @@ def redirect_page(path: str, title: str, target: str):
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260627-technical-facts01">
+  <link rel="stylesheet" href="{prefix}assets/css/styles.css?v=20260701-detail01">
 </head>
 <body>
   <main class="redirect-page">
@@ -1081,8 +1119,6 @@ def product_page(product):
     story = extra.get("story", product["short"])
     degustation_title = extra.get("degustation_title", "Dégustation")
     degustation_text = extra.get("degustation_text", product["short"])
-    nutrition = NUTRITION_VALUES.get(product["slug"])
-    nutrition_placeholder = extra.get("nutrition_placeholder", "")
     sensory_items = "".join(
         f'<li><span>{escape(label)} :</span><strong>{escape(value)}</strong></li>'
         for label, value in sensory.items()
@@ -1098,32 +1134,6 @@ def product_page(product):
         f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="" loading="lazy"></button>'
         for idx, src in enumerate(gallery_images)
     )
-    nutrition_controls = f"""
-      <button class="nutrition-link" type="button" data-nutrition-open data-fr>Valeurs nutritionnelles</button>
-      <button class="nutrition-link" type="button" data-nutrition-open data-en>Nutritional values</button>
-"""
-    if nutrition:
-        nutrition_controls += f"""
-      <dialog class="nutrition-dialog" data-nutrition-dialog>
-        <form method="dialog">
-          <button type="submit" aria-label="Fermer">×</button>
-        </form>
-        <h2>Valeurs nutritionnelles - {escape(product["name"])}</h2>
-{nutrition_table(product["slug"], product["name"])}
-      </dialog>
-"""
-    elif nutrition_placeholder:
-        nutrition_controls += f"""
-      <dialog class="nutrition-dialog" data-nutrition-dialog>
-        <form method="dialog">
-          <button type="submit" aria-label="Fermer">×</button>
-        </form>
-        <h2>Valeurs nutritionnelles - {escape(product["name"])}</h2>
-        <p>{escape(nutrition_placeholder)}</p>
-      </dialog>
-"""
-    else:
-        nutrition_controls = ""
     trade_pdf_download = ""
     if trade_pdf:
         trade_pdf_download = f"""
@@ -1171,7 +1181,6 @@ def product_page(product):
         {sensory_items}
       </ul>
       {details_block}
-      {nutrition_controls}
       {trade_pdf_download}
     </div>
   </div>
@@ -1893,13 +1902,13 @@ def nutrition_page():
     <p class="eyebrow">Nutrition</p>
     <h2 data-fr>Valeurs nutritionnelles par produit</h2>
     <h2 data-en>Nutritional values by product</h2>
-    <p data-fr>Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.</p>
-    <p data-en>Values are shown per 30 ml and per 100 ml, with energy displayed in the regulatory kJ / kcal order.</p>
+    <p data-fr>Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence.</p>
+    <p data-en>Values are shown per 3 ml for Cognacs, per 70 ml for Pineau, and per 100 ml as a reference.</p>
     <div class="nutrition-list">{''.join(cards)}</div>
   </div>
 </section>
 """
-    return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic par produit, pour 30 ml et 100 ml.", "Valeurs nutritionnelles", "Les tableaux nutritionnels Esprit Organic avec l'énergie en kJ / kcal.", "Cognac Esprit Organic nutritional tables with energy shown in kJ / kcal.", body, image="assets/img/brand/hero-old-vine.jpg")
+    return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic par produit, pour 3 ml, 70 ml et 100 ml.", "Valeurs nutritionnelles", "Les tableaux nutritionnels Esprit Organic avec l'énergie en kJ / kcal.", "Cognac Esprit Organic nutritional tables with energy shown in kJ / kcal.", body, image="assets/img/brand/hero-old-vine.jpg")
 
 
 def technical_product_rows(product, lang="fr"):
@@ -2012,6 +2021,7 @@ def product_detail_schema_rows(product, lang="fr"):
 
 
 def product_details_block(product):
+    extra = PRODUCT_EXTRAS.get(product["slug"], {})
     rows = "".join(
         f"""
         <div>
@@ -2023,11 +2033,33 @@ def product_details_block(product):
             product_detail_rows(product, "en"),
         )
     )
+    nutrition = NUTRITION_VALUES.get(product["slug"])
+    nutrition_placeholder = extra.get("nutrition_placeholder", "")
+    if nutrition:
+        nutrition_block = f"""
+          <div class="product-detail-section product-detail-section-nutrition">
+            <h3>{bilingual("Valeurs nutritionnelles", "Nutritional values")}</h3>
+{nutrition_table(product["slug"], product["name"])}
+          </div>"""
+    elif nutrition_placeholder:
+        nutrition_block = f"""
+          <div class="product-detail-section product-detail-section-nutrition">
+            <h3>{bilingual("Valeurs nutritionnelles", "Nutritional values")}</h3>
+            <p>{escape(nutrition_placeholder)}</p>
+          </div>"""
+    else:
+        nutrition_block = ""
     return f"""
       <details class="product-details-discreet">
         <summary><span data-fr>{PRODUCT_DETAILS_I18N["fr"]["summary"]}</span><span data-en>{PRODUCT_DETAILS_I18N["en"]["summary"]}</span></summary>
-        <dl>{rows}
-        </dl>
+        <div class="product-detail-accordion-body">
+          <div class="product-detail-section">
+            <h3>{bilingual("Détails produit", "Product details")}</h3>
+            <dl>{rows}
+            </dl>
+          </div>
+{nutrition_block}
+        </div>
       </details>
 """
 
@@ -2295,7 +2327,7 @@ def technical_product_facts_page_en():
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/styles.css?v=20260627-technical-facts01">
+  <link rel="stylesheet" href="../assets/css/styles.css?v=20260701-detail01">
   {json_ld(schema_items)}
 </head>
 <body data-lang="en" class="product-data-page">
@@ -3707,7 +3739,7 @@ p { margin: 18px 0 0; }
 }
 .product-details-discreet {
   margin-top: 18px;
-  max-width: 80%;
+  max-width: min(100%, 720px);
   color: rgba(255,255,255,.88);
   font-family: Raleway, sans-serif;
   font-size: .8rem;
@@ -3723,13 +3755,34 @@ p { margin: 18px 0 0; }
 .product-details-discreet summary::marker {
   color: rgba(255,255,255,.72);
 }
+.product-detail-accordion-body {
+  display: grid;
+  gap: 18px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+.product-details-discreet .product-detail-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.product-details-discreet h3 {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-family: Montserrat, sans-serif;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .product-details-discreet dl {
   display: grid;
   gap: 6px;
-  margin: 12px 0 0;
+  margin: 0;
   padding: 0;
 }
-.product-details-discreet div {
+.product-details-discreet dl > div {
   display: grid;
   grid-template-columns: minmax(115px, .42fr) 1fr;
   gap: 12px;
@@ -3744,6 +3797,36 @@ p { margin: 18px 0 0; }
   font-weight: 800;
 }
 .product-details-discreet dd {
+  color: #fff;
+  font-weight: 300;
+}
+.product-details-discreet .nutrition-table-wrap {
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.94);
+}
+.product-details-discreet .nutrition-table {
+  min-width: 520px;
+}
+.product-details-discreet .nutrition-table caption {
+  padding: 12px 14px;
+  text-align: left;
+}
+.product-details-discreet .nutrition-table th,
+.product-details-discreet .nutrition-table td {
+  padding: 10px 12px;
+  color: #522e03;
+  font-size: .76rem;
+}
+.product-details-discreet .nutrition-meta {
+  margin-top: 10px;
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.2);
+}
+.product-details-discreet .nutrition-meta strong {
+  color: rgba(255,255,255,.72);
+  font-weight: 800;
+}
+.product-details-discreet .nutrition-meta span {
   color: #fff;
   font-weight: 300;
 }
@@ -4294,7 +4377,7 @@ thead th {
     grid-template-columns: 1fr;
     gap: 2px;
   }
-  .product-details-discreet div {
+  .product-details-discreet dl > div {
     grid-template-columns: 1fr;
     gap: 2px;
   }
@@ -4424,18 +4507,6 @@ document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
   });
 });
 
-document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const block = button.closest(".product-sensory");
-    const dialog = block && block.querySelector("[data-nutrition-dialog]");
-    if (!dialog) return;
-    if (typeof dialog.showModal === "function") {
-      dialog.showModal();
-    } else {
-      dialog.setAttribute("open", "");
-    }
-  });
-});
 """)
 
 

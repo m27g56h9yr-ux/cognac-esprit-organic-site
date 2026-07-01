@@ -374,6 +374,8 @@ const translations = {
     "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Organic Pineau des Charentes made with Colombard and Ugni Blanc, with no added sulphites.",
     "Dégustation": "Tasting",
     "Notes sensorielles": "Sensory notes",
+    "Détail": "Details",
+    "Détails produit": "Product details",
     "Bouche :": "Mouth:",
     "Couleur :": "Colour:",
     "Nez :": "Nose:",
@@ -513,6 +515,8 @@ const translations = {
     "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Økologisk Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.",
     "Dégustation": "Smagning",
     "Notes sensorielles": "Sensoriske noter",
+    "Détail": "Detaljer",
+    "Détails produit": "Produktdetaljer",
     "Bouche :": "Mund:",
     "Couleur :": "Farve:",
     "Nez :": "Næse:",
@@ -651,6 +655,8 @@ const translations = {
     "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Økologisk Pineau des Charentes laget med Colombard og Ugni Blanc, uten tilsatte sulfitter.",
     "Dégustation": "Smaking",
     "Notes sensorielles": "Sensoriske noter",
+    "Détail": "Detaljer",
+    "Détails produit": "Produktdetaljer",
     "Bouche :": "Munn:",
     "Couleur :": "Farge:",
     "Nez :": "Nese:",
@@ -789,6 +795,8 @@ const translations = {
     "Pineau des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.": "Ekologisk Pineau des Charentes gjord med Colombard och Ugni Blanc, utan tillsatta sulfiter.",
     "Dégustation": "Provning",
     "Notes sensorielles": "Sensoriska noter",
+    "Détail": "Detaljer",
+    "Détails produit": "Produktdetaljer",
     "Bouche :": "Mun:",
     "Couleur :": "Färg:",
     "Nez :": "Doft:",
@@ -1049,9 +1057,10 @@ const nutritionTranslations = {
   en: {
     "Valeurs nutritionnelles moyennes": "Average nutritional values",
     "Valeurs nutritionnelles par produit": "Nutritional values by product",
-    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Values are shown per 30 ml and per 100 ml, with energy displayed in the regulatory kJ / kcal order.",
+    "Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence.": "Values are shown per 3 ml for Cognacs, per 70 ml for Pineau, and per 100 ml as a reference.",
     "Nutriment": "Nutrient",
-    "Pour 30 ml": "Per 30 ml",
+    "Pour 3 ml": "Per 3 ml",
+    "Pour 70 ml": "Per 70 ml",
     "Pour 100 ml": "Per 100 ml",
     "Valeur énergétique": "Energy",
     "Alcool": "Alcohol",
@@ -1076,9 +1085,10 @@ const nutritionTranslations = {
   da: {
     "Valeurs nutritionnelles moyennes": "Gennemsnitlige næringsværdier",
     "Valeurs nutritionnelles par produit": "Næringsværdier efter produkt",
-    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Værdierne vises pr. 30 ml og pr. 100 ml, med energi i rækkefølgen kJ / kcal.",
+    "Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence.": "Værdierne vises pr. 3 ml for Cognac, pr. 70 ml for Pineau og pr. 100 ml som reference.",
     "Nutriment": "Næringsstof",
-    "Pour 30 ml": "Pr. 30 ml",
+    "Pour 3 ml": "Pr. 3 ml",
+    "Pour 70 ml": "Pr. 70 ml",
     "Pour 100 ml": "Pr. 100 ml",
     "Valeur énergétique": "Energi",
     "Alcool": "Alkohol",
@@ -1103,9 +1113,10 @@ const nutritionTranslations = {
   no: {
     "Valeurs nutritionnelles moyennes": "Gjennomsnittlige næringsverdier",
     "Valeurs nutritionnelles par produit": "Næringsverdier etter produkt",
-    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Verdiene vises per 30 ml og per 100 ml, med energi i rekkefølgen kJ / kcal.",
+    "Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence.": "Verdiene vises per 3 ml for Cognac, per 70 ml for Pineau og per 100 ml som referanse.",
     "Nutriment": "Næringsstoff",
-    "Pour 30 ml": "Per 30 ml",
+    "Pour 3 ml": "Per 3 ml",
+    "Pour 70 ml": "Per 70 ml",
     "Pour 100 ml": "Per 100 ml",
     "Valeur énergétique": "Energi",
     "Alcool": "Alkohol",
@@ -1130,9 +1141,10 @@ const nutritionTranslations = {
   sv: {
     "Valeurs nutritionnelles moyennes": "Genomsnittliga näringsvärden",
     "Valeurs nutritionnelles par produit": "Näringsvärden per produkt",
-    "Les valeurs sont indiquées pour 30 ml et 100 ml, avec l'énergie dans l'ordre réglementaire kJ / kcal.": "Värdena visas per 30 ml och per 100 ml, med energi i ordningen kJ / kcal.",
+    "Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence.": "Värdena visas per 3 ml för Cognac, per 70 ml för Pineau och per 100 ml som referens.",
     "Nutriment": "Näringsämne",
-    "Pour 30 ml": "Per 30 ml",
+    "Pour 3 ml": "Per 3 ml",
+    "Pour 70 ml": "Per 70 ml",
     "Pour 100 ml": "Per 100 ml",
     "Valeur énergétique": "Energi",
     "Alcool": "Alkohol",
@@ -1258,19 +1270,6 @@ document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
     const next = button.dataset.galleryTarget;
     if (main && next) {
       main.src = next;
-    }
-  });
-});
-
-document.querySelectorAll("[data-nutrition-open]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const block = button.closest(".product-sensory");
-    const dialog = block && block.querySelector("[data-nutrition-dialog]");
-    if (!dialog) return;
-    if (typeof dialog.showModal === "function") {
-      dialog.showModal();
-    } else {
-      dialog.setAttribute("open", "");
     }
   });
 });

@@ -1715,7 +1715,7 @@ p { margin: 18px 0 0; }
 }
 .product-details-discreet {
   margin-top: 18px;
-  max-width: 80%;
+  max-width: min(100%, 720px);
   color: rgba(255,255,255,.88);
   font-family: Raleway, sans-serif;
   font-size: .8rem;
@@ -1731,13 +1731,34 @@ p { margin: 18px 0 0; }
 .product-details-discreet summary::marker {
   color: rgba(255,255,255,.72);
 }
+.product-detail-accordion-body {
+  display: grid;
+  gap: 18px;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px solid rgba(255,255,255,.2);
+}
+.product-details-discreet .product-detail-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.product-details-discreet h3 {
+  margin: 0;
+  color: rgba(255,255,255,.72);
+  font-family: Montserrat, sans-serif;
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
 .product-details-discreet dl {
   display: grid;
   gap: 6px;
-  margin: 12px 0 0;
+  margin: 0;
   padding: 0;
 }
-.product-details-discreet div {
+.product-details-discreet dl > div {
   display: grid;
   grid-template-columns: minmax(115px, .42fr) 1fr;
   gap: 12px;
@@ -1752,6 +1773,36 @@ p { margin: 18px 0 0; }
   font-weight: 800;
 }
 .product-details-discreet dd {
+  color: #fff;
+  font-weight: 300;
+}
+.product-details-discreet .nutrition-table-wrap {
+  border-color: rgba(255,255,255,.28);
+  background: rgba(255,255,255,.94);
+}
+.product-details-discreet .nutrition-table {
+  min-width: 520px;
+}
+.product-details-discreet .nutrition-table caption {
+  padding: 12px 14px;
+  text-align: left;
+}
+.product-details-discreet .nutrition-table th,
+.product-details-discreet .nutrition-table td {
+  padding: 10px 12px;
+  color: #522e03;
+  font-size: .76rem;
+}
+.product-details-discreet .nutrition-meta {
+  margin-top: 10px;
+  background: rgba(255,255,255,.12);
+  border-color: rgba(255,255,255,.2);
+}
+.product-details-discreet .nutrition-meta strong {
+  color: rgba(255,255,255,.72);
+  font-weight: 800;
+}
+.product-details-discreet .nutrition-meta span {
   color: #fff;
   font-weight: 300;
 }
@@ -2302,7 +2353,7 @@ thead th {
     grid-template-columns: 1fr;
     gap: 2px;
   }
-  .product-details-discreet div {
+  .product-details-discreet dl > div {
     grid-template-columns: 1fr;
     gap: 2px;
   }

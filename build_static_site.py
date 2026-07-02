@@ -362,7 +362,8 @@ PRODUCT_EXTRAS = {
             {
                 "src": "assets/img/old-site/img_prod_fondation_medaile.png",
                 "href": AWARD_PROOF_URLS["fondation-vs-sfwsc-2019"],
-                "label": "résultats officiels 2019 du San Francisco World Spirits Competition pour Fondation VS",
+                "alt": "Distinction Fondation VS",
+                "label": "Voir le palmarès 2019 du San Francisco World Spirits Competition pour Fondation VS",
             }
         ],
         "gallery": ["assets/img/old-site/img_prod_fondation_02.jpg"],
@@ -427,7 +428,8 @@ PRODUCT_EXTRAS = {
             {
                 "src": "assets/img/old-site/img_prod_fondation_medaille_02.png",
                 "href": AWARD_PROOF_URLS["transmission-xo-wwsa-2022"],
-                "label": "preuve de la récompense Women's Wine & Spirits Awards pour Transmission XO",
+                "alt": "Distinction Transmission XO",
+                "label": "Voir le palmarès Women's Wine & Spirits Awards pour Transmission XO",
             }
         ],
         "gallery": ["assets/img/old-site/img_prod_transmission_02.jpg", "assets/img/old-site/img_prod_transmission_03.jpg"],
@@ -519,6 +521,8 @@ DOCUMENTED_AWARDS = {
         "proof_label": "Résultats officiels 2019 du San Francisco World Spirits Competition",
         "en_proof_label": "Official 2019 San Francisco World Spirits Competition results",
         "url": AWARD_PROOF_URLS["fondation-vs-sfwsc-2019"],
+        "visual_src": "assets/img/old-site/img_prod_fondation_medaile.png",
+        "visual_alt": "Médaille d'or San Francisco World Spirits Competition 2019",
     },
     "transmission-xo": {
         "name": "Women's Wine & Spirits Awards 2022",
@@ -526,6 +530,8 @@ DOCUMENTED_AWARDS = {
         "proof_label": "Résultats Women's Wine & Spirits Awards 2022",
         "en_proof_label": "Women's Wine & Spirits Awards 2022 results",
         "url": AWARD_PROOF_URLS["transmission-xo-wwsa-2022"],
+        "visual_src": "assets/img/old-site/img_prod_fondation_medaille_02.png",
+        "visual_alt": "Double médaille d'or Women's Wine & Spirits Awards 2022",
     },
     "pineau": {
         "name": "Médaille d'argent - Concours Mondial de Bruxelles 2025",
@@ -533,6 +539,12 @@ DOCUMENTED_AWARDS = {
         "proof_label": "Résultat officiel Concours Mondial de Bruxelles 2025 pour Pineau des Charentes Esprit Organic 2011",
         "en_proof_label": "Official Concours Mondial de Bruxelles 2025 result for Pineau des Charentes Esprit Organic 2011",
         "url": AWARD_PROOF_URLS["pineau-blanc-cmb-2025"],
+        "visual_src": "assets/img/awards/cmb2025-silver-medal.png",
+        "visual_alt": "Médaille d'argent Concours Mondial de Bruxelles 2025",
+        "visual_title": "Concours Mondial<br>de Bruxelles",
+        "visual_label": "Médaille d'argent - 2025",
+        "reflected_visual": True,
+        "product_visual": True,
     },
 }
 
@@ -1020,15 +1032,55 @@ def split(left, right, cls=""):
 def medal_html(medal, product_name: str, prefix: str) -> str:
     if isinstance(medal, str):
         src = medal
-        return f'<img src="{prefix}{src}" alt="Récompense {escape(product_name)}" loading="lazy">'
+        return f'<img src="{prefix}{src}" alt="" aria-hidden="true" loading="lazy">'
     src = medal["src"]
-    alt = medal.get("alt", f"Récompense {product_name}")
+    alt = medal.get("alt", f"Distinction {product_name}")
     href = medal.get("href")
-    label = medal.get("label", f"Voir la preuve de la récompense {product_name}")
+    label = medal.get("label", f"Voir le palmarès de {product_name}")
     image = f'<img src="{prefix}{src}" alt="{escape(alt)}" loading="lazy">'
     if href:
         return f'<a class="product-medal-link" href="{escape(href)}" target="_blank" rel="noopener noreferrer" aria-label="{escape(label)}">{image}</a>'
     return image
+
+
+def award_visual_html(award, product_name: str, prefix: str, context: str = "product") -> str:
+    src = award.get("visual_src")
+    if not src:
+        return ""
+    href = award["url"]
+    label = award.get("proof_label", f"Voir le palmarès de {product_name}")
+    alt = award.get("visual_alt", award["name"])
+    if award.get("reflected_visual"):
+        context_class = " award-page-award" if context == "award-page" else ""
+        title = award.get("visual_title", award["name"])
+        visual_label = award.get("visual_label", award["name"])
+        return f"""
+      <div class="product-awards{context_class}">
+        <a class="product-award-link" href="{escape(href)}" target="_blank" rel="noopener noreferrer" aria-label="{escape(label)}">
+          <span class="product-award-visual">
+            <img class="product-award-image" src="{prefix}{escape(src)}" alt="{escape(alt)}" loading="lazy" width="395" height="369">
+            <img class="product-award-reflection" src="{prefix}{escape(src)}" alt="" aria-hidden="true" loading="lazy" width="395" height="369">
+          </span>
+          <span class="product-award-copy">
+            <strong>{title}</strong>
+            <span>{escape(visual_label)}</span>
+          </span>
+        </a>
+      </div>"""
+    if context == "award-page":
+        return (
+            f'<a class="award-page-medal-link" href="{escape(href)}" target="_blank" '
+            f'rel="noopener noreferrer" aria-label="{escape(label)}">'
+            f'<img class="award-page-medal-image" src="{prefix}{escape(src)}" alt="{escape(alt)}" loading="lazy"></a>'
+        )
+    return ""
+
+
+def product_award_html(product, prefix: str) -> str:
+    award = DOCUMENTED_AWARDS.get(product["slug"])
+    if not award or not award.get("product_visual"):
+        return ""
+    return award_visual_html(award, product["name"], prefix)
 
 
 def property_value(name: str, value: str):
@@ -1137,6 +1189,7 @@ def range_page():
 def product_page(product):
     prefix = "../"
     extra = PRODUCT_EXTRAS.get(product["slug"], {})
+    award = DOCUMENTED_AWARDS.get(product["slug"])
     trade_pdf = PRODUCT_TRADE_PDFS.get(product["slug"])
     detail_image = extra.get("detail_image", product.get("detail_image", product["scene"]))
     tasting_image = extra.get("tasting_image", product.get("tasting_image", product["image"]))
@@ -1164,6 +1217,9 @@ def product_page(product):
         schema["gtin13"] = product["gtin13"]
     additional_properties = [property_value(label, value) for label, value in product_detail_schema_rows(product, "fr")]
     additional_properties.extend(property_value(label, value) for label, value in sensory.items())
+    if award:
+        additional_properties.append(property_value("Distinction", award["proof_label"]))
+        schema["award"] = award["name"]
     if additional_properties:
         schema["additionalProperty"] = additional_properties
     if trade_pdf:
@@ -1186,7 +1242,14 @@ def product_page(product):
         medal_html(medal, product["name"], prefix)
         for medal in extra.get("medals", [])
     )
+    award_block = product_award_html(product, prefix)
     medal_block = f'<div class="product-medals">{medals}</div>' if medals else ""
+    recognition_blocks = "\n      ".join(
+        block.strip()
+        for block in (award_block, medal_block)
+        if block
+    )
+    recognition_markup = f"\n      {recognition_blocks}" if recognition_blocks else ""
     gallery_images = [detail_image] + extra.get("gallery", [])
     gallery_buttons = "".join(
         f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="" loading="lazy"></button>'
@@ -1220,8 +1283,7 @@ def product_page(product):
       <h1>{escape(product['name'])}</h1>
       <p data-fr>{escape(product['short'])}</p>
       <p data-en>{escape(product['en_short'])}</p>
-      <p class="product-story">{escape(story)}</p>
-      {medal_block}
+      <p class="product-story">{escape(story)}</p>{recognition_markup}
     </div>
     <div class="product-bottle-inline">
       <img src="{prefix}{tasting_image}" alt="Illustration {escape(product['name'])}">
@@ -1896,8 +1958,8 @@ FAQ_GROUPS_FR = [
         ("faq-q14", "Quelle bouteille choisir pour découvrir la gamme ?", "Pour une première découverte, le choix dépend de l’usage : VS ou VSOP pour une approche plus vive, Napoléon ou XO pour davantage de rondeur, XXO ou Single Cask pour une expression plus rare."),
         ("faq-q15", "Que signifient VS, VSOP, Napoléon, XO et XXO ?", "Ces mentions indiquent l’âge minimal des eaux-de-vie en fût : VS au moins 2 ans, VSOP au moins 4 ans, Napoléon au moins 6 ans, XO au moins 10 ans et XXO au moins 14 ans."),
         ("faq-q16", "Quelle est la différence entre cognac et Pineau des Charentes ?", "Le cognac est une eau-de-vie de vin vieillie en fût. Le Pineau des Charentes est un vin de liqueur obtenu par assemblage de moût de raisin et de cognac."),
-        ("faq-q17", "Où trouver les détails techniques de chaque produit ?", "Les données produits, les contenances, les degrés d’alcool, les cépages, les récompenses documentées et les liens de fiches PDF sont regroupés dans la page “Données produits et documents professionnels”."),
-        (FAQ_REWARDS_ID, "Quelles sont les médailles et récompenses gagnées par Esprit Organic ?", "Consulter la page Récompenses."),
+        ("faq-q17", "Où trouver les détails techniques de chaque produit ?", "Les données produits, les contenances, les degrés d’alcool, les cépages, les distinctions et les liens de fiches PDF sont regroupés dans la page “Données produits et documents professionnels”."),
+        (FAQ_REWARDS_ID, "Quelles cuvées Esprit Organic ont été distinguées ?", "Consulter la page Distinctions."),
         ("faq-q18", "Pourquoi un produit peut-il être indisponible ?", "La disponibilité peut varier selon les lots, les marchés et les réseaux de distribution. Le plus fiable est de contacter la maison pour une demande précise."),
         ("faq-q19", "Comment prononcer Cognac Esprit Organic ?", "“Cognac” se prononce comme l’appellation française. “Esprit Organic” associe un mot français et le terme anglais Organic, conservé dans le nom de marque."),
     ]),
@@ -1933,7 +1995,7 @@ FAQ_GROUPS_FR = [
 
 def faq_question_answer_html(item_id, answer):
     if item_id == FAQ_REWARDS_ID:
-        return 'Consulter la <a href="recompenses.html">page Récompenses</a>.'
+        return 'Consulter la <a href="recompenses.html">page Distinctions</a>.'
     return escape(answer)
 
 
@@ -2007,11 +2069,12 @@ def rewards_item_list():
     item_list = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "Récompenses documentées Cognac Esprit Organic",
+        "name": "Distinctions Cognac Esprit Organic",
         "itemListElement": [],
         "@id": page_url("recompenses.html") + "#awards",
     }
-    for index, product in enumerate(PRODUCTS):
+    awarded_products = [product for product in PRODUCTS if DOCUMENTED_AWARDS.get(product["slug"])]
+    for index, product in enumerate(awarded_products):
         award = DOCUMENTED_AWARDS.get(product["slug"])
         item = {
             "@type": "Product",
@@ -2020,68 +2083,82 @@ def rewards_item_list():
             "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
             "category": product["category"],
             "image": DOMAIN + "/" + product["image"],
+            "award": award["name"],
+            "sameAs": award["url"],
         }
-        if award:
-            item["award"] = award["name"]
-            item["sameAs"] = award["url"]
         item_list["itemListElement"].append({"@type": "ListItem", "position": index + 1, "item": item})
     return item_list
 
 
 def rewards_page():
+    awarded_products = [product for product in PRODUCTS if DOCUMENTED_AWARDS.get(product["slug"])]
+    award_copy = {
+        "fondation-vs": {
+            "kicker": "Finesse et fraîcheur",
+            "text": "Un VS franc et lumineux, salué pour son éclat aromatique et sa lecture directe du fruit. Une entrée dans l'univers Esprit Organic, précise, vive et naturellement élégante.",
+        },
+        "transmission-xo": {
+            "kicker": "Profondeur et patience",
+            "text": "Un XO construit dans le temps, porté par les fruits noirs, les fleurs séchées et les premières notes de rancio. Une cuvée de passage, ample et tenue.",
+        },
+        "pineau": {
+            "kicker": "Équilibre et gourmandise",
+            "text": "Un Pineau blanc biologique au charme patiné, entre raisin frais, fruits confits et douceur vanillée. Une distinction qui souligne sa gourmandise sans excès.",
+            "image": "assets/img/old-site/visuel_pineau.jpg",
+        },
+    }
     cards = []
-    for product in PRODUCTS:
+    for product in awarded_products:
         award = DOCUMENTED_AWARDS.get(product["slug"])
-        if award:
-            award_rows = (
-                f'<tr><th scope="row">Récompense documentée</th><td>{escape(award["name"])}</td></tr>'
-                f'<tr><th scope="row">Preuve consultable</th><td><a class="technical-proof-link" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">{escape(award["proof_label"])}</a></td></tr>'
-            )
-        else:
-            award_rows = '<tr><th scope="row">Récompense documentée</th><td>Aucune récompense documentée publiée sur le site à ce jour.</td></tr>'
+        award_visual = award_visual_html(award, product["name"], "", "award-page") if award else ""
+        copy = award_copy[product["slug"]]
+        card_image = copy.get("image", product["image"])
         cards.append(
             f"""
-      <article class="technical-product-card" id="{escape(product["slug"])}">
-        <header>
-          <div>
+      <article class="award-feature-card" id="{escape(product["slug"])}">
+        <div class="award-feature-visual">
+          <img src="{escape(card_image)}" alt="{escape(product["name"])} Cognac Esprit Organic" loading="eager">
+        </div>
+        <div class="award-feature-copy">
+          <p class="tag">{escape(product["category"])}</p>
+          <div class="award-feature-heading">
             <h2>{escape(product["name"])}</h2>
-            <p class="tag">{escape(product["category"])}</p>
+            <p>{escape(copy["kicker"])}</p>
           </div>
-          <a class="text-link" href="produits/{escape(product["slug"])}.html">Voir la fiche produit</a>
-        </header>
-        <div class="nutrition-table-wrap">
-          <table class="nutrition-table">
-            <caption>Récompenses - {escape(product["name"])}</caption>
-            <tbody>{award_rows}</tbody>
-          </table>
+          <p class="award-feature-text">{escape(copy["text"])}</p>
+          <div class="award-feature-distinction">
+            {award_visual.strip()}
+            <p>{escape(award["name"])}</p>
+          </div>
+          <div class="award-feature-actions">
+            <a class="text-link" href="produits/{escape(product["slug"])}.html">Découvrir la cuvée</a>
+            <a class="text-link muted" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">Voir le palmarès</a>
+          </div>
         </div>
       </article>
 """
         )
     body = f"""
-<section class="product-data-intro">
-  <div class="section-inner">
-    <p class="eyebrow">Récompenses</p>
-    <h2>Médailles et récompenses documentées</h2>
-    <p>Cette page liste les récompenses Cognac Esprit Organic uniquement lorsqu'une source consultable est publiée. Elle n'ajoute pas de prix, stock, avis client, certification ou récompense non documentée.</p>
-    <nav class="technical-index" aria-label="Accès rapide aux récompenses par produit">
-      {''.join(f'<a href="#{escape(product["slug"])}">{escape(product["name"])}</a>' for product in PRODUCTS)}
-    </nav>
+<section class="awards-intro">
+  <div class="section-inner narrow">
+    <p class="eyebrow">Distinctions</p>
+    <h2>Cuvées distinguées</h2>
+    <p>Au fil des dégustations, certaines cuvées Esprit Organic ont retenu l'attention de jurys internationaux. Elles racontent chacune une expression de la maison : la fraîcheur, la profondeur, l'équilibre.</p>
   </div>
 </section>
-<section>
+<section class="awards-selection">
   <div class="section-inner">
-    <div class="technical-product-list">{''.join(cards)}</div>
+    <div class="award-feature-list">{''.join(cards)}</div>
   </div>
 </section>
 """
     return layout(
         "recompenses.html",
-        "Récompenses | Cognac Esprit Organic",
-        "Médailles et récompenses documentées des produits Cognac Esprit Organic, avec sources consultables par produit.",
-        "Récompenses Cognac Esprit Organic",
-        "Les médailles et récompenses publiées avec une source consultable.",
-        "Awards and medals published with a consultable source.",
+        "Distinctions | Cognac Esprit Organic",
+        "Distinctions reçues par les cuvées Cognac Esprit Organic : Fondation VS, Transmission XO et Pineau blanc.",
+        "Distinctions Esprit Organic",
+        "Trois cuvées remarquées, trois expressions de notre maison.",
+        "Three acclaimed cuvées, three expressions of our house.",
         body,
         schemas=[rewards_item_list()],
         image="assets/img/products/gamme-esprit-organic.jpg",
@@ -2424,7 +2501,7 @@ def technical_product_item(product, lang="fr"):
     ]
     award = documented_award(product)
     if award:
-        properties.append(property_value("Documented award" if lang == "en" else "Récompense documentée", technical_award_proof_label(award, lang)))
+        properties.append(property_value("Award" if lang == "en" else "Distinction", technical_award_proof_label(award, lang)))
     url_prefix = "en/" if lang == "en" else ""
     item = {
         "@type": "Product",
@@ -2476,7 +2553,7 @@ def technical_alternate_links(path):
 def technical_product_cards(lang="fr"):
     asset_prefix = "../" if lang == "en" else ""
     product_link_prefix = "produits/"
-    award_label = "Documented award" if lang == "en" else "Récompense documentée"
+    award_label = "Award" if lang == "en" else "Distinction"
     product_link_text = "View product page" if lang == "en" else "Voir la fiche produit"
     caption_prefix = "Product data" if lang == "en" else "Données produit"
     index_links = "".join(
@@ -4183,6 +4260,107 @@ p { margin: 18px 0 0; }
 .product-medal-link:focus-visible img {
   filter: drop-shadow(0 8px 18px rgba(0,0,0,.2));
 }
+.product-awards {
+  display: flex;
+  align-items: center;
+  max-width: 560px;
+  margin-top: 20px;
+}
+.product-award-link {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: clamp(18px, 2vw, 30px);
+  width: 100%;
+  color: #fff;
+  text-decoration: none;
+  outline-offset: 4px;
+  transition: filter .2s ease;
+}
+.product-award-link:hover,
+.product-award-link:focus-visible {
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.2));
+}
+.product-award-visual {
+  position: relative;
+  flex: 0 0 clamp(96px, 9.6vw, 126px);
+  padding-bottom: clamp(26px, 3vw, 38px);
+  overflow: hidden;
+}
+.product-award-image,
+.product-award-reflection {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.product-award-image {
+  position: relative;
+  z-index: 1;
+}
+.product-award-reflection {
+  position: absolute;
+  top: calc(100% - clamp(26px, 3vw, 38px) - 3px);
+  left: 0;
+  height: clamp(26px, 3vw, 38px);
+  object-fit: cover;
+  object-position: bottom;
+  transform: scaleY(-1);
+  opacity: .68;
+  filter: blur(.28px);
+  mask-image: linear-gradient(to bottom, rgba(0,0,0,.96) 0%, rgba(0,0,0,.96) 48%, rgba(0,0,0,.68) 64%, rgba(0,0,0,.22) 80%, rgba(0,0,0,.035) 93%, rgba(0,0,0,0) 100%);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,.96) 0%, rgba(0,0,0,.96) 48%, rgba(0,0,0,.68) 64%, rgba(0,0,0,.22) 80%, rgba(0,0,0,.035) 93%, rgba(0,0,0,0) 100%);
+}
+.product-award-copy {
+  display: block;
+  flex: 1 1 0;
+  min-width: 0;
+  max-width: 330px;
+  padding-top: clamp(12px, 1.35vw, 22px);
+  color: rgba(255,255,255,.92);
+  font-family: Montserrat, sans-serif;
+  text-transform: uppercase;
+}
+.product-award-copy strong,
+.product-award-copy span {
+  display: block;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: break-word;
+}
+.product-award-copy strong {
+  font-size: clamp(.98rem, 1.45vw, 1.34rem);
+  font-weight: 500;
+  line-height: 1.25;
+  letter-spacing: .02em;
+}
+.product-award-copy span {
+  margin-top: 4px;
+  font-size: clamp(.98rem, 1.45vw, 1.34rem);
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: .01em;
+}
+@media (max-width: 520px) {
+  .product-award-link {
+    gap: 13px;
+  }
+  .product-award-visual {
+    flex-basis: 92px;
+    padding-bottom: 30px;
+  }
+  .product-award-reflection {
+    top: calc(100% - 33px);
+    height: 30px;
+  }
+  .product-award-copy {
+    padding-top: 12px;
+  }
+  .product-award-copy strong {
+    font-size: .82rem;
+  }
+  .product-award-copy span {
+    font-size: .82rem;
+  }
+}
 .product-medals img {
   display: block;
   width: 100%;
@@ -4546,6 +4724,146 @@ p { margin: 18px 0 0; }
   color: #3f3328;
   font-weight: 800;
 }
+.awards-page .product-awards {
+  max-width: 430px;
+  margin: 18px 0 20px;
+}
+.awards-page .product-award-link {
+  color: #3f3328;
+}
+.awards-page .product-award-copy {
+  color: #3f3328;
+}
+.award-page-medal-link {
+  display: block;
+  max-width: 360px;
+  margin: 18px 0 20px;
+  line-height: 0;
+  border-radius: 6px;
+  outline-offset: 4px;
+}
+.award-page-medal-link:hover,
+.award-page-medal-link:focus-visible {
+  filter: drop-shadow(0 10px 22px rgba(0,0,0,.14));
+}
+.award-page-medal-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+.awards-intro {
+  background: #f8f3e8;
+}
+.awards-intro h2 {
+  max-width: 820px;
+}
+.awards-intro p:not(.eyebrow) {
+  max-width: 820px;
+  color: #4c4034;
+  font-size: clamp(1.02rem, 1.3vw, 1.18rem);
+}
+.awards-selection {
+  padding-top: 0;
+  background: #ebe6d9;
+}
+.award-feature-list {
+  display: grid;
+  gap: clamp(24px, 4vw, 42px);
+}
+.award-feature-card {
+  display: grid;
+  grid-template-columns: minmax(260px, .82fr) minmax(0, 1fr);
+  min-height: 520px;
+  border: 1px solid rgba(94,61,35,.16);
+  background: #fffaf0;
+  box-shadow: 0 22px 60px rgba(33, 25, 17, .08);
+}
+.award-feature-card:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(260px, .82fr);
+}
+.award-feature-card:nth-child(even) .award-feature-visual {
+  order: 2;
+}
+.award-feature-visual {
+  display: grid;
+  place-items: center;
+  min-height: 440px;
+  padding: clamp(28px, 5vw, 68px);
+  background: linear-gradient(140deg, #efe9d9, #fffaf1 58%, #e2d6be);
+}
+.award-feature-visual img {
+  width: min(100%, 460px);
+  max-height: 520px;
+  object-fit: contain;
+  filter: drop-shadow(0 24px 34px rgba(42, 31, 18, .18));
+}
+.award-feature-copy {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(34px, 6vw, 76px);
+}
+.award-feature-heading {
+  margin-top: 8px;
+}
+.award-feature-heading h2 {
+  color: #4b2d15;
+  font-size: clamp(2.4rem, 5vw, 5.3rem);
+}
+.award-feature-heading p {
+  margin-top: 10px;
+  color: #9a762c;
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(1.05rem, 1.5vw, 1.38rem);
+}
+.award-feature-text {
+  max-width: 620px;
+  margin-top: 26px;
+  color: #46382d;
+  font-size: clamp(1rem, 1.2vw, 1.12rem);
+}
+.award-feature-distinction {
+  margin-top: 30px;
+}
+.award-feature-distinction > p {
+  margin-top: 12px;
+  color: #69550d;
+  font-size: .78rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.award-feature-distinction .product-awards {
+  margin-top: 0;
+}
+.award-feature-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px 26px;
+  margin-top: 14px;
+}
+.award-feature-actions .text-link.muted {
+  color: #8a6a25;
+}
+@media (max-width: 860px) {
+  .award-feature-card,
+  .award-feature-card:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+  .award-feature-card:nth-child(even) .award-feature-visual {
+    order: 0;
+  }
+  .award-feature-visual {
+    min-height: 320px;
+  }
+  .award-feature-copy {
+    padding: 30px 24px 38px;
+  }
+  .award-feature-actions .text-link {
+    margin-top: 8px;
+  }
+}
 .technical-index {
   display: flex;
   flex-wrap: wrap;
@@ -4850,6 +5168,21 @@ thead th {
   }
 }
 @media (max-width: 640px) {
+  .awards-page .page-hero {
+    min-height: 62vh;
+    padding: 120px 0 46px;
+    background-position: center center, 58% center;
+  }
+  .awards-page .page-hero h1 {
+    max-width: 330px;
+    font-size: 3rem;
+    line-height: 1;
+  }
+  .awards-page .page-hero .lead {
+    max-width: 310px;
+    font-size: 1rem;
+    line-height: 1.35;
+  }
   .home-page .page-hero {
     height: auto;
     min-height: 82vh;
@@ -5229,7 +5562,7 @@ Europe, USA, Canada.
 - Page de synthèse : /valeurs-nutritionnelles.html
 - Source affichée : CodeOnline GS1 France, données produits Cognac Esprit Organic.
 
-## Récompenses documentées
+## Distinctions
 
 - Page de synthèse : /recompenses.html
 - Fondation VS : San Francisco World Spirits Competition 2019, source liée depuis /recompenses.html.

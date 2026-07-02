@@ -6,7 +6,7 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260701-vsop-volume01"
+CSS_VERSION = "20260702-footerfix01"
 JS_VERSION = "20260701-vsop-volume01"
 
 CONTACT = {
@@ -3315,6 +3315,109 @@ p { margin: 18px 0 0; }
 .footer-logo { width: 150px; margin-bottom: 14px; }
 .footer-links { display: flex; flex-wrap: wrap; gap: 14px; justify-content: flex-end; }
 .footer-links a { color: var(--paper); }
+.footer-social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.footer-social-link svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  pointer-events: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+.footer-newsletter {
+  grid-column: 1 / -1;
+  max-width: 620px;
+  margin-top: 6px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(236,232,220,.24);
+}
+.footer-newsletter h2 {
+  max-width: 560px;
+  margin: 0 0 6px;
+  color: var(--paper);
+  font-family: "Roboto Slab", Georgia, serif;
+  font-size: clamp(1rem, 1.3vw, 1.2rem);
+  font-weight: 400;
+  line-height: 1.25;
+}
+.footer-newsletter-consent {
+  max-width: 620px;
+  margin: 0 0 8px;
+  color: rgba(236,232,220,.9);
+  font-size: .92rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+.footer-newsletter-consent a {
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.footer-newsletter-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 104px;
+  gap: 8px;
+  align-items: stretch;
+  max-width: 560px;
+}
+.footer-newsletter-form input {
+  width: 100%;
+  min-height: 42px;
+  border: 2px solid rgba(236,232,220,.4);
+  background: rgba(255,255,255,.96);
+  color: var(--ink);
+  padding: 0 14px;
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: .92rem;
+  outline: none;
+}
+.footer-newsletter-form input::placeholder {
+  color: rgba(23,19,15,.38);
+}
+.footer-newsletter-form input:focus {
+  border-color: #87a4ee;
+  box-shadow: 0 0 0 3px rgba(135,164,238,.35);
+}
+.footer-newsletter-form button {
+  min-height: 42px;
+  border: 0;
+  background: rgba(255,255,255,.96);
+  color: var(--brand);
+  font-family: Montserrat, Arial, sans-serif;
+  font-size: .7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.footer-newsletter-form button:disabled {
+  cursor: wait;
+  opacity: .65;
+}
+.footer-newsletter-form button:hover,
+.footer-newsletter-form button:focus-visible {
+  background: var(--paper);
+}
+.footer-newsletter-status {
+  min-height: 1.5em;
+  margin: 5px 0 0;
+  color: rgba(236,232,220,.9);
+  font-size: .78rem;
+}
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
 .small { color: #c9c0b1; font-size: .92rem; }
 :focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 @media (max-width: 1060px) {
@@ -3353,6 +3456,8 @@ p { margin: 18px 0 0; }
   .product-detail { background: var(--paper); }
   .product-image-panel { min-height: auto; }
   .footer-links { justify-content: flex-start; }
+  .footer-newsletter-form { grid-template-columns: 1fr; }
+  .footer-newsletter-form button { min-height: 60px; }
   .product-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .visit-map-section { grid-template-columns: 1fr; }
   .visit-map-copy { min-height: auto; }

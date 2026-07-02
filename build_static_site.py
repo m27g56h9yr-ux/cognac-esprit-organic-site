@@ -1256,6 +1256,7 @@ def product_page(product):
         image=product["image"],
         page_class="product-page",
         show_hero=False,
+        head_extra=technical_alternate_links(f"produits/{product['slug']}.html"),
     )
 
 

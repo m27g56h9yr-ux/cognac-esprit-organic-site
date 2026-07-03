@@ -7,7 +7,7 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260702-hvecec-charte01"
+CSS_VERSION = "20260703-hvecec-elegant01"
 JS_VERSION = "20260701-vsop-volume01"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
@@ -1835,7 +1835,6 @@ HVE_CEC_COPY = {
         "hero_intro": "Des eaux-de-vie sélectionnées avec exigence, des vignes jusqu’au verre.",
         "heading": "Des vignes engagées, des eaux-de-vie mieux tracées.",
         "lockup_label": "Signature officielle Certification Environnementale Cognac et Haute Valeur Environnementale",
-        "charter_caption": "Signature CEC cuivre et HVE noir, dans l’ordre de la charte Cognac.",
         "promise": "Un cognac bio, traçable et engagé, des vignes jusqu’au verre.",
         "lead": "L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.",
         "proof_label": "Liens publics de preuve HVE et CEC",
@@ -1875,7 +1874,6 @@ HVE_CEC_COPY = {
         "hero_intro": "Eaux-de-vie selected with care, from vineyard to glass.",
         "heading": "Committed vineyards and clearer eau-de-vie traceability.",
         "lockup_label": "Official Cognac Environmental Certification and High Environmental Value signature",
-        "charter_caption": "Copper CEC and black HVE signature, following the Cognac charter order.",
         "promise": "Organic, traceable and committed Cognac, from vineyard to glass.",
         "lead": "Most eaux-de-vie used by Cognac Esprit Organic come from SCEA Domaine de la Grande Versenne in Triac-Lautrait, or from a listed supplier approved HVE and CEC.",
         "proof_label": "Public HVE and CEC proof links",
@@ -1915,7 +1913,6 @@ HVE_CEC_COPY = {
         "hero_intro": "Eaux-de-vie udvalgt med omhu, fra vinmark til glas.",
         "heading": "Engagerede vinmarker og tydeligere sporbarhed for eaux-de-vie.",
         "lockup_label": "Officiel signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
-        "charter_caption": "CEC i kobber og HVE i sort, i den rækkefølge Cognac-chartret angiver.",
         "promise": "Økologisk, sporbar og engageret Cognac, fra vinmark til glas.",
         "lead": "Størstedelen af de eaux-de-vie, som bruges af Cognac Esprit Organic, kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait eller fra en registreret leverandør godkendt HVE og CEC.",
         "proof_label": "Offentlige beviser for HVE og CEC",
@@ -1955,7 +1952,6 @@ HVE_CEC_COPY = {
         "hero_intro": "Eaux-de-vie valgt med omtanke, fra vinmark til glass.",
         "heading": "Engasjerte vinmarker og tydeligere sporbarhet for eaux-de-vie.",
         "lockup_label": "Offisiell signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
-        "charter_caption": "CEC i kobber og HVE i svart, i rekkefølgen Cognac-chartret angir.",
         "promise": "Økologisk, sporbar og forpliktende Cognac, fra vinmark til glass.",
         "lead": "Det meste av eaux-de-vie som brukes av Cognac Esprit Organic kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller fra en registrert leverandør godkjent HVE og CEC.",
         "proof_label": "Offentlige bevislenker for HVE og CEC",
@@ -1995,7 +1991,6 @@ HVE_CEC_COPY = {
         "hero_intro": "Eaux-de-vie utvalda med omsorg, från vingård till glas.",
         "heading": "Engagerade vingårdar och tydligare spårbarhet för eaux-de-vie.",
         "lockup_label": "Officiell signatur för Certification Environnementale Cognac och Haute Valeur Environnementale",
-        "charter_caption": "CEC i koppar och HVE i svart, i den ordning Cognac-chartret anger.",
         "promise": "Ekologisk, spårbar och engagerad Cognac, från vingård till glas.",
         "lead": "Merparten av de eaux-de-vie som används av Cognac Esprit Organic kommer från SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller från en registrerad leverantör godkänd HVE och CEC.",
         "proof_label": "Offentliga bevislänkar för HVE och CEC",
@@ -2179,15 +2174,15 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
     cec_logo = prefix + "assets/img/certifications/logo-cec-cuivre-rvb.png"
     hve_logo = prefix + "assets/img/certifications/logo-hve-noir.png"
     hve_links = [
-        (hve_directory, copy["links"][0], "button"),
-        (hve_csv, copy["links"][1], "text-link"),
-        (environmental_certification, copy["links"][2], "text-link"),
-        (cec_cognac, copy["links"][3], "text-link"),
-        (cec_bureau_veritas, copy["links"][4], "text-link"),
+        (hve_directory, copy["links"][0]),
+        (hve_csv, copy["links"][1]),
+        (environmental_certification, copy["links"][2]),
+        (cec_cognac, copy["links"][3]),
+        (cec_bureau_veritas, copy["links"][4]),
     ]
     hve_link_html = "".join(
-        f'<a class="{cls}" href="{href}" target="_blank" rel="noopener">{escape(label)}</a>'
-        for href, label, cls in hve_links
+        f'<a class="hve-cec-source-link" href="{href}" target="_blank" rel="noopener">{escape(label)}</a>'
+        for href, label in hve_links
     )
     hve_card = copy["hve_card"]
     cec_card = copy["cec_card"]
@@ -2213,10 +2208,9 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
       <h2>{escape(copy["heading"])}</h2>
       <div class="hve-cec-charter-lockup" role="img" aria-label="{escape(copy["lockup_label"])}">
         <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="" width="592" height="592" loading="lazy" decoding="async">
-        <span class="hve-cec-lockup-plus" aria-hidden="true">+</span>
+        <span class="hve-cec-lockup-divider" aria-hidden="true"></span>
         <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="" width="255" height="258" loading="lazy" decoding="async">
       </div>
-      <p class="hve-cec-charter-caption">{escape(copy["charter_caption"])}</p>
     </div>
     <div class="organic-proof-lead">
       <p class="hve-cec-promise">{escape(copy["promise"])}</p>
@@ -2270,7 +2264,7 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
   <div class="section-inner organic-certification-grid">
     <div class="hve-cec-proof-mark" role="img" aria-label="{escape(copy["lockup_label"])}">
       <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="" width="592" height="592" loading="lazy" decoding="async">
-      <span class="hve-cec-lockup-plus" aria-hidden="true">+</span>
+      <span class="hve-cec-lockup-divider" aria-hidden="true"></span>
       <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="" width="255" height="258" loading="lazy" decoding="async">
     </div>
     <div>
@@ -6294,16 +6288,18 @@ thead th {
 .organic-proof-card.reverse .organic-proof-card-copy { background: linear-gradient(135deg, #69550d, #513213); }
 .proof-kicker { margin: 0 0 16px; color: #d9bd72; text-transform: uppercase; letter-spacing: .16em; font-size: .74rem; font-weight: 900; }
 .organic-proof-card h2 { max-width: 620px; color: #fff; font-size: clamp(2.1rem, 4.6vw, 4.45rem); }
+.hve-cec-page { --cec-copper: #b67645; --cec-green: #174f3c; --cec-ink: #342216; --cec-porcelain: #fbf8f1; --cec-line: rgba(73, 54, 38, .18); }
+.hve-cec-intro .organic-proof-intro-grid { align-items: center; }
 .hve-cec-page .hve-cec-promise { max-width: 650px; color: #2f4a2b; font-size: clamp(1.35rem, 2.3vw, 1.85rem); line-height: 1.16; font-weight: 900; }
-.hve-cec-page .hve-cec-public-links { gap: 10px; margin-top: 24px; }
-.hve-cec-page .hve-cec-public-links a { background: #f8f4ea; border-color: rgba(94, 61, 35, .24); }
-.hve-cec-page { --cec-copper: #f5a872; --cec-green: #095540; --cec-cream: #fff7ed; }
-.hve-cec-charter-lockup { display: flex; align-items: center; gap: clamp(14px, 3vw, 28px); width: min(430px, 100%); margin-top: 28px; padding: clamp(18px, 3vw, 28px); background: linear-gradient(90deg, rgba(9,85,64,.08), rgba(245,168,114,.18)); border-left: 7px solid var(--cec-green); box-shadow: 0 22px 46px rgba(47,74,43,.12); }
-.hve-cec-lockup-cec, .hve-cec-lockup-hve { display: block; height: auto; object-fit: contain; flex: 0 0 auto; }
-.hve-cec-charter-lockup .hve-cec-lockup-cec { width: clamp(112px, 16vw, 154px); }
-.hve-cec-charter-lockup .hve-cec-lockup-hve { width: clamp(38px, 5.4vw, 52px); }
-.hve-cec-lockup-plus { color: var(--cec-green); font-family: Montserrat, Arial, sans-serif; font-size: clamp(1.75rem, 4vw, 3.2rem); font-weight: 800; line-height: 1; letter-spacing: 0; }
-.hve-cec-charter-caption { margin: 12px 0 0; max-width: 430px; color: #5e3d23; font-family: Georgia, "Times New Roman", serif; font-size: .94rem; font-style: italic; }
+.hve-cec-page .hve-cec-public-links { gap: 8px; margin-top: 26px; align-items: stretch; }
+.hve-cec-page .hve-cec-public-links a { min-height: 42px; display: inline-flex; align-items: center; padding: 10px 14px; border: 1px solid var(--cec-line); border-radius: 3px; background: rgba(255,255,255,.48); color: var(--cec-ink); box-shadow: inset 0 -1px 0 rgba(73,54,38,.05); font-size: .74rem; font-weight: 850; letter-spacing: .04em; line-height: 1.18; text-transform: uppercase; }
+.hve-cec-page .hve-cec-public-links a:hover, .hve-cec-page .hve-cec-public-links a:focus-visible { background: var(--cec-porcelain); border-color: rgba(23,79,60,.45); color: var(--cec-green); }
+.hve-cec-charter-lockup { position: relative; display: grid; grid-template-columns: minmax(132px, 1fr) 1px minmax(44px, .38fr); align-items: center; gap: clamp(16px, 3vw, 28px); width: min(500px, 100%); margin-top: 30px; padding: clamp(22px, 3.5vw, 34px); background: linear-gradient(135deg, rgba(255,255,255,.82), rgba(236,226,206,.76)); border: 1px solid rgba(73,54,38,.2); border-radius: 4px; box-shadow: 0 24px 58px rgba(47,74,43,.12); }
+.hve-cec-charter-lockup::before { content: ""; position: absolute; inset: 10px; border: 1px solid rgba(182,118,69,.22); border-radius: 2px; pointer-events: none; }
+.hve-cec-lockup-cec, .hve-cec-lockup-hve { position: relative; z-index: 1; display: block; height: auto; object-fit: contain; }
+.hve-cec-charter-lockup .hve-cec-lockup-cec { justify-self: end; width: clamp(126px, 17vw, 176px); }
+.hve-cec-charter-lockup .hve-cec-lockup-hve { justify-self: start; width: clamp(56px, 7vw, 82px); }
+.hve-cec-lockup-divider { position: relative; z-index: 1; display: block; width: 1px; height: clamp(76px, 10vw, 118px); background: linear-gradient(180deg, transparent, rgba(52,34,22,.32), transparent); }
 .proof-facts { display: grid; gap: 0; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.26); }
 .proof-facts li { display: grid; grid-template-columns: minmax(120px, .36fr) 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.2); }
 .proof-facts span { color: rgba(255,255,255,.68); text-transform: uppercase; letter-spacing: .11em; font-size: .68rem; font-weight: 900; }
@@ -6317,9 +6313,9 @@ thead th {
 .organic-chain span { min-height: 74px; display: grid; place-items: center; padding: 12px; background: #2f4a2b; color: #fff; font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
 .hve-cec-page .organic-proof-card h2 { font-size: clamp(1.9rem, 3.6vw, 3.45rem); }
 .hve-cec-page .organic-proof-card-copy > p:not(.proof-kicker) { max-width: 700px; color: rgba(255,255,255,.88); font-size: 1.01rem; }
-.hve-cec-proof-mark { display: flex; align-items: center; justify-content: center; gap: clamp(18px, 4vw, 42px); min-height: 280px; padding: 34px; background: linear-gradient(180deg, #fff7ed, #efe4d5); border-top: 8px solid var(--cec-green); box-shadow: inset 0 0 0 1px rgba(94,61,35,.12); }
-.hve-cec-proof-mark .hve-cec-lockup-cec { width: clamp(140px, 22vw, 210px); }
-.hve-cec-proof-mark .hve-cec-lockup-hve { width: clamp(47px, 7.3vw, 70px); }
+.hve-cec-proof-mark { display: grid; grid-template-columns: minmax(150px, 1fr) 1px minmax(52px, .35fr); align-items: center; justify-items: center; gap: clamp(20px, 4vw, 36px); min-height: 280px; padding: clamp(28px, 4.5vw, 46px); background: radial-gradient(circle at 20% 20%, rgba(255,255,255,.72), transparent 38%), linear-gradient(135deg, #fbf8f1, #e7dcc8); border: 1px solid rgba(73,54,38,.16); border-radius: 4px; box-shadow: inset 0 0 0 10px rgba(255,255,255,.32); }
+.hve-cec-proof-mark .hve-cec-lockup-cec { justify-self: end; width: clamp(148px, 21vw, 210px); }
+.hve-cec-proof-mark .hve-cec-lockup-hve { justify-self: start; width: clamp(62px, 8.5vw, 92px); }
 .hve-cec-proof-band h2::after { content: ""; display: block; width: 78px; height: 5px; margin-top: 18px; background: var(--cec-copper); }
 @media (max-width: 1060px) {
   .organic-proof-intro-grid, .organic-proof-note-grid, .organic-certification-grid, .organic-proof-card, .organic-proof-card.reverse { grid-template-columns: 1fr; }
@@ -6332,8 +6328,9 @@ thead th {
   .organic-proof-card-copy { padding: 34px 24px 42px; }
   .proof-facts li, .organic-chain { grid-template-columns: 1fr; }
   .organic-chain span { min-height: 52px; }
-  .hve-cec-proof-mark { min-height: 220px; padding: 24px; }
-  .hve-cec-charter-lockup { padding: 18px; }
+  .hve-cec-proof-mark { min-height: 220px; padding: 24px; gap: 18px; }
+  .hve-cec-charter-lockup { padding: 20px; gap: 16px; }
+  .hve-cec-page .hve-cec-public-links a { width: 100%; justify-content: center; text-align: center; }
 }
 '''
     write("assets/css/styles.css", css)

@@ -2828,6 +2828,11 @@ def product_gtin_variants(product, parent_id):
         variants.append({
             "@type": "Product",
             "name": variant["name"],
+            "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
+            "manufacturer": {"@id": DOMAIN + "/#organization"},
+            "category": product["category"],
+            "image": DOMAIN + "/" + product["image"],
+            "description": f"{variant['name']} : {product['short']}",
             "size": variant["size"],
             "gtin13": variant["gtin13"],
             "isVariantOf": {"@id": parent_id},

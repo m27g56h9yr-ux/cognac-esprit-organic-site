@@ -1,13 +1,104 @@
 from html import escape
 import json
+import posixpath
 from pathlib import Path
 import re
 
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260702-footerfix01"
+CSS_VERSION = "20260702-hvecec-charte01"
 JS_VERSION = "20260701-vsop-volume01"
+LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
+SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
+
+COMMON_I18N = {
+    "fr": {
+        "skip": "Aller au contenu",
+        "nav": "Navigation principale",
+        "open_menu": "Ouvrir le menu",
+        "choose_language": "Choisir la langue",
+        "range": "La gamme",
+        "house": "La maison",
+        "approach": "Notre démarche",
+        "production": "La production",
+        "people": "Léopold et Fanny",
+        "team": "L’équipe",
+        "visit": "Visiter",
+        "organic": "Agriculture biologique",
+        "warning": "L'abus d'alcool est dangereux pour la santé. A consommer avec modération.",
+        "footer_range": "Gamme",
+        "legal": "Mentions légales",
+    },
+    "en": {
+        "skip": "Skip to content",
+        "nav": "Primary navigation",
+        "open_menu": "Open menu",
+        "choose_language": "Choose language",
+        "range": "The range",
+        "house": "The house",
+        "approach": "Our approach",
+        "production": "Production",
+        "people": "Léopold and Fanny",
+        "team": "The team",
+        "visit": "Visit",
+        "organic": "Organic agriculture",
+        "warning": "Alcohol abuse is dangerous for your health. Consume in moderation.",
+        "footer_range": "Range",
+        "legal": "Legal notice",
+    },
+    "da": {
+        "skip": "Gå til indhold",
+        "nav": "Primær navigation",
+        "open_menu": "Åbn menu",
+        "choose_language": "Vælg sprog",
+        "range": "Sortimentet",
+        "house": "Huset",
+        "approach": "Vores tilgang",
+        "production": "Fremstilling",
+        "people": "Léopold og Fanny",
+        "team": "Teamet",
+        "visit": "Besøg",
+        "organic": "Økologisk landbrug",
+        "warning": "Alkoholmisbrug er skadeligt for helbredet. Nyd med måde.",
+        "footer_range": "Sortiment",
+        "legal": "Juridiske oplysninger",
+    },
+    "no": {
+        "skip": "Gå til innhold",
+        "nav": "Hovednavigasjon",
+        "open_menu": "Åpne meny",
+        "choose_language": "Velg språk",
+        "range": "Sortimentet",
+        "house": "Huset",
+        "approach": "Vår tilnærming",
+        "production": "Produksjon",
+        "people": "Léopold og Fanny",
+        "team": "Teamet",
+        "visit": "Besøk",
+        "organic": "Økologisk landbruk",
+        "warning": "Alkoholmisbruk er skadelig for helsen. Nyt med måte.",
+        "footer_range": "Sortiment",
+        "legal": "Juridisk informasjon",
+    },
+    "sv": {
+        "skip": "Gå till innehåll",
+        "nav": "Huvudnavigering",
+        "open_menu": "Öppna meny",
+        "choose_language": "Välj språk",
+        "range": "Sortimentet",
+        "house": "Huset",
+        "approach": "Vårt arbetssätt",
+        "production": "Tillverkning",
+        "people": "Léopold och Fanny",
+        "team": "Teamet",
+        "visit": "Besök",
+        "organic": "Ekologiskt jordbruk",
+        "warning": "Alkoholmissbruk är skadligt för hälsan. Njut med måtta.",
+        "footer_range": "Sortiment",
+        "legal": "Juridisk information",
+    },
+}
 
 CONTACT = {
     "email": "Cognac@mdpierre.com",
@@ -773,12 +864,44 @@ def nutrition_table(slug: str, product_name: str) -> str:
 
 
 def rel_prefix(path: str) -> str:
-    return "../" if "/" in path else ""
+    depth = max(len(Path(path).parts) - 1, 0)
+    return "../" * depth
 
 
 def lang_for_path(path: str) -> str:
     first_segment = path.split("/", 1)[0]
-    return first_segment if first_segment in {"en", "da", "no", "sv"} else "fr"
+    return first_segment if first_segment in LOCALIZED_LANGUAGES else "fr"
+
+
+def base_path_for(path: str) -> str:
+    first_segment = path.split("/", 1)[0]
+    return path.split("/", 1)[1] if first_segment in LOCALIZED_LANGUAGES else path
+
+
+def localized_path_for(base_path: str, lang: str) -> str:
+    return base_path if lang == "fr" else f"{lang}/{base_path}"
+
+
+def relative_href(current_path: str, target_path: str) -> str:
+    current_dir = posixpath.dirname(current_path)
+    href = posixpath.relpath(target_path, current_dir or ".")
+    return href if href != "." else "./"
+
+
+def localized_href(current_path: str, base_path: str, lang=None) -> str:
+    lang = lang or lang_for_path(current_path)
+    return relative_href(current_path, localized_path_for(base_path, lang))
+
+
+def locale_alternate_links(path: str) -> str:
+    base_path = base_path_for(path)
+    localized_paths = {lang: localized_path_for(base_path, lang) for lang in SUPPORTED_LANGUAGES}
+    return "\n  ".join([
+        '<!-- Locale alternates -->',
+        *(f'<link rel="alternate" hreflang="{lang}" href="{page_url(localized_path)}">' for lang, localized_path in localized_paths.items()),
+        f'<link rel="alternate" hreflang="x-default" href="{page_url(base_path)}">',
+        '<!-- /Locale alternates -->',
+    ])
 
 
 def canonical_home_href(path: str) -> str:
@@ -797,8 +920,11 @@ def page_url(path: str) -> str:
 
 
 def breadcrumb_schema(path: str, title: str):
+    lang = lang_for_path(path)
+    home_name = "Accueil" if lang == "fr" else "Home"
+    home_item = DOMAIN + canonical_home_href(path)
     items = [
-        {"@type": "ListItem", "position": 1, "name": "Accueil", "item": DOMAIN + "/"},
+        {"@type": "ListItem", "position": 1, "name": home_name, "item": home_item},
     ]
     if path != "index.html":
         items.append({"@type": "ListItem", "position": 2, "name": title, "item": page_url(path)})
@@ -839,43 +965,53 @@ def json_ld(items):
     )
 
 
-def nav_html(current: str, prefix: str) -> str:
-    product_current = current.startswith("produits/")
-    house_current = current.startswith("production/") or current.startswith("demarche/") or current.startswith("leopold-et-fanny/") or current.startswith("equipe/")
+def clean_html(html: str) -> str:
+    return "\n".join(line.rstrip() for line in html.splitlines()) + "\n"
+
+
+def nav_html(current: str, prefix: str, lang: str) -> str:
+    base_current = base_path_for(current)
+    copy = COMMON_I18N.get(lang, COMMON_I18N["en"])
+    product_current = base_current.startswith("produits/")
+    house_current = base_current.startswith("production/") or base_current.startswith("demarche/") or base_current.startswith("leopold-et-fanny/") or base_current.startswith("equipe/")
     range_items = "".join(
-        f'<a href="{prefix}produits/{p["slug"]}.html">{escape(p["name"])}</a>'
+        f'<a href="{localized_href(current, "produits/" + p["slug"] + ".html", lang)}">{escape(p["name"])}</a>'
         for p in PRODUCTS
     )
     house_items = (
-        f'<a href="{prefix}production/"><span data-fr>Notre démarche</span><span data-en>Our approach</span></a>'
-        f'<a href="{prefix}demarche/"><span data-fr>La production</span><span data-en>Production</span></a>'
-        f'<a href="{prefix}leopold-et-fanny/"><span data-fr>Léopold et Fanny</span><span data-en>Léopold and Fanny</span></a>'
-        f'<a href="{prefix}equipe/"><span data-fr>L’équipe</span><span data-en>The team</span></a>'
+        f'<a href="{localized_href(current, "production/index.html", lang)}">{escape(copy["approach"])}</a>'
+        f'<a href="{localized_href(current, "demarche/index.html", lang)}">{escape(copy["production"])}</a>'
+        f'<a href="{localized_href(current, "leopold-et-fanny/index.html", lang)}">{escape(copy["people"])}</a>'
+        f'<a href="{localized_href(current, "equipe/index.html", lang)}">{escape(copy["team"])}</a>'
     )
-    visit_current = ' aria-current="page"' if current == "visiter.html" else ""
+    visit_current = ' aria-current="page"' if base_current == "visiter.html" else ""
     product_aria = ' aria-current="page"' if product_current else ""
     house_aria = ' aria-current="page"' if house_current else ""
     return f"""
 <div class="nav-dropdown">
-  <a{product_aria} href="{prefix}produits/transmission-xo.html"><span data-fr>La gamme</span><span data-en>The range</span></a>
+  <a{product_aria} href="{localized_href(current, "produits/transmission-xo.html", lang)}">{escape(copy["range"])}</a>
   <div class="dropdown-menu" role="menu">{range_items}</div>
 </div>
 <div class="nav-dropdown">
-  <a{house_aria} href="{prefix}production/"><span data-fr>La maison</span><span data-en>The house</span></a>
+  <a{house_aria} href="{localized_href(current, "production/index.html", lang)}">{escape(copy["house"])}</a>
   <div class="dropdown-menu" role="menu">{house_items}</div>
 </div>
-<a{visit_current} href="{prefix}visiter.html"><span data-fr>Visiter</span><span data-en>Visit</span></a>
+<a{visit_current} href="{localized_href(current, "visiter.html", lang)}">{escape(copy["visit"])}</a>
 """
 
 
 def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intro_en: str, body: str, schemas=None, image="assets/img/products/gamme-esprit-organic.jpg", page_class="", hero_actions="", hero_video="", show_hero=True, robots=None, head_extra=""):
     prefix = rel_prefix(path)
+    lang = lang_for_path(path)
+    copy = COMMON_I18N.get(lang, COMMON_I18N["en"])
     canonical = page_url(path)
     robots_content = robots or ("noindex,nofollow" if NOINDEX else "index,follow")
     noindex = f'<meta name="robots" content="{robots_content}">'
     schema_items = [organization_schema(), breadcrumb_schema(path, h1)]
     if schemas:
         schema_items.extend(schemas)
+    locale_links = "" if 'rel="alternate"' in head_extra else locale_alternate_links(path)
+    head_extra = "\n  ".join(part for part in [locale_links, head_extra] if part)
     root_image = "/" + image
     hero_class = "page-hero video-hero" if hero_video else "page-hero"
     hero_video_html = f"""<video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="{prefix}{image}">
@@ -904,8 +1040,8 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         {hero_actions}
       </div>
     </section>""" if show_hero else ""
-    return f"""<!doctype html>
-<html lang="fr" data-default-lang="fr">
+    return clean_html(f"""<!doctype html>
+<html lang="{lang}" data-default-lang="{lang}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -925,15 +1061,15 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <link rel="stylesheet" href="{prefix}assets/css/styles.css?v={CSS_VERSION}">
   {json_ld(schema_items)}
 </head>
-<body class="{page_class}">
-  <a class="skip-link" href="#contenu">Aller au contenu</a>
+<body data-lang="{lang}" class="{page_class}">
+  <a class="skip-link" href="#contenu">{escape(copy["skip"])}</a>
   <header class="site-header">
-    <nav class="nav" aria-label="Navigation principale">
+    <nav class="nav" aria-label="{escape(copy["nav"])}">
       <a class="brand" href="{canonical_home_href(path)}" aria-label="Cognac Esprit Organic">
         <img src="{prefix}assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic">
       </a>
-      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="Ouvrir le menu">Menu</button>
-      <div class="nav-links" data-nav-links>{nav_html(path, prefix)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">{lang_for_path(path).upper()}</button><div class="lang-menu-panel" role="menu" aria-label="Choisir la langue"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><a class="header-bio-link" href="{prefix}agriculture-biologique.html" aria-label="Agriculture biologique"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="Agriculture biologique"></a></div>
+      <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="{escape(copy["open_menu"])}">Menu</button>
+      <div class="nav-links" data-nav-links>{nav_html(path, prefix, lang)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">{lang.upper()}</button><div class="lang-menu-panel" role="menu" aria-label="{escape(copy["choose_language"])}"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><a class="header-bio-link" href="{localized_href(path, "agriculture-biologique.html", lang)}" aria-label="{escape(copy["organic"])}"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="{escape(copy["organic"])}"></a></div>
     </nav>
   </header>
   <main id="contenu">
@@ -944,32 +1080,41 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
     <div class="footer-grid">
       <div>
         <img class="footer-logo" src="{prefix}assets/img/logo-esprit-organic-white.svg" alt="Cognac Esprit Organic">
-        <p class="small">L'abus d'alcool est dangereux pour la santé. A consommer avec modération.</p>
+        <p class="small">{escape(copy["warning"])}</p>
       </div>
       <div class="footer-links">
-        <a href="{prefix}produits/transmission-xo.html">Gamme</a>
-        <a href="{prefix}faq.html">FAQ</a>
-        <a href="{prefix}cocktails.html">Cocktails</a>
-        <a href="{prefix}hve-cec.html">HVE / CEC</a>
+        <a href="{localized_href(path, "produits/transmission-xo.html", lang)}">{escape(copy["footer_range"])}</a>
+        <a href="{localized_href(path, "faq.html", lang)}">FAQ</a>
+        <a href="{localized_href(path, "cocktails.html", lang)}">Cocktails</a>
+        <a href="{localized_href(path, "hve-cec.html", lang)}">HVE / CEC</a>
+        <a href="{localized_href(path, "mentions-legales.html", lang)}">{escape(copy["legal"])}</a>
       </div>
     </div>
   </footer>
   <script src="{prefix}assets/js/main.js?v={JS_VERSION}"></script>
 </body>
 </html>
-"""
+""")
 
 
 def redirect_page(path: str, title: str, target: str):
     prefix = rel_prefix(path)
+    lang = lang_for_path(path)
+    moved_copy = {
+        "fr": ("Redirection vers la nouvelle page Cognac Esprit Organic.", "Cette page a été déplacée.", "Ouvrir la nouvelle page"),
+        "en": ("Redirect to the new Cognac Esprit Organic page.", "This page has moved.", "Open the new page"),
+        "da": ("Omdirigering til den nye Cognac Esprit Organic-side.", "Denne side er flyttet.", "Åbn den nye side"),
+        "no": ("Omdirigering til den nye Cognac Esprit Organic-siden.", "Denne siden er flyttet.", "Åpne den nye siden"),
+        "sv": ("Omdirigering till den nya Cognac Esprit Organic-sidan.", "Den här sidan har flyttats.", "Öppna den nya sidan"),
+    }.get(lang, ("Redirect to the new Cognac Esprit Organic page.", "This page has moved.", "Open the new page"))
     noindex = '<meta name="robots" content="noindex,nofollow">' if NOINDEX else '<meta name="robots" content="index,follow">'
     return f"""<!doctype html>
-<html lang="fr">
+<html lang="{lang}" data-default-lang="{lang}">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{escape(title)}</title>
-  <meta name="description" content="Redirection vers la nouvelle page Cognac Esprit Organic.">
+  <meta name="description" content="{escape(moved_copy[0])}">
   {noindex}
   <link rel="canonical" href="{DOMAIN}/{target}">
   <meta http-equiv="refresh" content="0; url={prefix}{target}">
@@ -978,13 +1123,13 @@ def redirect_page(path: str, title: str, target: str):
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{prefix}assets/css/styles.css?v={CSS_VERSION}">
 </head>
-<body>
+<body data-lang="{lang}">
   <main class="redirect-page">
     <section>
       <div class="section-inner">
         <h1>{escape(title)}</h1>
-        <p>Cette page a été déplacée.</p>
-        <a class="button" href="{prefix}{target}">Ouvrir la nouvelle page</a>
+        <p>{escape(moved_copy[1])}</p>
+        <a class="button" href="{prefix}{target}">{escape(moved_copy[2])}</a>
       </div>
     </section>
   </main>
@@ -1683,8 +1828,257 @@ def organic_proof_page():
     return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "Les preuves publiques de l'engagement bio Cognac Esprit Organic : Domaine de la Grande Versenne et Maison des Pierres certifiés Agriculture biologique Europe par Ecocert.", "Agriculture biologique", "Une démarche contrôlée, documentée, et visible dans les annuaires publics.", "A verified organic approach documented in public directories.", body, schemas=[organic_proof_schema()], image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
 
 
-def hve_cec_schema():
-    page = page_url("hve-cec.html")
+HVE_CEC_COPY = {
+    "fr": {
+        "title": "HVE / CEC | Cognac Esprit Organic",
+        "description": "HVE / CEC : des eaux-de-vie bio, traçables et engagées, avec liens publics vers data.gouv, le ministère, le BNIC et Bureau Veritas.",
+        "hero_intro": "Des eaux-de-vie sélectionnées avec exigence, des vignes jusqu’au verre.",
+        "heading": "Des vignes engagées, des eaux-de-vie mieux tracées.",
+        "lockup_label": "Signature officielle Certification Environnementale Cognac et Haute Valeur Environnementale",
+        "charter_caption": "Signature CEC cuivre et HVE noir, dans l’ordre de la charte Cognac.",
+        "promise": "Un cognac bio, traçable et engagé, des vignes jusqu’au verre.",
+        "lead": "L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.",
+        "proof_label": "Liens publics de preuve HVE et CEC",
+        "links": ["Preuve HVE data.gouv", "Fichier public HVE", "Ministère de l’Agriculture", "CEC Cognac / BNIC", "Audit CEC Bureau Veritas"],
+        "hve_card": {
+            "kicker": "Haute Valeur Environnementale",
+            "title": "HVE : une exploitation nommée dans l’annuaire public.",
+            "text": "La certification HVE correspond au niveau 3 de la certification environnementale des exploitations agricoles. Elle repose sur des indicateurs de résultats portant notamment sur la biodiversité, la stratégie phytosanitaire, la fertilisation et l’irrigation.",
+            "facts": [("Exploitation", "SCEA Domaine de la Grande Versenne"), ("Adresse", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Activité", "Viticulture"), ("Date HVE", "23/12/2024 dans l’annuaire HVE au 01/06/2025")],
+            "buttons": ["Voir l’annuaire HVE", "Ouvrir le fichier public CSV"],
+            "alt": "Paysage viticole du Domaine de la Grande Versenne à Triac-Lautrait",
+        },
+        "cec_card": {
+            "kicker": "Certification Environnementale Cognac",
+            "title": "CEC : une démarche propre au vignoble de Cognac.",
+            "text": "La Certification Environnementale Cognac est une démarche de filière portée par les acteurs du Cognac. Elle évalue les pratiques viticoles autour de cinq objectifs : biodiversité, qualité de l’eau, de l’air et des sols, restriction des traitements de synthèse, vie des sols et sobriété carbone.",
+            "facts": [("Référentiel", "24 pratiques environnementales adaptées au contexte Cognac"), ("Statut public", "Reconnaissance de niveau 2 par le ministère de l’Agriculture"), ("Contrôle", "Audit externe et certificat au nom de l’exploitation selon Bureau Veritas"), ("Approvisionnement", "SCEA Domaine de la Grande Versenne ou fournisseur référencé HVE / CEC")],
+            "buttons": ["Voir la page Cognac / BNIC", "Voir Bureau Veritas CEC"],
+            "alt": "Vieilles vignes dans le vignoble de Cognac",
+        },
+        "band": {
+            "eyebrow": "Ce que cela change",
+            "title": "Une sélection plus lisible des eaux-de-vie.",
+            "text": "La démarche permet de relier les lots à des exploitations engagées et contrôlées, puis de documenter les achats auprès de fournisseurs référencés quand l’approvisionnement ne vient pas directement de la SCEA Domaine de la Grande Versenne.",
+            "chain": ["Domaine", "Fournisseurs", "Traçabilité", "Élevage", "Assemblage"],
+        },
+        "note": {
+            "title": "Des engagements visibles, des preuves accessibles.",
+            "p1": "Nos engagements se vérifient simplement : HVE dans l’annuaire public, CEC auprès des sources officielles de la filière Cognac.",
+            "p2": "La HVE de la SCEA Domaine de la Grande Versenne est nominative sur data.gouv. Pour la CEC, les sites publics du BNIC et de Bureau Veritas détaillent le référentiel, sa reconnaissance et le contrôle ; aucun annuaire nominatif ouvert équivalent au fichier HVE n’est publié à ce jour.",
+            "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Certification environnementale agricole", "Certification Environnementale Cognac", "Audit CEC Bureau Veritas"],
+        },
+    },
+    "en": {
+        "title": "HVE / CEC | Cognac Esprit Organic",
+        "description": "HVE / CEC: organic, traceable and committed eaux-de-vie, with public links to data.gouv, the French ministry, BNIC and Bureau Veritas.",
+        "hero_intro": "Eaux-de-vie selected with care, from vineyard to glass.",
+        "heading": "Committed vineyards and clearer eau-de-vie traceability.",
+        "lockup_label": "Official Cognac Environmental Certification and High Environmental Value signature",
+        "charter_caption": "Copper CEC and black HVE signature, following the Cognac charter order.",
+        "promise": "Organic, traceable and committed Cognac, from vineyard to glass.",
+        "lead": "Most eaux-de-vie used by Cognac Esprit Organic come from SCEA Domaine de la Grande Versenne in Triac-Lautrait, or from a listed supplier approved HVE and CEC.",
+        "proof_label": "Public HVE and CEC proof links",
+        "links": ["HVE proof on data.gouv", "Public HVE CSV file", "French Ministry of Agriculture", "CEC Cognac / BNIC", "Bureau Veritas CEC audit"],
+        "hve_card": {
+            "kicker": "High Environmental Value",
+            "title": "HVE: an estate named in the public directory.",
+            "text": "HVE certification corresponds to level 3 of the environmental certification for French farms. It is based on result indicators covering biodiversity, crop protection strategy, fertilisation and irrigation.",
+            "facts": [("Estate", "SCEA Domaine de la Grande Versenne"), ("Address", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Activity", "Viticulture"), ("HVE date", "23/12/2024 in the HVE directory dated 01/06/2025")],
+            "buttons": ["View the HVE directory", "Open the public CSV file"],
+            "alt": "Vineyard landscape at Domaine de la Grande Versenne in Triac-Lautrait",
+        },
+        "cec_card": {
+            "kicker": "Cognac Environmental Certification",
+            "title": "CEC: a programme specific to the Cognac vineyard.",
+            "text": "Cognac Environmental Certification is a sector programme led by Cognac stakeholders. It assesses winegrowing practices around five objectives: biodiversity, water, air and soil quality, restriction of synthetic treatments, soil life and carbon restraint.",
+            "facts": [("Standard", "24 environmental practices adapted to the Cognac context"), ("Public status", "Level 2 recognition by the French Ministry of Agriculture"), ("Control", "External audit and estate certificate according to Bureau Veritas"), ("Supply", "SCEA Domaine de la Grande Versenne or listed HVE / CEC supplier")],
+            "buttons": ["View the Cognac / BNIC page", "View Bureau Veritas CEC"],
+            "alt": "Old vines in the Cognac vineyard",
+        },
+        "band": {
+            "eyebrow": "What it changes",
+            "title": "A clearer selection of eaux-de-vie.",
+            "text": "The approach links lots to committed and audited estates, and documents purchases from listed suppliers when supply does not come directly from SCEA Domaine de la Grande Versenne.",
+            "chain": ["Estate", "Suppliers", "Traceability", "Ageing", "Blending"],
+        },
+        "note": {
+            "title": "Visible commitments, accessible proof.",
+            "p1": "Our commitments can be checked simply: HVE in the public directory, CEC through official Cognac sector sources.",
+            "p2": "The HVE certification of SCEA Domaine de la Grande Versenne is named on data.gouv. For CEC, the public BNIC and Bureau Veritas websites describe the standard, its recognition and the audit process; no equivalent open nominative directory to the HVE file is published to date.",
+            "links": ["HVE data.gouv directory", "Public HVE file", "Agricultural environmental certification", "Cognac Environmental Certification", "Bureau Veritas CEC audit"],
+        },
+    },
+    "da": {
+        "title": "HVE / CEC | Cognac Esprit Organic",
+        "description": "HVE / CEC: økologiske, sporbare og engagerede eaux-de-vie med offentlige links til data.gouv, ministeriet, BNIC og Bureau Veritas.",
+        "hero_intro": "Eaux-de-vie udvalgt med omhu, fra vinmark til glas.",
+        "heading": "Engagerede vinmarker og tydeligere sporbarhed for eaux-de-vie.",
+        "lockup_label": "Officiel signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
+        "charter_caption": "CEC i kobber og HVE i sort, i den rækkefølge Cognac-chartret angiver.",
+        "promise": "Økologisk, sporbar og engageret Cognac, fra vinmark til glas.",
+        "lead": "Størstedelen af de eaux-de-vie, som bruges af Cognac Esprit Organic, kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait eller fra en registreret leverandør godkendt HVE og CEC.",
+        "proof_label": "Offentlige beviser for HVE og CEC",
+        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Det franske landbrugsministerium", "CEC Cognac / BNIC", "Bureau Veritas CEC-audit"],
+        "hve_card": {
+            "kicker": "Haute Valeur Environnementale",
+            "title": "HVE: en ejendom nævnt i det offentlige register.",
+            "text": "HVE-certificeringen svarer til niveau 3 i den franske miljøcertificering af landbrug. Den bygger på resultatindikatorer for blandt andet biodiversitet, plantebeskyttelsesstrategi, gødskning og vanding.",
+            "facts": [("Ejendom", "SCEA Domaine de la Grande Versenne"), ("Adresse", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Aktivitet", "Vinavl"), ("HVE-dato", "23/12/2024 i HVE-registret pr. 01/06/2025")],
+            "buttons": ["Se HVE-registret", "Åbn den offentlige CSV-fil"],
+            "alt": "Vinmarkslandskab ved Domaine de la Grande Versenne i Triac-Lautrait",
+        },
+        "cec_card": {
+            "kicker": "Certification Environnementale Cognac",
+            "title": "CEC: en tilgang specifik for Cognac-vinmarkerne.",
+            "text": "Certification Environnementale Cognac er en sektorordning drevet af Cognac-aktørerne. Den vurderer vinavlspraksis omkring fem mål: biodiversitet, vand-, luft- og jordkvalitet, begrænsning af syntetiske behandlinger, jordliv og lavere kulstofbelastning.",
+            "facts": [("Standard", "24 miljøpraksisser tilpasset Cognac-konteksten"), ("Offentlig status", "Niveau 2-anerkendelse fra det franske landbrugsministerium"), ("Kontrol", "Ekstern audit og certifikat for ejendommen ifølge Bureau Veritas"), ("Forsyning", "SCEA Domaine de la Grande Versenne eller registreret HVE / CEC-leverandør")],
+            "buttons": ["Se Cognac / BNIC-siden", "Se Bureau Veritas CEC"],
+            "alt": "Gamle vinstokke i Cognac-vinmarken",
+        },
+        "band": {
+            "eyebrow": "Hvad det ændrer",
+            "title": "Et tydeligere udvalg af eaux-de-vie.",
+            "text": "Tilgangen gør det muligt at knytte partier til engagerede og kontrollerede ejendomme og dokumentere indkøb fra registrerede leverandører, når forsyningen ikke kommer direkte fra SCEA Domaine de la Grande Versenne.",
+            "chain": ["Ejendom", "Leverandører", "Sporbarhed", "Lagring", "Assemblage"],
+        },
+        "note": {
+            "title": "Synlige forpligtelser, tilgængelige beviser.",
+            "p1": "Vores forpligtelser kan kontrolleres enkelt: HVE i det offentlige register, CEC via officielle kilder fra Cognac-sektoren.",
+            "p2": "HVE-certificeringen for SCEA Domaine de la Grande Versenne er navngivet på data.gouv. For CEC beskriver de offentlige BNIC- og Bureau Veritas-sider standarden, anerkendelsen og kontrollen; der er ikke offentliggjort et tilsvarende åbent navngivet register som HVE-filen.",
+            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljøcertificering af landbrug", "Certification Environnementale Cognac", "Bureau Veritas CEC-audit"],
+        },
+    },
+    "no": {
+        "title": "HVE / CEC | Cognac Esprit Organic",
+        "description": "HVE / CEC: økologiske, sporbare og forpliktende eaux-de-vie med offentlige lenker til data.gouv, departementet, BNIC og Bureau Veritas.",
+        "hero_intro": "Eaux-de-vie valgt med omtanke, fra vinmark til glass.",
+        "heading": "Engasjerte vinmarker og tydeligere sporbarhet for eaux-de-vie.",
+        "lockup_label": "Offisiell signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
+        "charter_caption": "CEC i kobber og HVE i svart, i rekkefølgen Cognac-chartret angir.",
+        "promise": "Økologisk, sporbar og forpliktende Cognac, fra vinmark til glass.",
+        "lead": "Det meste av eaux-de-vie som brukes av Cognac Esprit Organic kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller fra en registrert leverandør godkjent HVE og CEC.",
+        "proof_label": "Offentlige bevislenker for HVE og CEC",
+        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Det franske landbruksdepartementet", "CEC Cognac / BNIC", "Bureau Veritas CEC-revisjon"],
+        "hve_card": {
+            "kicker": "Haute Valeur Environnementale",
+            "title": "HVE: en eiendom navngitt i det offentlige registeret.",
+            "text": "HVE-sertifiseringen tilsvarer nivå 3 i den franske miljøsertifiseringen av landbruk. Den bygger på resultatindikatorer for blant annet biodiversitet, plantevernstrategi, gjødsling og vanning.",
+            "facts": [("Eiendom", "SCEA Domaine de la Grande Versenne"), ("Adresse", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Aktivitet", "Vinavl"), ("HVE-dato", "23/12/2024 i HVE-registeret per 01/06/2025")],
+            "buttons": ["Se HVE-registeret", "Åpne den offentlige CSV-filen"],
+            "alt": "Vinmarkslandskap ved Domaine de la Grande Versenne i Triac-Lautrait",
+        },
+        "cec_card": {
+            "kicker": "Certification Environnementale Cognac",
+            "title": "CEC: en ordning som er spesifikk for Cognac-vinmarkene.",
+            "text": "Certification Environnementale Cognac er en sektorordning drevet av Cognac-aktørene. Den vurderer vinpraksis rundt fem mål: biodiversitet, vann-, luft- og jordkvalitet, begrensning av syntetiske behandlinger, jordliv og lavere karbonbelastning.",
+            "facts": [("Standard", "24 miljøpraksiser tilpasset Cognac-konteksten"), ("Offentlig status", "Nivå 2-anerkjennelse fra det franske landbruksdepartementet"), ("Kontroll", "Ekstern revisjon og sertifikat for eiendommen ifølge Bureau Veritas"), ("Forsyning", "SCEA Domaine de la Grande Versenne eller registrert HVE / CEC-leverandør")],
+            "buttons": ["Se Cognac / BNIC-siden", "Se Bureau Veritas CEC"],
+            "alt": "Gamle vinstokker i Cognac-vinmarken",
+        },
+        "band": {
+            "eyebrow": "Hva det endrer",
+            "title": "Et tydeligere utvalg av eaux-de-vie.",
+            "text": "Tilnærmingen gjør det mulig å knytte partier til engasjerte og kontrollerte eiendommer, og dokumentere innkjøp fra registrerte leverandører når forsyningen ikke kommer direkte fra SCEA Domaine de la Grande Versenne.",
+            "chain": ["Eiendom", "Leverandører", "Sporbarhet", "Lagring", "Assemblage"],
+        },
+        "note": {
+            "title": "Synlige forpliktelser, tilgjengelige bevis.",
+            "p1": "Forpliktelsene våre kan kontrolleres enkelt: HVE i det offentlige registeret, CEC gjennom offisielle kilder fra Cognac-sektoren.",
+            "p2": "HVE-sertifiseringen til SCEA Domaine de la Grande Versenne er navngitt på data.gouv. For CEC beskriver de offentlige BNIC- og Bureau Veritas-sidene standarden, anerkjennelsen og kontrollen; det er ikke publisert et tilsvarende åpent navngitt register som HVE-filen.",
+            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljøsertifisering av landbruk", "Certification Environnementale Cognac", "Bureau Veritas CEC-revisjon"],
+        },
+    },
+    "sv": {
+        "title": "HVE / CEC | Cognac Esprit Organic",
+        "description": "HVE / CEC: ekologiska, spårbara och engagerade eaux-de-vie med offentliga länkar till data.gouv, ministeriet, BNIC och Bureau Veritas.",
+        "hero_intro": "Eaux-de-vie utvalda med omsorg, från vingård till glas.",
+        "heading": "Engagerade vingårdar och tydligare spårbarhet för eaux-de-vie.",
+        "lockup_label": "Officiell signatur för Certification Environnementale Cognac och Haute Valeur Environnementale",
+        "charter_caption": "CEC i koppar och HVE i svart, i den ordning Cognac-chartret anger.",
+        "promise": "Ekologisk, spårbar och engagerad Cognac, från vingård till glas.",
+        "lead": "Merparten av de eaux-de-vie som används av Cognac Esprit Organic kommer från SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller från en registrerad leverantör godkänd HVE och CEC.",
+        "proof_label": "Offentliga bevislänkar för HVE och CEC",
+        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Franska jordbruksministeriet", "CEC Cognac / BNIC", "Bureau Veritas CEC-revision"],
+        "hve_card": {
+            "kicker": "Haute Valeur Environnementale",
+            "title": "HVE: en egendom namngiven i det offentliga registret.",
+            "text": "HVE-certifieringen motsvarar nivå 3 i den franska miljöcertifieringen av jordbruk. Den bygger på resultatindikatorer för bland annat biologisk mångfald, växtskyddsstrategi, gödsling och bevattning.",
+            "facts": [("Egendom", "SCEA Domaine de la Grande Versenne"), ("Adress", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Verksamhet", "Vinodling"), ("HVE-datum", "23/12/2024 i HVE-registret per 01/06/2025")],
+            "buttons": ["Se HVE-registret", "Öppna den offentliga CSV-filen"],
+            "alt": "Vingårdslandskap vid Domaine de la Grande Versenne i Triac-Lautrait",
+        },
+        "cec_card": {
+            "kicker": "Certification Environnementale Cognac",
+            "title": "CEC: ett program särskilt för Cognac-vingårdarna.",
+            "text": "Certification Environnementale Cognac är ett branschprogram drivet av Cognac-aktörerna. Det bedömer vinodlingspraxis utifrån fem mål: biologisk mångfald, vatten-, luft- och jordkvalitet, begränsning av syntetiska behandlingar, markliv och lägre koldioxidpåverkan.",
+            "facts": [("Standard", "24 miljöpraktiker anpassade till Cognac-kontexten"), ("Offentlig status", "Nivå 2-erkännande från franska jordbruksministeriet"), ("Kontroll", "Extern revision och certifikat för egendomen enligt Bureau Veritas"), ("Försörjning", "SCEA Domaine de la Grande Versenne eller registrerad HVE / CEC-leverantör")],
+            "buttons": ["Se Cognac / BNIC-sidan", "Se Bureau Veritas CEC"],
+            "alt": "Gamla vinstockar i Cognac-vingården",
+        },
+        "band": {
+            "eyebrow": "Vad det förändrar",
+            "title": "Ett tydligare urval av eaux-de-vie.",
+            "text": "Arbetssättet gör det möjligt att koppla partier till engagerade och kontrollerade egendomar, och dokumentera inköp från registrerade leverantörer när försörjningen inte kommer direkt från SCEA Domaine de la Grande Versenne.",
+            "chain": ["Egendom", "Leverantörer", "Spårbarhet", "Lagring", "Assemblage"],
+        },
+        "note": {
+            "title": "Synliga åtaganden, tillgängliga bevis.",
+            "p1": "Våra åtaganden kan kontrolleras enkelt: HVE i det offentliga registret, CEC via officiella källor från Cognac-sektorn.",
+            "p2": "HVE-certifieringen för SCEA Domaine de la Grande Versenne är namngiven på data.gouv. För CEC beskriver de offentliga BNIC- och Bureau Veritas-sidorna standarden, erkännandet och kontrollen; inget motsvarande öppet namngivet register som HVE-filen är publicerat hittills.",
+            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljöcertifiering av jordbruk", "Certification Environnementale Cognac", "Bureau Veritas CEC-revision"],
+        },
+    },
+}
+
+
+HVE_SCHEMA_COPY = {
+    "fr": {
+        "name": "HVE / CEC : démarche environnementale et preuves",
+        "description": "Démarche HVE et Certification Environnementale Cognac pour les eaux-de-vie Cognac Esprit Organic, avec sources publiques et preuves officielles.",
+        "hve_set": "Certification environnementale des exploitations agricoles",
+        "hve_description": "L'annuaire public HVE au 01/06/2025 mentionne SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activité viticulture, date de certification 23/12/2024.",
+        "cec_set": "Démarche environnementale de la filière Cognac",
+        "cec_description": "Démarche filière Cognac reconnue de niveau 2 par le ministère de l'Agriculture selon les sources publiques Cognac/BNIC et Bureau Veritas.",
+    },
+    "en": {
+        "name": "HVE / CEC: environmental approach and proof",
+        "description": "HVE and Cognac Environmental Certification approach for Cognac Esprit Organic eaux-de-vie, with public sources and official proof.",
+        "hve_set": "Environmental certification for farms",
+        "hve_description": "The public HVE directory dated 01/06/2025 lists SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activity viticulture, certification date 23/12/2024.",
+        "cec_set": "Environmental programme for the Cognac sector",
+        "cec_description": "Cognac sector programme recognised as level 2 by the French Ministry of Agriculture according to public Cognac/BNIC and Bureau Veritas sources.",
+    },
+    "da": {
+        "name": "HVE / CEC: miljøtilgang og beviser",
+        "description": "HVE og Certification Environnementale Cognac for Cognac Esprit Organic eaux-de-vie, med offentlige kilder og officielle beviser.",
+        "hve_set": "Miljøcertificering af landbrug",
+        "hve_description": "Det offentlige HVE-register pr. 01/06/2025 nævner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, aktivitet vinavl, certificeringsdato 23/12/2024.",
+        "cec_set": "Miljøordning for Cognac-sektoren",
+        "cec_description": "Cognac-sektorens ordning er anerkendt som niveau 2 af det franske landbrugsministerium ifølge offentlige Cognac/BNIC- og Bureau Veritas-kilder.",
+    },
+    "no": {
+        "name": "HVE / CEC: miljøtilnærming og bevis",
+        "description": "HVE og Certification Environnementale Cognac for Cognac Esprit Organic eaux-de-vie, med offentlige kilder og offisielle bevis.",
+        "hve_set": "Miljøsertifisering av landbruk",
+        "hve_description": "Det offentlige HVE-registeret per 01/06/2025 nevner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, aktivitet vinavl, sertifiseringsdato 23/12/2024.",
+        "cec_set": "Miljøordning for Cognac-sektoren",
+        "cec_description": "Cognac-sektorens ordning er anerkjent som nivå 2 av det franske landbruksdepartementet ifølge offentlige Cognac/BNIC- og Bureau Veritas-kilder.",
+    },
+    "sv": {
+        "name": "HVE / CEC: miljöarbete och bevis",
+        "description": "HVE och Certification Environnementale Cognac för Cognac Esprit Organic eaux-de-vie, med offentliga källor och officiella bevis.",
+        "hve_set": "Miljöcertifiering av jordbruk",
+        "hve_description": "Det offentliga HVE-registret per 01/06/2025 nämner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, verksamhet vinodling, certifieringsdatum 23/12/2024.",
+        "cec_set": "Miljöprogram för Cognac-sektorn",
+        "cec_description": "Cognac-sektorns program är erkänt som nivå 2 av franska jordbruksministeriet enligt offentliga Cognac/BNIC- och Bureau Veritas-källor.",
+    },
+}
+
+
+def hve_cec_schema(path="hve-cec.html", lang="fr"):
+    schema_copy = HVE_SCHEMA_COPY.get(lang, HVE_SCHEMA_COPY["en"])
+    page = page_url(path)
     domaine_id = page + "#scea-domaine-grande-versenne"
     hve_cert_id = page + "#certification-hve"
     cec_term_id = page + "#certification-environnementale-cognac"
@@ -1702,11 +2096,11 @@ def hve_cec_schema():
             {
                 "@type": "WebPage",
                 "@id": page + "#webpage",
-                "name": "HVE / CEC : démarche environnementale et preuves",
+                "name": schema_copy["name"],
                 "url": page,
-                "description": "Démarche HVE et Certification Environnementale Cognac pour les eaux-de-vie Cognac Esprit Organic, avec sources publiques et preuves officielles.",
-                "inLanguage": "fr",
-                "dateModified": "2026-06-29",
+                "description": schema_copy["description"],
+                "inLanguage": lang,
+                "dateModified": "2026-07-02",
                 "isPartOf": {"@id": DOMAIN + "/#website"},
                 "publisher": {"@id": DOMAIN + "/#organization"},
                 "about": [
@@ -1745,7 +2139,7 @@ def hve_cec_schema():
                 "alternateName": "HVE",
                 "inDefinedTermSet": {
                     "@type": "DefinedTermSet",
-                    "name": "Certification environnementale des exploitations agricoles",
+                    "name": schema_copy["hve_set"],
                     "url": ENVIRONMENTAL_PROOF_URLS["environmental_certification"],
                 },
             },
@@ -1755,7 +2149,7 @@ def hve_cec_schema():
                 "name": "Certification Haute Valeur Environnementale",
                 "url": ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"],
                 "about": {"@id": hve_term_id},
-                "description": "L'annuaire public HVE au 01/06/2025 mentionne SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activité viticulture, date de certification 23/12/2024.",
+                "description": schema_copy["hve_description"],
                 "validIn": {"@type": "AdministrativeArea", "name": "France"},
             },
             {
@@ -1765,37 +2159,70 @@ def hve_cec_schema():
                 "alternateName": "CEC",
                 "inDefinedTermSet": {
                     "@type": "DefinedTermSet",
-                    "name": "Démarche environnementale de la filière Cognac",
+                    "name": schema_copy["cec_set"],
                     "url": ENVIRONMENTAL_PROOF_URLS["cec_cognac"],
                 },
-                "description": "Démarche filière Cognac reconnue de niveau 2 par le ministère de l'Agriculture selon les sources publiques Cognac/BNIC et Bureau Veritas.",
+                "description": schema_copy["cec_description"],
             },
         ],
     }
 
 
-def hve_cec_page():
+def hve_cec_page(path="hve-cec.html", lang="fr"):
+    copy = HVE_CEC_COPY.get(lang, HVE_CEC_COPY["en"])
+    prefix = rel_prefix(path)
     hve_directory = ENVIRONMENTAL_PROOF_URLS["hve_directory"]
     hve_csv = ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"]
     environmental_certification = ENVIRONMENTAL_PROOF_URLS["environmental_certification"]
     cec_cognac = ENVIRONMENTAL_PROOF_URLS["cec_cognac"]
     cec_bureau_veritas = ENVIRONMENTAL_PROOF_URLS["cec_bureau_veritas"]
+    cec_logo = prefix + "assets/img/certifications/logo-cec-cuivre-rvb.png"
+    hve_logo = prefix + "assets/img/certifications/logo-hve-noir.png"
+    hve_links = [
+        (hve_directory, copy["links"][0], "button"),
+        (hve_csv, copy["links"][1], "text-link"),
+        (environmental_certification, copy["links"][2], "text-link"),
+        (cec_cognac, copy["links"][3], "text-link"),
+        (cec_bureau_veritas, copy["links"][4], "text-link"),
+    ]
+    hve_link_html = "".join(
+        f'<a class="{cls}" href="{href}" target="_blank" rel="noopener">{escape(label)}</a>'
+        for href, label, cls in hve_links
+    )
+    hve_card = copy["hve_card"]
+    cec_card = copy["cec_card"]
+    hve_facts = "".join(f"<li><span>{escape(label)}</span><strong>{escape(value)}</strong></li>" for label, value in hve_card["facts"])
+    cec_facts = "".join(f"<li><span>{escape(label)}</span><strong>{escape(value)}</strong></li>" for label, value in cec_card["facts"])
+    chain = "".join(f"<span>{escape(item)}</span>" for item in copy["band"]["chain"])
+    note_links = [
+        (hve_directory, copy["note"]["links"][0]),
+        (hve_csv, copy["note"]["links"][1]),
+        (environmental_certification, copy["note"]["links"][2]),
+        (cec_cognac, copy["note"]["links"][3]),
+        (cec_bureau_veritas, copy["note"]["links"][4]),
+    ]
+    note_link_html = "".join(
+        f'<a href="{href}" target="_blank" rel="noopener">{escape(label)}</a>'
+        for href, label in note_links
+    )
     body = f"""
 <section class="organic-proof-intro hve-cec-intro">
   <div class="section-inner organic-proof-intro-grid">
     <div>
       <p class="eyebrow">HVE / CEC</p>
-      <h2>Des vignes engagées, des eaux-de-vie mieux tracées.</h2>
+      <h2>{escape(copy["heading"])}</h2>
+      <div class="hve-cec-charter-lockup" role="img" aria-label="{escape(copy["lockup_label"])}">
+        <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="" width="592" height="592" loading="lazy" decoding="async">
+        <span class="hve-cec-lockup-plus" aria-hidden="true">+</span>
+        <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="" width="255" height="258" loading="lazy" decoding="async">
+      </div>
+      <p class="hve-cec-charter-caption">{escape(copy["charter_caption"])}</p>
     </div>
     <div class="organic-proof-lead">
-      <p class="hve-cec-promise">Un cognac bio, traçable et engagé, des vignes jusqu’au verre.</p>
-      <p>L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.</p>
-      <div class="link-list hve-cec-public-links" aria-label="Liens publics de preuve HVE et CEC">
-        <a href="{hve_directory}" target="_blank" rel="noopener">Preuve HVE data.gouv</a>
-        <a href="{hve_csv}" target="_blank" rel="noopener">Fichier public HVE</a>
-        <a href="{environmental_certification}" target="_blank" rel="noopener">Ministère de l’Agriculture</a>
-        <a href="{cec_cognac}" target="_blank" rel="noopener">CEC Cognac / BNIC</a>
-        <a href="{cec_bureau_veritas}" target="_blank" rel="noopener">Audit CEC Bureau Veritas</a>
+      <p class="hve-cec-promise">{escape(copy["promise"])}</p>
+      <p>{escape(copy["lead"])}</p>
+      <div class="link-list hve-cec-public-links" aria-label="{escape(copy["proof_label"])}">
+        {hve_link_html}
       </div>
     </div>
   </div>
@@ -1805,39 +2232,33 @@ def hve_cec_page():
   <div class="section-inner">
     <div class="organic-proof-cards">
       <article class="organic-proof-card">
-        <div class="organic-proof-card-media"><img src="assets/img/old-site/img_home_vigne.jpg" alt="Paysage viticole du Domaine de la Grande Versenne à Triac-Lautrait" loading="lazy"></div>
+        <div class="organic-proof-card-media"><img src="{prefix}assets/img/old-site/img_home_vigne.jpg" alt="{escape(hve_card["alt"])}" loading="lazy"></div>
         <div class="organic-proof-card-copy">
-          <p class="proof-kicker">Haute Valeur Environnementale</p>
-          <h2>HVE : une exploitation nommée dans l’annuaire public.</h2>
-          <p>La certification HVE correspond au niveau 3 de la certification environnementale des exploitations agricoles. Elle repose sur des indicateurs de résultats portant notamment sur la biodiversité, la stratégie phytosanitaire, la fertilisation et l’irrigation.</p>
+          <p class="proof-kicker">{escape(hve_card["kicker"])}</p>
+          <h2>{escape(hve_card["title"])}</h2>
+          <p>{escape(hve_card["text"])}</p>
           <ul class="proof-facts">
-            <li><span>Exploitation</span><strong>SCEA Domaine de la Grande Versenne</strong></li>
-            <li><span>Adresse</span><strong>30 rue d’Angoulême, 16200 Triac-Lautrait</strong></li>
-            <li><span>Activité</span><strong>Viticulture</strong></li>
-            <li><span>Date HVE</span><strong>23/12/2024 dans l’annuaire HVE au 01/06/2025</strong></li>
+            {hve_facts}
           </ul>
           <div class="proof-links">
-            <a class="button" href="{hve_directory}" target="_blank" rel="noopener">Voir l’annuaire HVE</a>
-            <a class="text-link" href="{hve_csv}" target="_blank" rel="noopener">Ouvrir le fichier public CSV</a>
+            <a class="button" href="{hve_directory}" target="_blank" rel="noopener">{escape(hve_card["buttons"][0])}</a>
+            <a class="text-link" href="{hve_csv}" target="_blank" rel="noopener">{escape(hve_card["buttons"][1])}</a>
           </div>
         </div>
       </article>
 
       <article class="organic-proof-card reverse">
-        <div class="organic-proof-card-media"><img src="assets/img/brand/hero-old-vine.jpg" alt="Vieilles vignes dans le vignoble de Cognac" loading="lazy"></div>
+        <div class="organic-proof-card-media"><img src="{prefix}assets/img/brand/hero-old-vine.jpg" alt="{escape(cec_card["alt"])}" loading="lazy"></div>
         <div class="organic-proof-card-copy">
-          <p class="proof-kicker">Certification Environnementale Cognac</p>
-          <h2>CEC : une démarche propre au vignoble de Cognac.</h2>
-          <p>La Certification Environnementale Cognac est une démarche de filière portée par les acteurs du Cognac. Elle évalue les pratiques viticoles autour de cinq objectifs : biodiversité, qualité de l’eau, de l’air et des sols, restriction des traitements de synthèse, vie des sols et sobriété carbone.</p>
+          <p class="proof-kicker">{escape(cec_card["kicker"])}</p>
+          <h2>{escape(cec_card["title"])}</h2>
+          <p>{escape(cec_card["text"])}</p>
           <ul class="proof-facts">
-            <li><span>Référentiel</span><strong>24 pratiques environnementales adaptées au contexte Cognac</strong></li>
-            <li><span>Statut public</span><strong>Reconnaissance de niveau 2 par le ministère de l’Agriculture</strong></li>
-            <li><span>Contrôle</span><strong>Audit externe et certificat au nom de l’exploitation selon Bureau Veritas</strong></li>
-            <li><span>Approvisionnement</span><strong>SCEA Domaine de la Grande Versenne ou fournisseur référencé HVE / CEC</strong></li>
+            {cec_facts}
           </ul>
           <div class="proof-links">
-            <a class="button" href="{cec_cognac}" target="_blank" rel="noopener">Voir la page Cognac / BNIC</a>
-            <a class="text-link" href="{cec_bureau_veritas}" target="_blank" rel="noopener">Voir Bureau Veritas CEC</a>
+            <a class="button" href="{cec_cognac}" target="_blank" rel="noopener">{escape(cec_card["buttons"][0])}</a>
+            <a class="text-link" href="{cec_bureau_veritas}" target="_blank" rel="noopener">{escape(cec_card["buttons"][1])}</a>
           </div>
         </div>
       </article>
@@ -1847,45 +2268,42 @@ def hve_cec_page():
 
 <section class="organic-certification-band hve-cec-proof-band">
   <div class="section-inner organic-certification-grid">
-    <div class="hve-cec-proof-mark">
-      <span>HVE</span>
-      <span>CEC</span>
+    <div class="hve-cec-proof-mark" role="img" aria-label="{escape(copy["lockup_label"])}">
+      <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="" width="592" height="592" loading="lazy" decoding="async">
+      <span class="hve-cec-lockup-plus" aria-hidden="true">+</span>
+      <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="" width="255" height="258" loading="lazy" decoding="async">
     </div>
     <div>
-      <p class="eyebrow">Ce que cela change</p>
-      <h2>Une sélection plus lisible des eaux-de-vie.</h2>
-      <p>La démarche permet de relier les lots à des exploitations engagées et contrôlées, puis de documenter les achats auprès de fournisseurs référencés quand l’approvisionnement ne vient pas directement de la SCEA Domaine de la Grande Versenne.</p>
-      <div class="organic-chain"><span>Domaine</span><span>Fournisseurs</span><span>Traçabilité</span><span>Élevage</span><span>Assemblage</span></div>
+      <p class="eyebrow">{escape(copy["band"]["eyebrow"])}</p>
+      <h2>{escape(copy["band"]["title"])}</h2>
+      <p>{escape(copy["band"]["text"])}</p>
+      <div class="organic-chain">{chain}</div>
     </div>
   </div>
 </section>
 
 <section class="organic-proof-note hve-cec-source-note">
   <div class="section-inner organic-proof-note-grid">
-    <div><h2>Des engagements visibles, des preuves accessibles.</h2></div>
+    <div><h2>{escape(copy["note"]["title"])}</h2></div>
     <div>
-      <p>Nos engagements se vérifient simplement : HVE dans l’annuaire public, CEC auprès des sources officielles de la filière Cognac.</p>
-      <p>La HVE de la SCEA Domaine de la Grande Versenne est nominative sur data.gouv. Pour la CEC, les sites publics du BNIC et de Bureau Veritas détaillent le référentiel, sa reconnaissance et le contrôle ; aucun annuaire nominatif ouvert équivalent au fichier HVE n’est publié à ce jour.</p>
+      <p>{escape(copy["note"]["p1"])}</p>
+      <p>{escape(copy["note"]["p2"])}</p>
       <div class="link-list">
-        <a href="{hve_directory}" target="_blank" rel="noopener">Annuaire HVE data.gouv</a>
-        <a href="{hve_csv}" target="_blank" rel="noopener">Fichier public HVE</a>
-        <a href="{environmental_certification}" target="_blank" rel="noopener">Certification environnementale agricole</a>
-        <a href="{cec_cognac}" target="_blank" rel="noopener">Certification Environnementale Cognac</a>
-        <a href="{cec_bureau_veritas}" target="_blank" rel="noopener">Audit CEC Bureau Veritas</a>
+        {note_link_html}
       </div>
     </div>
   </div>
 </section>
 """
     return layout(
-        "hve-cec.html",
-        "HVE / CEC | Cognac Esprit Organic",
-        "HVE / CEC : des eaux-de-vie bio, traçables et engagées, avec liens publics vers data.gouv, le ministère, le BNIC et Bureau Veritas.",
+        path,
+        copy["title"],
+        copy["description"],
         "HVE / CEC",
-        "Des eaux-de-vie sélectionnées avec exigence, des vignes jusqu’au verre.",
-        "High Environmental Value and Cognac Environmental Certification: traceability for our eaux-de-vie.",
+        copy["hero_intro"],
+        copy["hero_intro"],
         body,
-        schemas=[hve_cec_schema()],
+        schemas=[hve_cec_schema(path, lang)],
         image="assets/img/old-site/img_home_vigne.jpg",
         page_class="organic-proof-page hve-cec-page",
     )
@@ -2065,13 +2483,148 @@ def faq_page():
     )
 
 
-def rewards_item_list():
+REWARDS_COPY = {
+    "fr": {
+        "title": "Distinctions | Cognac Esprit Organic",
+        "description": "Distinctions reçues par les cuvées Cognac Esprit Organic : Fondation VS, Transmission XO et Pineau blanc.",
+        "h1": "Distinctions Esprit Organic",
+        "intro": "Trois cuvées remarquées, trois expressions de notre maison.",
+        "eyebrow": "Distinctions",
+        "heading": "Cuvées distinguées",
+        "body": "Au fil des dégustations, certaines cuvées Esprit Organic ont retenu l'attention de jurys internationaux. Elles racontent chacune une expression de la maison : la fraîcheur, la profondeur, l'équilibre.",
+        "discover": "Découvrir la cuvée",
+        "proof": "Voir le palmarès",
+        "item_list": "Distinctions Cognac Esprit Organic",
+        "cards": {
+            "fondation-vs": {
+                "kicker": "Finesse et fraîcheur",
+                "text": "Un VS franc et lumineux, salué pour son éclat aromatique et sa lecture directe du fruit. Une entrée dans l'univers Esprit Organic, précise, vive et naturellement élégante.",
+            },
+            "transmission-xo": {
+                "kicker": "Profondeur et patience",
+                "text": "Un XO construit dans le temps, porté par les fruits noirs, les fleurs séchées et les premières notes de rancio. Une cuvée de passage, ample et tenue.",
+            },
+            "pineau": {
+                "kicker": "Équilibre et gourmandise",
+                "text": "Un Pineau blanc biologique au charme patiné, entre raisin frais, fruits confits et douceur vanillée. Une distinction qui souligne sa gourmandise sans excès.",
+            },
+        },
+    },
+    "en": {
+        "title": "Awards | Cognac Esprit Organic",
+        "description": "Awards received by Cognac Esprit Organic cuvées: Fondation VS, Transmission XO and white Pineau.",
+        "h1": "Esprit Organic Awards",
+        "intro": "Three acclaimed cuvées, three expressions of our house.",
+        "eyebrow": "Awards",
+        "heading": "Award-winning cuvées",
+        "body": "Across tastings, several Esprit Organic cuvées have caught the attention of international juries. Each tells one expression of the house: freshness, depth and balance.",
+        "discover": "Discover the cuvée",
+        "proof": "View the result",
+        "item_list": "Cognac Esprit Organic awards",
+        "cards": {
+            "fondation-vs": {
+                "kicker": "Finesse and freshness",
+                "text": "A bright, direct VS praised for aromatic clarity and a fruit-forward reading. A precise, lively and naturally elegant introduction to the Esprit Organic universe.",
+            },
+            "transmission-xo": {
+                "kicker": "Depth and patience",
+                "text": "An XO built over time, carried by dark fruit, dried flowers and the first notes of rancio. A broad, composed cuvée made for transmission.",
+            },
+            "pineau": {
+                "kicker": "Balance and generosity",
+                "text": "An organic white Pineau with a mellow charm, between fresh grape, candied fruit and vanilla sweetness. The award underlines its generous balance.",
+            },
+        },
+    },
+    "da": {
+        "title": "Udmærkelser | Cognac Esprit Organic",
+        "description": "Udmærkelser modtaget af Cognac Esprit Organic-cuvéer: Fondation VS, Transmission XO og hvid Pineau.",
+        "h1": "Esprit Organic-udmærkelser",
+        "intro": "Tre bemærkede cuvéer, tre udtryk for vores hus.",
+        "eyebrow": "Udmærkelser",
+        "heading": "Udmærkede cuvéer",
+        "body": "Gennem smagninger har flere Esprit Organic-cuvéer fanget internationale juryers opmærksomhed. De fortæller hver deres udtryk for huset: friskhed, dybde og balance.",
+        "discover": "Oplev cuvéen",
+        "proof": "Se resultatet",
+        "item_list": "Cognac Esprit Organic-udmærkelser",
+        "cards": {
+            "fondation-vs": {
+                "kicker": "Finesse og friskhed",
+                "text": "En klar og lys VS, bemærket for sin aromatiske friskhed og direkte frugt. En præcis, livlig og naturligt elegant indgang til Esprit Organic-universet.",
+            },
+            "transmission-xo": {
+                "kicker": "Dybde og tålmodighed",
+                "text": "En XO bygget over tid, båret af mørke frugter, tørrede blomster og de første rancio-noter. En rummelig og velholdt cuvée.",
+            },
+            "pineau": {
+                "kicker": "Balance og fylde",
+                "text": "En økologisk hvid Pineau med moden charme, mellem frisk drue, kandiseret frugt og vaniljesødme. Udmærkelsen fremhæver dens generøse balance.",
+            },
+        },
+    },
+    "no": {
+        "title": "Utmerkelser | Cognac Esprit Organic",
+        "description": "Utmerkelser mottatt av Cognac Esprit Organic-cuvéer: Fondation VS, Transmission XO og hvit Pineau.",
+        "h1": "Esprit Organic-utmerkelser",
+        "intro": "Tre bemerket cuvéer, tre uttrykk for huset vårt.",
+        "eyebrow": "Utmerkelser",
+        "heading": "Prisbelønte cuvéer",
+        "body": "Gjennom smakinger har flere Esprit Organic-cuvéer fanget oppmerksomheten til internasjonale juryer. De forteller hvert sitt uttrykk for huset: friskhet, dybde og balanse.",
+        "discover": "Oppdag cuvéen",
+        "proof": "Se resultatet",
+        "item_list": "Cognac Esprit Organic-utmerkelser",
+        "cards": {
+            "fondation-vs": {
+                "kicker": "Finesse og friskhet",
+                "text": "En klar og lys VS, verdsatt for aromatisk friskhet og direkte frukt. En presis, livlig og naturlig elegant introduksjon til Esprit Organic-universet.",
+            },
+            "transmission-xo": {
+                "kicker": "Dybde og tålmodighet",
+                "text": "En XO bygget over tid, båret av mørk frukt, tørkede blomster og de første rancio-notene. En romslig og samlet cuvée.",
+            },
+            "pineau": {
+                "kicker": "Balanse og fylde",
+                "text": "En økologisk hvit Pineau med moden sjarm, mellom frisk drue, kandisert frukt og vaniljesødme. Utmerkelsen fremhever den generøse balansen.",
+            },
+        },
+    },
+    "sv": {
+        "title": "Utmärkelser | Cognac Esprit Organic",
+        "description": "Utmärkelser för Cognac Esprit Organic-cuvéer: Fondation VS, Transmission XO och vit Pineau.",
+        "h1": "Esprit Organic-utmärkelser",
+        "intro": "Tre uppmärksammade cuvéer, tre uttryck för vårt hus.",
+        "eyebrow": "Utmärkelser",
+        "heading": "Utmärkta cuvéer",
+        "body": "Genom provningar har flera Esprit Organic-cuvéer fångat internationella juryers uppmärksamhet. Var och en berättar ett uttryck för huset: friskhet, djup och balans.",
+        "discover": "Upptäck cuvéen",
+        "proof": "Se resultatet",
+        "item_list": "Cognac Esprit Organic-utmärkelser",
+        "cards": {
+            "fondation-vs": {
+                "kicker": "Finess och friskhet",
+                "text": "En klar och ljus VS, uppmärksammad för aromatisk friskhet och direkt frukt. En precis, livlig och naturligt elegant ingång till Esprit Organic-universumet.",
+            },
+            "transmission-xo": {
+                "kicker": "Djup och tålamod",
+                "text": "En XO byggd över tid, buren av mörk frukt, torkade blommor och de första rancio-tonerna. En rymlig och välhållen cuvée.",
+            },
+            "pineau": {
+                "kicker": "Balans och fyllighet",
+                "text": "En ekologisk vit Pineau med mogen charm, mellan färsk druva, kanderad frukt och vaniljsötma. Utmärkelsen lyfter fram den generösa balansen.",
+            },
+        },
+    },
+}
+
+
+def rewards_item_list(path="recompenses.html", lang="fr"):
+    copy = REWARDS_COPY.get(lang, REWARDS_COPY["en"])
     item_list = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "Distinctions Cognac Esprit Organic",
+        "name": copy["item_list"],
         "itemListElement": [],
-        "@id": page_url("recompenses.html") + "#awards",
+        "@id": page_url(path) + "#awards",
     }
     awarded_products = [product for product in PRODUCTS if DOCUMENTED_AWARDS.get(product["slug"])]
     for index, product in enumerate(awarded_products):
@@ -2079,7 +2632,7 @@ def rewards_item_list():
         item = {
             "@type": "Product",
             "name": product["name"],
-            "url": page_url(f"produits/{product['slug']}.html"),
+            "url": page_url(localized_path_for(f"produits/{product['slug']}.html", lang)),
             "brand": {"@type": "Brand", "name": "Cognac Esprit Organic", "@id": DOMAIN + "/#brand"},
             "category": product["category"],
             "image": DOMAIN + "/" + product["image"],
@@ -2090,29 +2643,19 @@ def rewards_item_list():
     return item_list
 
 
-def rewards_page():
+def rewards_page(path="recompenses.html", lang="fr"):
+    copy = REWARDS_COPY.get(lang, REWARDS_COPY["en"])
+    prefix = rel_prefix(path)
     awarded_products = [product for product in PRODUCTS if DOCUMENTED_AWARDS.get(product["slug"])]
-    award_copy = {
-        "fondation-vs": {
-            "kicker": "Finesse et fraîcheur",
-            "text": "Un VS franc et lumineux, salué pour son éclat aromatique et sa lecture directe du fruit. Une entrée dans l'univers Esprit Organic, précise, vive et naturellement élégante.",
-        },
-        "transmission-xo": {
-            "kicker": "Profondeur et patience",
-            "text": "Un XO construit dans le temps, porté par les fruits noirs, les fleurs séchées et les premières notes de rancio. Une cuvée de passage, ample et tenue.",
-        },
-        "pineau": {
-            "kicker": "Équilibre et gourmandise",
-            "text": "Un Pineau blanc biologique au charme patiné, entre raisin frais, fruits confits et douceur vanillée. Une distinction qui souligne sa gourmandise sans excès.",
-            "image": "assets/img/old-site/visuel_pineau.jpg",
-        },
+    card_images = {
+        "pineau": "assets/img/old-site/visuel_pineau.jpg",
     }
     cards = []
     for product in awarded_products:
         award = DOCUMENTED_AWARDS.get(product["slug"])
-        award_visual = award_visual_html(award, product["name"], "", "award-page") if award else ""
-        copy = award_copy[product["slug"]]
-        card_image = copy.get("image", product["image"])
+        award_visual = award_visual_html(award, product["name"], prefix, "award-page") if award else ""
+        card_copy = copy["cards"][product["slug"]]
+        card_image = prefix + card_images.get(product["slug"], product["image"])
         cards.append(
             f"""
       <article class="award-feature-card" id="{escape(product["slug"])}">
@@ -2123,16 +2666,16 @@ def rewards_page():
           <p class="tag">{escape(product["category"])}</p>
           <div class="award-feature-heading">
             <h2>{escape(product["name"])}</h2>
-            <p>{escape(copy["kicker"])}</p>
+            <p>{escape(card_copy["kicker"])}</p>
           </div>
-          <p class="award-feature-text">{escape(copy["text"])}</p>
+          <p class="award-feature-text">{escape(card_copy["text"])}</p>
           <div class="award-feature-distinction">
             {award_visual.strip()}
             <p>{escape(award["name"])}</p>
           </div>
           <div class="award-feature-actions">
-            <a class="text-link" href="produits/{escape(product["slug"])}.html">Découvrir la cuvée</a>
-            <a class="text-link muted" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">Voir le palmarès</a>
+            <a class="text-link" href="{localized_href(path, "produits/" + product["slug"] + ".html", lang)}">{escape(copy["discover"])}</a>
+            <a class="text-link muted" href="{escape(award["url"])}" target="_blank" rel="noopener noreferrer">{escape(copy["proof"])}</a>
           </div>
         </div>
       </article>
@@ -2141,9 +2684,9 @@ def rewards_page():
     body = f"""
 <section class="awards-intro">
   <div class="section-inner narrow">
-    <p class="eyebrow">Distinctions</p>
-    <h2>Cuvées distinguées</h2>
-    <p>Au fil des dégustations, certaines cuvées Esprit Organic ont retenu l'attention de jurys internationaux. Elles racontent chacune une expression de la maison : la fraîcheur, la profondeur, l'équilibre.</p>
+    <p class="eyebrow">{escape(copy["eyebrow"])}</p>
+    <h2>{escape(copy["heading"])}</h2>
+    <p>{escape(copy["body"])}</p>
   </div>
 </section>
 <section class="awards-selection">
@@ -2153,14 +2696,14 @@ def rewards_page():
 </section>
 """
     return layout(
-        "recompenses.html",
-        "Distinctions | Cognac Esprit Organic",
-        "Distinctions reçues par les cuvées Cognac Esprit Organic : Fondation VS, Transmission XO et Pineau blanc.",
-        "Distinctions Esprit Organic",
-        "Trois cuvées remarquées, trois expressions de notre maison.",
-        "Three acclaimed cuvées, three expressions of our house.",
+        path,
+        copy["title"],
+        copy["description"],
+        copy["h1"],
+        copy["intro"],
+        copy["intro"],
         body,
-        schemas=[rewards_item_list()],
+        schemas=[rewards_item_list(path, lang)],
         image="assets/img/products/gamme-esprit-organic.jpg",
         page_class="product-data-page awards-page",
     )
@@ -2533,21 +3076,7 @@ def technical_product_item(product, lang="fr"):
 
 
 def technical_alternate_links(path):
-    first_segment = path.split("/", 1)[0]
-    base_path = path.split("/", 1)[1] if first_segment in {"en", "da", "no", "sv"} else path
-    localized_paths = {
-        "fr": base_path,
-        "en": f"en/{base_path}",
-        "da": f"da/{base_path}",
-        "no": f"no/{base_path}",
-        "sv": f"sv/{base_path}",
-    }
-    return "\n  ".join([
-        '<!-- Locale alternates -->',
-        *(f'<link rel="alternate" hreflang="{lang}" href="{page_url(localized_path)}">' for lang, localized_path in localized_paths.items()),
-        f'<link rel="alternate" hreflang="x-default" href="{page_url(base_path)}">',
-        '<!-- /Locale alternates -->',
-    ])
+    return locale_alternate_links(path)
 
 
 def technical_product_cards(lang="fr"):
@@ -2957,36 +3486,382 @@ def sync_localized_product_data():
             technical_path.write_text(html, encoding="utf-8")
 
 
-def legal_page():
+LEGAL_COPY = {
+    "fr": {
+        "title": "Mentions légales | Cognac Esprit Organic",
+        "description": "Mentions légales du site Cognac Esprit Organic : éditeur, hébergement, données personnelles, cookies, propriété intellectuelle et avertissement alcool.",
+        "h1": "Mentions légales",
+        "intro": "Informations légales du site Cognac Esprit Organic.",
+        "eyebrow": "Informations légales",
+        "identity_title": "Éditeur du site",
+        "summary": "Le site internet cognac-esprit-organic.com est édité par LA MAISON DES PIERRES (MPC), société à responsabilité limitée au capital social de 10 000 euros, immatriculée au RCS d’Angoulême sous le numéro 508 104 361.",
+        "rows": [
+            ("Site", "https://cognac-esprit-organic.com"),
+            ("Marque", "Cognac Esprit Organic"),
+            ("Éditeur", "LA MAISON DES PIERRES (MPC)"),
+            ("Forme juridique", "EURL, entreprise unipersonnelle à responsabilité limitée"),
+            ("Capital social", "10 000 euros"),
+            ("RCS", "508 104 361 R.C.S. Angoulême"),
+            ("SIREN", "508 104 361"),
+            ("SIRET du siège", "508 104 361 00029"),
+            ("TVA intracommunautaire", "FR96 508 104 361"),
+            ("Code APE", "46.34Z, commerce de gros de boissons"),
+            ("Siège social", "Lantin, 30 rue d’Angoulême, 16200 Triac-Lautrait, France"),
+            ("Téléphone", "+33 5 45 35 88 10"),
+            ("E-mail", "cognac@mdpierre.com"),
+            ("Directeur de la publication", "Léopold Croizet, gérant de LA MAISON DES PIERRES (MPC)"),
+        ],
+        "sections": [
+            ("Hébergement", [
+                "Le site est hébergé par OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. OVH SAS est immatriculée au RCS de Lille Métropole sous le numéro 424 761 419 00045. TVA intracommunautaire : FR22 424 761 419. Site : www.ovhcloud.com. Téléphone : 1007.",
+            ]),
+            ("Objet du site et accès", [
+                "Le site présente la marque Cognac Esprit Organic, ses cognacs, ses Pineaux des Charentes, sa démarche biologique et environnementale, ses actualités et ses moyens de contact.",
+                "Le site ne conclut directement aucune commande, aucun panier et aucun paiement en ligne. Les informations publiées sont fournies à titre indicatif et ne constituent pas une offre contractuelle de vente ; toute demande commerciale doit être confirmée par échange direct, devis, facture ou accord écrit de LA MAISON DES PIERRES (MPC).",
+                "Le site contient des informations relatives à des boissons alcooliques. Son accès est réservé aux personnes ayant l’âge légal requis pour consulter ce type de contenu dans leur pays de résidence.",
+            ]),
+            ("Commandes, alcool et mineurs", [
+                "La vente d’alcool est interdite aux mineurs. Une preuve de majorité peut être demandée avant toute vente ou remise de produits alcooliques.",
+                "Le client demeure responsable du respect des règles applicables à l’achat, à l’importation, à la détention et à la consommation de boissons alcooliques dans son pays de livraison ou de résidence.",
+            ]),
+            ("Données personnelles", [
+                "Le responsable du traitement est LA MAISON DES PIERRES (MPC), joignable à l’adresse postale indiquée ci-dessus ou par e-mail à cognac@mdpierre.com.",
+                "Des données personnelles peuvent être collectées lorsque vous utilisez un formulaire, demandez une information, préparez une commande, réservez une visite ou vous inscrivez à la newsletter. Selon le service utilisé, ces données peuvent comprendre vos coordonnées, votre adresse e-mail, votre message, les informations nécessaires au suivi commercial, la langue, le marché détecté et la page d’inscription.",
+                "Ces données sont utilisées pour répondre aux demandes, gérer la relation commerciale, préparer ou exécuter une commande, envoyer la newsletter après consentement, assurer la sécurité technique du site, conserver la preuve des consentements et respecter les obligations légales. Elles sont destinées à LA MAISON DES PIERRES (MPC) et à ses prestataires techniques strictement nécessaires au fonctionnement du site. Elles ne sont ni vendues ni louées à des tiers.",
+            ]),
+            ("Durée de conservation et droits", [
+                "Les données sont conservées pendant une durée limitée aux finalités poursuivies. Les données liées à la newsletter sont conservées jusqu’au retrait du consentement ou à la demande de désinscription. Les données commerciales, contractuelles ou comptables peuvent être conservées pendant les durées imposées par la réglementation applicable.",
+                "Vous disposez, dans les conditions prévues par la réglementation, d’un droit d’accès, de rectification, d’effacement, d’opposition, de limitation, de portabilité lorsque ce droit est applicable, ainsi que du droit de retirer votre consentement à tout moment. Vous pouvez exercer ces droits en écrivant à cognac@mdpierre.com ou à l’adresse postale de LA MAISON DES PIERRES (MPC). Vous pouvez également introduire une réclamation auprès de la CNIL : www.cnil.fr.",
+            ]),
+            ("Newsletter", [
+                "L’inscription à la newsletter suppose un consentement explicite. Chaque inscription valide est enregistrée avec les informations nécessaires au fonctionnement du service : date, adresse e-mail, langue, marché détecté et page d’inscription. Vous pouvez demander votre désinscription à tout moment en écrivant à cognac@mdpierre.com. Chaque envoi de newsletter devra également permettre la désinscription.",
+            ]),
+            ("Cookies et contenus tiers", [
+                "Le site peut utiliser des cookies ou traceurs strictement nécessaires à son fonctionnement, par exemple pour l’affichage, la sécurité ou la mémorisation de certains choix techniques.",
+                "Les cookies non strictement nécessaires, notamment de mesure d’audience, de publicité, de personnalisation ou liés aux réseaux sociaux, ne doivent être déposés qu’après votre consentement lorsqu’ils sont activés. Le site peut intégrer des contenus tiers, notamment des cartes Google Maps, susceptibles de se charger directement et d’entraîner des échanges techniques avec les services concernés.",
+            ]),
+            ("Propriété intellectuelle et crédits", [
+                "L’accès au site confère un droit d’usage privé, personnel et non exclusif. Les textes, photographies, vidéos, illustrations, dessins, logos, marques, noms de domaine et éléments graphiques figurant sur le site sont protégés par le droit de la propriété intellectuelle et appartiennent à LA MAISON DES PIERRES (MPC), à Cognac Esprit Organic ou à leurs auteurs et partenaires.",
+                "Toute reproduction, représentation, adaptation, extraction ou réutilisation, totale ou partielle, sans autorisation préalable, est interdite. Les images historiques et supports de marque réutilisés sur ce site proviennent des archives Cognac Esprit Organic ou de partenaires mandatés.",
+            ]),
+            ("Responsabilité et liens externes", [
+                "LA MAISON DES PIERRES (MPC) s’efforce de publier des informations exactes et à jour, mais ne peut garantir l’absence totale d’erreur, d’omission ou d’indisponibilité temporaire. Les liens vers des sites tiers sont fournis à titre informatif ; LA MAISON DES PIERRES (MPC) ne contrôle pas ces sites et ne peut être tenue responsable de leur contenu, de leurs pratiques ou de leurs évolutions.",
+            ]),
+            ("Avertissement alcool", [
+                "L’ABUS D’ALCOOL EST DANGEREUX POUR LA SANTÉ, À CONSOMMER AVEC MODÉRATION.",
+                "Dernière mise à jour : 2 juillet 2026.",
+            ]),
+        ],
+    },
+    "en": {
+        "title": "Legal notice | Cognac Esprit Organic",
+        "description": "Legal notice for Cognac Esprit Organic: publisher, hosting, personal data, cookies, intellectual property and alcohol warning.",
+        "h1": "Legal notice",
+        "intro": "Legal information for the Cognac Esprit Organic website.",
+        "eyebrow": "Legal information",
+        "identity_title": "Website publisher",
+        "summary": "The website cognac-esprit-organic.com is published by LA MAISON DES PIERRES (MPC), a limited liability company with share capital of 10,000 euros, registered with the Angoulême Trade and Companies Register under number 508 104 361.",
+        "rows": [
+            ("Website", "https://cognac-esprit-organic.com"),
+            ("Brand", "Cognac Esprit Organic"),
+            ("Publisher", "LA MAISON DES PIERRES (MPC)"),
+            ("Legal form", "EURL, single-member limited liability company"),
+            ("Share capital", "10,000 euros"),
+            ("Trade register", "508 104 361 R.C.S. Angoulême"),
+            ("SIREN", "508 104 361"),
+            ("Head office SIRET", "508 104 361 00029"),
+            ("EU VAT number", "FR96 508 104 361"),
+            ("APE code", "46.34Z, wholesale of beverages"),
+            ("Registered office", "Lantin, 30 rue d’Angoulême, 16200 Triac-Lautrait, France"),
+            ("Phone", "+33 5 45 35 88 10"),
+            ("Email", "cognac@mdpierre.com"),
+            ("Publication director", "Léopold Croizet, manager of LA MAISON DES PIERRES (MPC)"),
+        ],
+        "sections": [
+            ("Hosting", [
+                "The website is hosted by OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. OVH SAS is registered with the Lille Métropole Trade and Companies Register under number 424 761 419 00045. EU VAT number: FR22 424 761 419. Website: www.ovhcloud.com. Phone: 1007.",
+            ]),
+            ("Purpose and access", [
+                "The website presents the Cognac Esprit Organic brand, its cognacs, Pineaux des Charentes, organic and environmental approach, news and contact details.",
+                "The website does not directly conclude any order, shopping cart or online payment. Published information is provided for guidance only and does not constitute a contractual offer to sell; any commercial request must be confirmed by direct exchange, quotation, invoice or written agreement from LA MAISON DES PIERRES (MPC).",
+                "The website contains information about alcoholic beverages. Access is reserved for people of legal age to view this type of content in their country of residence.",
+            ]),
+            ("Orders, alcohol and minors", [
+                "The sale of alcohol to minors is prohibited. Proof of legal age may be requested before any sale or handover of alcoholic products.",
+                "The customer remains responsible for complying with the rules applicable to the purchase, import, possession and consumption of alcoholic beverages in their delivery or residence country.",
+            ]),
+            ("Personal data", [
+                "The data controller is LA MAISON DES PIERRES (MPC), reachable at the postal address above or by email at cognac@mdpierre.com.",
+                "Personal data may be collected when you use a form, request information, prepare an order, book a visit or subscribe to the newsletter. Depending on the service, this data may include your contact details, email address, message, information needed for commercial follow-up, language, detected market and subscription page.",
+                "This data is used to answer requests, manage the commercial relationship, prepare or perform an order, send the newsletter after consent, ensure the technical security of the website, keep proof of consent and comply with legal obligations. It is intended for LA MAISON DES PIERRES (MPC) and technical providers strictly necessary for the website. It is neither sold nor rented to third parties.",
+            ]),
+            ("Retention period and rights", [
+                "Data is kept for a period limited to the purposes pursued. Newsletter data is kept until consent is withdrawn or unsubscription is requested. Commercial, contractual or accounting data may be kept for the periods required by applicable regulations.",
+                "You have, under the conditions provided by applicable regulations, rights of access, rectification, erasure, objection, restriction, portability where applicable, and the right to withdraw consent at any time. You may exercise these rights by writing to cognac@mdpierre.com or to the postal address of LA MAISON DES PIERRES (MPC). You may also lodge a complaint with the CNIL: www.cnil.fr.",
+            ]),
+            ("Newsletter", [
+                "Newsletter subscription requires explicit consent. Each valid subscription is recorded with information needed to run the service: date, email address, language, detected market and subscription page. You may request unsubscription at any time by writing to cognac@mdpierre.com. Each newsletter mailing should also allow unsubscription.",
+            ]),
+            ("Cookies and third-party content", [
+                "The website may use cookies or trackers strictly necessary for its operation, for example for display, security or remembering certain technical choices.",
+                "Non-essential cookies, including analytics, advertising, personalisation or social-network cookies, should be placed only after consent when activated. The website may embed third-party content, including Google Maps, which may load directly and trigger technical exchanges with the relevant services.",
+            ]),
+            ("Intellectual property and credits", [
+                "Access to the website grants a private, personal and non-exclusive right of use. Texts, photographs, videos, illustrations, drawings, logos, trademarks, domain names and graphic elements on the website are protected by intellectual property law and belong to LA MAISON DES PIERRES (MPC), Cognac Esprit Organic or their authors and partners.",
+                "Any reproduction, representation, adaptation, extraction or reuse, in whole or in part, without prior authorisation is prohibited. Historical images and brand materials reused on this website come from Cognac Esprit Organic archives or appointed partners.",
+            ]),
+            ("Liability and external links", [
+                "LA MAISON DES PIERRES (MPC) endeavours to publish accurate and up-to-date information, but cannot guarantee the complete absence of errors, omissions or temporary unavailability. Links to third-party websites are provided for information; LA MAISON DES PIERRES (MPC) does not control these websites and cannot be held liable for their content, practices or changes.",
+            ]),
+            ("Alcohol warning", [
+                "ALCOHOL ABUSE IS DANGEROUS FOR YOUR HEALTH. CONSUME IN MODERATION.",
+                "Last updated: 2 July 2026.",
+            ]),
+        ],
+    },
+    "da": {
+        "title": "Juridiske oplysninger | Cognac Esprit Organic",
+        "description": "Juridiske oplysninger for Cognac Esprit Organic: udgiver, hosting, persondata, cookies, immaterielle rettigheder og alkoholadvarsel.",
+        "h1": "Juridiske oplysninger",
+        "intro": "Juridiske oplysninger for Cognac Esprit Organic-webstedet.",
+        "eyebrow": "Juridiske oplysninger",
+        "identity_title": "Webstedets udgiver",
+        "summary": "Webstedet cognac-esprit-organic.com udgives af LA MAISON DES PIERRES (MPC), et fransk selskab med begrænset ansvar med en kapital på 10.000 euro, registreret ved handels- og selskabsregistret i Angoulême under nummer 508 104 361.",
+        "rows": [
+            ("Websted", "https://cognac-esprit-organic.com"),
+            ("Brand", "Cognac Esprit Organic"),
+            ("Udgiver", "LA MAISON DES PIERRES (MPC)"),
+            ("Juridisk form", "EURL, fransk enkeltmandsselskab med begrænset ansvar"),
+            ("Selskabskapital", "10.000 euro"),
+            ("Handelsregister", "508 104 361 R.C.S. Angoulême"),
+            ("SIREN", "508 104 361"),
+            ("SIRET for hovedsæde", "508 104 361 00029"),
+            ("EU-momsnummer", "FR96 508 104 361"),
+            ("APE-kode", "46.34Z, engroshandel med drikkevarer"),
+            ("Hovedsæde", "Lantin, 30 rue d’Angoulême, 16200 Triac-Lautrait, France"),
+            ("Telefon", "+33 5 45 35 88 10"),
+            ("Email", "cognac@mdpierre.com"),
+            ("Publikationsansvarlig", "Léopold Croizet, leder af LA MAISON DES PIERRES (MPC)"),
+        ],
+        "sections": [
+            ("Hosting", [
+                "Webstedet hostes af OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. OVH SAS er registreret ved RCS Lille Métropole under nummer 424 761 419 00045. EU-momsnummer: FR22 424 761 419. Websted: www.ovhcloud.com. Telefon: 1007.",
+            ]),
+            ("Formål og adgang", [
+                "Webstedet præsenterer Cognac Esprit Organic, brandets cognacs, Pineaux des Charentes, økologiske og miljømæssige tilgang, nyheder og kontaktmuligheder.",
+                "Webstedet gennemfører ikke direkte ordrer, indkøbskurv eller onlinebetaling. Oplysningerne er vejledende og udgør ikke et kontraktligt salgstilbud; enhver kommerciel forespørgsel skal bekræftes ved direkte kontakt, tilbud, faktura eller skriftlig aftale fra LA MAISON DES PIERRES (MPC).",
+                "Webstedet indeholder oplysninger om alkoholholdige drikkevarer. Adgang er forbeholdt personer, der har den lovlige alder til at se denne type indhold i deres bopælsland.",
+            ]),
+            ("Ordrer, alkohol og mindreårige", [
+                "Salg af alkohol til mindreårige er forbudt. Dokumentation for lovlig alder kan kræves før ethvert salg eller udlevering af alkoholholdige produkter.",
+                "Kunden er ansvarlig for at overholde de regler, der gælder for køb, import, besiddelse og forbrug af alkoholholdige drikkevarer i leverings- eller bopælslandet.",
+            ]),
+            ("Persondata", [
+                "Dataansvarlig er LA MAISON DES PIERRES (MPC), som kan kontaktes på den postadresse, der er angivet ovenfor, eller via e-mail på cognac@mdpierre.com.",
+                "Persondata kan indsamles, når du bruger en formular, anmoder om oplysninger, forbereder en ordre, booker et besøg eller tilmelder dig nyhedsbrevet. Afhængigt af tjenesten kan data omfatte kontaktoplysninger, e-mailadresse, besked, oplysninger til kommerciel opfølgning, sprog, registreret marked og tilmeldingsside.",
+                "Disse data bruges til at besvare henvendelser, administrere den kommercielle relation, forberede eller gennemføre en ordre, sende nyhedsbrevet efter samtykke, sikre webstedets tekniske sikkerhed, opbevare bevis for samtykke og overholde lovpligtige forpligtelser. Data er bestemt for LA MAISON DES PIERRES (MPC) og de tekniske leverandører, der er strengt nødvendige for webstedets drift. De sælges eller udlejes ikke til tredjeparter.",
+            ]),
+            ("Opbevaring og rettigheder", [
+                "Data opbevares kun så længe, det er nødvendigt for formålene. Nyhedsbrevsdata opbevares indtil samtykke trækkes tilbage, eller afmelding anmodes. Kommercielle, kontraktlige eller regnskabsmæssige data kan opbevares i de perioder, som gældende regler kræver.",
+                "Du har, i henhold til gældende regler, ret til indsigt, berigtigelse, sletning, indsigelse, begrænsning, dataportabilitet hvor relevant og ret til at trække samtykke tilbage til enhver tid. Rettighederne kan udøves ved at skrive til cognac@mdpierre.com eller til postadressen for LA MAISON DES PIERRES (MPC). Du kan også klage til CNIL: www.cnil.fr.",
+            ]),
+            ("Nyhedsbrev", [
+                "Tilmelding til nyhedsbrevet kræver udtrykkeligt samtykke. Hver gyldig tilmelding registreres med de oplysninger, der er nødvendige for tjenesten: dato, e-mailadresse, sprog, registreret marked og tilmeldingsside. Du kan til enhver tid anmode om afmelding ved at skrive til cognac@mdpierre.com. Hver udsendelse bør også give mulighed for afmelding.",
+            ]),
+            ("Cookies og tredjepartsindhold", [
+                "Webstedet kan bruge cookies eller sporingsværktøjer, der er strengt nødvendige for driften, for eksempel til visning, sikkerhed eller til at huske visse tekniske valg.",
+                "Ikke-nødvendige cookies, herunder analyse-, reklame-, personaliserings- eller sociale netværkscookies, bør kun placeres efter samtykke, når de er aktiveret. Webstedet kan integrere tredjepartsindhold, herunder Google Maps, som kan indlæses direkte og medføre tekniske udvekslinger med de pågældende tjenester.",
+            ]),
+            ("Immaterielle rettigheder og kreditering", [
+                "Adgang til webstedet giver en privat, personlig og ikke-eksklusiv brugsret. Tekster, fotografier, videoer, illustrationer, tegninger, logoer, varemærker, domænenavne og grafiske elementer på webstedet er beskyttet af immaterialretten og tilhører LA MAISON DES PIERRES (MPC), Cognac Esprit Organic eller deres ophavsmænd og partnere.",
+                "Enhver reproduktion, fremstilling, tilpasning, udtrækning eller genbrug, helt eller delvist, uden forudgående tilladelse er forbudt. Historiske billeder og brandmateriale genbrugt på dette websted stammer fra Cognac Esprit Organic-arkiver eller udpegede partnere.",
+            ]),
+            ("Ansvar og eksterne links", [
+                "LA MAISON DES PIERRES (MPC) bestræber sig på at offentliggøre nøjagtige og opdaterede oplysninger, men kan ikke garantere fuldstændigt fravær af fejl, udeladelser eller midlertidig utilgængelighed. Links til tredjepartswebsteder gives som information; LA MAISON DES PIERRES (MPC) kontrollerer ikke disse websteder og kan ikke holdes ansvarlig for deres indhold, praksis eller ændringer.",
+            ]),
+            ("Alkoholadvarsel", [
+                "ALKOHOLMISBRUG ER SKADELIGT FOR HELBREDET. NYD MED MÅDE.",
+                "Senest opdateret: 2. juli 2026.",
+            ]),
+        ],
+    },
+    "no": {
+        "title": "Juridisk informasjon | Cognac Esprit Organic",
+        "description": "Juridisk informasjon for Cognac Esprit Organic: utgiver, hosting, personopplysninger, cookies, immaterielle rettigheter og alkoholadvarsel.",
+        "h1": "Juridisk informasjon",
+        "intro": "Juridisk informasjon for nettstedet Cognac Esprit Organic.",
+        "eyebrow": "Juridisk informasjon",
+        "identity_title": "Nettstedets utgiver",
+        "summary": "Nettstedet cognac-esprit-organic.com publiseres av LA MAISON DES PIERRES (MPC), et fransk selskap med begrenset ansvar med kapital på 10 000 euro, registrert ved handels- og selskapsregisteret i Angoulême under nummer 508 104 361.",
+        "rows": [
+            ("Nettsted", "https://cognac-esprit-organic.com"),
+            ("Merke", "Cognac Esprit Organic"),
+            ("Utgiver", "LA MAISON DES PIERRES (MPC)"),
+            ("Juridisk form", "EURL, fransk enkeltpersonsforetak med begrenset ansvar"),
+            ("Selskapskapital", "10 000 euro"),
+            ("Handelsregister", "508 104 361 R.C.S. Angoulême"),
+            ("SIREN", "508 104 361"),
+            ("SIRET for hovedkontor", "508 104 361 00029"),
+            ("MVA-nummer", "FR96 508 104 361"),
+            ("APE-kode", "46.34Z, engroshandel med drikkevarer"),
+            ("Hovedkontor", "Lantin, 30 rue d’Angoulême, 16200 Triac-Lautrait, France"),
+            ("Telefon", "+33 5 45 35 88 10"),
+            ("E-post", "cognac@mdpierre.com"),
+            ("Publiseringsansvarlig", "Léopold Croizet, daglig leder i LA MAISON DES PIERRES (MPC)"),
+        ],
+        "sections": [
+            ("Hosting", [
+                "Nettstedet hostes av OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. OVH SAS er registrert ved RCS Lille Métropole under nummer 424 761 419 00045. MVA-nummer: FR22 424 761 419. Nettsted: www.ovhcloud.com. Telefon: 1007.",
+            ]),
+            ("Formål og tilgang", [
+                "Nettstedet presenterer Cognac Esprit Organic, merkets cognacer, Pineaux des Charentes, økologiske og miljømessige tilnærming, nyheter og kontaktmuligheter.",
+                "Nettstedet gjennomfører ikke direkte ordre, handlekurv eller nettbetaling. Informasjonen er veiledende og utgjør ikke et kontraktsmessig salgstilbud; enhver kommersiell forespørsel må bekreftes ved direkte kontakt, tilbud, faktura eller skriftlig avtale fra LA MAISON DES PIERRES (MPC).",
+                "Nettstedet inneholder informasjon om alkoholholdige drikker. Tilgang er forbeholdt personer som har lovlig alder til å se denne typen innhold i sitt bostedsland.",
+            ]),
+            ("Ordrer, alkohol og mindreårige", [
+                "Salg av alkohol til mindreårige er forbudt. Bevis på lovlig alder kan kreves før salg eller utlevering av alkoholholdige produkter.",
+                "Kunden er ansvarlig for å overholde reglene som gjelder kjøp, import, besittelse og forbruk av alkoholholdige drikker i leverings- eller bostedslandet.",
+            ]),
+            ("Personopplysninger", [
+                "Behandlingsansvarlig er LA MAISON DES PIERRES (MPC), som kan kontaktes på postadressen ovenfor eller via e-post til cognac@mdpierre.com.",
+                "Personopplysninger kan samles inn når du bruker et skjema, ber om informasjon, forbereder en ordre, bestiller et besøk eller melder deg på nyhetsbrevet. Avhengig av tjenesten kan data omfatte kontaktopplysninger, e-postadresse, melding, opplysninger som trengs for kommersiell oppfølging, språk, registrert marked og påmeldingsside.",
+                "Disse dataene brukes til å svare på henvendelser, administrere kundeforholdet, forberede eller gjennomføre en ordre, sende nyhetsbrev etter samtykke, sikre nettstedets tekniske sikkerhet, oppbevare bevis på samtykke og overholde lovpålagte forpliktelser. Dataene er beregnet for LA MAISON DES PIERRES (MPC) og tekniske leverandører som er strengt nødvendige for nettstedets drift. De selges eller leies ikke ut til tredjeparter.",
+            ]),
+            ("Lagringstid og rettigheter", [
+                "Data oppbevares bare så lenge det er nødvendig for formålene. Nyhetsbrevdata oppbevares til samtykke trekkes tilbake eller avmelding bes om. Kommersielle, kontraktsmessige eller regnskapsmessige data kan oppbevares i periodene som gjeldende regler krever.",
+                "Du har, i henhold til gjeldende regler, rett til innsyn, retting, sletting, innsigelse, begrensning, dataportabilitet der det er aktuelt, og rett til å trekke samtykke tilbake når som helst. Rettighetene kan utøves ved å skrive til cognac@mdpierre.com eller til postadressen til LA MAISON DES PIERRES (MPC). Du kan også klage til CNIL: www.cnil.fr.",
+            ]),
+            ("Nyhetsbrev", [
+                "Påmelding til nyhetsbrevet krever uttrykkelig samtykke. Hver gyldige påmelding registreres med informasjonen som trengs for tjenesten: dato, e-postadresse, språk, registrert marked og påmeldingsside. Du kan når som helst be om avmelding ved å skrive til cognac@mdpierre.com. Hver utsendelse bør også gi mulighet for avmelding.",
+            ]),
+            ("Cookies og tredjepartsinnhold", [
+                "Nettstedet kan bruke cookies eller sporingsverktøy som er strengt nødvendige for driften, for eksempel visning, sikkerhet eller lagring av enkelte tekniske valg.",
+                "Ikke-nødvendige cookies, inkludert analyse-, reklame-, personaliserings- eller sosiale nettverkscookies, bør bare plasseres etter samtykke når de er aktivert. Nettstedet kan integrere tredjepartsinnhold, inkludert Google Maps, som kan lastes direkte og føre til tekniske utvekslinger med de aktuelle tjenestene.",
+            ]),
+            ("Immaterielle rettigheter og kreditering", [
+                "Tilgang til nettstedet gir en privat, personlig og ikke-eksklusiv bruksrett. Tekster, fotografier, videoer, illustrasjoner, tegninger, logoer, varemerker, domenenavn og grafiske elementer på nettstedet er beskyttet av immaterialretten og tilhører LA MAISON DES PIERRES (MPC), Cognac Esprit Organic eller deres opphavsmenn og partnere.",
+                "Enhver reproduksjon, fremstilling, tilpasning, uttrekk eller gjenbruk, helt eller delvis, uten forhåndstillatelse er forbudt. Historiske bilder og merkevaremateriale gjenbrukt på dette nettstedet kommer fra Cognac Esprit Organic-arkiver eller utpekte partnere.",
+            ]),
+            ("Ansvar og eksterne lenker", [
+                "LA MAISON DES PIERRES (MPC) forsøker å publisere nøyaktig og oppdatert informasjon, men kan ikke garantere fullstendig fravær av feil, utelatelser eller midlertidig utilgjengelighet. Lenker til tredjepartsnettsteder gis som informasjon; LA MAISON DES PIERRES (MPC) kontrollerer ikke disse nettstedene og kan ikke holdes ansvarlig for innhold, praksis eller endringer.",
+            ]),
+            ("Alkoholadvarsel", [
+                "ALKOHOLMISBRUK ER SKADELIG FOR HELSEN. NYT MED MÅTE.",
+                "Sist oppdatert: 2. juli 2026.",
+            ]),
+        ],
+    },
+    "sv": {
+        "title": "Juridisk information | Cognac Esprit Organic",
+        "description": "Juridisk information för Cognac Esprit Organic: utgivare, hosting, personuppgifter, cookies, immateriella rättigheter och alkoholvarning.",
+        "h1": "Juridisk information",
+        "intro": "Juridisk information för webbplatsen Cognac Esprit Organic.",
+        "eyebrow": "Juridisk information",
+        "identity_title": "Webbplatsens utgivare",
+        "summary": "Webbplatsen cognac-esprit-organic.com publiceras av LA MAISON DES PIERRES (MPC), ett franskt bolag med begränsat ansvar med kapital på 10 000 euro, registrerat vid handels- och bolagsregistret i Angoulême under nummer 508 104 361.",
+        "rows": [
+            ("Webbplats", "https://cognac-esprit-organic.com"),
+            ("Varumärke", "Cognac Esprit Organic"),
+            ("Utgivare", "LA MAISON DES PIERRES (MPC)"),
+            ("Juridisk form", "EURL, franskt enmansbolag med begränsat ansvar"),
+            ("Bolagskapital", "10 000 euro"),
+            ("Handelsregister", "508 104 361 R.C.S. Angoulême"),
+            ("SIREN", "508 104 361"),
+            ("SIRET för huvudkontor", "508 104 361 00029"),
+            ("Momsregistreringsnummer", "FR96 508 104 361"),
+            ("APE-kod", "46.34Z, partihandel med drycker"),
+            ("Huvudkontor", "Lantin, 30 rue d’Angoulême, 16200 Triac-Lautrait, France"),
+            ("Telefon", "+33 5 45 35 88 10"),
+            ("E-post", "cognac@mdpierre.com"),
+            ("Publiceringsansvarig", "Léopold Croizet, chef för LA MAISON DES PIERRES (MPC)"),
+        ],
+        "sections": [
+            ("Hosting", [
+                "Webbplatsen hostas av OVH SAS, 2 rue Kellermann, 59100 Roubaix, France. OVH SAS är registrerat vid RCS Lille Métropole under nummer 424 761 419 00045. Momsregistreringsnummer: FR22 424 761 419. Webbplats: www.ovhcloud.com. Telefon: 1007.",
+            ]),
+            ("Syfte och åtkomst", [
+                "Webbplatsen presenterar Cognac Esprit Organic, varumärkets cognacer, Pineaux des Charentes, ekologiska och miljömässiga arbetssätt, nyheter och kontaktmöjligheter.",
+                "Webbplatsen genomför inte direkt någon order, kundvagn eller onlinebetalning. Informationen är vägledande och utgör inte ett avtalsenligt erbjudande om försäljning; varje kommersiell förfrågan måste bekräftas genom direkt kontakt, offert, faktura eller skriftlig överenskommelse från LA MAISON DES PIERRES (MPC).",
+                "Webbplatsen innehåller information om alkoholhaltiga drycker. Åtkomst är förbehållen personer som har laglig ålder för att se denna typ av innehåll i sitt bosättningsland.",
+            ]),
+            ("Beställningar, alkohol och minderåriga", [
+                "Försäljning av alkohol till minderåriga är förbjuden. Bevis på laglig ålder kan begäras före varje försäljning eller överlämnande av alkoholhaltiga produkter.",
+                "Kunden ansvarar för att följa de regler som gäller köp, import, innehav och konsumtion av alkoholhaltiga drycker i leverans- eller bosättningslandet.",
+            ]),
+            ("Personuppgifter", [
+                "Personuppgiftsansvarig är LA MAISON DES PIERRES (MPC), som kan kontaktas på postadressen ovan eller via e-post till cognac@mdpierre.com.",
+                "Personuppgifter kan samlas in när du använder ett formulär, begär information, förbereder en order, bokar ett besök eller prenumererar på nyhetsbrevet. Beroende på tjänsten kan uppgifterna omfatta kontaktuppgifter, e-postadress, meddelande, information som behövs för kommersiell uppföljning, språk, registrerad marknad och prenumerationssida.",
+                "Dessa uppgifter används för att besvara förfrågningar, hantera den kommersiella relationen, förbereda eller genomföra en order, skicka nyhetsbrev efter samtycke, säkerställa webbplatsens tekniska säkerhet, bevara bevis på samtycke och följa lagliga skyldigheter. Uppgifterna är avsedda för LA MAISON DES PIERRES (MPC) och tekniska leverantörer som är strikt nödvändiga för webbplatsens drift. De säljs eller hyrs inte ut till tredje part.",
+            ]),
+            ("Lagringstid och rättigheter", [
+                "Uppgifter sparas endast under den tid som behövs för ändamålen. Nyhetsbrevsuppgifter sparas tills samtycke återkallas eller avregistrering begärs. Kommersiella, avtalsmässiga eller bokföringsmässiga uppgifter kan sparas under de perioder som gällande regler kräver.",
+                "Du har, enligt gällande regler, rätt till tillgång, rättelse, radering, invändning, begränsning, dataportabilitet där det är tillämpligt samt rätt att när som helst återkalla samtycke. Rättigheterna kan utövas genom att skriva till cognac@mdpierre.com eller till postadressen för LA MAISON DES PIERRES (MPC). Du kan även lämna klagomål till CNIL: www.cnil.fr.",
+            ]),
+            ("Nyhetsbrev", [
+                "Prenumeration på nyhetsbrevet kräver uttryckligt samtycke. Varje giltig prenumeration registreras med den information som krävs för tjänsten: datum, e-postadress, språk, registrerad marknad och prenumerationssida. Du kan när som helst begära avregistrering genom att skriva till cognac@mdpierre.com. Varje utskick bör också ge möjlighet till avregistrering.",
+            ]),
+            ("Cookies och tredjepartsinnehåll", [
+                "Webbplatsen kan använda cookies eller spårning som är strikt nödvändig för driften, till exempel visning, säkerhet eller lagring av vissa tekniska val.",
+                "Icke-nödvändiga cookies, inklusive analys-, reklam-, personaliserings- eller sociala nätverkscookies, bör endast placeras efter samtycke när de är aktiverade. Webbplatsen kan integrera tredjepartsinnehåll, inklusive Google Maps, som kan laddas direkt och medföra tekniska utbyten med berörda tjänster.",
+            ]),
+            ("Immateriella rättigheter och krediter", [
+                "Åtkomst till webbplatsen ger en privat, personlig och icke-exklusiv nyttjanderätt. Texter, fotografier, videor, illustrationer, teckningar, logotyper, varumärken, domännamn och grafiska element på webbplatsen skyddas av immaterialrätten och tillhör LA MAISON DES PIERRES (MPC), Cognac Esprit Organic eller deras upphovsmän och partner.",
+                "All reproduktion, framställning, anpassning, extrahering eller återanvändning, helt eller delvis, utan föregående tillstånd är förbjuden. Historiska bilder och varumärkesmaterial som återanvänds på denna webbplats kommer från Cognac Esprit Organic-arkiv eller utsedda partner.",
+            ]),
+            ("Ansvar och externa länkar", [
+                "LA MAISON DES PIERRES (MPC) strävar efter att publicera korrekt och uppdaterad information, men kan inte garantera fullständig frånvaro av fel, utelämnanden eller tillfällig otillgänglighet. Länkar till tredjepartswebbplatser ges som information; LA MAISON DES PIERRES (MPC) kontrollerar inte dessa webbplatser och kan inte hållas ansvarigt för deras innehåll, praxis eller ändringar.",
+            ]),
+            ("Alkoholvarning", [
+                "ALKOHOLMISSBRUK ÄR SKADLIGT FÖR HÄLSAN. NJUT MED MÅTTA.",
+                "Senast uppdaterad: 2 juli 2026.",
+            ]),
+        ],
+    },
+}
+
+
+def legal_page(path="mentions-legales.html", lang="fr"):
+    copy = LEGAL_COPY.get(lang, LEGAL_COPY["en"])
+    rows = "".join(
+        f"<li><span>{escape(label)}</span><strong>{escape(value)}</strong></li>"
+        for label, value in copy["rows"]
+    )
+    sections = "".join(
+        f"""
+<section class="legal-notice-section">
+  <div class="section-inner split">
+    <div><p class="eyebrow">{escape(copy["eyebrow"])}</p><h2>{escape(title)}</h2></div>
+    <div>{"".join(f"<p>{escape(paragraph)}</p>" for paragraph in paragraphs)}</div>
+  </div>
+</section>"""
+        for title, paragraphs in copy["sections"]
+    )
     body = f"""
-<section>
+<section class="legal-notice-intro">
   <div class="section-inner split">
     <div>
-      <p class="eyebrow">Informations légales</p>
-      <h2 data-fr>Brouillon à confirmer</h2>
-      <h2 data-en>Draft to confirm</h2>
-      <p data-fr>Les informations confirmées sont limitées aux coordonnées affichées ci-contre. Les mentions légales complètes restent à valider ; cette page est donc en noindex temporaire.</p>
-      <p data-en>Only the contact details shown here are confirmed. The complete legal notice still needs validation, so this page uses a temporary noindex.</p>
+      <p class="eyebrow">{escape(copy["eyebrow"])}</p>
+      <h2>{escape(copy["identity_title"])}</h2>
+      <p>{escape(copy["summary"])}</p>
     </div>
     <div>
-      <ul class="meta-list">
-        <li><span>Site</span><strong>{DOMAIN}</strong></li>
-        <li><span>Marque</span><strong>Cognac Esprit Organic</strong></li>
-        <li><span>Email</span><strong>{CONTACT['email']}</strong></li>
-        <li><span>Téléphone</span><strong>{CONTACT['phone']}</strong></li>
-        <li><span>Adresse</span><strong>{CONTACT['address']}</strong></li>
-        <li><span>Éditeur du site</span><strong>à confirmer</strong></li>
-        <li><span>Forme juridique</span><strong>à confirmer</strong></li>
-        <li><span>Numéro d'immatriculation</span><strong>à confirmer</strong></li>
-        <li><span>TVA intracommunautaire</span><strong>à confirmer</strong></li>
-        <li><span>Responsable de publication</span><strong>à confirmer</strong></li>
-        <li><span>Hébergeur</span><strong>à confirmer</strong></li>
-      </ul>
+      <ul class="meta-list">{rows}</ul>
     </div>
   </div>
 </section>
+{sections}
 """
-    return layout("mentions-legales.html", "Mentions légales | Cognac Esprit Organic", "Mentions légales Cognac Esprit Organic : informations connues et champs à confirmer.", "Mentions légales", "Informations connues et champs à confirmer avant publication.", "Known information and fields to confirm before publication.", body, image="assets/img/brand/hero-old-vine.jpg", robots="noindex,nofollow")
+    return layout(
+        path,
+        copy["title"],
+        copy["description"],
+        copy["h1"],
+        copy["intro"],
+        copy["intro"],
+        body,
+        image="assets/img/brand/hero-old-vine.jpg",
+        page_class="legal-notice-page",
+    )
 
 
 def write_css():
@@ -5422,6 +6297,13 @@ thead th {
 .hve-cec-page .hve-cec-promise { max-width: 650px; color: #2f4a2b; font-size: clamp(1.35rem, 2.3vw, 1.85rem); line-height: 1.16; font-weight: 900; }
 .hve-cec-page .hve-cec-public-links { gap: 10px; margin-top: 24px; }
 .hve-cec-page .hve-cec-public-links a { background: #f8f4ea; border-color: rgba(94, 61, 35, .24); }
+.hve-cec-page { --cec-copper: #f5a872; --cec-green: #095540; --cec-cream: #fff7ed; }
+.hve-cec-charter-lockup { display: flex; align-items: center; gap: clamp(14px, 3vw, 28px); width: min(430px, 100%); margin-top: 28px; padding: clamp(18px, 3vw, 28px); background: linear-gradient(90deg, rgba(9,85,64,.08), rgba(245,168,114,.18)); border-left: 7px solid var(--cec-green); box-shadow: 0 22px 46px rgba(47,74,43,.12); }
+.hve-cec-lockup-cec, .hve-cec-lockup-hve { display: block; height: auto; object-fit: contain; flex: 0 0 auto; }
+.hve-cec-charter-lockup .hve-cec-lockup-cec { width: clamp(112px, 16vw, 154px); }
+.hve-cec-charter-lockup .hve-cec-lockup-hve { width: clamp(38px, 5.4vw, 52px); }
+.hve-cec-lockup-plus { color: var(--cec-green); font-family: Montserrat, Arial, sans-serif; font-size: clamp(1.75rem, 4vw, 3.2rem); font-weight: 800; line-height: 1; letter-spacing: 0; }
+.hve-cec-charter-caption { margin: 12px 0 0; max-width: 430px; color: #5e3d23; font-family: Georgia, "Times New Roman", serif; font-size: .94rem; font-style: italic; }
 .proof-facts { display: grid; gap: 0; margin: 28px 0 0; padding: 0; list-style: none; border-top: 1px solid rgba(255,255,255,.26); }
 .proof-facts li { display: grid; grid-template-columns: minmax(120px, .36fr) 1fr; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.2); }
 .proof-facts span { color: rgba(255,255,255,.68); text-transform: uppercase; letter-spacing: .11em; font-size: .68rem; font-weight: 900; }
@@ -5435,8 +6317,10 @@ thead th {
 .organic-chain span { min-height: 74px; display: grid; place-items: center; padding: 12px; background: #2f4a2b; color: #fff; font-size: .72rem; font-weight: 900; letter-spacing: .08em; text-align: center; text-transform: uppercase; }
 .hve-cec-page .organic-proof-card h2 { font-size: clamp(1.9rem, 3.6vw, 3.45rem); }
 .hve-cec-page .organic-proof-card-copy > p:not(.proof-kicker) { max-width: 700px; color: rgba(255,255,255,.88); font-size: 1.01rem; }
-.hve-cec-proof-mark { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2px; min-height: 280px; background: #f5f2e8; padding: 34px; }
-.hve-cec-proof-mark span { display: grid; place-items: center; background: #2f4a2b; color: #fff; font-family: "Roboto Slab", Georgia, serif; font-size: clamp(2.6rem, 6vw, 5.4rem); font-weight: 800; letter-spacing: .04em; }
+.hve-cec-proof-mark { display: flex; align-items: center; justify-content: center; gap: clamp(18px, 4vw, 42px); min-height: 280px; padding: 34px; background: linear-gradient(180deg, #fff7ed, #efe4d5); border-top: 8px solid var(--cec-green); box-shadow: inset 0 0 0 1px rgba(94,61,35,.12); }
+.hve-cec-proof-mark .hve-cec-lockup-cec { width: clamp(140px, 22vw, 210px); }
+.hve-cec-proof-mark .hve-cec-lockup-hve { width: clamp(47px, 7.3vw, 70px); }
+.hve-cec-proof-band h2::after { content: ""; display: block; width: 78px; height: 5px; margin-top: 18px; background: var(--cec-copper); }
 @media (max-width: 1060px) {
   .organic-proof-intro-grid, .organic-proof-note-grid, .organic-certification-grid, .organic-proof-card, .organic-proof-card.reverse { grid-template-columns: 1fr; }
   .organic-proof-card.reverse .organic-proof-card-media { order: 0; }
@@ -5448,7 +6332,8 @@ thead th {
   .organic-proof-card-copy { padding: 34px 24px 42px; }
   .proof-facts li, .organic-chain { grid-template-columns: 1fr; }
   .organic-chain span { min-height: 52px; }
-  .hve-cec-proof-mark { grid-template-columns: 1fr; padding: 22px; }
+  .hve-cec-proof-mark { min-height: 220px; padding: 24px; }
+  .hve-cec-charter-lockup { padding: 18px; }
 }
 '''
     write("assets/css/styles.css", css)
@@ -5570,9 +6455,10 @@ document.addEventListener("keydown", (event) => {
 
 
 def write_static_files():
-    localized_languages = ["en", "da", "no", "sv"]
-    pages = ["index.html", "hve-cec.html"] + [f"{lang}/index.html" for lang in localized_languages]
+    localized_languages = list(LOCALIZED_LANGUAGES)
+    pages = ["index.html"] + [f"{lang}/index.html" for lang in localized_languages]
     localized_base_pages = [
+        "hve-cec.html",
         "agriculture-biologique.html",
         "organic-cognac-producer-france.html",
         "importers.html",
@@ -5586,6 +6472,8 @@ def write_static_files():
         "cocktails.html",
         "galerie.html",
         "valeurs-nutritionnelles.html",
+        "recompenses.html",
+        "mentions-legales.html",
     ]
     for base_page in localized_base_pages:
         pages.append(base_page)
@@ -5594,7 +6482,6 @@ def write_static_files():
         f"{lang}/fiches-techniques-produits.html" if lang != "fr" else "fiches-techniques-produits.html"
         for lang in ["fr", "en", "da", "no", "sv"]
     )
-    pages.append("recompenses.html")
     for product in PRODUCTS:
         product_page_path = f"produits/{product['slug']}.html"
         pages.append(product_page_path)
@@ -5632,7 +6519,7 @@ Domaine officiel : {DOMAIN}
 
 ## Statut du projet
 
-Ce site est la version publique statique de Cognac Esprit Organic. Les pages publiques autorisent l'indexation, sauf les mentions légales laissées en brouillon avec `noindex` temporaire tant que les champs légaux restent à confirmer. Le fichier `robots.txt` publie le sitemap officiel.
+Ce site est la version publique statique de Cognac Esprit Organic. Les pages publiques finalisées, dont les mentions légales, autorisent l'indexation. Le fichier `robots.txt` publie le sitemap officiel.
 
 ## Identité
 
@@ -5700,6 +6587,7 @@ Europe, USA, Canada.
 - Produktdata og professionelle dokumenter : /da/fiches-techniques-produits.html
 - Produktdata og profesjonelle dokumenter : /no/fiches-techniques-produits.html
 - Produktdata och professionella dokument : /sv/fiches-techniques-produits.html
+- Mentions légales : /mentions-legales.html
 - llms.txt : /llms.txt
 
 ## Versions linguistiques
@@ -5757,7 +6645,7 @@ Il est aussi possible d'ouvrir `index.html` directement, mais le serveur local r
 Le site est prêt pour la mise en ligne :
 
 - `<meta name="robots" content="index,follow">` sur les pages publiques finalisées ;
-- `<meta name="robots" content="noindex,nofollow">` sur les mentions légales tant que les champs juridiques restent à confirmer ;
+- mentions légales finalisées, traduites et accessibles depuis le pied de page ;
 - `robots.txt` autorise l'exploration et référence le sitemap officiel.
 
 ## Fichiers principaux
@@ -5780,6 +6668,18 @@ Les archives de l'ancien site WordPress sont rangées dans `ancien-site-wordpres
 
 Les images récupérées de l'ancien site et utilisées par le nouveau site restent dans `assets/img/old-site/`, car elles servent directement aux pages publiées.
 
+En production OVH, l'ancien site WordPress doit rester accessible sur :
+
+```text
+https://ancien.cognac-esprit-organic.com/
+```
+
+Ce sous-domaine doit rester separe du nouveau site GitHub et doit etre protege contre l'indexation Google avec `noindex`. Il ne doit pas devenir la version principale du site, et le domaine principal doit rester :
+
+```text
+https://cognac-esprit-organic.com/
+```
+
 ## Mise en ligne OVH
 
 Copier à la racine de l'hébergement OVH :
@@ -5789,7 +6689,8 @@ Copier à la racine de l'hébergement OVH :
 - le dossier `assets/` ;
 - `robots.txt` ;
 - `sitemap.xml` ;
-- `llms.txt`.
+- `llms.txt` ;
+- `.htaccess` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
 
@@ -5824,18 +6725,22 @@ def main():
     write("importers.html", importer_page())
     write("agriculture-biologique.html", organic_proof_page())
     write("hve-cec.html", hve_cec_page())
+    for lang in LOCALIZED_LANGUAGES:
+        write(f"{lang}/hve-cec.html", hve_cec_page(f"{lang}/hve-cec.html", lang))
     write("organic-cognac-producer-france.html", producer_page())
     write("contact.html", contact_page())
     write("faq.html", faq_page())
     write("recompenses.html", rewards_page())
-    for lang in ["en", "da", "no", "sv"]:
-        write(f"{lang}/recompenses.html", redirect_page(f"{lang}/recompenses.html", "Récompenses", "recompenses.html"))
+    for lang in LOCALIZED_LANGUAGES:
+        write(f"{lang}/recompenses.html", rewards_page(f"{lang}/recompenses.html", lang))
     write("cocktails.html", cocktails_page())
     write("galerie.html", gallery_page())
     write("valeurs-nutritionnelles.html", nutrition_page())
     write("fiches-techniques-produits.html", technical_product_facts_page())
     write("en/fiches-techniques-produits.html", technical_product_facts_page_en())
     write("mentions-legales.html", legal_page())
+    for lang in LOCALIZED_LANGUAGES:
+        write(f"{lang}/mentions-legales.html", legal_page(f"{lang}/mentions-legales.html", lang))
     write("visiter.html", visit_page())
     write("leopold-et-fanny/index.html", people_page("leopold-et-fanny/index.html"))
     write("leopold-et-fanny.html", redirect_page("leopold-et-fanny.html", "Léopold et Fanny", "leopold-et-fanny/"))

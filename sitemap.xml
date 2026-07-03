@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://cognac-esprit-organic.com/</loc></url>
-  <url><loc>https://cognac-esprit-organic.com/hve-cec.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/en/</loc></url>
   <url><loc>https://cognac-esprit-organic.com/da/</loc></url>
   <url><loc>https://cognac-esprit-organic.com/no/</loc></url>
   <url><loc>https://cognac-esprit-organic.com/sv/</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/hve-cec.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/en/hve-cec.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/da/hve-cec.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/no/hve-cec.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/sv/hve-cec.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/agriculture-biologique.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/en/agriculture-biologique.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/da/agriculture-biologique.html</loc></url>
@@ -71,12 +75,21 @@
   <url><loc>https://cognac-esprit-organic.com/da/valeurs-nutritionnelles.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/no/valeurs-nutritionnelles.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/sv/valeurs-nutritionnelles.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/recompenses.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/en/recompenses.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/da/recompenses.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/no/recompenses.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/sv/recompenses.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/mentions-legales.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/en/mentions-legales.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/da/mentions-legales.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/no/mentions-legales.html</loc></url>
+  <url><loc>https://cognac-esprit-organic.com/sv/mentions-legales.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/fiches-techniques-produits.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/en/fiches-techniques-produits.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/da/fiches-techniques-produits.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/no/fiches-techniques-produits.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/sv/fiches-techniques-produits.html</loc></url>
-  <url><loc>https://cognac-esprit-organic.com/recompenses.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/produits/fondation-vs.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/en/produits/fondation-vs.html</loc></url>
   <url><loc>https://cognac-esprit-organic.com/da/produits/fondation-vs.html</loc></url>

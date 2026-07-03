@@ -4,7 +4,7 @@ Domaine officiel : https://cognac-esprit-organic.com
 
 ## Statut du projet
 
-Ce site est la version publique statique de Cognac Esprit Organic. Les pages publiques autorisent l'indexation, sauf les mentions légales laissées en brouillon avec `noindex` temporaire tant que les champs légaux restent à confirmer. Le fichier `robots.txt` publie le sitemap officiel.
+Ce site est la version publique statique de Cognac Esprit Organic. Les pages publiques finalisées, dont les mentions légales, autorisent l'indexation. Le fichier `robots.txt` publie le sitemap officiel.
 
 ## Identité
 
@@ -120,6 +120,7 @@ Europe, USA, Canada.
 - Produktdata og professionelle dokumenter : /da/fiches-techniques-produits.html
 - Produktdata og profesjonelle dokumenter : /no/fiches-techniques-produits.html
 - Produktdata och professionella dokument : /sv/fiches-techniques-produits.html
+- Mentions légales : /mentions-legales.html
 - llms.txt : /llms.txt
 
 ## Versions linguistiques

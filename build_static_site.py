@@ -1177,7 +1177,7 @@ def split(left, right, cls=""):
 def medal_html(medal, product_name: str, prefix: str) -> str:
     if isinstance(medal, str):
         src = medal
-        return f'<img src="{prefix}{src}" alt="" aria-hidden="true" loading="lazy">'
+        return f'<img src="{prefix}{src}" alt="" role="presentation" aria-hidden="true" loading="lazy">'
     src = medal["src"]
     alt = medal.get("alt", f"Distinction {product_name}")
     href = medal.get("href")
@@ -1204,7 +1204,7 @@ def award_visual_html(award, product_name: str, prefix: str, context: str = "pro
         <a class="product-award-link" href="{escape(href)}" target="_blank" rel="noopener noreferrer" aria-label="{escape(label)}">
           <span class="product-award-visual">
             <img class="product-award-image" src="{prefix}{escape(src)}" alt="{escape(alt)}" loading="lazy" width="395" height="369">
-            <img class="product-award-reflection" src="{prefix}{escape(src)}" alt="" aria-hidden="true" loading="lazy" width="395" height="369">
+            <img class="product-award-reflection" src="{prefix}{escape(src)}" alt="" role="presentation" aria-hidden="true" loading="lazy" width="395" height="369">
           </span>
           <span class="product-award-copy">
             <strong>{title}</strong>
@@ -1262,8 +1262,8 @@ def home():
 </section>
 <section class="cream-signature">
   <div>
-    <img class="floral-left" src="assets/img/floral-01.svg" alt="" aria-hidden="true">
-    <img class="floral-right" src="assets/img/floral-03.svg" alt="" aria-hidden="true">
+    <img class="floral-left" src="assets/img/floral-01.svg" alt="" role="presentation" aria-hidden="true">
+    <img class="floral-right" src="assets/img/floral-03.svg" alt="" role="presentation" aria-hidden="true">
     <p data-fr>Bienvenue sur nos terres</p>
     <p data-en>Welcome to our land</p>
     <span>•••</span>
@@ -1294,8 +1294,8 @@ def home():
   </div>
 </a>
 <section class="home-transmission-block">
-  <img class="transmission-floral-left" src="assets/img/floral-01.svg" alt="" aria-hidden="true">
-  <img class="transmission-floral-right" src="assets/img/floral-03.svg" alt="" aria-hidden="true">
+  <img class="transmission-floral-left" src="assets/img/floral-01.svg" alt="" role="presentation" aria-hidden="true">
+  <img class="transmission-floral-right" src="assets/img/floral-03.svg" alt="" role="presentation" aria-hidden="true">
   <div>
     <h2 data-fr>Cultiver pour transmettre</h2>
     <h2 data-en>Cultivating to transmit</h2>
@@ -1309,7 +1309,7 @@ def home():
     return layout(
         "index.html",
         "Cognac Esprit Organic | Cognac bio familial des Fins Bois",
-        "Cognac Esprit Organic, cognac biologique familial en Charente : une gamme élégante portée par Léopold et Fanny Croizet, du VS au XXO.",
+        "Cognac Esprit Organic, cognac biologique familial en Charente : cuvées VS, VSOP, Napoléon, XO, XXO et Pineaux, signées Léopold et Fanny Croizet, au domaine.",
         "Cognac Esprit Organic",
         "Cognac biologique familial, élégant et sincère.",
         "Family organic Cognac, elegant and sincere.",
@@ -1397,7 +1397,7 @@ def product_page(product):
     recognition_markup = f"\n      {recognition_blocks}" if recognition_blocks else ""
     gallery_images = [detail_image] + extra.get("gallery", [])
     gallery_buttons = "".join(
-        f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="" loading="lazy"></button>'
+        f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="{escape(product["name"])} - visuel {idx + 1}" loading="lazy"></button>'
         for idx, src in enumerate(gallery_images)
     )
     trade_pdf_download = ""
@@ -2207,9 +2207,9 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
       <p class="eyebrow">HVE / CEC</p>
       <h2>{escape(copy["heading"])}</h2>
       <div class="hve-cec-charter-lockup" role="img" aria-label="{escape(copy["lockup_label"])}">
-        <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="" width="592" height="592" loading="lazy" decoding="async">
+        <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="Logo CEC" width="592" height="592" loading="lazy" decoding="async">
         <span class="hve-cec-lockup-divider" aria-hidden="true"></span>
-        <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="" width="255" height="258" loading="lazy" decoding="async">
+        <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="Logo HVE" width="255" height="258" loading="lazy" decoding="async">
       </div>
     </div>
     <div class="organic-proof-lead">
@@ -2263,9 +2263,9 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
 <section class="organic-certification-band hve-cec-proof-band">
   <div class="section-inner organic-certification-grid">
     <div class="hve-cec-proof-mark" role="img" aria-label="{escape(copy["lockup_label"])}">
-      <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="" width="592" height="592" loading="lazy" decoding="async">
+      <img class="hve-cec-lockup-cec" src="{cec_logo}" alt="Logo CEC" width="592" height="592" loading="lazy" decoding="async">
       <span class="hve-cec-lockup-divider" aria-hidden="true"></span>
-      <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="" width="255" height="258" loading="lazy" decoding="async">
+      <img class="hve-cec-lockup-hve" src="{hve_logo}" alt="Logo HVE" width="255" height="258" loading="lazy" decoding="async">
     </div>
     <div>
       <p class="eyebrow">{escape(copy["band"]["eyebrow"])}</p>
@@ -3489,6 +3489,21 @@ def replace_many(html, replacements):
     for old, new in replacements.items():
         html = html.replace(old, new)
     return html
+
+
+def normalize_presentational_images(html):
+    return html.replace('alt="" aria-hidden="true"', 'alt="" role="presentation" aria-hidden="true"')
+
+
+def normalize_generated_accessibility_markup():
+    excluded_parts = {".git", "ancien-site-wordpress", "node_modules", "output"}
+    for path in ROOT.rglob("*.html"):
+        if any(part in excluded_parts for part in path.parts):
+            continue
+        html = path.read_text(encoding="utf-8")
+        normalized = normalize_presentational_images(html)
+        if normalized != html:
+            path.write_text(normalized, encoding="utf-8")
 
 
 def sync_localized_marketing_copy():
@@ -6949,6 +6964,7 @@ def main():
     write_static_files()
     sync_localized_product_data()
     sync_localized_marketing_copy()
+    normalize_generated_accessibility_markup()
 
 
 if __name__ == "__main__":

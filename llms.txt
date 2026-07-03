@@ -28,7 +28,7 @@ Europe, USA, Canada.
 - Conviction VSOP : Cognac VSOP. Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.
 - Cohesion Napoléon : Cognac Napoléon. Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.
 - Transmission XO : Cognac XO. Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.
-- XXO : Cognac XXO. Premier XXO en agriculture biologique, doux, structuré et très fruité.
+- XXO : Cognac XXO. Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.
 - Single Cask : Cognac Single Cask. Édition limitée, 51 %, sélectionnée par Fanny.
 - Pineau blanc : Pineau des Charentes blanc. Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
 - Pineau rouge : Pineau des Charentes rouge. Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
@@ -115,11 +115,11 @@ Europe, USA, Canada.
 - FAQ om økologisk Cognac : /no/faq.html
 - FAQ om ekologisk Cognac : /sv/faq.html
 - Cocktails : /cocktails.html
-- Données produits et documents professionnels : /fiches-techniques-produits.html
-- Product data and professional documents : /en/fiches-techniques-produits.html
-- Produktdata og professionelle dokumenter : /da/fiches-techniques-produits.html
-- Produktdata og profesjonelle dokumenter : /no/fiches-techniques-produits.html
-- Produktdata och professionella dokument : /sv/fiches-techniques-produits.html
+- Fiches produits et ressources professionnelles : /fiches-techniques-produits.html
+- Product sheets and trade resources : /en/fiches-techniques-produits.html
+- Produktark og professionelle ressourcer : /da/fiches-techniques-produits.html
+- Produktark og profesjonelle ressurser : /no/fiches-techniques-produits.html
+- Produktblad och professionella resurser : /sv/fiches-techniques-produits.html
 - Mentions légales : /mentions-legales.html
 - llms.txt : /llms.txt
 

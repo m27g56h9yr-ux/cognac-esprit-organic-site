@@ -228,8 +228,8 @@ PRODUCTS = [
     {
         "name": "XXO",
         "slug": "xxo",
-        "short": "Premier XXO en agriculture biologique, doux, structuré et très fruité.",
-        "en_short": "Presented as the first XXO in organic agriculture, soft, structured and fruit-forward.",
+        "short": "Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.",
+        "en_short": "An organic XXO Cognac, soft, structured and fruit-forward.",
         "notes": ["Doux", "Structuré", "Très fruité", "Plus jeune eau-de-vie 14 ans"],
         "category": "Cognac XXO",
         "image": "assets/img/products/xxo.jpg",
@@ -440,7 +440,7 @@ PRODUCT_EXTRAS = {
         "gallery_color": "#eae7da",
         "detail_image": "assets/img/old-site/VS-FONDATION.jpg",
         "tasting_image": "assets/img/old-site/img_degustation_vs.jpg",
-        "story": "Je dédie FONDATION à ma grand-mère Germaine, pionnière de la famille, qui me répétait sans cesse : Ce patrimoine est solide car il est sain, la terre n’a pas besoin d’autre chose que le travail de l’homme et ses connaissances. Les produits chimiques ne sont pas nécessaires pour que la vigne pousse et produise. C’est ce discours impactant qui m’a poussé à crée cette marque.",
+        "story": "Je dédie FONDATION à ma grand-mère Germaine, pionnière de la famille. Elle me répétait que la solidité d’un patrimoine vient du travail de la terre, de l’observation et de la transmission. Cette conviction m’a donné envie de créer Esprit Organic.",
         "degustation_text": "FONDATION se caractérise par une belle fraîcheur en bouche des notes fruitées de poire et de pêche ou encore de fleur de vigne. Les premiers tannins du bois révèlent des arômes briochés. Idéal pour réaliser des cocktails ou être consommé sur glace.",
         "sensory": {
             "Bouche": "Bois de chêne, brioche, fleur de vigne, pêche, poire, vanille",
@@ -466,7 +466,7 @@ PRODUCT_EXTRAS = {
         "gallery_color": "#eae7da",
         "detail_image": "assets/img/old-site/VSOP-CONVICTION.jpg",
         "tasting_image": "assets/img/old-site/cocktail_vsop.jpg",
-        "story": "Fanny et moi-même sommes convaincus qu’un « mieux produire » est la meilleure solution pour préserver notre vignoble et nous permettre de continuer à travailler de manière passionnée dans le respect de la terre. CONVICTION c’est un hommage à notre vision d’une vie saine, d’un bon sens paysan mais aussi à notre alliance dans le travail et dans la vie.",
+        "story": "Fanny et moi-même sommes convaincus qu’un « mieux produire » est la meilleure manière de préserver notre vignoble et de continuer à travailler avec passion dans le respect de la terre. CONVICTION rend hommage à ce bon sens paysan, mais aussi à notre alliance dans le travail et dans la vie.",
         "degustation_text": "CONVICTION est un cognac rond et gourmand. Les premières années en fûts lui confèrent des notes de fruits confits et de vanille. On y trouve en bouche des notes de fruits secs, de bois chaud et d’épices. CONVICTION offre une finale fraîche de clou de girofle.",
         "sensory": {
             "Bouche": "Abricot sec, clou de girofle, prune, rose, vanille",
@@ -1308,11 +1308,11 @@ def home():
     hero_actions = f'<nav class="hero-product-links" aria-label="Accès rapides produits"><ul>{product_names}</ul></nav>'
     return layout(
         "index.html",
-        "Cognac Esprit Organic | Cognac bio familial en France",
-        "Cognac Esprit Organic présente une gamme de Cognacs biologiques portée par Léopold et Fanny Croizet, avec une structure claire pour Google et l'export.",
+        "Cognac Esprit Organic | Cognac bio familial des Fins Bois",
+        "Cognac Esprit Organic, cognac biologique familial en Charente : une gamme élégante portée par Léopold et Fanny Croizet, du VS au XXO.",
         "Cognac Esprit Organic",
-        "Cognac biologique familial, naturel et premium.",
-        "Family, natural and premium organic Cognac.",
+        "Cognac biologique familial, élégant et sincère.",
+        "Family organic Cognac, elegant and sincere.",
         body,
         image="assets/img/brand/hero-vine-02.jpg",
         page_class="home-page",
@@ -1639,21 +1639,21 @@ def team_page(path="equipe/index.html"):
 
 def importer_page():
     body = f"""
-{split('<p class="eyebrow">B2B export</p><h2 data-fr>Une page dédiée aux importateurs, cavistes, CHR, bars, hôtels et réseaux bio.</h2><h2 data-en>A dedicated page for importers, wine merchants, hospitality, bars, hotels and organic retail networks.</h2>', '<p data-fr>Esprit Organic s’adresse aux marchés export formulés ainsi : Europe, USA, Canada. Cette page reste volontairement factuelle : elle présente la gamme, les informations de contact et les documents à préparer, sans inventer de volumes ni de distributeurs.</p><p data-en>Esprit Organic addresses export markets formulated as: Europe, USA, Canada. This page stays factual: it presents the range, contact details and documents to prepare, without inventing volumes or distributors.</p><a class="button" href="contact.html" data-fr>Demander des informations export</a><a class="button" href="contact.html" data-en>Request export information</a>')}
-{section('<div class="feature-grid"><article><h2 data-fr>Gamme</h2><h2 data-en>Range</h2><p>VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc, Pineau rouge.</p></article><article><h2 data-fr>Positionnement</h2><h2 data-en>Positioning</h2><p data-fr>Cognac biologique familial, naturel, premium et indépendant.</p><p data-en>Family, natural, premium and independent organic Cognac.</p></article><article><h2 data-fr>Marchés</h2><h2 data-en>Markets</h2><p>Europe, USA, Canada.</p></article></div>')}
-{section('<h2 data-fr>Documents à préparer</h2><h2 data-en>Documents to prepare</h2><ul class="check-list"><li data-fr><a href="fiches-techniques-produits.html">Données produits et documents professionnels en HTML accessible.</a></li><li data-en><a href="fiches-techniques-produits.html">Product data and professional documents in accessible HTML.</a></li><li data-fr>Photos bouteilles et gamme.</li><li data-en>Bottle and range photographs.</li><li data-fr>Informations réglementaires et nutritionnelles en HTML accessible.</li><li data-en>Regulatory and nutritional information in accessible HTML.</li></ul>')}
+{split('<p class="eyebrow">Partenaires</p><h2 data-fr>Un cognac biologique français pour les importateurs, cavistes, CHR et réseaux spécialisés.</h2><h2 data-en>French organic Cognac for importers, wine merchants, hospitality and specialist retailers.</h2>', '<p data-fr>Esprit Organic accompagne les partenaires qui recherchent une gamme de cognacs et pineaux lisible, familiale et certifiée biologique, avec un contact direct en Charente.</p><p data-en>Esprit Organic supports partners looking for a clear, family-led and certified organic range of Cognacs and Pineaux, with direct contact in Charente.</p><a class="button" href="contact.html" data-fr>Parler de votre projet</a><a class="button" href="contact.html" data-en>Discuss your project</a>')}
+{section('<div class="feature-grid"><article><h2 data-fr>Gamme</h2><h2 data-en>Range</h2><p>VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc, Pineau rouge.</p></article><article><h2 data-fr>Positionnement</h2><h2 data-en>Positioning</h2><p data-fr>Cognac biologique familial, premium et indépendant.</p><p data-en>Family, premium and independent organic Cognac.</p></article><article><h2 data-fr>Marchés accompagnés</h2><h2 data-en>Supported markets</h2><p>Europe, USA, Canada.</p></article></div>')}
+{section('<h2 data-fr>Ressources pour vos sélections</h2><h2 data-en>Resources for your selections</h2><ul class="check-list"><li data-fr><a href="fiches-techniques-produits.html">Fiches produits et informations professionnelles.</a></li><li data-en><a href="fiches-techniques-produits.html">Product sheets and professional information.</a></li><li data-fr>Photos bouteilles et visuels de gamme.</li><li data-en>Bottle photographs and range visuals.</li><li data-fr>Informations réglementaires et nutritionnelles pour préparer un référencement.</li><li data-en>Regulatory and nutritional information to prepare a listing.</li></ul>')}
 """
-    return layout("importers.html", "Importateurs cognac bio | Cognac Esprit Organic", "Page export B2B pour les importateurs de Cognac Esprit Organic en Europe, aux USA et au Canada : gamme bio, positionnement et contact.", "Pour les importateurs", "Une page B2B export pour les marchés Europe, USA, Canada.", "A B2B export page for Europe, USA and Canada.", body)
+    return layout("importers.html", "Importateurs et cavistes | Cognac Esprit Organic", "Cognac bio familial pour importateurs, cavistes et CHR : gamme Esprit Organic, positionnement premium et contact direct en Charente.", "Pour les partenaires professionnels", "Une gamme française, biologique et familiale pour vos sélections cognac.", "A French, organic and family-led range for your Cognac selections.", body)
 
 
 def producer_page():
-    location_cards = "<div class=\"feature-grid\"><article><h2>Location</h2><p>30 Rue d'Angoulême, 16200 Triac-Lautrait, France.</p></article><article><h2>Organic focus</h2><p>Family, natural and premium positioning for professional buyers looking for organic Cognac from France.</p></article><article><h2>Export wording</h2><p>Europe, USA, Canada.</p></article></div>"
+    location_cards = "<div class=\"feature-grid\"><article><h2>From Charente, France</h2><p>30 Rue d'Angoulême, 16200 Triac-Lautrait, in the Cognac region.</p></article><article><h2>Organic identity</h2><p>A family-led organic Cognac range for partners looking for provenance, clarity and a direct producer relationship.</p></article><article><h2>Priority markets</h2><p>Europe, USA, Canada.</p></article></div>"
     body = f"""
-{split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>This page is written in English for international buyers. Esprit Organic is an organic Cognac brand led by Léopold and Fanny Croizet.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><a class="button" href="importers.html">For Importers</a>')}
+{split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><a class="button" href="importers.html">For importers and trade partners</a>')}
 {section(location_cards)}
 {section('<h2>Useful internal pages</h2><div class="link-list"><a href="produits/transmission-xo.html">Transmission XO</a><a href="production/">Organic approach</a><a href="demarche/">Production</a><a href="contact.html">Contact</a></div>')}
 """
-    return layout("organic-cognac-producer-france.html", "Organic Cognac Producer in France | Cognac Esprit Organic", "Cognac Esprit Organic is an organic Cognac brand in France, with a range for Europe, USA and Canada.", "Organic Cognac Producer in France", "Page stratégique en anglais pour les acheteurs internationaux.", "Strategic English page for international buyers.", body)
+    return layout("organic-cognac-producer-france.html", "Organic Cognac Producer in France | Cognac Esprit Organic", "Meet Cognac Esprit Organic, a family organic Cognac producer in Charente, France, with a range for importers, retailers and hospitality.", "Organic Cognac Producer in France", "Organic Cognac from Charente for international partners.", "Organic Cognac from Charente for international partners.", body)
 
 
 def organic_proof_schema(page_path="agriculture-biologique.html", name="Certification biologique et preuves", lang="fr", description="Preuves publiques de certification Agriculture biologique Europe pour le Domaine de la Grande Versenne et Maison des Pierres SARL."):
@@ -1779,12 +1779,12 @@ def organic_proof_page():
 <section class="organic-proof-intro">
   <div class="section-inner organic-proof-intro-grid">
     <div>
-      <p class="eyebrow">Preuves publiques</p>
-      <h2>Le bio n’est pas une intention. C’est une traçabilité.</h2>
+      <p class="eyebrow">Engagement biologique</p>
+      <h2>Un cognac biologique, du vignoble à la bouteille.</h2>
     </div>
     <div class="organic-proof-lead">
-      <p>Cognac Esprit Organic s’appuie sur une production conduite en agriculture biologique au Domaine de la Grande Versenne et sur une structure de commercialisation certifiée, Maison des Pierres SARL.</p>
-      <p>Les liens ci-dessous renvoient vers Ecocert et l’Annuaire Bio, organismes et annuaires publics consultés le 27 juin 2026.</p>
+      <p>Cognac Esprit Organic s’appuie sur une production conduite en agriculture biologique au Domaine de la Grande Versenne et sur une maison de commercialisation certifiée, Maison des Pierres SARL.</p>
+      <p>Pour que cet engagement reste lisible et vérifiable, nous indiquons les références Ecocert et Annuaire Bio consultées le 27 juin 2026.</p>
     </div>
   </div>
 </section>
@@ -1815,33 +1815,33 @@ def organic_proof_page():
 <section class="organic-certification-band">
   <div class="section-inner organic-certification-grid">
     <div class="organic-ab-mark"><img src="assets/img/logo-bio-home-tight.png" alt="Logo Agriculture biologique" loading="lazy"></div>
-    <div><p class="eyebrow">Ce que cela engage</p><h2>De la vigne à la bouteille, une chaîne suivie.</h2><p>L’agriculture biologique encadre la culture de la vigne et les étapes de préparation contrôlées. Pour un cognac, cette exigence se lit dans la conduite du vignoble, la transformation, l’élevage, l’assemblage et la traçabilité administrative.</p><div class="organic-chain"><span>Vignes</span><span>Vin</span><span>Distillation</span><span>Élevage</span><span>Bouteille</span></div></div>
+    <div><p class="eyebrow">Ce que cela engage</p><h2>De la vigne à la bouteille, une chaîne suivie.</h2><p>L’agriculture biologique encadre la culture de la vigne et les étapes de préparation contrôlées. Pour un cognac, cette exigence se lit dans la conduite du vignoble, la transformation, l’élevage, l’assemblage et la traçabilité.</p><div class="organic-chain"><span>Vignes</span><span>Vin</span><span>Distillation</span><span>Élevage</span><span>Bouteille</span></div></div>
   </div>
 </section>
 <section class="organic-proof-note">
   <div class="section-inner organic-proof-note-grid">
     <div><h2>Un choix agricole avant d’être un argument.</h2></div>
-    <div><p>La page ne cherche pas à promettre plus que ce que les preuves publiques montrent : des opérateurs identifiés, une certification Ecocert, une activité bio déclarée, et une cohérence entre le domaine, la maison et la gamme Cognac Esprit Organic.</p><div class="link-list"><a href="production/">Notre démarche</a><a href="demarche/">La production</a><a href="produits/transmission-xo.html">La gamme</a><a href="contact.html">Contact</a></div></div>
+    <div><p>Nous préférons des engagements simples à vérifier : des opérateurs identifiés, une certification Ecocert, une activité bio déclarée, et une cohérence entre le domaine, la maison et la gamme Cognac Esprit Organic.</p><div class="link-list"><a href="production/">Notre démarche</a><a href="demarche/">La production</a><a href="produits/transmission-xo.html">La gamme</a><a href="contact.html">Contact</a></div></div>
   </div>
 </section>
 """
-    return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "Les preuves publiques de l'engagement bio Cognac Esprit Organic : Domaine de la Grande Versenne et Maison des Pierres certifiés Agriculture biologique Europe par Ecocert.", "Agriculture biologique", "Une démarche contrôlée, documentée, et visible dans les annuaires publics.", "A verified organic approach documented in public directories.", body, schemas=[organic_proof_schema()], image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
+    return layout("agriculture-biologique.html", "Agriculture biologique | Cognac Esprit Organic", "L’engagement bio Cognac Esprit Organic : un domaine en Charente, une maison certifiée Ecocert et une gamme conduite avec exigence.", "Agriculture biologique", "Une démarche certifiée, lisible et fidèle à nos terres.", "A certified organic approach, clear and true to our land.", body, schemas=[organic_proof_schema()], image="assets/img/old-site/IMG_4079-scaled.jpg", page_class="organic-proof-page")
 
 
 HVE_CEC_COPY = {
     "fr": {
         "title": "HVE / CEC | Cognac Esprit Organic",
-        "description": "HVE / CEC : des eaux-de-vie bio, traçables et engagées, avec liens publics vers data.gouv, le ministère, le BNIC et Bureau Veritas.",
+        "description": "HVE / CEC : des eaux-de-vie bio et traçables, avec des sources officielles pour mieux comprendre les engagements du vignoble.",
         "hero_intro": "Des eaux-de-vie sélectionnées avec exigence, des vignes jusqu’au verre.",
-        "heading": "Des vignes engagées, des eaux-de-vie mieux tracées.",
+        "heading": "Des vignes engagées, des eaux-de-vie choisies avec soin.",
         "lockup_label": "Signature officielle Certification Environnementale Cognac et Haute Valeur Environnementale",
         "promise": "Un cognac bio, traçable et engagé, des vignes jusqu’au verre.",
         "lead": "L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.",
-        "proof_label": "Liens publics de preuve HVE et CEC",
-        "links": ["Preuve HVE data.gouv", "Fichier public HVE", "Ministère de l’Agriculture", "CEC Cognac / BNIC", "Audit CEC Bureau Veritas"],
+        "proof_label": "Sources officielles HVE et CEC",
+        "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Ministère de l’Agriculture", "CEC Cognac / BNIC", "Audit CEC Bureau Veritas"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
-            "title": "HVE : une exploitation nommée dans l’annuaire public.",
+            "title": "HVE : le domaine dans l’annuaire officiel.",
             "text": "La certification HVE correspond au niveau 3 de la certification environnementale des exploitations agricoles. Elle repose sur des indicateurs de résultats portant notamment sur la biodiversité, la stratégie phytosanitaire, la fertilisation et l’irrigation.",
             "facts": [("Exploitation", "SCEA Domaine de la Grande Versenne"), ("Adresse", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Activité", "Viticulture"), ("Date HVE", "23/12/2024 dans l’annuaire HVE au 01/06/2025")],
             "buttons": ["Voir l’annuaire HVE", "Ouvrir le fichier public CSV"],
@@ -1857,12 +1857,12 @@ HVE_CEC_COPY = {
         },
         "band": {
             "eyebrow": "Ce que cela change",
-            "title": "Une sélection plus lisible des eaux-de-vie.",
+            "title": "Une sélection plus claire des eaux-de-vie.",
             "text": "La démarche permet de relier les lots à des exploitations engagées et contrôlées, puis de documenter les achats auprès de fournisseurs référencés quand l’approvisionnement ne vient pas directement de la SCEA Domaine de la Grande Versenne.",
             "chain": ["Domaine", "Fournisseurs", "Traçabilité", "Élevage", "Assemblage"],
         },
         "note": {
-            "title": "Des engagements visibles, des preuves accessibles.",
+            "title": "Des engagements visibles, des sources accessibles.",
             "p1": "Nos engagements se vérifient simplement : HVE dans l’annuaire public, CEC auprès des sources officielles de la filière Cognac.",
             "p2": "La HVE de la SCEA Domaine de la Grande Versenne est nominative sur data.gouv. Pour la CEC, les sites publics du BNIC et de Bureau Veritas détaillent le référentiel, sa reconnaissance et le contrôle ; aucun annuaire nominatif ouvert équivalent au fichier HVE n’est publié à ce jour.",
             "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Certification environnementale agricole", "Certification Environnementale Cognac", "Audit CEC Bureau Veritas"],
@@ -1870,17 +1870,17 @@ HVE_CEC_COPY = {
     },
     "en": {
         "title": "HVE / CEC | Cognac Esprit Organic",
-        "description": "HVE / CEC: organic, traceable and committed eaux-de-vie, with public links to data.gouv, the French ministry, BNIC and Bureau Veritas.",
+        "description": "HVE / CEC: organic and traceable eaux-de-vie, with official sources to understand the vineyard commitments behind Cognac Esprit Organic.",
         "hero_intro": "Eaux-de-vie selected with care, from vineyard to glass.",
-        "heading": "Committed vineyards and clearer eau-de-vie traceability.",
+        "heading": "Committed vineyards and carefully selected eaux-de-vie.",
         "lockup_label": "Official Cognac Environmental Certification and High Environmental Value signature",
         "promise": "Organic, traceable and committed Cognac, from vineyard to glass.",
         "lead": "Most eaux-de-vie used by Cognac Esprit Organic come from SCEA Domaine de la Grande Versenne in Triac-Lautrait, or from a listed supplier approved HVE and CEC.",
-        "proof_label": "Public HVE and CEC proof links",
-        "links": ["HVE proof on data.gouv", "Public HVE CSV file", "French Ministry of Agriculture", "CEC Cognac / BNIC", "Bureau Veritas CEC audit"],
+        "proof_label": "Official HVE and CEC sources",
+        "links": ["HVE directory on data.gouv", "Public HVE CSV file", "French Ministry of Agriculture", "CEC Cognac / BNIC", "Bureau Veritas CEC audit"],
         "hve_card": {
             "kicker": "High Environmental Value",
-            "title": "HVE: an estate named in the public directory.",
+            "title": "HVE: the estate in the official directory.",
             "text": "HVE certification corresponds to level 3 of the environmental certification for French farms. It is based on result indicators covering biodiversity, crop protection strategy, fertilisation and irrigation.",
             "facts": [("Estate", "SCEA Domaine de la Grande Versenne"), ("Address", "30 rue d’Angoulême, 16200 Triac-Lautrait"), ("Activity", "Viticulture"), ("HVE date", "23/12/2024 in the HVE directory dated 01/06/2025")],
             "buttons": ["View the HVE directory", "Open the public CSV file"],
@@ -1901,7 +1901,7 @@ HVE_CEC_COPY = {
             "chain": ["Estate", "Suppliers", "Traceability", "Ageing", "Blending"],
         },
         "note": {
-            "title": "Visible commitments, accessible proof.",
+            "title": "Visible commitments, accessible sources.",
             "p1": "Our commitments can be checked simply: HVE in the public directory, CEC through official Cognac sector sources.",
             "p2": "The HVE certification of SCEA Domaine de la Grande Versenne is named on data.gouv. For CEC, the public BNIC and Bureau Veritas websites describe the standard, its recognition and the audit process; no equivalent open nominative directory to the HVE file is published to date.",
             "links": ["HVE data.gouv directory", "Public HVE file", "Agricultural environmental certification", "Cognac Environmental Certification", "Bureau Veritas CEC audit"],
@@ -1915,7 +1915,7 @@ HVE_CEC_COPY = {
         "lockup_label": "Officiel signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
         "promise": "Økologisk, sporbar og engageret Cognac, fra vinmark til glas.",
         "lead": "Størstedelen af de eaux-de-vie, som bruges af Cognac Esprit Organic, kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait eller fra en registreret leverandør godkendt HVE og CEC.",
-        "proof_label": "Offentlige beviser for HVE og CEC",
+        "proof_label": "Officielle HVE- og CEC-kilder",
         "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Det franske landbrugsministerium", "CEC Cognac / BNIC", "Bureau Veritas CEC-audit"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
@@ -1954,7 +1954,7 @@ HVE_CEC_COPY = {
         "lockup_label": "Offisiell signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
         "promise": "Økologisk, sporbar og forpliktende Cognac, fra vinmark til glass.",
         "lead": "Det meste av eaux-de-vie som brukes av Cognac Esprit Organic kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller fra en registrert leverandør godkjent HVE og CEC.",
-        "proof_label": "Offentlige bevislenker for HVE og CEC",
+        "proof_label": "Offisielle HVE- og CEC-kilder",
         "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Det franske landbruksdepartementet", "CEC Cognac / BNIC", "Bureau Veritas CEC-revisjon"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
@@ -1993,7 +1993,7 @@ HVE_CEC_COPY = {
         "lockup_label": "Officiell signatur för Certification Environnementale Cognac och Haute Valeur Environnementale",
         "promise": "Ekologisk, spårbar och engagerad Cognac, från vingård till glas.",
         "lead": "Merparten av de eaux-de-vie som används av Cognac Esprit Organic kommer från SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller från en registrerad leverantör godkänd HVE och CEC.",
-        "proof_label": "Offentliga bevislänkar för HVE och CEC",
+        "proof_label": "Officiella HVE- och CEC-källor",
         "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Franska jordbruksministeriet", "CEC Cognac / BNIC", "Bureau Veritas CEC-revision"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
@@ -2029,40 +2029,40 @@ HVE_CEC_COPY = {
 
 HVE_SCHEMA_COPY = {
     "fr": {
-        "name": "HVE / CEC : démarche environnementale et preuves",
-        "description": "Démarche HVE et Certification Environnementale Cognac pour les eaux-de-vie Cognac Esprit Organic, avec sources publiques et preuves officielles.",
+        "name": "HVE / CEC : démarche environnementale et sources officielles",
+        "description": "Démarche HVE et Certification Environnementale Cognac pour les eaux-de-vie Cognac Esprit Organic, avec sources publiques officielles.",
         "hve_set": "Certification environnementale des exploitations agricoles",
         "hve_description": "L'annuaire public HVE au 01/06/2025 mentionne SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activité viticulture, date de certification 23/12/2024.",
         "cec_set": "Démarche environnementale de la filière Cognac",
         "cec_description": "Démarche filière Cognac reconnue de niveau 2 par le ministère de l'Agriculture selon les sources publiques Cognac/BNIC et Bureau Veritas.",
     },
     "en": {
-        "name": "HVE / CEC: environmental approach and proof",
-        "description": "HVE and Cognac Environmental Certification approach for Cognac Esprit Organic eaux-de-vie, with public sources and official proof.",
+        "name": "HVE / CEC: environmental approach and official sources",
+        "description": "HVE and Cognac Environmental Certification approach for Cognac Esprit Organic eaux-de-vie, with official public sources.",
         "hve_set": "Environmental certification for farms",
         "hve_description": "The public HVE directory dated 01/06/2025 lists SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activity viticulture, certification date 23/12/2024.",
         "cec_set": "Environmental programme for the Cognac sector",
         "cec_description": "Cognac sector programme recognised as level 2 by the French Ministry of Agriculture according to public Cognac/BNIC and Bureau Veritas sources.",
     },
     "da": {
-        "name": "HVE / CEC: miljøtilgang og beviser",
-        "description": "HVE og Certification Environnementale Cognac for Cognac Esprit Organic eaux-de-vie, med offentlige kilder og officielle beviser.",
+        "name": "HVE / CEC: miljøtilgang og officielle kilder",
+        "description": "HVE og Certification Environnementale Cognac for Cognac Esprit Organic eaux-de-vie, med officielle offentlige kilder.",
         "hve_set": "Miljøcertificering af landbrug",
         "hve_description": "Det offentlige HVE-register pr. 01/06/2025 nævner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, aktivitet vinavl, certificeringsdato 23/12/2024.",
         "cec_set": "Miljøordning for Cognac-sektoren",
         "cec_description": "Cognac-sektorens ordning er anerkendt som niveau 2 af det franske landbrugsministerium ifølge offentlige Cognac/BNIC- og Bureau Veritas-kilder.",
     },
     "no": {
-        "name": "HVE / CEC: miljøtilnærming og bevis",
-        "description": "HVE og Certification Environnementale Cognac for Cognac Esprit Organic eaux-de-vie, med offentlige kilder og offisielle bevis.",
+        "name": "HVE / CEC: miljøtilnærming og offisielle kilder",
+        "description": "HVE og Certification Environnementale Cognac for Cognac Esprit Organic eaux-de-vie, med offisielle offentlige kilder.",
         "hve_set": "Miljøsertifisering av landbruk",
         "hve_description": "Det offentlige HVE-registeret per 01/06/2025 nevner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, aktivitet vinavl, sertifiseringsdato 23/12/2024.",
         "cec_set": "Miljøordning for Cognac-sektoren",
         "cec_description": "Cognac-sektorens ordning er anerkjent som nivå 2 av det franske landbruksdepartementet ifølge offentlige Cognac/BNIC- og Bureau Veritas-kilder.",
     },
     "sv": {
-        "name": "HVE / CEC: miljöarbete och bevis",
-        "description": "HVE och Certification Environnementale Cognac för Cognac Esprit Organic eaux-de-vie, med offentliga källor och officiella bevis.",
+        "name": "HVE / CEC: miljöarbete och officiella källor",
+        "description": "HVE och Certification Environnementale Cognac för Cognac Esprit Organic eaux-de-vie, med officiella offentliga källor.",
         "hve_set": "Miljöcertifiering av jordbruk",
         "hve_description": "Det offentliga HVE-registret per 01/06/2025 nämner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, verksamhet vinodling, certifieringsdatum 23/12/2024.",
         "cec_set": "Miljöprogram för Cognac-sektorn",
@@ -2308,7 +2308,7 @@ def contact_page():
 {split('<p class="eyebrow">Contact</p><h2 data-fr>Contacter Cognac Esprit Organic</h2><h2 data-en>Contact Cognac Esprit Organic</h2>', f'<ul class="meta-list"><li><span>Email</span><strong><a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></strong></li><li><span>Téléphone</span><strong><a href="tel:+33545358810">{CONTACT["phone"]}</a></strong></li><li><span>Adresse</span><strong>{CONTACT["address"]}</strong></li></ul>')}
 {section('<h2 data-fr>Visites</h2><h2 data-en>Visits</h2><p data-fr>Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.</p><p data-en>Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.</p>')}
 """
-    return layout("contact.html", "Contact | Cognac Esprit Organic", "Contact Cognac Esprit Organic : email, téléphone, adresse à Triac-Lautrait et informations de visite.", "Contact Cognac Esprit Organic", "Email, téléphone, adresse et informations de visite validées.", "Email, phone, address and approved visit information.", body)
+    return layout("contact.html", "Contact | Cognac Esprit Organic", "Contactez Cognac Esprit Organic à Triac-Lautrait : demande de visite, information produit ou échange professionnel avec la maison.", "Contact Cognac Esprit Organic", "Pour organiser une visite, parler d’une cuvée ou préparer un projet professionnel.", "For visits, product questions or professional projects.", body)
 
 
 def visit_page():
@@ -2339,7 +2339,7 @@ def visit_page():
   </div>
 </section>
 """
-    return layout("visiter.html", "Visiter | Cognac Esprit Organic", "Informations de visite Cognac Esprit Organic : lundi-vendredi, 10h-12h ou 14h-17h, durée 1h, maximum 10 personnes et carte Google Maps.", "Bienvenue sur nos terres", "Nous vous accueillons toute l’année. Contactez-nous !", "We welcome visitors throughout the year. Contact us!", body, image="assets/img/old-site/distillerie_02.jpg", page_class="visit-page")
+    return layout("visiter.html", "Visiter | Cognac Esprit Organic", "Visitez Cognac Esprit Organic à Triac-Lautrait : découverte du domaine, de la distillerie et de la gamme biologique sur rendez-vous.", "Bienvenue sur nos terres", "Nous vous accueillons toute l’année. Contactez-nous !", "We welcome visitors throughout the year. Contact us!", body, image="assets/img/old-site/distillerie_02.jpg", page_class="visit-page")
 
 
 def simple_page(path, title, desc, h1, intro_fr, intro_en, body):
@@ -2359,8 +2359,8 @@ FAQ_GROUPS_FR = [
     ]),
     ("faq-bio", "Production et démarche biologique", [
         ("faq-q7", "Que signifie “agriculture biologique” pour Cognac Esprit Organic ?", "La démarche biologique couvre les informations visibles sur le site, notamment les opérateurs Domaine de la Grande Versenne et Maison des Pierres SARL, avec une certification Agriculture biologique Europe publiée par Ecocert."),
-        ("faq-q8", "Qui certifie la démarche biologique ?", "Les preuves publiques visibles sur le site renvoient à Ecocert pour le Domaine de la Grande Versenne et Maison des Pierres SARL, ainsi qu’à l’Annuaire Bio pour le domaine."),
-        ("faq-q9", "Qu’est-ce que la HVE ?", "HVE signifie Haute Valeur Environnementale. C’est une certification française qui reconnaît des pratiques agricoles attentives à la biodiversité, à l’eau, aux sols et à la limitation des pressions sur l’environnement. Pour Cognac Esprit Organic, la preuve environnementale visible sur ce site reste la démarche biologique certifiée par Ecocert."),
+        ("faq-q8", "Qui certifie la démarche biologique ?", "Les sources officielles indiquées sur le site renvoient à Ecocert pour le Domaine de la Grande Versenne et Maison des Pierres SARL, ainsi qu’à l’Annuaire Bio pour le domaine."),
+        ("faq-q9", "Qu’est-ce que la HVE ?", "HVE signifie Haute Valeur Environnementale. C’est une certification française qui reconnaît des pratiques agricoles attentives à la biodiversité, à l’eau, aux sols et à la limitation des pressions sur l’environnement. Pour Cognac Esprit Organic, l’engagement biologique visible sur ce site est certifié par Ecocert."),
         ("faq-q10", "Qu’est-ce que la CEC ?", "CEC signifie Certification Environnementale Cognac. C’est une démarche environnementale propre à la filière Cognac, adaptée au vignoble charentais et à la production d’eaux-de-vie. Elle ne doit pas être confondue avec la certification Agriculture biologique Europe publiée pour Cognac Esprit Organic."),
         ("faq-q11", "Pourquoi le cognac vieillit-il en fût de chêne ?", "Le vieillissement en fût de chêne apporte de la couleur, de la structure et de la complexité aromatique. C’est une étape essentielle de l’identité d’un cognac."),
         ("faq-q12", "Pourquoi assembler plusieurs eaux-de-vie ?", "L’assemblage permet de construire un profil régulier et cohérent. Le maître de chai choisit des eaux-de-vie complémentaires selon l’âge, le style et l’équilibre recherché."),
@@ -2370,7 +2370,7 @@ FAQ_GROUPS_FR = [
         ("faq-q14", "Quelle bouteille choisir pour découvrir la gamme ?", "Pour une première découverte, le choix dépend de l’usage : VS ou VSOP pour une approche plus vive, Napoléon ou XO pour davantage de rondeur, XXO ou Single Cask pour une expression plus rare."),
         ("faq-q15", "Que signifient VS, VSOP, Napoléon, XO et XXO ?", "Ces mentions indiquent l’âge minimal des eaux-de-vie en fût : VS au moins 2 ans, VSOP au moins 4 ans, Napoléon au moins 6 ans, XO au moins 10 ans et XXO au moins 14 ans."),
         ("faq-q16", "Quelle est la différence entre cognac et Pineau des Charentes ?", "Le cognac est une eau-de-vie de vin vieillie en fût. Le Pineau des Charentes est un vin de liqueur obtenu par assemblage de moût de raisin et de cognac."),
-        ("faq-q17", "Où trouver les détails techniques de chaque produit ?", "Les données produits, les contenances, les degrés d’alcool, les cépages, les distinctions et les liens de fiches PDF sont regroupés dans la page “Données produits et documents professionnels”."),
+        ("faq-q17", "Où trouver les informations détaillées de chaque produit ?", "Les contenances, les degrés d’alcool, les cépages, les distinctions et les fiches de dégustation sont regroupés dans la page “Fiches produits et ressources professionnelles”."),
         (FAQ_REWARDS_ID, "Quelles cuvées Esprit Organic ont été distinguées ?", "Consulter la page Distinctions."),
         ("faq-q18", "Pourquoi un produit peut-il être indisponible ?", "La disponibilité peut varier selon les lots, les marchés et les réseaux de distribution. Le plus fiable est de contacter la maison pour une demande précise."),
         ("faq-q19", "Comment prononcer Cognac Esprit Organic ?", "“Cognac” se prononce comme l’appellation française. “Esprit Organic” associe un mot français et le terme anglais Organic, conservé dans le nom de marque."),
@@ -2381,13 +2381,13 @@ FAQ_GROUPS_FR = [
         ("faq-q22", "Le cognac peut-il se périmer ?", "Le cognac ne vieillit plus en bouteille comme il le fait en fût. Une bouteille bien conservée reste stable, mais une longue ouverture peut modifier progressivement l’expression aromatique."),
         ("faq-q23", "Faut-il mettre le cognac au réfrigérateur ?", "Le réfrigérateur n’est pas nécessaire pour un service classique. Une température trop froide peut réduire la perception des arômes."),
         ("faq-q24", "Peut-on servir le cognac sur glace ?", "Oui, selon le style recherché. La glace peut adoucir la perception alcoolique, mais elle dilue aussi progressivement le cognac."),
-        ("faq-q25", "Peut-on utiliser Cognac Esprit Organic en cocktail ?", "Oui. Le site propose une page Cocktails pour inspirer des services simples autour de Cognac Esprit Organic, sans remplacer les fiches techniques des produits."),
+        ("faq-q25", "Peut-on utiliser Cognac Esprit Organic en cocktail ?", "Oui. Le site propose une page Cocktails pour inspirer des services simples autour de Cognac Esprit Organic, en gardant le style de chaque cuvée au centre du verre."),
         ("faq-q26", "Quels mélanges simples fonctionnent avec le cognac ?", "Selon le style du cognac, on peut l’associer à des ingrédients frais, toniques ou fruités. Les recettes précises doivent être vérifiées sur la page Cocktails du site."),
         ("faq-q27", "Quel cocktail conseiller pour débuter ?", "Pour débuter, choisissez une recette courte et lisible, avec peu d’ingrédients, afin de garder le cognac au centre du verre."),
         ("faq-q28", "Avec quoi accorder un cognac ?", "Les accords dépendent du profil du cognac : fruit, épices, bois, rondeur ou puissance. Les fiches produits et les conseils de la maison restent les meilleures références."),
         ("faq-q29", "Le cognac contient-il du gluten ou des allergènes ?", "Pour toute contrainte alimentaire ou allergène, il faut consulter les fiches produits disponibles et contacter la maison. La FAQ ne remplace pas une vérification réglementaire ou médicale."),
         ("faq-q30", "Quelles informations nutritionnelles faut-il vérifier ?", "Le site dispose d’une page de valeurs nutritionnelles par produit. Elle doit être consultée pour les informations quantitatives disponibles."),
-        ("faq-q31", "Les produits sont-ils végétaliens, casher ou certifiés autrement ?", "Les pages visibles documentent la démarche biologique et les preuves Ecocert. Aucune autre certification de type casher ou végétalien ne doit être déduite sans document officiel fourni par la maison."),
+        ("faq-q31", "Les produits sont-ils végétaliens, casher ou certifiés autrement ?", "Les pages visibles présentent la démarche biologique et les certifications Ecocert. Aucune autre certification de type casher ou végétalien ne doit être déduite sans document officiel fourni par la maison."),
     ]),
     ("faq-visite", "Visite, achat et contact", [
         ("faq-q32", "Peut-on visiter Cognac Esprit Organic à Triac-Lautrait ?", "Oui, le site présente une page de visite pour accueillir les personnes intéressées par la maison et son territoire."),
@@ -2399,7 +2399,7 @@ FAQ_GROUPS_FR = [
         ("faq-q38", "Comment contacter Cognac Esprit Organic ?", "La maison est joignable par e-mail à Cognac@mdpierre.com et par téléphone au +33 5 45 35 88 10."),
         ("faq-q39", "Que fournir pour une demande professionnelle ?", "Pour une demande caviste, importateur ou distributeur, indiquez le pays, le type d’activité, les produits souhaités, les volumes envisagés et vos coordonnées professionnelles."),
         ("faq-q40", "La maison estime-t-elle les anciennes bouteilles ?", "Pour une ancienne bouteille, contactez la maison avec des photos nettes de la bouteille, de l’étiquette, de la capsule et du niveau. La FAQ ne donne pas d’estimation de valeur."),
-        ("faq-q41", "Quels documents existent pour les professionnels ?", "Le site met à disposition des fiches produits, des données techniques et des fiches PDF de dégustation lorsque celles-ci sont publiées."),
+        ("faq-q41", "Quels documents existent pour les professionnels ?", "Le site met à disposition des fiches produits, des informations de gamme et des fiches PDF de dégustation lorsque celles-ci sont publiées."),
         ("faq-q42", "Où suivre les actualités de la maison ?", "Le site indique le compte Instagram officiel Cognac Esprit Organic dans le pied de page, ainsi que les coordonnées directes de la maison."),
     ]),
 ]
@@ -2466,10 +2466,10 @@ def faq_page():
     return layout(
         "faq.html",
         "FAQ | Cognac Esprit Organic",
-        "Questions fréquentes sur Cognac Esprit Organic, la gamme, l'export, les récompenses, les visites et les informations utiles.",
+        "Questions fréquentes sur Cognac Esprit Organic : choisir une cuvée, servir le cognac, visiter la maison et contacter l’équipe.",
         "FAQ Cognac Esprit Organic",
-        "Réponses factuelles sur la maison, la gamme biologique, les visites et les informations utiles aux professionnels.",
-        "Factual answers about the house, the organic range, visits and useful information for professionals.",
+        "Pour choisir une cuvée, préparer une visite ou contacter la maison.",
+        "For choosing a cuvée, planning a visit or contacting the house.",
         body,
         schemas=[faq_schema],
         image="assets/img/products/gamme-esprit-organic.jpg",
@@ -2716,21 +2716,21 @@ def cocktails_page():
     <span class="panel-copy haut-gauche"><strong data-fr>Accompagner nos Cognacs</strong><strong data-en>Pair our Cognacs</strong><small data-fr>Laisser courir l'inspiration</small><small data-en>Let inspiration flow</small></span>
   </div>
   <div class="old-panel text-panel green">
-    <p data-fr>Cette page reprend l'univers cocktail de l'ancien site. Les recettes détaillées seront ajoutées uniquement après validation, afin de ne pas inventer d'accords ou de dosages.</p>
-    <p data-en>This page carries over the cocktail universe of the former website. Detailed recipes will be added only after approval, without inventing pairings or measures.</p>
+    <p data-fr>Découvrez des idées de service simples autour de Cognac Esprit Organic, pour l’apéritif, les beaux moments de table et les cocktails qui laissent parler le fruit.</p>
+    <p data-en>Discover simple serving ideas around Cognac Esprit Organic, for aperitifs, table moments and cocktails that let the fruit speak.</p>
   </div>
 </section>
 <section class="cream-signature compact">
   <div>
-    <p data-fr>À compléter</p>
-    <p data-en>To complete</p>
+    <p data-fr>Inspiration cocktail</p>
+    <p data-en>Cocktail inspiration</p>
     <span>•••</span>
-    <strong data-fr>Prévoir ici les cocktails validés, les ingrédients, les étapes, les visuels et les produits Esprit Organic associés.</strong>
-    <strong data-en>Approved cocktails, ingredients, steps, images and associated Esprit Organic products will be added here.</strong>
+    <strong data-fr>Des accords frais et élégants pour servir nos cognacs et pineaux autrement.</strong>
+    <strong data-en>Fresh and elegant pairings to serve our Cognacs and Pineaux differently.</strong>
   </div>
 </section>
 """
-    return layout("cocktails.html", "Cocktails | Cognac Esprit Organic", "Page cocktails Cognac Esprit Organic : accompagnements et recettes à intégrer après validation.", "Accompagner nos Cognacs", "L'univers cocktail du site, reconstruit sans inventer de recettes.", "The cocktail universe rebuilt without inventing recipes.", body, image="assets/img/brand/home-cocktail.jpg")
+    return layout("cocktails.html", "Cocktails | Cognac Esprit Organic", "Cocktails Cognac Esprit Organic : idées de service fraîches, accords au Cognac et inspirations autour des Pineaux.", "Accompagner nos Cognacs", "Des idées de service fraîches et élégantes autour de la gamme.", "Fresh and elegant serving ideas around the range.", body, image="assets/img/brand/home-cocktail.jpg")
 
 
 def gallery_page():
@@ -2742,21 +2742,21 @@ def gallery_page():
             continue
         label = file.stem.replace("_", " ").replace("-", " ")
         items.append(
-            f'<figure><img src="assets/img/old-site/{escape(file.name)}" alt="Ancien site Cognac Esprit Organic - {escape(label)}" loading="lazy"><figcaption>{escape(label)}</figcaption></figure>'
+            f'<figure><img src="assets/img/old-site/{escape(file.name)}" alt="Cognac Esprit Organic - {escape(label)}" loading="lazy"></figure>'
         )
     body = f"""
 <section>
   <div class="section-inner">
-    <p class="eyebrow">Archives visuelles</p>
-    <h2 data-fr>Photos et visuels récupérés de l'ancien site</h2>
-    <h2 data-en>Images recovered from the former website</h2>
-    <p data-fr>Cette galerie rassemble les visuels utiles récupérés depuis l'ancien site WordPress. Elle sert de réserve propre pour reconstruire les pages sans dépendre de WordPress.</p>
-    <p data-en>This gallery gathers useful visuals recovered from the former WordPress website. It provides a clean reserve for rebuilding pages without depending on WordPress.</p>
+    <p class="eyebrow">Galerie</p>
+    <h2 data-fr>Images de la maison, du vignoble et de la gamme</h2>
+    <h2 data-en>Images of the house, vineyard and range</h2>
+    <p data-fr>Une sélection de visuels Cognac Esprit Organic pour découvrir nos terres, nos bouteilles et l’esprit familial de la maison.</p>
+    <p data-en>A selection of Cognac Esprit Organic visuals to discover our land, bottles and family spirit.</p>
     <div class="legacy-gallery">{''.join(items)}</div>
   </div>
 </section>
 """
-    return layout("galerie.html", "Galerie | Cognac Esprit Organic", "Galerie des photos et visuels récupérés de l'ancien site Cognac Esprit Organic.", "Galerie Cognac Esprit Organic", "Les photos et visuels récupérés de l'ancien site, regroupés dans une page propre.", "Recovered images from the former website, gathered in a clean page.", body, image="assets/img/brand/hero-old-vine.jpg")
+    return layout("galerie.html", "Galerie | Cognac Esprit Organic", "Galerie Cognac Esprit Organic : images du vignoble, de la maison, de la distillerie et de la gamme de cognacs biologiques.", "Galerie Cognac Esprit Organic", "Vignes, bouteilles et moments de maison.", "Vines, bottles and house moments.", body, image="assets/img/brand/hero-old-vine.jpg")
 
 
 def nutrition_page():
@@ -2778,13 +2778,13 @@ def nutrition_page():
     <p class="eyebrow">Nutrition</p>
     <h2 data-fr>Valeurs nutritionnelles par produit</h2>
     <h2 data-en>Nutritional values by product</h2>
-    <p data-fr>Les valeurs sont indiquées pour 3 ml sur les Cognacs, pour 70 ml sur les Pineau, et pour 100 ml en référence. Source : CodeOnline GS1 France, données produits Cognac Esprit Organic.</p>
-    <p data-en>Values are shown per 3 ml for Cognacs, per 70 ml for Pineau, and per 100 ml as a reference. Source: CodeOnline GS1 France, Cognac Esprit Organic product data.</p>
+    <p data-fr>Retrouvez les informations nutritionnelles publiées pour chaque cuvée : une lecture claire pour les consommateurs, cavistes et partenaires qui souhaitent présenter la gamme avec précision.</p>
+    <p data-en>Find the published nutritional information for each cuvée: a clear reference for consumers, wine merchants and partners presenting the range accurately.</p>
     <div class="nutrition-list">{''.join(cards)}</div>
   </div>
 </section>
 """
-    return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic par produit, pour 3 ml, 70 ml et 100 ml.", "Valeurs nutritionnelles", "Les tableaux nutritionnels Esprit Organic avec l'énergie en kJ / kcal.", "Cognac Esprit Organic nutritional tables with energy shown in kJ / kcal.", body, image="assets/img/brand/hero-old-vine.jpg")
+    return layout("valeurs-nutritionnelles.html", "Valeurs nutritionnelles | Cognac Esprit Organic", "Valeurs nutritionnelles Cognac Esprit Organic par cuvée, pour présenter clairement la gamme aux consommateurs et partenaires.", "Valeurs nutritionnelles", "Les informations nutritionnelles publiées pour chaque cuvée Esprit Organic.", "Published nutritional information for each Esprit Organic cuvée.", body, image="assets/img/brand/hero-old-vine.jpg")
 
 
 def technical_product_rows(product, lang="fr"):
@@ -3083,7 +3083,7 @@ def technical_product_cards(lang="fr"):
     product_link_prefix = "produits/"
     award_label = "Award" if lang == "en" else "Distinction"
     product_link_text = "View product page" if lang == "en" else "Voir la fiche produit"
-    caption_prefix = "Product data" if lang == "en" else "Données produit"
+    caption_prefix = "Product sheet" if lang == "en" else "Fiche produit"
     index_links = "".join(
         f'<a href="#{escape(product["slug"])}">{escape(product["name"])}</a>'
         for product in PRODUCTS
@@ -3114,9 +3114,9 @@ def technical_product_cards(lang="fr"):
         category = english_category(product) if lang == "en" else product["category"]
         short = product["en_short"] if lang == "en" else product["short"]
         answer = (
-            f'{escape(product["name"])} is part of the Cognac Esprit Organic range, classified as {escape(category)}. {escape(short)}'
+            f'{escape(product["name"])} belongs to the Cognac Esprit Organic range as {escape(category)}. {escape(short)}'
             if lang == "en"
-            else f'{escape(product["name"])} est un produit de la gamme Cognac Esprit Organic, classé {escape(category)}. {escape(short)}'
+            else f'{escape(product["name"])} s’inscrit dans la gamme Cognac Esprit Organic en {escape(category)}. {escape(short)}'
         )
         cards.append(
             f"""
@@ -3146,7 +3146,7 @@ def technical_item_list(lang="fr"):
     item_list = {
         "@context": "https://schema.org",
         "@type": "ItemList",
-        "name": "Cognac Esprit Organic product data and professional documents" if lang == "en" else "Données produits et documents professionnels Cognac Esprit Organic",
+        "name": "Cognac Esprit Organic product sheets and trade resources" if lang == "en" else "Fiches produits et ressources professionnelles Cognac Esprit Organic",
         "itemListElement": [
             {"@type": "ListItem", "position": index + 1, "item": technical_product_item(product, lang)}
             for index, product in enumerate(PRODUCTS)
@@ -3162,16 +3162,16 @@ def technical_product_facts_page():
     body = f"""
 <section class="product-data-intro">
   <div class="section-inner">
-    <p class="eyebrow">Données produit</p>
-    <h2>Données produits et documents professionnels</h2>
-    <p>Cette page regroupe les faits stables des produits Cognac Esprit Organic dans un format clair, consultable et réutilisable par les partenaires professionnels. Elle ne remplace pas les fiches commerciales ; elle sert de page de référence documentaire.</p>
-    <p>Les tableaux ci-dessous n'ajoutent pas de prix, de stock, d'avis client, de certification non affichée, ni de récompense sans preuve consultable.</p>
+    <p class="eyebrow">Ressources professionnelles</p>
+    <h2>Fiches produits et ressources professionnelles</h2>
+    <p>Cette page rassemble les informations clés pour présenter Cognac Esprit Organic avec précision : gamme, profils aromatiques, contenances, titres alcoométriques, cépages, distinctions et fiches de dégustation.</p>
+    <p>Elle aide les cavistes, importateurs, restaurateurs et partenaires à préparer une sélection claire, sans ajouter de prix, de stock, d’avis client ni de promesse non publiée par la maison.</p>
     <figure class="technical-hero-image">
       <img src="{asset_prefix}assets/img/products/gamme-esprit-organic.jpg" alt="Gamme Cognac Esprit Organic : Fondation VS, Conviction VSOP, Cohesion Napoléon et Transmission XO" width="1800" height="1130" loading="lazy">
-      <figcaption>Gamme Cognac Esprit Organic : fiches commerciales et données techniques reliées dans une même source publique.</figcaption>
+      <figcaption>Gamme Cognac Esprit Organic : une ressource claire pour présenter les cuvées et leurs informations essentielles.</figcaption>
     </figure>
-    <nav class="technical-index" aria-label="Accès rapide aux données produit">{index_links}</nav>
-    <p class="technical-note">Référence professionnelle : cette page centralise les informations stables de la gamme et les relie aux pages produit.</p>
+    <nav class="technical-index" aria-label="Accès rapide aux fiches produits">{index_links}</nav>
+    <p class="technical-note">Ressource professionnelle : chaque fiche relie les informations essentielles à la page produit correspondante.</p>
   </div>
 </section>
 <section>
@@ -3182,11 +3182,11 @@ def technical_product_facts_page():
 """
     return layout(
         "fiches-techniques-produits.html",
-        "Données produits et documents professionnels | Cognac Esprit Organic",
-        "Données factuelles des produits Cognac Esprit Organic pour partenaires professionnels : catégories, contenances, titres alcoométriques, cépages, notes et preuves.",
-        "Données produits et documents professionnels",
-        "Une page de référence factuelle, séparée des fiches commerciales.",
-        "A factual reference page, separate from commercial product pages.",
+        "Fiches produits et ressources pro | Cognac Esprit Organic",
+        "Fiches produits Cognac Esprit Organic pour cavistes, importateurs et CHR : gamme, profils, contenances, degrés, cépages et dégustation.",
+        "Fiches produits et ressources professionnelles",
+        "Les informations clés pour présenter la gamme Esprit Organic.",
+        "Key information for presenting the Esprit Organic range.",
         body,
         schemas=[item_list],
         image="assets/img/brand/hero-old-vine.jpg",
@@ -3207,7 +3207,7 @@ def technical_product_facts_page_en():
             "@type": "BreadcrumbList",
             "itemListElement": [
                 {"@type": "ListItem", "position": 1, "name": "Home", "item": DOMAIN + "/en/"},
-                {"@type": "ListItem", "position": 2, "name": "Product data and professional documents", "item": canonical},
+                {"@type": "ListItem", "position": 2, "name": "Product sheets and trade resources", "item": canonical},
             ],
             "@id": canonical + "#breadcrumb",
         },
@@ -3220,16 +3220,16 @@ def technical_product_facts_page_en():
     body = f"""
 <section class="product-data-intro">
   <div class="section-inner">
-    <p class="eyebrow">Product data</p>
-    <h2>Product data and professional documents</h2>
-    <p>This page brings together stable facts about Cognac Esprit Organic products in a clear, consultable format for professional partners. It does not replace the commercial product pages; it is a documentary reference page.</p>
-    <p>The tables below do not add prices, stock, customer reviews, undisplayed certification, or awards without a consultable proof source.</p>
+    <p class="eyebrow">Trade resources</p>
+    <h2>Product sheets and trade resources</h2>
+    <p>This page brings together the key information needed to present Cognac Esprit Organic accurately: range, aromatic profiles, bottle sizes, alcohol by volume, grape varieties, awards and tasting sheets.</p>
+    <p>It helps wine merchants, importers, hospitality teams and partners prepare clear selections without adding prices, stock, customer reviews or claims not published by the house.</p>
     <figure class="technical-hero-image">
       <img src="{asset_prefix}assets/img/products/gamme-esprit-organic.jpg" alt="Cognac Esprit Organic range: Fondation VS, Conviction VSOP, Cohesion Napoléon and Transmission XO" width="1800" height="1130" loading="lazy">
-      <figcaption>Cognac Esprit Organic range: commercial pages and technical product data connected in one public source.</figcaption>
+      <figcaption>Cognac Esprit Organic range: a clear resource for presenting the cuvées and their essential information.</figcaption>
     </figure>
-    <nav class="technical-index" aria-label="Quick access to product data">{index_links}</nav>
-    <p class="technical-note">Professional reference: this page centralises stable range information and links it to the product pages.</p>
+    <nav class="technical-index" aria-label="Quick access to product sheets">{index_links}</nav>
+    <p class="technical-note">Trade resource: each sheet links the essential information to the corresponding product page.</p>
   </div>
 </section>
 <section>
@@ -3243,13 +3243,13 @@ def technical_product_facts_page_en():
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Product data and professional documents | Cognac Esprit Organic</title>
-  <meta name="description" content="Factual product data for Cognac Esprit Organic professional partners: categories, bottle sizes, alcohol by volume, grape varieties, tasting notes and proof links.">
+  <title>Product sheets and trade resources | Cognac Esprit Organic</title>
+  <meta name="description" content="Cognac Esprit Organic product sheets for importers, wine merchants and hospitality: range, profiles, bottle sizes, ABV, grape varieties and tasting.">
   <meta name="robots" content="index,follow">
   <link rel="canonical" href="{canonical}">
   {technical_alternate_links(path)}
-  <meta property="og:title" content="Product data and professional documents | Cognac Esprit Organic">
-  <meta property="og:description" content="Factual product data for Cognac Esprit Organic professional partners: categories, bottle sizes, alcohol by volume, grape varieties, tasting notes and proof links.">
+  <meta property="og:title" content="Product sheets and trade resources | Cognac Esprit Organic">
+  <meta property="og:description" content="Cognac Esprit Organic product sheets for importers, wine merchants and hospitality: range, profiles, bottle sizes, ABV, grape varieties and tasting.">
   <meta property="og:type" content="website">
   <meta property="og:image" content="{DOMAIN}/assets/img/brand/hero-old-vine.jpg">
   <link rel="icon" href="../assets/img/fav_organic.png">
@@ -3284,9 +3284,9 @@ def technical_product_facts_page_en():
     <section class="page-hero" style="--hero-image: url('/assets/img/brand/hero-old-vine.jpg')">
       <div class="section-inner narrow">
         <p class="eyebrow">Cognac Esprit Organic</p>
-        <h1>Product data and professional documents</h1>
-        <p class="lead" data-fr>A factual reference page, separate from commercial product pages.</p>
-        <p class="lead" data-en>A factual reference page, separate from commercial product pages.</p>
+        <h1>Product sheets and trade resources</h1>
+        <p class="lead" data-fr>Key information for presenting the Esprit Organic range.</p>
+        <p class="lead" data-en>Key information for presenting the Esprit Organic range.</p>
       </div>
     </section>
     {body}
@@ -3483,6 +3483,199 @@ def sync_localized_product_data():
             html = sync_product_json_ld(html, None, rel_path)
             html = sync_localized_technical_tables(html)
             technical_path.write_text(html, encoding="utf-8")
+
+
+def replace_many(html, replacements):
+    for old, new in replacements.items():
+        html = html.replace(old, new)
+    return html
+
+
+def sync_localized_marketing_copy():
+    page_replacements = {
+        "da/index.html": {
+            "Cognac Esprit Organic præsenterer et udvalg af økologiske Cognacs ledet af Léopold og Fanny Croizet, med tydelig information til Google, AI-agenter og eksport.": "Cognac Esprit Organic er en familiedrevet økologisk Cognac fra Charente, båret af Léopold og Fanny Croizet, fra VS til XXO.",
+        },
+        "no/index.html": {
+            "Cognac Esprit Organic presenterer et utvalg økologiske Cognacer ledet av Léopold og Fanny Croizet, med tydelig informasjon for Google, AI-agenter og eksport.": "Cognac Esprit Organic er en familiedrevet økologisk Cognac fra Charente, ledet av Léopold og Fanny Croizet, fra VS til XXO.",
+        },
+        "sv/index.html": {
+            "Cognac Esprit Organic presenterar ett sortiment ekologiska Cognacer lett av Léopold och Fanny Croizet, med tydlig information för Google, AI-agenter och export.": "Cognac Esprit Organic är en familjeägd ekologisk Cognac från Charente, ledd av Léopold och Fanny Croizet, från VS till XXO.",
+        },
+        "en/importers.html": {
+            "B2B export page for Cognac Esprit Organic importers in Europe, USA and Canada: organic Cognac range, positioning and contact.": "French organic Cognac for importers, wine merchants and hospitality partners: Esprit Organic range, premium positioning and direct contact in Charente.",
+            "A B2B export page for Europe, USA and Canada.": "A French, organic and family-led range for your Cognac selections.",
+            "<p class=\"eyebrow\">B2B export</p>": "<p class=\"eyebrow\">Trade partners</p>",
+            "A dedicated page for importers, wine merchants, hospitality, bars, hotels and organic retail networks.": "French organic Cognac for importers, wine merchants, hospitality and specialist retailers.",
+            "Esprit Organic addresses export markets formulated as: Europe, USA, Canada. This page stays factual: it presents the range, contact details and documents to prepare, without inventing volumes or distributors.": "Esprit Organic supports partners looking for a clear, family-led and certified organic range of Cognacs and Pineaux, with direct contact in Charente.",
+            "Request export information": "Discuss your project",
+            "Family, natural, premium and independent organic Cognac.": "Family, premium and independent organic Cognac.",
+            "<h2>Markets</h2>": "<h2>Supported markets</h2>",
+            "Documents to prepare": "Resources for your selections",
+            "Product data and professional documents.": "Product sheets and professional information.",
+            "Regulatory and nutritional information in accessible HTML.": "Regulatory and nutritional information to prepare a listing.",
+        },
+        "da/importers.html": {
+            "B2B-eksportside for Cognac Esprit Organic-importører i Europa, USA og Canada: økologisk Cognac-sortiment, positionering og kontakt.": "Fransk økologisk Cognac til importører, vinhandlere og restaurationspartnere: Esprit Organic-sortiment, premium positionering og direkte kontakt i Charente.",
+            "En B2B-eksportside for markederne Europa, USA og Canada.": "Et fransk, økologisk og familiedrevet sortiment til jeres Cognac-udvalg.",
+            "B2B-eksport": "Partnere",
+            "En side for importører, vinhandlere, restaurationsbranchen, barer, hoteller og økologiske netværk.": "Fransk økologisk Cognac til importører, vinhandlere, restaurationsbranchen og specialiserede netværk.",
+            "Esprit Organic henvender sig til eksportmarkeder formuleret som: Europa, USA, Canada. Denne side er bevidst faktuel: den præsenterer sortimentet, kontaktoplysningerne og de dokumenter, der skal forberedes, uden at opfinde volumener eller distributører.": "Esprit Organic ledsager partnere, der søger et klart, familiedrevet og certificeret økologisk sortiment af Cognac og Pineau med direkte kontakt i Charente.",
+            "Bed om eksportinformation": "Tal med os om jeres projekt",
+            "Familiedrevet, naturlig, premium og uafhængig økologisk Cognac.": "Familiedrevet, premium og uafhængig økologisk Cognac.",
+            "Dokumenter der skal forberedes": "Ressourcer til jeres udvalg",
+            "Produktdata og professionelle dokumenter.": "Produktark og professionelle oplysninger.",
+            "Regulatoriske oplysninger og næringsoplysninger i tilgængelig HTML.": "Regulatoriske oplysninger og næringsoplysninger til en klar præsentation.",
+        },
+        "no/importers.html": {
+            "B2B-eksportside for Cognac Esprit Organic-importører i Europa, USA og Canada: økologisk Cognac-sortiment, posisjonering og kontakt.": "Fransk økologisk Cognac for importører, vinhandlere og serveringspartnere: Esprit Organic-sortiment, premium posisjonering og direkte kontakt i Charente.",
+            "En B2B-eksportside for markedene Europa, USA og Canada.": "Et fransk, økologisk og familiedrevet sortiment for deres Cognac-utvalg.",
+            "B2B-eksport": "Partnere",
+            "En side for importører, vinhandlere, serveringsbransjen, barer, hoteller og økologiske nettverk.": "Fransk økologisk Cognac for importører, vinhandlere, serveringsbransjen og spesialiserte nettverk.",
+            "Esprit Organic retter seg mot eksportmarkeder formulert slik: Europa, USA, Canada. Denne siden er bevisst faktuell: den presenterer sortimentet, kontaktopplysninger og dokumenter som skal forberedes, uten å finne opp volumer eller distributører.": "Esprit Organic støtter partnere som ønsker et tydelig, familiedrevet og sertifisert økologisk sortiment av Cognac og Pineau med direkte kontakt i Charente.",
+            "Be om eksportinformasjon": "Snakk med oss om prosjektet",
+            "Familiedrevet, naturlig, premium og uavhengig økologisk Cognac.": "Familiedrevet, premium og uavhengig økologisk Cognac.",
+            "Dokumenter som skal forberedes": "Ressurser for utvalget deres",
+            "Produktdata og profesjonelle dokumenter.": "Produktark og profesjonell informasjon.",
+            "Regulatorisk og ernæringsmessig informasjon i tilgjengelig HTML.": "Regulatorisk og ernæringsmessig informasjon for en klar presentasjon.",
+        },
+        "sv/importers.html": {
+            "B2B-exportsida för Cognac Esprit Organic-importörer i Europa, USA och Kanada: ekologiskt Cognac-sortiment, positionering och kontakt.": "Fransk ekologisk Cognac för importörer, vinhandlare och restaurangpartners: Esprit Organic-sortiment, premium positionering och direkt kontakt i Charente.",
+            "En B2B-exportsida för marknaderna Europa, USA och Kanada.": "Ett franskt, ekologiskt och familjeägt sortiment för ert Cognac-urval.",
+            "B2B-export": "Partner",
+            "En sida för importörer, vinhandlare, restaurangbranschen, barer, hotell och ekologiska nätverk.": "Fransk ekologisk Cognac för importörer, vinhandlare, restaurangbranschen och specialiserade nätverk.",
+            "Esprit Organic riktar sig till exportmarknader formulerade som: Europa, USA, Kanada. Denna sida är medvetet faktabaserad: den presenterar sortimentet, kontaktuppgifter och dokument att förbereda, utan att hitta på volymer eller distributörer.": "Esprit Organic stödjer partner som söker ett tydligt, familjeägt och certifierat ekologiskt sortiment av Cognac och Pineau med direkt kontakt i Charente.",
+            "Begär exportinformation": "Prata med oss om ert projekt",
+            "Familjedriven, naturlig, premium och oberoende ekologisk Cognac.": "Familjeägd, premium och oberoende ekologisk Cognac.",
+            "Dokument att förbereda": "Resurser för ert urval",
+            "Produktdata och professionella dokument.": "Produktblad och professionell information.",
+            "Regulatorisk information och näringsinformation i tillgänglig HTML.": "Regulatorisk information och näringsinformation för en tydlig presentation.",
+        },
+        "en/organic-cognac-producer-france.html": {
+            "Cognac Esprit Organic is an organic Cognac brand in France, with a range for Europe, USA and Canada.": "Meet Cognac Esprit Organic, a family organic Cognac producer in Charente, France, with a range for importers, retailers and hospitality.",
+            "Page stratégique en anglais pour les acheteurs internationaux.": "Organic Cognac from Charente for international partners.",
+            "Strategic English page for international buyers.": "Organic Cognac from Charente for international partners.",
+            "This page is written in English for international buyers. Esprit Organic is an organic Cognac brand led by Léopold and Fanny Croizet.": "Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.",
+            "For Importers": "For importers and trade partners",
+            "<h2>Location</h2>": "<h2>From Charente, France</h2>",
+            "30 Rue d'Angoulême, 16200 Triac-Lautrait, France.": "30 Rue d'Angoulême, 16200 Triac-Lautrait, in the Cognac region.",
+            "<h2>Organic focus</h2>": "<h2>Organic identity</h2>",
+            "Family, natural and premium positioning for professional buyers looking for organic Cognac from France.": "A family-led organic Cognac range for partners looking for provenance, clarity and a direct producer relationship.",
+            "<h2>Export wording</h2>": "<h2>Priority markets</h2>",
+        },
+        "da/organic-cognac-producer-france.html": {
+            "Familiedrevet, naturlig og premium positionering for professionelle købere, der søger økologisk Cognac fra Frankrig.": "Familiedrevet og premium økologisk Cognac til professionelle partnere, der søger oprindelse, klarhed og direkte kontakt.",
+            "Eksportmarkeder": "Prioriterede markeder",
+        },
+        "no/organic-cognac-producer-france.html": {
+            "Familiedrevet, naturlig og premium posisjonering for profesjonelle kjøpere som søker økologisk Cognac fra Frankrike.": "Familiedrevet og premium økologisk Cognac for profesjonelle partnere som søker opprinnelse, klarhet og direkte kontakt.",
+            "Eksportmarkeder": "Prioriterte markeder",
+        },
+        "sv/organic-cognac-producer-france.html": {
+            "Familjeägd, naturlig och premium positionering för professionella köpare som söker ekologisk Cognac från Frankrike.": "Familjeägd och premium ekologisk Cognac för professionella partner som söker ursprung, tydlighet och direkt kontakt.",
+            "Exportmarknader": "Prioriterade marknader",
+        },
+        "en/faq.html": {
+            "Factual answers about the house, the organic range, visits and useful information for professionals.": "For choosing a cuvée, planning a visit or contacting the house.",
+            "Where can I find technical details for each product?": "Where can I find detailed information for each product?",
+            "Product data, bottle sizes, alcohol levels, grape varieties, documented awards and PDF sheet links are gathered on the “Product data and professional documents” page.": "Bottle sizes, alcohol levels, grape varieties, documented awards and tasting sheets are gathered on the “Product sheets and trade resources” page.",
+            "Product data and professional documents": "Product sheets and trade resources",
+            "product data pages": "product sheets",
+            "without replacing the product data sheets": "while keeping each cuvée’s style at the centre of the glass",
+            "technical data": "range information",
+            "The public evidence linked from the site points to Ecocert for Domaine de la Grande Versenne and Maison des Pierres SARL, and to Annuaire Bio for the estate.": "The official sources linked from the site point to Ecocert for Domaine de la Grande Versenne and Maison des Pierres SARL, and to Annuaire Bio for the estate.",
+            "For Cognac Esprit Organic, the visible environmental proof on this site remains the organic approach certified by Ecocert.": "For Cognac Esprit Organic, the visible organic commitment on this site is certified by Ecocert.",
+            "The visible pages document the organic approach and Ecocert evidence.": "The visible pages present the organic approach and Ecocert certifications.",
+        },
+        "en/agriculture-biologique.html": {
+            "Public proof of Cognac Esprit Organic’s organic commitment: Domaine de la Grande Versenne and Maison des Pierres certified Organic Agriculture Europe by Ecocert.": "Cognac Esprit Organic organic commitment: a Charente estate, an Ecocert-certified house and a family range guided by care.",
+            "Domaine de la Grande Versenne and Maison des Pierres: public proof of Organic Agriculture Europe certification.": "Domaine de la Grande Versenne and Maison des Pierres: certified organic commitment for Cognac Esprit Organic.",
+            "Organic certification and evidence": "Organic certification and commitment",
+            "Public evidence of Organic Agriculture Europe certification for Domaine de la Grande Versenne and Maison des Pierres SARL.": "Certified organic commitment for Domaine de la Grande Versenne, Maison des Pierres SARL and the Cognac Esprit Organic range.",
+            "A controlled, documented approach visible in public directories.": "A certified organic approach, clear and true to our land.",
+            "Public proof": "Organic commitment",
+            "Organic is not an intention. It is traceability.": "Organic Cognac, from vineyard to bottle.",
+            "This page does not try to promise more than the public proof shows: identified operators, Ecocert certification, declared organic activity and consistency between the estate, the house and the Cognac Esprit Organic range.": "We prefer commitments that are simple to verify: identified operators, Ecocert certification, declared organic activity and consistency between the estate, the house and the Cognac Esprit Organic range.",
+            "This transparency is intentional: it allows consumers, wine merchants and importers to verify the reality of the approach.": "This transparency helps consumers, wine merchants and importers understand the reality of the approach.",
+        },
+        "da/agriculture-biologique.html": {
+            "Offentlige beviser for Cognac Esprit Organics økologiske engagement: Domaine de la Grande Versenne og Maison des Pierres certificeret Organic Agriculture Europe af Ecocert.": "Cognac Esprit Organics økologiske engagement: en ejendom i Charente, et Ecocert-certificeret hus og et sortiment ført med omhu.",
+            "Domaine de la Grande Versenne og Maison des Pierres: offentlige beviser for Organic Agriculture Europe-certificering.": "Domaine de la Grande Versenne og Maison des Pierres: et certificeret økologisk engagement for Cognac Esprit Organic.",
+            "Økologisk certificering og beviser": "Økologisk certificering og engagement",
+            "Offentlige beviser for Organic Agriculture Europe-certificering for Domaine de la Grande Versenne og Maison des Pierres SARL.": "Certificeret økologisk engagement for Domaine de la Grande Versenne, Maison des Pierres SARL og Cognac Esprit Organic-sortimentet.",
+            "En kontrolleret og dokumenteret tilgang, synlig i offentlige registre.": "En certificeret økologisk tilgang, klar og tro mod vores jord.",
+            "Offentlige beviser": "Økologisk engagement",
+            "Økologi er ikke en intention. Det er sporbarhed.": "Økologisk Cognac, fra vinmark til flaske.",
+            "Denne side lover ikke mere, end de offentlige beviser viser: identificerede operatører, Ecocert-certificering, erklæret økologisk aktivitet og sammenhæng mellem domenet, huset og Cognac Esprit Organic-sortimentet.": "Vi foretrækker engagementer, der er enkle at forstå: identificerede operatører, Ecocert-certificering, erklæret økologisk aktivitet og sammenhæng mellem domenet, huset og Cognac Esprit Organic-sortimentet.",
+            "Denne gennemsigtighed er bevidst: den gør det muligt for forbrugere, vinhandlere, importører og AI-agenter at kontrollere tilgangen.": "Denne gennemsigtighed hjælper forbrugere, vinhandlere og importører med at forstå tilgangen.",
+        },
+        "no/agriculture-biologique.html": {
+            "Offentlige bevis på Cognac Esprit Organics økologiske forpliktelse: Domaine de la Grande Versenne og Maison des Pierres sertifisert Organic Agriculture Europe av Ecocert.": "Cognac Esprit Organics økologiske forpliktelse: en eiendom i Charente, et Ecocert-sertifisert hus og et sortiment ført med omtanke.",
+            "Domaine de la Grande Versenne og Maison des Pierres: offentlige bevis på Organic Agriculture Europe-sertifisering.": "Domaine de la Grande Versenne og Maison des Pierres: en sertifisert økologisk forpliktelse for Cognac Esprit Organic.",
+            "Økologisk sertifisering og bevis": "Økologisk sertifisering og forpliktelse",
+            "Offentlige bevis på Organic Agriculture Europe-sertifisering for Domaine de la Grande Versenne og Maison des Pierres SARL.": "Sertifisert økologisk forpliktelse for Domaine de la Grande Versenne, Maison des Pierres SARL og Cognac Esprit Organic-sortimentet.",
+            "En kontrollert og dokumentert tilnærming, synlig i offentlige registre.": "En sertifisert økologisk tilnærming, tydelig og tro mot jorden vår.",
+            "Offentlige bevis": "Økologisk forpliktelse",
+            "Økologisk er ikke en intensjon. Det er sporbarhet.": "Økologisk Cognac, fra vinmark til flaske.",
+            "Denne siden prøver ikke å love mer enn de offentlige bevisene viser: identifiserte operatører, Ecocert-sertifisering, erklært økologisk aktivitet og sammenheng mellom domenet, huset og Cognac Esprit Organic-sortimentet.": "Vi foretrekker forpliktelser som er enkle å forstå: identifiserte operatører, Ecocert-sertifisering, erklært økologisk aktivitet og sammenheng mellom domenet, huset og Cognac Esprit Organic-sortimentet.",
+            "Denne åpenheten er bevisst: den gjør det mulig for forbrukere, vinhandlere, importører og AI-agenter å kontrollere realiteten i tilnærmingen.": "Denne åpenheten hjelper forbrukere, vinhandlere og importører med å forstå tilnærmingen.",
+        },
+        "sv/agriculture-biologique.html": {
+            "Offentliga bevis för Cognac Esprit Organics ekologiska åtagande: Domaine de la Grande Versenne och Maison des Pierres certifierade Organic Agriculture Europe av Ecocert.": "Cognac Esprit Organics ekologiska åtagande: en egendom i Charente, ett Ecocert-certifierat hus och ett sortiment fört med omsorg.",
+            "Domaine de la Grande Versenne och Maison des Pierres: offentliga bevis för Organic Agriculture Europe-certifiering.": "Domaine de la Grande Versenne och Maison des Pierres: ett certifierat ekologiskt åtagande för Cognac Esprit Organic.",
+            "Ekologisk certifiering och bevis": "Ekologisk certifiering och åtagande",
+            "Offentliga bevis för Organic Agriculture Europe-certifiering för Domaine de la Grande Versenne och Maison des Pierres SARL.": "Certifierat ekologiskt åtagande för Domaine de la Grande Versenne, Maison des Pierres SARL och Cognac Esprit Organic-sortimentet.",
+            "En kontrollerad och dokumenterad metod, synlig i offentliga register.": "En certifierad ekologisk metod, tydlig och trogen vår jord.",
+            "Offentliga bevis": "Ekologiskt åtagande",
+            "Ekologiskt är inte en intention. Det är spårbarhet.": "Ekologisk Cognac, från vingård till flaska.",
+            "Den här sidan försöker inte lova mer än vad de offentliga bevisen visar: identifierade aktörer, Ecocert-certifiering, deklarerad ekologisk aktivitet och samstämmighet mellan egendomen, huset och Cognac Esprit Organic-sortimentet.": "Vi föredrar åtaganden som är enkla att förstå: identifierade aktörer, Ecocert-certifiering, deklarerad ekologisk aktivitet och samstämmighet mellan egendomen, huset och Cognac Esprit Organic-sortimentet.",
+            "Denna transparens är avsiktlig: den gör det möjligt för konsumenter, vinhandlare, importörer och AI-agenter att kontrollera metodens verklighet.": "Denna transparens hjälper konsumenter, vinhandlare och importörer att förstå metoden.",
+        },
+    }
+    gallery_replacements = {
+        "en": {
+            "Gallery of photos and visuals recovered from the former Cognac Esprit Organic website.": "Cognac Esprit Organic gallery: images of the vineyard, house, distillery and organic Cognac range.",
+            "Galerie Cognac Esprit Organic": "Cognac Esprit Organic Gallery",
+            "Les photos et visuels récupérés de l'ancien site, regroupés dans une page propre.": "Vines, bottles and house moments.",
+            "Recovered images from the former website, gathered in a clean page.": "Vines, bottles and house moments.",
+            "Archives visuelles": "Gallery",
+            "Images recovered from the former website": "Images of the house, vineyard and range",
+            "This gallery gathers useful visuals recovered from the former WordPress website. It provides a clean reserve for rebuilding pages without depending on WordPress.": "A selection of Cognac Esprit Organic visuals to discover our land, bottles and family spirit.",
+        },
+        "da": {
+            "Galleri med fotos og visuelle materialer hentet fra det tidligere Cognac Esprit Organic-website.": "Billedgalleri Cognac Esprit Organic: vinmarker, huset, destilleriet og sortimentet af økologisk Cognac.",
+            "Les photos et visuels récupérés de l'ancien site, regroupés dans une page propre.": "Vinmarker, flasker og øjeblikke fra huset.",
+            "Recovered images from the former website, gathered in a clean page.": "Vinmarker, flasker og øjeblikke fra huset.",
+            "Dette galleri samler nyttige visuelle elementer fra det tidligere WordPress-site. Det fungerer som en ren ressource til at genopbygge siderne uden WordPress.": "Et udvalg af Cognac Esprit Organic-billeder til at opleve vores jord, flasker og familiedrevne hus.",
+        },
+        "no": {
+            "Galleri med bilder og visuelt materiale hentet fra det tidligere Cognac Esprit Organic-nettstedet.": "Bildegalleri Cognac Esprit Organic: vinmarker, huset, destilleriet og sortimentet av økologisk Cognac.",
+            "Les photos et visuels récupérés de l'ancien site, regroupés dans une page propre.": "Vinmarker, flasker og øyeblikk fra huset.",
+            "Recovered images from the former website, gathered in a clean page.": "Vinmarker, flasker og øyeblikk fra huset.",
+            "Dette galleriet samler nyttige visuelle elementer fra det tidligere WordPress-nettstedet. Det fungerer som en ren ressurs for å gjenoppbygge sidene uten WordPress.": "Et utvalg Cognac Esprit Organic-bilder som viser jorden vår, flaskene og husets familieånd.",
+        },
+        "sv": {
+            "Galleri med foton och visuellt material återställt från den tidigare webbplatsen för Cognac Esprit Organic.": "Bildgalleri Cognac Esprit Organic: vingården, huset, destilleriet och sortimentet av ekologisk Cognac.",
+            "Les photos et visuels récupérés de l'ancien site, regroupés dans une page propre.": "Vingårdar, flaskor och stunder från huset.",
+            "Recovered images from the former website, gathered in a clean page.": "Vingårdar, flaskor och stunder från huset.",
+            "Detta galleri samlar användbart visuellt material från den tidigare WordPress-webbplatsen. Det fungerar som en ren resurs för att bygga om sidorna utan WordPress.": "Ett urval Cognac Esprit Organic-bilder för att upptäcka vår jord, våra flaskor och husets familjeanda.",
+        },
+    }
+    for rel_path, replacements in page_replacements.items():
+        path = ROOT / rel_path
+        if not path.exists():
+            continue
+        html = path.read_text(encoding="utf-8")
+        path.write_text(replace_many(html, replacements), encoding="utf-8")
+    for lang, replacements in gallery_replacements.items():
+        path = ROOT / lang / "galerie.html"
+        if not path.exists():
+            continue
+        html = path.read_text(encoding="utf-8")
+        html = replace_many(html, replacements)
+        html = html.replace("Ancien site Cognac Esprit Organic - ", "Cognac Esprit Organic - ")
+        html = re.sub(r"<figcaption>.*?</figcaption>", "", html)
+        path.write_text(html, encoding="utf-8")
 
 
 LEGAL_COPY = {
@@ -6589,11 +6782,11 @@ Europe, USA, Canada.
 - FAQ om økologisk Cognac : /no/faq.html
 - FAQ om ekologisk Cognac : /sv/faq.html
 - Cocktails : /cocktails.html
-- Données produits et documents professionnels : /fiches-techniques-produits.html
-- Product data and professional documents : /en/fiches-techniques-produits.html
-- Produktdata og professionelle dokumenter : /da/fiches-techniques-produits.html
-- Produktdata og profesjonelle dokumenter : /no/fiches-techniques-produits.html
-- Produktdata och professionella dokument : /sv/fiches-techniques-produits.html
+- Fiches produits et ressources professionnelles : /fiches-techniques-produits.html
+- Product sheets and trade resources : /en/fiches-techniques-produits.html
+- Produktark og professionelle ressourcer : /da/fiches-techniques-produits.html
+- Produktark og profesjonelle ressurser : /no/fiches-techniques-produits.html
+- Produktblad och professionella resurser : /sv/fiches-techniques-produits.html
 - Mentions légales : /mentions-legales.html
 - llms.txt : /llms.txt
 
@@ -6755,6 +6948,7 @@ def main():
     write("equipe.html", redirect_page("equipe.html", "L’équipe", "equipe/"))
     write_static_files()
     sync_localized_product_data()
+    sync_localized_marketing_copy()
 
 
 if __name__ == "__main__":

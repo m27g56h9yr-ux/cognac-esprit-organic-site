@@ -2704,6 +2704,11 @@ def rewards_page(path="recompenses.html", lang="fr"):
 
 
 def cocktails_page():
+    existing = ROOT / "cocktails.html"
+    if existing.exists():
+        html = existing.read_text(encoding="utf-8")
+        if "cocktail-showcases" in html and re.search(r'"@type"\s*:\s*"Recipe"', html):
+            return html
     body = """
 <section class="old-duo page-duo">
   <div class="old-panel image-panel">
@@ -6337,6 +6342,11 @@ thead th {
 
 
 def write_js():
+    existing = ROOT / "assets/js/main.js"
+    if existing.exists():
+        js = existing.read_text(encoding="utf-8")
+        if "supportedLangs" in js and "footerNewsletterCopy" in js and "data-volume-selector" in js:
+            return
     write("assets/js/main.js", """const navToggle = document.querySelector("[data-nav-toggle]");
 const navLinks = document.querySelector("[data-nav-links]");
 const langToggle = document.querySelector("[data-lang-toggle]");

@@ -5,6 +5,7 @@ const langMenu = document.querySelector("[data-lang-menu]");
 const langOptions = Array.from(document.querySelectorAll("[data-lang-option]"));
 const savedLang = localStorage.getItem("ceo-lang");
 const supportedLangs = ["fr", "en", "da", "no", "sv"];
+const languageMarketDefaults = { da: "dk", no: "no" };
 const urlLocale = getUrlLocale();
 const languageAliases = { nb: "no", nn: "no" };
 const countryLanguages = {
@@ -66,6 +67,7 @@ function detectConfiguredMarket() {
     document.documentElement.dataset.serverMarket ||
     document.documentElement.dataset.market ||
     metaMarket ||
+    localStorage.getItem("ceo-market") ||
     readCookie("ceo-market")
   );
 }
@@ -82,7 +84,7 @@ function detectVisitorMarket() {
   return "";
 }
 const initialLang = urlLocale || document.documentElement.dataset.defaultLang || savedLang || detectVisitorLanguage();
-let visitorMarket = detectConfiguredMarket() || detectVisitorMarket();
+let visitorMarket = detectConfiguredMarket() || detectVisitorMarket() || languageMarketDefaults[urlLocale] || "";
 const langNames = {
   fr: "Français",
   en: "English",
@@ -179,8 +181,29 @@ function getCanonicalLanguagePath(lang) {
   return `/${lang}${basePath}`;
 }
 
-function navigateToLanguage(lang) {
+function writeMarketCookie(market) {
+  if (market) {
+    document.cookie = `ceo-market=${market};path=/;max-age=31536000;SameSite=Lax`;
+  } else {
+    document.cookie = "ceo-market=;path=/;max-age=0;SameSite=Lax";
+  }
+}
+
+function persistVisitorMarket(market) {
+  const normalized = normalizeMarket(market);
+  if (normalized) {
+    localStorage.setItem("ceo-market", normalized);
+  } else {
+    localStorage.removeItem("ceo-market");
+  }
+  writeMarketCookie(normalized);
+  setVisitorMarket(normalized);
+}
+
+function navigateToLanguage(lang, market) {
   if (!supportedLangs.includes(lang)) lang = "fr";
+  const selectedMarket = market === undefined ? languageMarketDefaults[lang] || "" : market;
+  persistVisitorMarket(selectedMarket);
   const nextPath = getCanonicalLanguagePath(lang);
   const nextUrl = `${nextPath}${window.location.search}${window.location.hash}`;
   localStorage.setItem("ceo-lang", lang);
@@ -1240,6 +1263,34 @@ function applyTextTranslations(lang) {
   });
 }
 
+function getOptionMarket(option) {
+  return normalizeMarket(option && option.dataset.marketOption);
+}
+
+function getCurrentLanguageOption(lang) {
+  const options = langOptions.filter((option) => option.dataset.langOption === lang);
+  const marketOption = options.find((option) => getOptionMarket(option) && getOptionMarket(option) === visitorMarket);
+  return marketOption || options.find((option) => !getOptionMarket(option)) || options[0] || null;
+}
+
+function getOptionLabel(option, fallbackLang) {
+  return option?.dataset.langLabel || fallbackLang.toUpperCase();
+}
+
+function updateLanguageMenuState(lang) {
+  const currentOption = getCurrentLanguageOption(lang);
+  const toggleLabel = getOptionLabel(currentOption, lang);
+  if (langToggle) {
+    langToggle.textContent = toggleLabel;
+    langToggle.setAttribute("aria-label", `Changer langue / pays. Sélection actuelle : ${toggleLabel}`);
+    langToggle.setAttribute("title", "FR / EN / DA / NO / SV / QC");
+    langToggle.setAttribute("aria-expanded", "false");
+  }
+  langOptions.forEach((option) => {
+    option.setAttribute("aria-current", String(option === currentOption));
+  });
+}
+
 function setLanguage(lang) {
   if (!supportedLangs.includes(lang)) lang = "fr";
   document.body.dataset.lang = lang;
@@ -1248,16 +1299,8 @@ function setLanguage(lang) {
   localStorage.setItem("ceo-lang", lang);
   applyTextTranslations(lang);
   renderFooterEnhancements(lang);
-  if (langToggle) {
-    langToggle.textContent = lang.toUpperCase();
-    langToggle.setAttribute("aria-label", `Changer de langue. Langue actuelle : ${langNames[lang]}`);
-    langToggle.setAttribute("title", "FR / EN / DA / NO / SV");
-    langToggle.setAttribute("aria-expanded", "false");
-  }
+  updateLanguageMenuState(lang);
   if (langMenu) langMenu.classList.remove("is-open");
-  langOptions.forEach((option) => {
-    option.setAttribute("aria-current", String(option.dataset.langOption === lang));
-  });
 }
 
 setLanguage(initialLang);
@@ -1265,6 +1308,7 @@ setLanguage(initialLang);
 function setVisitorMarket(market) {
   visitorMarket = normalizeMarket(market);
   document.body.dataset.market = visitorMarket;
+  updateLanguageMenuState(document.body.dataset.lang || initialLang);
 }
 
 function loadServerMarket() {
@@ -1299,7 +1343,8 @@ if (langToggle) {
 
 langOptions.forEach((option) => {
   option.addEventListener("click", () => {
-    navigateToLanguage(option.dataset.langOption || "fr");
+    const market = option.hasAttribute("data-market-option") ? option.dataset.marketOption : "";
+    navigateToLanguage(option.dataset.langOption || "fr", market);
   });
 });
 

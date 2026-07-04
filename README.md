@@ -47,9 +47,10 @@ Les liens d'achat produits sont présents dans les pages, mais masqués par déf
 
 Le fonctionnement est complémentaire :
 
-1. `assets/js/main.js` applique d'abord un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
-2. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
-3. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
+1. Le visiteur peut forcer son choix dans le menu langue / pays : `QC Québec` => `qc`, `DA Danemark` => `dk`, `NO Norvège` => `no`. Ce choix est enregistré en `localStorage` et dans le cookie `ceo-market`.
+2. `assets/js/main.js` applique ensuite un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
+3. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
+4. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
 
 Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
 

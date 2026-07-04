@@ -7,17 +7,25 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260704-buy-links-market01"
-JS_VERSION = "20260704-market01"
+CSS_VERSION = "20260704-market-choice01"
+JS_VERSION = "20260704-market-choice01"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
+LANGUAGE_MARKET_OPTIONS = (
+    {"lang": "fr", "label": "FR"},
+    {"lang": "en", "label": "EN"},
+    {"lang": "da", "label": "DA", "market": "dk", "region": "Danemark"},
+    {"lang": "no", "label": "NO", "market": "no", "region": "Norvège"},
+    {"lang": "sv", "label": "SV"},
+    {"lang": "fr", "label": "QC", "market": "qc", "region": "Québec"},
+)
 
 COMMON_I18N = {
     "fr": {
         "skip": "Aller au contenu",
         "nav": "Navigation principale",
         "open_menu": "Ouvrir le menu",
-        "choose_language": "Choisir la langue",
+        "choose_language": "Choisir la langue / le pays",
         "range": "La gamme",
         "house": "La maison",
         "approach": "Notre démarche",
@@ -34,7 +42,7 @@ COMMON_I18N = {
         "skip": "Skip to content",
         "nav": "Primary navigation",
         "open_menu": "Open menu",
-        "choose_language": "Choose language",
+        "choose_language": "Choose language / country",
         "range": "The range",
         "house": "The house",
         "approach": "Our approach",
@@ -51,7 +59,7 @@ COMMON_I18N = {
         "skip": "Gå til indhold",
         "nav": "Primær navigation",
         "open_menu": "Åbn menu",
-        "choose_language": "Vælg sprog",
+        "choose_language": "Vælg sprog / land",
         "range": "Sortimentet",
         "house": "Huset",
         "approach": "Vores tilgang",
@@ -68,7 +76,7 @@ COMMON_I18N = {
         "skip": "Gå til innhold",
         "nav": "Hovednavigasjon",
         "open_menu": "Åpne meny",
-        "choose_language": "Velg språk",
+        "choose_language": "Velg språk / land",
         "range": "Sortimentet",
         "house": "Huset",
         "approach": "Vår tilnærming",
@@ -85,7 +93,7 @@ COMMON_I18N = {
         "skip": "Gå till innehåll",
         "nav": "Huvudnavigering",
         "open_menu": "Öppna meny",
-        "choose_language": "Välj språk",
+        "choose_language": "Välj språk / land",
         "range": "Sortimentet",
         "house": "Huset",
         "approach": "Vårt arbetssätt",
@@ -1221,6 +1229,22 @@ def nav_html(current: str, prefix: str, lang: str) -> str:
 """
 
 
+def language_menu_options_html() -> str:
+    buttons = []
+    for option in LANGUAGE_MARKET_OPTIONS:
+        market_attr = f' data-market-option="{escape(option["market"])}"' if option.get("market") else ""
+        region = option.get("region")
+        label = escape(option["label"])
+        label_html = label
+        if region:
+            label_html += f'<span class="lang-option-region">{escape(region)}</span>'
+        buttons.append(
+            f'<button type="button" class="lang-option" data-lang-option="{escape(option["lang"])}" '
+            f'data-lang-label="{label}"{market_attr} role="menuitem">{label_html}</button>'
+        )
+    return "".join(buttons)
+
+
 def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intro_en: str, body: str, schemas=None, image="assets/img/products/gamme-esprit-organic.jpg", page_class="", hero_actions="", hero_video="", show_hero=True, robots=None, head_extra=""):
     prefix = rel_prefix(path)
     lang = lang_for_path(path)
@@ -1249,6 +1273,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
             f'<span class="{"is-active" if i == 0 else ""}" style="background-image:url({prefix}{src})"></span>'
             for i, src in enumerate(home_slides)
         ) + "</div>"
+    language_options = language_menu_options_html()
     hero_html = f"""
     <section class="{hero_class}" style="--hero-image: url('{root_image}')">
       {home_slideshow}
@@ -1290,7 +1315,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         <img src="{prefix}assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic">
       </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="{escape(copy["open_menu"])}">Menu</button>
-      <div class="nav-links" data-nav-links>{nav_html(path, prefix, lang)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">{lang.upper()}</button><div class="lang-menu-panel" role="menu" aria-label="{escape(copy["choose_language"])}"><button type="button" class="lang-option" data-lang-option="fr" role="menuitem">FR</button><button type="button" class="lang-option" data-lang-option="en" role="menuitem">EN</button><button type="button" class="lang-option" data-lang-option="da" role="menuitem">DA</button><button type="button" class="lang-option" data-lang-option="no" role="menuitem">NO</button><button type="button" class="lang-option" data-lang-option="sv" role="menuitem">SV</button></div></div><a class="header-bio-link" href="{localized_href(path, "agriculture-biologique.html", lang)}" aria-label="{escape(copy["organic"])}"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="{escape(copy["organic"])}"></a></div>
+      <div class="nav-links" data-nav-links>{nav_html(path, prefix, lang)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">{lang.upper()}</button><div class="lang-menu-panel" role="menu" aria-label="{escape(copy["choose_language"])}">{language_options}</div></div><a class="header-bio-link" href="{localized_href(path, "agriculture-biologique.html", lang)}" aria-label="{escape(copy["organic"])}"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="{escape(copy["organic"])}"></a></div>
     </nav>
   </header>
   <main id="contenu">
@@ -4739,7 +4764,7 @@ img { display: block; max-width: 100%; height: auto; }
   right: 0;
   top: calc(100% + 8px);
   z-index: 35;
-  min-width: 84px;
+  min-width: 142px;
   padding: 8px;
   border: 1px solid rgba(94, 61, 35, .18);
   background: var(--cream);
@@ -4753,9 +4778,12 @@ img { display: block; max-width: 100%; height: auto; }
 .lang-menu:hover .lang-menu-panel,
 .lang-menu:focus-within .lang-menu-panel { opacity: 1; visibility: visible; transform: translateY(0); }
 .lang-option {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   min-height: 34px;
+  padding: 0 8px;
   border: 0;
   background: transparent;
   color: var(--brand);
@@ -4764,7 +4792,9 @@ img { display: block; max-width: 100%; height: auto; }
   font-weight: 800;
   text-align: left;
   cursor: pointer;
+  white-space: nowrap;
 }
+.lang-option-region { color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: none; }
 .lang-option:hover,
 .lang-option:focus-visible,
 .lang-option[aria-current="true"] { background: rgba(94, 61, 35, .08); }
@@ -7545,9 +7575,10 @@ Les liens d'achat produits sont présents dans les pages, mais masqués par déf
 
 Le fonctionnement est complémentaire :
 
-1. `assets/js/main.js` applique d'abord un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
-2. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
-3. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
+1. Le visiteur peut forcer son choix dans le menu langue / pays : `QC Québec` => `qc`, `DA Danemark` => `dk`, `NO Norvège` => `no`. Ce choix est enregistré en `localStorage` et dans le cookie `ceo-market`.
+2. `assets/js/main.js` applique ensuite un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
+3. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
+4. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
 
 Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
 

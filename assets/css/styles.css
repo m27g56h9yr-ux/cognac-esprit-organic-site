@@ -42,7 +42,7 @@ img { display: block; max-width: 100%; height: auto; }
   right: 0;
   top: calc(100% + 8px);
   z-index: 35;
-  min-width: 84px;
+  min-width: 142px;
   padding: 8px;
   border: 1px solid rgba(94, 61, 35, .18);
   background: var(--cream);
@@ -56,9 +56,12 @@ img { display: block; max-width: 100%; height: auto; }
 .lang-menu:hover .lang-menu-panel,
 .lang-menu:focus-within .lang-menu-panel { opacity: 1; visibility: visible; transform: translateY(0); }
 .lang-option {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: 10px;
   width: 100%;
   min-height: 34px;
+  padding: 0 8px;
   border: 0;
   background: transparent;
   color: var(--brand);
@@ -67,7 +70,9 @@ img { display: block; max-width: 100%; height: auto; }
   font-weight: 800;
   text-align: left;
   cursor: pointer;
+  white-space: nowrap;
 }
+.lang-option-region { color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: none; }
 .lang-option:hover,
 .lang-option:focus-visible,
 .lang-option[aria-current="true"] { background: rgba(94, 61, 35, .08); }

@@ -8,7 +8,7 @@ ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
 CSS_VERSION = "20260704-buy-links-market01"
-JS_VERSION = "20260701-vsop-volume01"
+JS_VERSION = "20260704-market01"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
 
@@ -4014,6 +4014,25 @@ def sync_css_version(html):
     )
 
 
+def sync_js_version(html):
+    return re.sub(
+        r'(assets/js/main\.js\?v=)[^"]+',
+        rf'\g<1>{JS_VERSION}',
+        html,
+    )
+
+
+def normalize_generated_asset_versions():
+    excluded_parts = {".git", "ancien-site-wordpress", "node_modules", "output"}
+    for path in ROOT.rglob("*.html"):
+        if any(part in excluded_parts for part in path.parts):
+            continue
+        html = path.read_text(encoding="utf-8")
+        updated = sync_js_version(sync_css_version(html))
+        if updated != html:
+            path.write_text(updated, encoding="utf-8")
+
+
 MARKET_SCRIPT_RE = re.compile(
     r'\n\s*<script src="(?:\.\./)*market\.php\?v=[^"]+"></script>',
     re.IGNORECASE,
@@ -4072,6 +4091,7 @@ def sync_localized_product_data():
             rel_path = f"{lang}/produits/{product['slug']}.html"
             html = path.read_text(encoding="utf-8")
             html = sync_css_version(html)
+            html = sync_js_version(html)
             html = sync_product_buy_links(html, product, lang)
             html = sync_product_json_ld(html, product, rel_path)
             html = sync_product_detail_rows(html, product)
@@ -4082,6 +4102,7 @@ def sync_localized_product_data():
             rel_path = f"{lang}/fiches-techniques-produits.html"
             html = technical_path.read_text(encoding="utf-8")
             html = sync_css_version(html)
+            html = sync_js_version(html)
             html = sync_product_json_ld(html, None, rel_path)
             html = sync_localized_technical_tables(html)
             technical_path.write_text(html, encoding="utf-8")
@@ -7631,6 +7652,7 @@ def main():
     write_static_files()
     sync_localized_product_data()
     sync_localized_marketing_copy()
+    normalize_generated_asset_versions()
     remove_market_script_includes()
     normalize_generated_accessibility_markup()
 

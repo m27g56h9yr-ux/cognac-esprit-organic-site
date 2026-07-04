@@ -7,7 +7,7 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260703-hvecec-elegant01"
+CSS_VERSION = "20260704-buy-links-market01"
 JS_VERSION = "20260701-vsop-volume01"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
@@ -319,6 +319,83 @@ PRODUCTS = [
         ],
     },
 ]
+
+PRODUCT_BUY_LINKS = {
+    "conviction-vsop": [
+        {
+            "class": "quebec-buy-link",
+            "href": "https://www.saq.com/fr/15548546",
+            "labels": {
+                "fr": "Commander à la SAQ",
+                "en": "Order at SAQ",
+                "da": "Bestil hos SAQ",
+                "no": "Bestill hos SAQ",
+                "sv": "Beställ hos SAQ",
+            },
+        },
+        {
+            "class": "denmark-buy-link",
+            "href": "https://vinoble.dk/vare/cognac-conviction-vsop-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/",
+            "labels": {
+                "fr": "Acheter chez Vinoble",
+                "en": "Buy from Vinoble",
+                "da": "Køb hos Vinoble",
+                "no": "Kjøp hos Vinoble",
+                "sv": "Köp hos Vinoble",
+            },
+        },
+        {
+            "class": "norway-buy-link",
+            "href": "https://www.vinmonopolet.no/Land/Frankrike/Cognac-Tradisjonell/Fins-Bois/Esprit-Organic-Cognac-Conviction-VSOP/p/15346001",
+            "labels": {
+                "fr": "Acheter chez Vinmonopolet",
+                "en": "Buy from Vinmonopolet",
+                "da": "Køb hos Vinmonopolet",
+                "no": "Kjøp hos Vinmonopolet",
+                "sv": "Köp hos Vinmonopolet",
+            },
+        },
+    ],
+    "transmission-xo": [
+        {
+            "class": "denmark-buy-link",
+            "href": "https://vinoble.dk/vare/cognac-transmission-xo-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/",
+            "labels": {
+                "fr": "Acheter chez Vinoble",
+                "en": "Buy from Vinoble",
+                "da": "Køb hos Vinoble",
+                "no": "Kjøp hos Vinoble",
+                "sv": "Köp hos Vinoble",
+            },
+        },
+    ],
+    "xxo": [
+        {
+            "class": "quebec-buy-link",
+            "href": "https://www.saq.com/fr/15263655",
+            "labels": {
+                "fr": "Commander à la SAQ",
+                "en": "Order at SAQ",
+                "da": "Bestil hos SAQ",
+                "no": "Bestill hos SAQ",
+                "sv": "Beställ hos SAQ",
+            },
+        },
+    ],
+    "pineau": [
+        {
+            "class": "denmark-buy-link",
+            "href": "https://vinoble.dk/vare/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres/",
+            "labels": {
+                "fr": "Acheter chez Vinoble",
+                "en": "Buy from Vinoble",
+                "da": "Køb hos Vinoble",
+                "no": "Kjøp hos Vinoble",
+                "sv": "Köp hos Vinoble",
+            },
+        },
+    ],
+}
 
 PRODUCT_TRADE_PDFS = {
     "fondation-vs": {
@@ -1395,6 +1472,7 @@ def product_page(product):
         if block
     )
     recognition_markup = f"\n      {recognition_blocks}" if recognition_blocks else ""
+    buy_links = product_buy_links_html(product)
     gallery_images = [detail_image] + extra.get("gallery", [])
     gallery_buttons = "".join(
         f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="{escape(product["name"])} - visuel {idx + 1}" loading="lazy"></button>'
@@ -1428,7 +1506,7 @@ def product_page(product):
       <h1>{escape(product['name'])}</h1>
       <p data-fr>{escape(product['short'])}</p>
       <p data-en>{escape(product['en_short'])}</p>
-      <p class="product-story">{escape(story)}</p>{recognition_markup}
+      <p class="product-story">{escape(story)}</p>{buy_links}{recognition_markup}
     </div>
     <div class="product-bottle-inline">
       <img src="{prefix}{tasting_image}" alt="Illustration {escape(product['name'])}">
@@ -3039,6 +3117,25 @@ def trade_pdf_label(slug, lang="fr"):
     return trade_pdf.get("en_label") if lang == "en" else trade_pdf["label"]
 
 
+BUY_LINK_ANCHOR_RE = re.compile(
+    r'\n\s*<a class="(?:product-buy-link\s+)?(?:quebec-buy-link|denmark-buy-link|norway-buy-link)"[^>]*>[\s\S]*?</a>',
+    re.IGNORECASE,
+)
+
+
+def product_buy_links_html(product, lang="fr", indent="      "):
+    links = PRODUCT_BUY_LINKS.get(product["slug"], [])
+    rendered = []
+    for link in links:
+        labels = link.get("labels", {})
+        label = labels.get(lang) or labels.get("en") or labels.get("fr", "")
+        class_name = f'product-buy-link {link["class"]}'
+        rendered.append(
+            f'\n{indent}<a class="{escape(class_name, quote=True)}" href="{escape(link["href"], quote=True)}" target="_blank" rel="noopener">{escape(label)}</a>'
+        )
+    return "".join(rendered)
+
+
 def technical_product_item(product, lang="fr"):
     excluded = {"Brand", "Product", "Category", "Short profile"} if lang == "en" else {"Marque", "Produit", "Catégorie", "Profil court"}
     properties = [
@@ -3437,6 +3534,27 @@ def sync_product_detail_rows(html, product):
     return details_re.sub(replace, html, count=1)
 
 
+def sync_product_buy_links(html, product, lang):
+    description_re = re.compile(
+        r'(<div class="product-description">[\s\S]*?<p class="product-story">[\s\S]*?</p>)([\s\S]*?)(\n\s*(?:<div class="product-medals"|</div>))',
+        re.IGNORECASE,
+    )
+
+    def replace(match):
+        cleaned = BUY_LINK_ANCHOR_RE.sub("", match.group(2)).rstrip()
+        return match.group(1) + product_buy_links_html(product, lang) + cleaned + match.group(3)
+
+    return description_re.sub(replace, html, count=1)
+
+
+def sync_css_version(html):
+    return re.sub(
+        r'(assets/css/styles\.css\?v=)[^"]+',
+        rf'\g<1>{CSS_VERSION}',
+        html,
+    )
+
+
 def localized_technical_gtin_rows(product):
     rows = []
     if product.get("gtin13"):
@@ -3477,6 +3595,8 @@ def sync_localized_product_data():
                 continue
             rel_path = f"{lang}/produits/{product['slug']}.html"
             html = path.read_text(encoding="utf-8")
+            html = sync_css_version(html)
+            html = sync_product_buy_links(html, product, lang)
             html = sync_product_json_ld(html, product, rel_path)
             html = sync_product_detail_rows(html, product)
             path.write_text(html, encoding="utf-8")
@@ -3485,6 +3605,7 @@ def sync_localized_product_data():
         if technical_path.exists() and lang != "en":
             rel_path = f"{lang}/fiches-techniques-produits.html"
             html = technical_path.read_text(encoding="utf-8")
+            html = sync_css_version(html)
             html = sync_product_json_ld(html, None, rel_path)
             html = sync_localized_technical_tables(html)
             technical_path.write_text(html, encoding="utf-8")
@@ -5432,6 +5553,44 @@ p { margin: 18px 0 0; }
   margin-top: 14px !important;
   font-size: .8rem !important;
   line-height: 1.6;
+}
+.product-buy-link,
+.norway-buy-link,
+.denmark-buy-link,
+.quebec-buy-link {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 18px 8px 0 0;
+  padding: 12px 18px;
+  border: 1px solid rgba(255,255,255,.68);
+  color: #fff;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+body[data-market="qc"] .quebec-buy-link,
+body[data-market="dk"] .denmark-buy-link,
+body[data-market="no"] .norway-buy-link {
+  display: inline-flex;
+}
+.product-buy-link:hover,
+.product-buy-link:focus-visible,
+.norway-buy-link:hover,
+.norway-buy-link:focus-visible,
+.denmark-buy-link:hover,
+.denmark-buy-link:focus-visible,
+.quebec-buy-link:hover,
+.quebec-buy-link:focus-visible {
+  background: #fff;
+  border-color: #fff;
+  color: var(--product-tone);
 }
 .product-medals {
   display: flex;

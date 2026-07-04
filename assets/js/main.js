@@ -32,13 +32,15 @@ function detectVisitorLanguage() {
 }
 function detectVisitorMarket() {
   const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
-  const hasFrenchCanadaLocale = locales.filter(Boolean).some((locale) => {
+  for (const locale of locales.filter(Boolean)) {
     const parts = locale.replace("_", "-").split("-");
     const language = (parts[0] || "").toLowerCase();
     const country = parts.length > 1 ? parts[parts.length - 1].toUpperCase() : "";
-    return language === "fr" && country === "CA";
-  });
-  return hasFrenchCanadaLocale ? "qc" : "";
+    if (language === "fr" && country === "CA") return "qc";
+    if (country === "DK") return "dk";
+    if (country === "NO" || country === "SJ") return "no";
+  }
+  return "";
 }
 const initialLang = urlLocale || document.documentElement.dataset.defaultLang || savedLang || detectVisitorLanguage();
 const visitorMarket = detectVisitorMarket();

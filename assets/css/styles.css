@@ -1354,6 +1354,44 @@ p { margin: 18px 0 0; }
   font-size: .8rem !important;
   line-height: 1.6;
 }
+.product-buy-link,
+.norway-buy-link,
+.denmark-buy-link,
+.quebec-buy-link {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  margin: 18px 8px 0 0;
+  padding: 12px 18px;
+  border: 1px solid rgba(255,255,255,.68);
+  color: #fff;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .06em;
+  line-height: 1.2;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background .2s ease, color .2s ease, border-color .2s ease;
+}
+body[data-market="qc"] .quebec-buy-link,
+body[data-market="dk"] .denmark-buy-link,
+body[data-market="no"] .norway-buy-link {
+  display: inline-flex;
+}
+.product-buy-link:hover,
+.product-buy-link:focus-visible,
+.norway-buy-link:hover,
+.norway-buy-link:focus-visible,
+.denmark-buy-link:hover,
+.denmark-buy-link:focus-visible,
+.quebec-buy-link:hover,
+.quebec-buy-link:focus-visible {
+  background: #fff;
+  border-color: #fff;
+  color: var(--product-tone);
+}
 .product-medals {
   display: flex;
   flex-wrap: wrap;

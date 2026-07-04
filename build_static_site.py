@@ -7,8 +7,9 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260704-assets01"
+CSS_VERSION = "20260704-assets04"
 JS_VERSION = "20260704-assets02"
+COCKTAILS_CSS_VERSION = "20260704-assets02"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
 LANGUAGE_MARKET_OPTIONS = (
@@ -29,11 +30,29 @@ def web_variant_path(src: str) -> str:
 OPTIMIZED_IMAGE_PATHS = (
     "assets/img/brand/hero-vine-02.jpg",
     "assets/img/brand/hero-old-vine.jpg",
+    "assets/img/brand/home-cocktail.jpg",
+    "assets/img/brand/home-video-poster.jpg",
     "assets/img/products/gamme-esprit-organic.jpg",
     "assets/img/products/fondation-vs.jpg",
+    "assets/img/products/conviction-vsop.jpg",
+    "assets/img/products/cohesion-napoleon.jpg",
     "assets/img/products/transmission-xo.jpg",
+    "assets/img/products/xxo.jpg",
+    "assets/img/products/single-cask.jpg",
+    "assets/img/products/pineau.jpg",
+    "assets/img/products/pineau-rouge.png",
+    "assets/img/products/pineau-rouge-scene.png",
+    "assets/img/products/pineau-rouge-scene-clean.png",
     "assets/img/products/pineau-rouge-scene-floral-clean.png",
     "assets/img/products/pineau-rouge-label.png",
+    "assets/img/cocktails/upload/heure-doree-produits-20260619.png",
+    "assets/img/cocktails/upload/heure-doree-verre-20260619.png",
+    "assets/img/cocktails/upload/cognac-mule-20260621-v10.jpg",
+    "assets/img/cocktails/upload/charente-spritz-20260625-v7.jpg",
+    "assets/img/old-site/img_home_01.jpg",
+    "assets/img/old-site/img_home_02.jpg",
+    "assets/img/old-site/img_home_03.jpg",
+    "assets/img/old-site/img_home_cocktail_01.jpg",
     "assets/img/old-site/img_home_part02_gamme.png",
     "assets/img/old-site/img_home_vigne.jpg",
     "assets/img/old-site/histoire.jpg",
@@ -45,6 +64,11 @@ OPTIMIZED_IMAGE_PATHS = (
     "assets/img/old-site/mise-en-bouteille-scaled.jpg",
     "assets/img/old-site/leopold_croizet.jpg",
     "assets/img/old-site/fanny_croizet.jpg",
+    "assets/img/old-site/NAPO-COHESION-1.png",
+    "assets/img/old-site/NAPO-COHESION.png",
+    "assets/img/old-site/VS-FONDATION.png",
+    "assets/img/old-site/VSOP-CONVICTION.png",
+    "assets/img/old-site/XO-TRANSMISSION.png",
     "assets/img/old-site/VS-FONDATION.jpg",
     "assets/img/old-site/img_degustation_vs.jpg",
     "assets/img/old-site/img_prod_fondation_medaile.png",
@@ -65,6 +89,13 @@ OPTIMIZED_IMAGE_PATHS = (
     "assets/img/old-site/XXO-scaled.jpg",
     "assets/img/old-site/img_XXO_leopold.jpg",
     "assets/img/old-site/img_deco_xxo.png",
+    "assets/img/old-site/icon_menu_XXO.png",
+    "assets/img/old-site/icon_menu_singlecask.png",
+    "assets/img/old-site/img_menu_napo.png",
+    "assets/img/old-site/img_menu_vs.png",
+    "assets/img/old-site/img_menu_vsop.png",
+    "assets/img/old-site/img_menu_xo.png",
+    "assets/img/old-site/cropped-fav_organic.png",
     "assets/img/old-site/SINGLE-CASK.jpg",
     "assets/img/old-site/SINGLE-CASK_tonneau.jpg",
     "assets/img/old-site/img_deco_singlecask-1.png",
@@ -79,6 +110,12 @@ OPTIMIZED_IMAGE_PATHS = (
     "assets/img/team/team-cognac-esprit-organic-sv.png",
 )
 WEBP_ASSETS = {src: web_variant_path(src) for src in OPTIMIZED_IMAGE_PATHS}
+WEBP_ASSETS.update({
+    "assets/img/old-site/NAPO-COHESION.png": "assets/img/old-site/NAPO-COHESION-png-web.webp",
+    "assets/img/old-site/VS-FONDATION.png": "assets/img/old-site/VS-FONDATION-png-web.webp",
+    "assets/img/old-site/VSOP-CONVICTION.png": "assets/img/old-site/VSOP-CONVICTION-png-web.webp",
+    "assets/img/old-site/XO-TRANSMISSION.png": "assets/img/old-site/XO-TRANSMISSION-png-web.webp",
+})
 
 MOBILE_VIDEO_ASSETS = {
     "assets/video/home-nature.mp4": "assets/video/home-nature-mobile.m4v",
@@ -1448,6 +1485,11 @@ def image_preload_link(src: str, prefix: str = "") -> str:
     return f'<link rel="preload" as="image" href="{escape(prefixed_url(prefix, preload_src))}" fetchpriority="high">'
 
 
+def video_poster_url(src: str, prefix: str = "") -> str:
+    poster = optimized_image_path(src) or src
+    return prefixed_url(prefix, poster)
+
+
 def video_source_tags(src: str, prefix: str = "") -> str:
     mobile = MOBILE_VIDEO_ASSETS.get(src)
     mobile_source = ""
@@ -1469,8 +1511,12 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
     locale_links = "" if 'rel="alternate"' in head_extra else locale_alternate_links(path)
     head_extra = "\n  ".join(part for part in [locale_links, head_extra] if part)
     root_image = css_image_value(image, absolute=True)
+    preload_links = [image_preload_link(image, prefix)] if show_hero else []
+    if "home-page" in page_class:
+        preload_links.append(image_preload_link("assets/img/old-site/img_home_01.jpg", prefix))
+    preload_html = "".join(f"\n  {link}" for link in preload_links)
     hero_class = "page-hero video-hero" if hero_video else "page-hero"
-    hero_video_html = f"""<video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="{prefix}{image}">
+    hero_video_html = f"""<video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="{escape(video_poster_url(image, prefix))}">
         {video_source_tags(hero_video, prefix)}
       </video>""" if hero_video else ""
     home_slideshow = ""
@@ -1511,10 +1557,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
   <meta property="og:description" content="{escape(description)}">
   <meta property="og:type" content="website">
   <meta property="og:image" content="{DOMAIN}/{image}">
-  <link rel="icon" href="{prefix}assets/img/fav_organic.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" href="{prefix}assets/img/fav_organic.png">{preload_html}
   <link rel="stylesheet" href="{prefix}assets/css/styles.css?v={CSS_VERSION}">
   {json_ld(schema_items)}
 </head>
@@ -1575,9 +1618,6 @@ def redirect_page(path: str, title: str, target: str):
   {noindex}
   <link rel="canonical" href="{DOMAIN}/{target}">
   <meta http-equiv="refresh" content="0; url={prefix}{target}">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{prefix}assets/css/styles.css?v={CSS_VERSION}">
 </head>
 <body data-lang="{lang}">
@@ -1739,8 +1779,8 @@ def home():
     <span class="panel-copy bas-droit"><strong data-fr>L'esprit organic</strong><strong data-en>The organic spirit</strong><small data-fr>Notre histoire</small><small data-en>Our story</small></span>
   </a>
 </section>
-<a class="home-video-signature" href="demarche/" aria-label="La production - Maîtriser et laisser faire">
-  <video autoplay muted loop playsinline preload="metadata" poster="assets/img/brand/home-video-poster.jpg">
+<a class="home-video-signature" href="demarche/" aria-label="La production - Maîtriser et laisser faire" style="--video-poster: {css_image_value("assets/img/brand/home-video-poster.jpg")}">
+  <video autoplay muted loop playsinline preload="metadata" poster="{video_poster_url("assets/img/brand/home-video-poster.jpg")}">
     {video_source_tags("assets/video/home-nature.mp4")}
   </video>
   <div class="video-copy">
@@ -1936,8 +1976,8 @@ def approach_page(path="production/index.html"):
     body = f"""
 <section class="legacy-content legacy-vertical">
   <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ Notre démarche</span></div>
-  <section class="legacy-video-block">
-    <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/domaine-scaled.jpg">
+  <section class="legacy-video-block" style="--video-poster: {css_image_value("assets/img/old-site/domaine-scaled.jpg", "../")}">
+    <video autoplay muted loop playsinline preload="metadata" poster="{video_poster_url("assets/img/old-site/domaine-scaled.jpg", "../")}">
       {video_source_tags("assets/video/approach-fins-bois.mp4", "../")}
     </video>
     <div>
@@ -1976,8 +2016,8 @@ def production_page(path="demarche/index.html"):
     body = f"""
 <section class="legacy-content legacy-vertical production-steps">
   <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ La Production</span></div>
-  <section class="legacy-video-block">
-    <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/IMG_4079-scaled.jpg">
+  <section class="legacy-video-block" style="--video-poster: {css_image_value("assets/img/old-site/IMG_4079-scaled.jpg", "../")}">
+    <video autoplay muted loop playsinline preload="metadata" poster="{video_poster_url("assets/img/old-site/IMG_4079-scaled.jpg", "../")}">
       {video_source_tags("assets/video/production-abeille.mp4", "../")}
     </video>
     <div>
@@ -2043,8 +2083,8 @@ def people_page(path="leopold-et-fanny/index.html"):
     body = f"""
 <section class="legacy-content legacy-vertical people-content">
   <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ Léopold et Fanny</span></div>
-  <section class="legacy-video-block">
-    <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/leopold_croizet.jpg">
+  <section class="legacy-video-block" style="--video-poster: {css_image_value("assets/img/old-site/leopold_croizet.jpg", "../")}">
+    <video autoplay muted loop playsinline preload="metadata" poster="{video_poster_url("assets/img/old-site/leopold_croizet.jpg", "../")}">
       {video_source_tags("assets/video/people-fond.mp4", "../")}
     </video>
     <div>
@@ -5196,9 +5236,6 @@ def technical_product_facts_page_en():
   <meta property="og:type" content="website">
   <meta property="og:image" content="{DOMAIN}/assets/img/brand/hero-old-vine.jpg">
   <link rel="icon" href="../assets/img/fav_organic.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css?v=20260701-detail01">
   {json_ld(schema_items)}
 </head>
@@ -5389,9 +5426,14 @@ def sync_product_buy_links(html, product, lang):
 
 
 def sync_css_version(html):
-    return re.sub(
+    html = re.sub(
         r'(assets/css/styles\.css\?v=)[^"]+',
         rf'\g<1>{CSS_VERSION}',
+        html,
+    )
+    return re.sub(
+        r'(assets/css/cocktails\.css\?v=)[^"]+',
+        rf'\g<1>{COCKTAILS_CSS_VERSION}',
         html,
     )
 
@@ -5404,15 +5446,28 @@ def sync_js_version(html):
     )
 
 
+GOOGLE_FONT_LINK_RE = re.compile(
+    r'\n\s*<link rel="preconnect" href="https://fonts\.googleapis\.com">'
+    r'\n\s*<link rel="preconnect" href="https://fonts\.gstatic\.com" crossorigin>'
+    r'\n\s*<link href="https://fonts\.googleapis\.com/css2\?[^"]+" rel="stylesheet">',
+    re.IGNORECASE,
+)
+
+
+def remove_google_font_includes(html):
+    return GOOGLE_FONT_LINK_RE.sub("", html)
+
+
 def normalize_generated_asset_versions():
     excluded_parts = {".git", "ancien-site-wordpress", "node_modules", "output"}
-    for path in ROOT.rglob("*.html"):
-        if any(part in excluded_parts for part in path.parts):
-            continue
-        html = path.read_text(encoding="utf-8")
-        updated = sync_js_version(sync_css_version(html))
-        if updated != html:
-            path.write_text(updated, encoding="utf-8")
+    for pattern in ("*.html", "*.php"):
+        for path in ROOT.rglob(pattern):
+            if any(part in excluded_parts for part in path.parts):
+                continue
+            html = path.read_text(encoding="utf-8")
+            updated = remove_google_font_includes(sync_js_version(sync_css_version(html)))
+            if updated != html:
+                path.write_text(updated, encoding="utf-8")
 
 
 def generated_page_paths():
@@ -6192,7 +6247,28 @@ def legal_page(path="mentions-legales.html", lang="fr"):
 
 
 def write_css():
-    css = r''':root {
+    css = r'''@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat-latin-variable.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("../fonts/raleway-latin-variable.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto Slab";
+  src: url("../fonts/roboto-slab-latin-variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+:root {
   --ink: #17130f;
   --muted: #6b5d50;
   --paper: #ece8dc;
@@ -7159,6 +7235,24 @@ p { margin: 18px 0 0; }
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+@media (prefers-reduced-data: reduce) {
+  .hero-bg-video,
+  .home-video-signature video,
+  .legacy-video-block video {
+    display: none;
+  }
+  .video-hero {
+    background-image: var(--hero-image);
+    background-position: center;
+    background-size: cover;
+  }
+  .home-video-signature,
+  .legacy-video-block {
+    background-image: var(--video-poster);
+    background-position: center;
+    background-size: cover;
+  }
 }
 .legacy-video-block::after {
   content: "";
@@ -8626,11 +8720,37 @@ thead th {
     background-position: center center, center center;
     background-size: cover, cover;
   }
+  .home-page .page-hero .narrow {
+    width: min(350px, calc(100% - 40px));
+    max-width: 350px;
+  }
   .home-page .page-hero h1 {
-    font-size: clamp(2.15rem, 11vw, 3rem);
+    max-width: 10ch;
+    margin-inline: 0;
+    overflow-wrap: anywhere;
+    font-size: clamp(2rem, 9vw, 2.45rem);
+    line-height: 1.04;
+  }
+  .home-page .page-hero .lead {
+    max-width: 320px;
+    margin-inline: 0;
+    font-size: .95rem;
+    line-height: 1.35;
   }
   .home-page .page-hero .actions {
     justify-content: flex-start;
+  }
+  .hero-product-links ul {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    row-gap: 6px;
+  }
+  .hero-product-links a,
+  .hero-product-links li:not(:last-child)::after {
+    font-size: 1.55rem;
+  }
+  .hero-product-links li:not(:last-child)::after {
+    margin: 0 12px;
   }
   .old-panel,
   .old-panel.large {

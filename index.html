@@ -20,10 +20,9 @@
   <meta property="og:type" content="website">
   <meta property="og:image" content="https://cognac-esprit-organic.com/assets/img/brand/hero-vine-02.jpg">
   <link rel="icon" href="assets/img/fav_organic.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/styles.css?v=20260704-assets01">
+  <link rel="preload" as="image" href="assets/img/brand/hero-vine-02-web.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/img/old-site/img_home_01-web.webp" fetchpriority="high">
+  <link rel="stylesheet" href="assets/css/styles.css?v=20260704-assets04">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Cognac Esprit Organic","url":"https://cognac-esprit-organic.com/","email":"Cognac@mdpierre.com","telephone":"+33 5 45 35 88 10","@id":"https://cognac-esprit-organic.com/#organization","address":{"@type":"PostalAddress","streetAddress":"30 Rue d'Angoulême","postalCode":"16200","addressLocality":"Triac-Lautrait","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"}}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://cognac-esprit-organic.com/"}],"@id":"https://cognac-esprit-organic.com/#breadcrumb"}</script>
 </head>
@@ -51,7 +50,7 @@
   <main id="contenu">
 
     <section class="page-hero" style="--hero-image: image-set(url('/assets/img/brand/hero-vine-02-web.webp') type('image/webp'), url('/assets/img/brand/hero-vine-02.jpg') type('image/jpeg'))">
-      <div class="home-hero-slideshow" aria-hidden="true"><span class="is-active" style="background-image:url('assets/img/old-site/img_home_01.jpg')"></span><span class="" style="background-image:url('assets/img/old-site/img_home_02.jpg')"></span><span class="" style="background-image:url('assets/img/old-site/img_home_03.jpg')"></span></div>
+      <div class="home-hero-slideshow" aria-hidden="true"><span class="is-active" style="background-image:image-set(url('assets/img/old-site/img_home_01-web.webp') type('image/webp'), url('assets/img/old-site/img_home_01.jpg') type('image/jpeg'))"></span><span class="" style="background-image:image-set(url('assets/img/old-site/img_home_02-web.webp') type('image/webp'), url('assets/img/old-site/img_home_02.jpg') type('image/jpeg'))"></span><span class="" style="background-image:image-set(url('assets/img/old-site/img_home_03-web.webp') type('image/webp'), url('assets/img/old-site/img_home_03.jpg') type('image/jpeg'))"></span></div>
 
       <div class="section-inner narrow">
         <p class="eyebrow">Cognac Esprit Organic</p>
@@ -68,7 +67,7 @@
     <span class="panel-copy haut-gauche"><strong data-fr>Toute la nature de nos Cognacs</strong><strong data-en>All the nature of our Cognacs</strong><small data-fr>Organique et sans complexe</small><small data-en>Organic and uncomplicated</small></span>
   </a>
   <a class="old-panel image-panel" href="cocktails.html">
-    <img src="assets/img/old-site/img_home_cocktail_01.jpg" alt="Cocktail Cognac Esprit Organic" loading="lazy" decoding="async" width="1600" height="1064">
+    <picture><source srcset="assets/img/old-site/img_home_cocktail_01-web.webp" type="image/webp"><img src="assets/img/old-site/img_home_cocktail_01.jpg" alt="Cocktail Cognac Esprit Organic" loading="lazy" decoding="async" width="1600" height="1064"></picture>
     <span class="panel-copy haut-gauche"><strong data-fr>Accompagner nos Cognacs</strong><strong data-en>Pair our Cognacs</strong><small data-fr>Laisser courir l'inspiration</small><small data-en>Let inspiration flow</small></span>
   </a>
 </section>
@@ -94,8 +93,8 @@
     <span class="panel-copy bas-droit"><strong data-fr>L'esprit organic</strong><strong data-en>The organic spirit</strong><small data-fr>Notre histoire</small><small data-en>Our story</small></span>
   </a>
 </section>
-<a class="home-video-signature" href="demarche/" aria-label="La production - Maîtriser et laisser faire">
-  <video autoplay muted loop playsinline preload="metadata" poster="assets/img/brand/home-video-poster.jpg">
+<a class="home-video-signature" href="demarche/" aria-label="La production - Maîtriser et laisser faire" style="--video-poster: image-set(url('assets/img/brand/home-video-poster-web.webp') type('image/webp'), url('assets/img/brand/home-video-poster.jpg') type('image/jpeg'))">
+  <video autoplay muted loop playsinline preload="metadata" poster="assets/img/brand/home-video-poster-web.webp">
 
       <source src="assets/video/home-nature-mobile.m4v" type="video/mp4" media="(max-width: 767px)">
       <source src="assets/video/home-nature.mp4" type="video/mp4">

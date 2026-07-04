@@ -1,2 +1,4 @@
 newsletter-data/subscriptions.csv
 outputs/
+output/
+.playwright-cli/

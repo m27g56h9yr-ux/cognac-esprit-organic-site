@@ -1,3 +1,24 @@
+@font-face {
+  font-family: "Montserrat";
+  src: url("../fonts/montserrat-latin-variable.woff2") format("woff2");
+  font-weight: 300 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Raleway";
+  src: url("../fonts/raleway-latin-variable.woff2") format("woff2");
+  font-weight: 200 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Roboto Slab";
+  src: url("../fonts/roboto-slab-latin-variable.woff2") format("woff2");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
 :root {
   --ink: #17130f;
   --muted: #6b5d50;
@@ -965,6 +986,24 @@ p { margin: 18px 0 0; }
   height: 100%;
   object-fit: cover;
   object-position: center;
+}
+@media (prefers-reduced-data: reduce) {
+  .hero-bg-video,
+  .home-video-signature video,
+  .legacy-video-block video {
+    display: none;
+  }
+  .video-hero {
+    background-image: var(--hero-image);
+    background-position: center;
+    background-size: cover;
+  }
+  .home-video-signature,
+  .legacy-video-block {
+    background-image: var(--video-poster);
+    background-position: center;
+    background-size: cover;
+  }
 }
 .legacy-video-block::after {
   content: "";
@@ -2432,11 +2471,37 @@ thead th {
     background-position: center center, center center;
     background-size: cover, cover;
   }
+  .home-page .page-hero .narrow {
+    width: min(350px, calc(100% - 40px));
+    max-width: 350px;
+  }
   .home-page .page-hero h1 {
-    font-size: clamp(2.15rem, 11vw, 3rem);
+    max-width: 10ch;
+    margin-inline: 0;
+    overflow-wrap: anywhere;
+    font-size: clamp(2rem, 9vw, 2.45rem);
+    line-height: 1.04;
+  }
+  .home-page .page-hero .lead {
+    max-width: 320px;
+    margin-inline: 0;
+    font-size: .95rem;
+    line-height: 1.35;
   }
   .home-page .page-hero .actions {
     justify-content: flex-start;
+  }
+  .hero-product-links ul {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    row-gap: 6px;
+  }
+  .hero-product-links a,
+  .hero-product-links li:not(:last-child)::after {
+    font-size: 1.55rem;
+  }
+  .hero-product-links li:not(:last-child)::after {
+    margin: 0 12px;
   }
   .old-panel,
   .old-panel.large {

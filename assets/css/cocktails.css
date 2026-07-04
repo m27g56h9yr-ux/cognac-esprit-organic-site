@@ -25,9 +25,14 @@
   inset: 0;
 }
 
+.cocktail-hero-image picture,
 .cocktail-hero-image img {
+  display: block;
   width: 100%;
   height: 100%;
+}
+
+.cocktail-hero-image img {
   object-fit: cover;
   filter: saturate(.92) brightness(.55);
 }
@@ -86,12 +91,12 @@
 
 .cocktail-intro-luxury::before {
   left: 0;
-  background-image: url('../img/old-site/illustration-vigne-left.png');
+  background-image: url('../img/floral-01.svg');
 }
 
 .cocktail-intro-luxury::after {
   right: 0;
-  background-image: url('../img/old-site/illustration-vigne-right.png');
+  background-image: url('../img/floral-03.svg');
 }
 
 .intro-label {
@@ -207,11 +212,15 @@
   pointer-events: none;
 }
 
+.cocktail-art picture,
 .cocktail-art img {
+  display: block;
   width: 100%;
   height: 100%;
   min-height: clamp(560px, 72vh, 700px);
-  display: block;
+}
+
+.cocktail-art img {
   object-fit: cover;
   object-position: center center;
   filter: saturate(1.02) contrast(1.03);
@@ -224,6 +233,7 @@
   min-height: 0;
 }
 
+.cocktail-slideshow picture,
 .cocktail-slideshow .cocktail-slide {
   position: absolute;
   inset: 0;
@@ -231,10 +241,18 @@
   animation: cocktail-slide-fade 6s ease-in-out infinite;
 }
 
+.cocktail-slideshow picture .cocktail-slide {
+  position: static;
+  opacity: 1;
+  animation: none;
+}
+
+.cocktail-slideshow picture:first-child,
 .cocktail-slideshow .cocktail-slide-current {
   position: absolute;
 }
 
+.cocktail-slideshow picture:nth-child(2),
 .cocktail-slideshow .cocktail-slide-next {
   animation-delay: 3s;
 }
@@ -256,11 +274,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .cocktail-slideshow picture,
   .cocktail-slideshow .cocktail-slide {
     animation: none;
     opacity: 1;
   }
 
+  .cocktail-slideshow picture:nth-child(2),
   .cocktail-slideshow .cocktail-slide-next {
     display: none;
   }
@@ -619,6 +639,7 @@
   }
 
   .cocktail-art,
+  .cocktail-art picture,
   .cocktail-art img {
     min-height: clamp(500px, 66vh, 620px);
   }
@@ -711,6 +732,7 @@
   }
 
   .cocktail-art,
+  .cocktail-art picture,
   .cocktail-art img {
     min-height: 560px;
   }
@@ -741,6 +763,7 @@
   }
 
   .cocktail-art,
+  .cocktail-art picture,
   .cocktail-art img {
     min-height: 480px;
   }

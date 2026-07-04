@@ -397,6 +397,113 @@ PRODUCT_BUY_LINKS = {
     ],
 }
 
+SELLER_TRACKING_UPDATED_AT = "4 juillet 2026"
+
+SELLER_TRACKING_ROWS = [
+    {
+        "market": "Québec",
+        "seller": "SAQ",
+        "product": "Conviction VSOP",
+        "source_url": "https://www.saq.com/fr/15548546",
+        "schema_status": "Product JSON-LD détecté",
+        "offers": {
+            "@type": "Offer",
+            "price": "88.25",
+            "priceCurrency": "CAD",
+            "availability": "https://schema.org/OutOfStock",
+            "url": "https://www.saq.com/fr/15548546",
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {
+                "@type": "LiquorStore",
+                "name": "SAQ",
+            },
+        },
+        "review": None,
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "0,0",
+            "ratingCount": None,
+            "reviewCount": None,
+        },
+        "notes": "Bloc AggregateRating publié par SAQ, mais sans compteur exploitable.",
+    },
+    {
+        "market": "Québec",
+        "seller": "SAQ",
+        "product": "XXO",
+        "source_url": "https://www.saq.com/fr/15263655",
+        "schema_status": "Product JSON-LD détecté",
+        "offers": {
+            "@type": "Offer",
+            "price": "295.75",
+            "priceCurrency": "CAD",
+            "availability": "https://schema.org/OutOfStock",
+            "url": "https://www.saq.com/fr/15263655",
+            "itemCondition": "https://schema.org/NewCondition",
+            "seller": {
+                "@type": "LiquorStore",
+                "name": "SAQ",
+            },
+        },
+        "review": None,
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "5,0",
+            "ratingCount": "1",
+            "reviewCount": "1",
+        },
+        "notes": "SAQ publie une note agrégée, sans objet Review détaillé détecté.",
+    },
+    {
+        "market": "Danemark",
+        "seller": "Vinoble",
+        "product": "Conviction VSOP",
+        "source_url": "https://vinoble.dk/vare/cognac-conviction-vsop-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/",
+        "schema_status": "Aucun Product/Offer/Review/AggregateRating détecté",
+        "offers": None,
+        "review": None,
+        "aggregateRating": None,
+        "notes": "La page expose des données WebPage/Breadcrumb/Image/Organization, mais pas de Product rich result exploitable.",
+    },
+    {
+        "market": "Danemark",
+        "seller": "Vinoble",
+        "product": "Transmission XO",
+        "source_url": "https://vinoble.dk/vare/cognac-transmission-xo-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/",
+        "schema_status": "Aucun Product/Offer/Review/AggregateRating détecté",
+        "offers": None,
+        "review": None,
+        "aggregateRating": None,
+        "notes": "La page expose des données WebPage/Breadcrumb/Image/Organization, mais pas de Product rich result exploitable.",
+    },
+    {
+        "market": "Danemark",
+        "seller": "Vinoble",
+        "product": "Pineau blanc",
+        "source_url": "https://vinoble.dk/vare/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres/",
+        "schema_status": "Aucun Product/Offer/Review/AggregateRating détecté",
+        "offers": None,
+        "review": None,
+        "aggregateRating": None,
+        "notes": "La page expose des données WebPage/Breadcrumb/Image/Organization, mais pas de Product rich result exploitable.",
+    },
+    {
+        "market": "Norvège",
+        "seller": "Vinmonopolet",
+        "product": "Conviction VSOP",
+        "source_url": "https://www.vinmonopolet.no/Land/Frankrike/Cognac-Tradisjonell/Fins-Bois/Esprit-Organic-Cognac-Conviction-VSOP/p/15346001",
+        "schema_status": "Product JSON-LD détecté",
+        "offers": {
+            "@type": "Offer",
+            "price": 500,
+            "priceCurrency": "NOK",
+        },
+        "review": None,
+        "aggregateRating": None,
+        "notes": "Offer détectée, sans availability, Review ni AggregateRating dans le JSON-LD publié.",
+    },
+]
+
 PRODUCT_TRADE_PDFS = {
     "fondation-vs": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf",
@@ -3295,6 +3402,126 @@ def technical_product_facts_page():
         page_class="product-data-page",
         head_extra=technical_alternate_links("fiches-techniques-produits.html"),
     )
+
+
+def seller_tracking_value(value):
+    if value is None:
+        return '<span class="seller-empty">Non exposé</span>'
+    return f"<pre><code>{escape(json.dumps(value, ensure_ascii=False, indent=2))}</code></pre>"
+
+
+def seller_tracking_page(path="suivi-vendeurs.html"):
+    rows = "\n".join(
+        f"""
+        <tr>
+          <td>{escape(row["market"])}</td>
+          <td>{escape(row["seller"])}</td>
+          <td>{escape(row["product"])}</td>
+          <td><a href="{escape(row["source_url"], quote=True)}" target="_blank" rel="noopener noreferrer">Page source</a></td>
+          <td>{escape(row["schema_status"])}</td>
+          <td>{seller_tracking_value(row["offers"])}</td>
+          <td>{seller_tracking_value(row["review"])}</td>
+          <td>{seller_tracking_value(row["aggregateRating"])}</td>
+          <td>{escape(row["notes"])}</td>
+        </tr>"""
+        for row in SELLER_TRACKING_ROWS
+    )
+    raw_data = json.dumps(
+        {
+            "updatedAt": SELLER_TRACKING_UPDATED_AT,
+            "rows": SELLER_TRACKING_ROWS,
+        },
+        ensure_ascii=False,
+        indent=2,
+    )
+    script_data = raw_data.replace("</", "<\\/")
+    return clean_html(f"""<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Suivi vendeurs | Cognac Esprit Organic</title>
+  <meta name="description" content="Page technique de suivi des données structurées publiées par les vendeurs externes Cognac Esprit Organic.">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <link rel="canonical" href="{page_url(path)}">
+  <link rel="icon" href="assets/img/fav_organic.png">
+  <style>
+    :root {{
+      --ink: #17130f;
+      --muted: #6b5d50;
+      --paper: #f7f3e8;
+      --panel: #ffffff;
+      --line: rgba(94, 61, 35, .18);
+      --brand: #704019;
+      --soft: #ebe5d5;
+    }}
+    * {{ box-sizing: border-box; }}
+    body {{
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Arial, sans-serif;
+      line-height: 1.5;
+    }}
+    main {{ width: min(1440px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 52px; }}
+    header {{ display: grid; gap: 8px; margin-bottom: 24px; }}
+    h1 {{ margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 4vw, 3.8rem); font-weight: 500; }}
+    p {{ max-width: 920px; margin: 0; color: var(--muted); }}
+    .seller-meta {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }}
+    .seller-meta span {{ padding: 7px 10px; border: 1px solid var(--line); background: var(--soft); font-size: .82rem; font-weight: 700; }}
+    .seller-panel {{ overflow-x: auto; border: 1px solid var(--line); background: var(--panel); }}
+    table {{ width: 100%; min-width: 1220px; border-collapse: collapse; font-size: .88rem; }}
+    th, td {{ vertical-align: top; padding: 12px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: left; }}
+    th {{ position: sticky; top: 0; background: #ded6c4; color: #2d2117; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }}
+    td:first-child, td:nth-child(2), td:nth-child(3) {{ font-weight: 700; }}
+    a {{ color: var(--brand); font-weight: 700; }}
+    pre {{ max-width: 340px; margin: 0; white-space: pre-wrap; word-break: break-word; font-size: .78rem; line-height: 1.35; }}
+    code {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
+    .seller-empty {{ display: inline-block; color: #756758; font-style: italic; }}
+    details {{ margin-top: 22px; border: 1px solid var(--line); background: var(--panel); }}
+    summary {{ cursor: pointer; padding: 14px 16px; font-weight: 800; }}
+    details pre {{ max-width: none; padding: 0 16px 18px; }}
+  </style>
+  <script type="application/json" id="seller-tracking-data">{script_data}</script>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Suivi vendeurs</h1>
+      <p>Page technique interne. Elle reprend les valeurs structurées actuellement visibles dans les pages distributeurs externes pour <code>offers</code>, <code>review</code> et <code>aggregateRating</code>. Elle n'est pas reliée au reste du site et reste en <code>noindex,nofollow,noarchive</code>.</p>
+      <div class="seller-meta">
+        <span>Dernière extraction : {escape(SELLER_TRACKING_UPDATED_AT)}</span>
+        <span>Portée : SAQ, Vinoble, Vinmonopolet</span>
+        <span>Usage : suivi technique uniquement</span>
+      </div>
+    </header>
+    <section class="seller-panel" aria-label="Données structurées des vendeurs externes">
+      <table>
+        <thead>
+          <tr>
+            <th>Marché</th>
+            <th>Vendeur</th>
+            <th>Produit</th>
+            <th>Source</th>
+            <th>Statut schema</th>
+            <th>offers</th>
+            <th>review</th>
+            <th>aggregateRating</th>
+            <th>Note</th>
+          </tr>
+        </thead>
+        <tbody>{rows}
+        </tbody>
+      </table>
+    </section>
+    <details>
+      <summary>Exporter les données de suivi en JSON</summary>
+      <pre><code>{escape(raw_data)}</code></pre>
+    </details>
+  </main>
+</body>
+</html>
+""")
 
 
 def technical_product_facts_page_en():
@@ -7117,6 +7344,7 @@ def main():
     write("valeurs-nutritionnelles.html", nutrition_page())
     write("fiches-techniques-produits.html", technical_product_facts_page())
     write("en/fiches-techniques-produits.html", technical_product_facts_page_en())
+    write("suivi-vendeurs.html", seller_tracking_page())
     write("mentions-legales.html", legal_page())
     for lang in LOCALIZED_LANGUAGES:
         write(f"{lang}/mentions-legales.html", legal_page(f"{lang}/mentions-legales.html", lang))

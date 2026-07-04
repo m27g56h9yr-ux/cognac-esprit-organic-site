@@ -1323,6 +1323,8 @@ function getVisiblePartnerBuyLink(productSlug, market) {
 
 function refreshPartnerProductSchema() {
   const requestId = ++partnerSchemaRequestId;
+  if (document.body.dataset.disablePartnerSchemaJs === "true") return;
+  if (document.querySelector('script[data-server-partner-product-schema="true"]')) return;
   removePartnerProductSchema();
   const productSlug = getCurrentProductSlug();
   const market = normalizeMarket(document.body.dataset.market || visitorMarket);
@@ -1378,7 +1380,7 @@ function setVisitorMarket(market) {
 
 function loadServerMarket() {
   if (detectConfiguredMarket()) return;
-  fetch("/market.php?format=json&v=20260704-partner-schema01", {
+  fetch("/market.php?format=json&v=20260704-market-seo01", {
     cache: "no-store",
     credentials: "same-origin"
   })

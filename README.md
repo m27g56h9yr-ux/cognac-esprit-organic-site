@@ -38,6 +38,7 @@ Le site est prêt pour la mise en ligne :
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
 - Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.
 - Données produit partenaire : `partner-product-schema.php` relit la page distributeur associée au bouton Acheter visible et renvoie les valeurs `offers`, `review` et `aggregateRating` à injecter dans la page produit.
+- Pages SEO marché : des pages PHP indexables dédiées aux couples produit/distributeur publient aussi ces mêmes données côté serveur, sans dépendre du JavaScript ni de la géolocalisation Googlebot.
 
 ## Géociblage des boutons Acheter
 
@@ -55,6 +56,12 @@ Le fonctionnement est complémentaire :
 4. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
 
 Quand un bouton Acheter devient visible sur une page produit, `assets/js/main.js` appelle `partner-product-schema.php` avec le couple `product` / `market`. L'endpoint relit immédiatement la page partenaire, extrait le meilleur bloc Product JSON-LD disponible, puis le JavaScript injecte un bloc JSON-LD partenaire seulement si au moins une valeur `offers`, `review` ou `aggregateRating` est publiée par le distributeur.
+
+Pour le référencement, le sitemap contient également des pages marché indexables, servies en PHP avec les balises partenaire déjà présentes dans le HTML initial :
+
+- `produits/conviction-vsop-saq.php` et `produits/xxo-saq.php` pour le Québec ;
+- `da/produits/conviction-vsop-vinoble.php`, `da/produits/transmission-xo-vinoble.php` et `da/produits/pineau-vinoble.php` pour le Danemark ;
+- `no/produits/conviction-vsop-vinmonopolet.php` pour la Norvège.
 
 Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
 
@@ -101,6 +108,7 @@ Copier à la racine de l'hébergement OVH :
 - `.htaccess` ;
 - `market.php` ;
 - `partner-product-schema.php` ;
+- `seo-market-product.php` ;
 - `suivi-vendeurs-data.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.

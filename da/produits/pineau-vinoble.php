@@ -1,20 +1,21 @@
+<?php
+require_once __DIR__ . '/../../seo-market-product.php';
+$ceoMarketProduct = ceo_market_fetch_partner_payload('pineau', 'dk', 'https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php');
+?>
 <!doctype html>
 <html lang="da" data-default-lang="da">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Hvid Pineau des Charentes | Cognac Esprit Organic</title>
-  <meta name="description" content="Hvid Pineau Cognac Esprit Organic: Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.">
+  <title>Pineau blanc hos Vinoble | Cognac Esprit Organic</title>
+  <meta name="description" content="Markedsside for Pineau blanc hos Vinoble med serveropdaterede partnerdata.">
   <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://cognac-esprit-organic.com/da/produits/pineau.html">
-  <!-- Locale alternates -->
-  <link rel="alternate" hreflang="fr" href="https://cognac-esprit-organic.com/produits/pineau.html">
-  <link rel="alternate" hreflang="en" href="https://cognac-esprit-organic.com/en/produits/pineau.html">
-  <link rel="alternate" hreflang="da" href="https://cognac-esprit-organic.com/da/produits/pineau.html">
-  <link rel="alternate" hreflang="no" href="https://cognac-esprit-organic.com/no/produits/pineau.html">
-  <link rel="alternate" hreflang="sv" href="https://cognac-esprit-organic.com/sv/produits/pineau.html">
+  <link rel="canonical" href="https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php">
+  <meta name="ceo-market" content="dk">
+  <!-- Market SEO alternates -->
+  <link rel="alternate" hreflang="da-DK" href="https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php">
   <link rel="alternate" hreflang="x-default" href="https://cognac-esprit-organic.com/produits/pineau.html">
-  <!-- /Locale alternates -->
+  <!-- /Market SEO alternates -->
   <meta property="og:title" content="Hvid Pineau des Charentes | Cognac Esprit Organic">
   <meta property="og:description" content="Hvid Pineau Cognac Esprit Organic: Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.">
   <meta property="og:type" content="website">
@@ -25,10 +26,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/styles.css?v=20260704-market-seo01">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Cognac Esprit Organic","url":"https://cognac-esprit-organic.com/","email":"Cognac@mdpierre.com","telephone":"+33 5 45 35 88 10","address":{"@type":"PostalAddress","streetAddress":"30 Rue d'Angoulême","postalCode":"16200","addressLocality":"Triac-Lautrait","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"@id":"https://cognac-esprit-organic.com/#organization"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Forside","item":"https://cognac-esprit-organic.com/da/"},{"@type":"ListItem","position":2,"name":"Hvid Pineau","item":"https://cognac-esprit-organic.com/da/produits/pineau.html"}],"@id":"https://cognac-esprit-organic.com/da/produits/pineau.html#breadcrumb"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Hvid Pineau","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"category":"Pineau des Charentes","image":"https://cognac-esprit-organic.com/assets/img/products/pineau.jpg","description":"Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.","@id":"https://cognac-esprit-organic.com/da/produits/pineau.html#product","manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"additionalProperty":[{"@type":"PropertyValue","name":"Oprindelse","value":"Frankrig"},{"@type":"PropertyValue","name":"Indhold","value":"750 ml"},{"@type":"PropertyValue","name":"Alkoholprocent","value":"17,5 % vol"},{"@type":"PropertyValue","name":"Druesorter","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"Mund","value":"Brioche, frisk druesaft, pære, sveske, vanilje"},{"@type":"PropertyValue","name":"Farve","value":"Gyldengul, strågul, klar"},{"@type":"PropertyValue","name":"Næse","value":"Udarbejdet og balanceret. Fin sammensætning af frugtige noter, friske druer og pære, med vanilje"},{"@type":"PropertyValue","name":"Gane","value":"Rig, fyldig, kompleks"},{"@type":"PropertyValue","name":"Afslutning","value":"Frugtig, intens, fyldig"},{"@type":"PropertyValue","name":"Dokumenteret udmærkelse","value":"Officielt resultat fra Concours Mondial de Bruxelles 2025 for Pineau des Charentes Esprit Organic 2011"},{"@type":"PropertyValue","name":"GTIN","value":"3322870002227"}],"award":"Sølvmedalje - Concours Mondial de Bruxelles 2025","size":"750 ml","subjectOf":{"@type":"DigitalDocument","name":"Hvid Pineau smageark","encodingFormat":"application/pdf","url":"https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-da.pdf"},"gtin13":"3322870002227"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Forside","item":"https://cognac-esprit-organic.com/da/"},{"@type":"ListItem","position":2,"name":"Hvid Pineau","item":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php"}],"@id":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php#breadcrumb"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Hvid Pineau","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"category":"Pineau des Charentes","image":"https://cognac-esprit-organic.com/assets/img/products/pineau.jpg","description":"Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.","@id":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php#product","manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"additionalProperty":[{"@type":"PropertyValue","name":"Oprindelse","value":"Frankrig"},{"@type":"PropertyValue","name":"Indhold","value":"750 ml"},{"@type":"PropertyValue","name":"Alkoholprocent","value":"17,5 % vol"},{"@type":"PropertyValue","name":"Druesorter","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"Mund","value":"Brioche, frisk druesaft, pære, sveske, vanilje"},{"@type":"PropertyValue","name":"Farve","value":"Gyldengul, strågul, klar"},{"@type":"PropertyValue","name":"Næse","value":"Udarbejdet og balanceret. Fin sammensætning af frugtige noter, friske druer og pære, med vanilje"},{"@type":"PropertyValue","name":"Gane","value":"Rig, fyldig, kompleks"},{"@type":"PropertyValue","name":"Afslutning","value":"Frugtig, intens, fyldig"},{"@type":"PropertyValue","name":"Dokumenteret udmærkelse","value":"Officielt resultat fra Concours Mondial de Bruxelles 2025 for Pineau des Charentes Esprit Organic 2011"},{"@type":"PropertyValue","name":"GTIN","value":"3322870002227"}],"award":"Sølvmedalje - Concours Mondial de Bruxelles 2025","size":"750 ml","subjectOf":{"@type":"DigitalDocument","name":"Hvid Pineau smageark","encodingFormat":"application/pdf","url":"https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-da.pdf"},"gtin13":"3322870002227","url":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php"}</script>
+  <?php echo ceo_market_partner_schema_script($ceoMarketProduct); ?>
 </head>
-<body data-lang="da" class="product-page">
+<body data-market="dk" data-disable-partner-schema-js="true" data-lang="da" class="product-page">
   <a class="skip-link" href="#contenu">Gå til indhold</a>
   <header class="site-header">
     <nav class="nav" aria-label="Primær navigation">
@@ -70,6 +72,7 @@
       <p data-en>Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.</p>
       <p class="product-story">Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.</p>
       <a class="product-buy-link denmark-buy-link" href="https://vinoble.dk/vare/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres/" target="_blank" rel="noopener" data-product-slug="pineau" data-partner-market="dk" data-partner-seller="Vinoble" data-partner-schema-url="https://vinoble.dk/vare/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres/">Køb hos Vinoble</a>
+      <?php echo ceo_market_partner_offer_html($ceoMarketProduct); ?>
       <div class="product-awards">
         <a class="product-award-link" href="https://resultats.concoursmondial.com/fr/resultats/2025/240534-pineau-des-charentes-esprit-organic-2011" target="_blank" rel="noopener noreferrer" aria-label="Officielt Concours Mondial de Bruxelles 2025-resultat for Hvid Pineau">
           <span class="product-award-visual">

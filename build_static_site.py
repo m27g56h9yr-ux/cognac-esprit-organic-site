@@ -7,8 +7,8 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260704-market-choice01"
-JS_VERSION = "20260704-partner-schema01"
+CSS_VERSION = "20260704-market-seo01"
+JS_VERSION = "20260704-market-seo01"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
 LANGUAGE_MARKET_OPTIONS = (
@@ -571,6 +571,27 @@ SELLER_TRACKING_SCHEMA_FIELDS = {
         ("ratingCount", "Nombre de notes"),
         ("reviewCount", "Nombre d'avis"),
     ],
+}
+
+MARKET_SEO_CONFIG = {
+    "qc": {
+        "lang_prefix": "",
+        "hreflang": "fr-CA",
+        "title_word": "chez",
+        "description": "Page de référencement marché pour {product} : bouton d'achat {seller} et données structurées partenaire actualisées côté serveur.",
+    },
+    "dk": {
+        "lang_prefix": "da/",
+        "hreflang": "da-DK",
+        "title_word": "hos",
+        "description": "Markedsside for {product} hos {seller} med serveropdaterede partnerdata.",
+    },
+    "no": {
+        "lang_prefix": "no/",
+        "hreflang": "nb-NO",
+        "title_word": "hos",
+        "description": "Markedsside for {product} hos {seller} med serveroppdaterte partnerdata.",
+    },
 }
 
 
@@ -4400,6 +4421,336 @@ ceo_json_response([
     return template.replace("__SELLER_TRACKING_SEED__", seed)
 
 
+def seller_slug(seller: str) -> str:
+    normalized = seller.lower()
+    normalized = normalized.replace("ø", "o").replace("æ", "ae").replace("å", "a")
+    normalized = re.sub(r"[^a-z0-9]+", "-", normalized).strip("-")
+    return normalized or "vendeur"
+
+
+def market_seo_entries(product_filter=None):
+    entries = []
+    products = {product["slug"]: product for product in PRODUCTS}
+    for slug, links in PRODUCT_BUY_LINKS.items():
+        product = products.get(slug)
+        if not product or (product_filter and slug != product_filter):
+            continue
+        for link in links:
+            market = link.get("market_key", "")
+            config = MARKET_SEO_CONFIG.get(market)
+            if not config:
+                continue
+            seller = link.get("seller", "")
+            seller_path = seller_slug(seller)
+            lang_prefix = config["lang_prefix"]
+            path = f"{lang_prefix}produits/{slug}-{seller_path}.php"
+            source_path = f"{lang_prefix}produits/{slug}.html" if lang_prefix else f"produits/{slug}.html"
+            entries.append({
+                "product": product,
+                "link": link,
+                "market": market,
+                "seller": seller,
+                "seller_slug": seller_path,
+                "path": path,
+                "source_path": source_path,
+                "url": page_url(path),
+                "config": config,
+            })
+    return entries
+
+
+def market_seo_alternate_links(product):
+    default_url = page_url(f"produits/{product['slug']}.html")
+    alternates = [
+        '<!-- Market SEO alternates -->',
+        *(
+            f'<link rel="alternate" hreflang="{entry["config"]["hreflang"]}" href="{entry["url"]}">'
+            for entry in market_seo_entries(product["slug"])
+        ),
+        f'<link rel="alternate" hreflang="x-default" href="{default_url}">',
+        '<!-- /Market SEO alternates -->',
+    ]
+    return "\n  ".join(alternates)
+
+
+def patch_market_json_ld(html: str, entry: dict) -> str:
+    old_url = page_url(entry["source_path"])
+    new_url = entry["url"]
+
+    def patch_node(node):
+        if isinstance(node, list):
+            return [patch_node(item) for item in node]
+        if not isinstance(node, dict):
+            return new_url if node == old_url else node
+        patched = {}
+        for key, value in node.items():
+            if isinstance(value, str):
+                if value == old_url:
+                    value = new_url
+                elif value == old_url + "#product":
+                    value = new_url + "#product"
+                elif value == old_url + "#breadcrumb":
+                    value = new_url + "#breadcrumb"
+            patched[key] = patch_node(value)
+        if patched.get("@type") == "Product" and patched.get("@id") == new_url + "#product":
+            patched["url"] = new_url
+        return patched
+
+    def replace(match):
+        try:
+            data = json.loads(match.group(1))
+        except json.JSONDecodeError:
+            return match.group(0)
+        patched = patch_node(data)
+        return (
+            '<script type="application/ld+json">'
+            + json.dumps(patched, ensure_ascii=False, separators=(",", ":"))
+            + "</script>"
+        )
+
+    return re.sub(r'<script type="application/ld\+json">(.*?)</script>', replace, html)
+
+
+def market_seo_helper_php():
+    return r"""<?php
+declare(strict_types=1);
+
+if (!defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+    define('JSON_INVALID_UTF8_SUBSTITUTE', 0);
+}
+
+function ceo_market_html($value): string
+{
+    return htmlspecialchars((string) $value, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+}
+
+function ceo_market_is_assoc(array $value): bool
+{
+    if ($value === []) {
+        return false;
+    }
+    return array_keys($value) !== range(0, count($value) - 1);
+}
+
+function ceo_market_first_object($value): array
+{
+    if (!is_array($value)) {
+        return [];
+    }
+    if (ceo_market_is_assoc($value)) {
+        return $value;
+    }
+    foreach ($value as $item) {
+        if (is_array($item)) {
+            return $item;
+        }
+    }
+    return [];
+}
+
+function ceo_market_fetch_partner_payload(string $product, string $market, string $pageUrl): array
+{
+    $endpoint = 'https://cognac-esprit-organic.com/partner-product-schema.php?product=' . rawurlencode($product) . '&market=' . rawurlencode($market) . '&ts=' . rawurlencode((string) time());
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'timeout' => 14,
+            'ignore_errors' => true,
+            'header' => "Accept: application/json\r\nUser-Agent: CognacEspritOrganicMarketSeo/1.0 (+https://cognac-esprit-organic.com/)\r\n",
+        ],
+    ]);
+    $json = @file_get_contents($endpoint, false, $context);
+    $payload = is_string($json) ? json_decode($json, true) : null;
+    if (!is_array($payload)) {
+        return [
+            'ok' => false,
+            'hasSchema' => false,
+            'seller' => '',
+            'market' => $market,
+            'product' => $product,
+            'schema' => null,
+            'error' => 'Lecture des données partenaire impossible.',
+        ];
+    }
+    if (isset($payload['schema']) && is_array($payload['schema'])) {
+        $payload['schema']['@id'] = $pageUrl . '#product';
+        $payload['schema']['url'] = $pageUrl;
+    }
+    return $payload;
+}
+
+function ceo_market_partner_schema_script(array $payload): string
+{
+    if (($payload['ok'] ?? false) !== true || ($payload['hasSchema'] ?? false) !== true || !isset($payload['schema']) || !is_array($payload['schema'])) {
+        return '';
+    }
+    return '<script type="application/ld+json" data-server-partner-product-schema="true">' .
+        json_encode($payload['schema'], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE) .
+        '</script>';
+}
+
+function ceo_market_labels(string $market): array
+{
+    $labels = [
+        'qc' => [
+            'title' => 'Boutique partenaire',
+            'price' => 'Prix publié',
+            'availability' => 'Disponibilité publiée',
+            'rating' => 'Note publiée',
+            'source' => 'Source partenaire',
+            'no_data' => 'Le distributeur ne publie actuellement pas de données Product/Offer/Review/AggregateRating exploitables sur cette page.',
+            'updated' => 'Actualisé à chaque chargement de la page.',
+        ],
+        'dk' => [
+            'title' => 'Partnerforhandler',
+            'price' => 'Offentliggjort pris',
+            'availability' => 'Offentliggjort tilgængelighed',
+            'rating' => 'Offentliggjort vurdering',
+            'source' => 'Partnerkilde',
+            'no_data' => 'Distributøren offentliggør i øjeblikket ikke brugbare Product/Offer/Review/AggregateRating-data på denne side.',
+            'updated' => 'Opdateres ved hver sideindlæsning.',
+        ],
+        'no' => [
+            'title' => 'Partnerforhandler',
+            'price' => 'Publisert pris',
+            'availability' => 'Publisert tilgjengelighet',
+            'rating' => 'Publisert vurdering',
+            'source' => 'Partnerkilde',
+            'no_data' => 'Distributøren publiserer for øyeblikket ikke brukbare Product/Offer/Review/AggregateRating-data på denne siden.',
+            'updated' => 'Oppdateres ved hver sideinnlasting.',
+        ],
+    ];
+    return $labels[$market] ?? $labels['qc'];
+}
+
+function ceo_market_availability_label(string $availability): string
+{
+    $availability = strtolower($availability);
+    $labels = [
+        'https://schema.org/instock' => 'InStock',
+        'https://schema.org/outofstock' => 'OutOfStock',
+        'https://schema.org/preorder' => 'PreOrder',
+        'https://schema.org/backorder' => 'BackOrder',
+        'https://schema.org/limitedavailability' => 'LimitedAvailability',
+    ];
+    return $labels[$availability] ?? $availability;
+}
+
+function ceo_market_partner_offer_html(array $payload): string
+{
+    $market = (string) ($payload['market'] ?? '');
+    $labels = ceo_market_labels($market);
+    $seller = (string) ($payload['seller'] ?? '');
+    $source = (string) ($payload['source_url'] ?? '');
+    $hasSchema = ($payload['hasSchema'] ?? false) === true;
+    $schema = isset($payload['schema']) && is_array($payload['schema']) ? $payload['schema'] : [];
+    $offer = ceo_market_first_object($schema['offers'] ?? []);
+    $rating = ceo_market_first_object($schema['aggregateRating'] ?? []);
+    $items = [];
+    if (!$hasSchema) {
+        $body = '<p>' . ceo_market_html($labels['no_data']) . '</p>';
+        if ($source !== '') {
+            $body .= '<p><a href="' . ceo_market_html($source) . '" target="_blank" rel="noopener noreferrer">' . ceo_market_html($seller ?: parse_url($source, PHP_URL_HOST)) . '</a></p>';
+        }
+    } else {
+        if (isset($offer['price'])) {
+            $price = ceo_market_html($offer['price']);
+            $currency = isset($offer['priceCurrency']) ? ' ' . ceo_market_html($offer['priceCurrency']) : '';
+            $items[] = '<li><span>' . ceo_market_html($labels['price']) . '</span><strong>' . $price . $currency . '</strong></li>';
+        }
+        if (isset($offer['availability'])) {
+            $items[] = '<li><span>' . ceo_market_html($labels['availability']) . '</span><strong>' . ceo_market_html(ceo_market_availability_label((string) $offer['availability'])) . '</strong></li>';
+        }
+        if (isset($rating['ratingValue'])) {
+            $count = $rating['reviewCount'] ?? $rating['ratingCount'] ?? null;
+            $countText = $count ? ' (' . ceo_market_html($count) . ')' : '';
+            $items[] = '<li><span>' . ceo_market_html($labels['rating']) . '</span><strong>' . ceo_market_html($rating['ratingValue']) . $countText . '</strong></li>';
+        }
+        if ($source !== '') {
+            $items[] = '<li><span>' . ceo_market_html($labels['source']) . '</span><strong><a href="' . ceo_market_html($source) . '" target="_blank" rel="noopener noreferrer">' . ceo_market_html($seller ?: parse_url($source, PHP_URL_HOST)) . '</a></strong></li>';
+        }
+        $body = $items
+            ? '<ul>' . implode('', $items) . '</ul>'
+            : '<p>' . ceo_market_html($labels['no_data']) . '</p>';
+    }
+    return '<section class="partner-offer-panel" aria-label="' . ceo_market_html($labels['title']) . '">' .
+        '<p class="eyebrow">' . ceo_market_html($labels['title']) . '</p>' .
+        $body .
+        '<p class="partner-offer-note">' . ceo_market_html($labels['updated']) . '</p>' .
+        '</section>';
+}
+"""
+
+
+def market_seo_page(entry: dict) -> str:
+    source = ROOT / entry["source_path"]
+    html = source.read_text(encoding="utf-8")
+    product = entry["product"]
+    market = entry["market"]
+    seller = entry["seller"]
+    url = entry["url"]
+    prefix = rel_prefix(entry["path"])
+    require_path = prefix + "seo-market-product.php"
+    description = entry["config"]["description"].format(product=product["name"], seller=seller)
+    title = f'{product["name"]} {entry["config"]["title_word"]} {seller} | Cognac Esprit Organic'
+
+    html = patch_market_json_ld(html, entry)
+    html = re.sub(r'<title>.*?</title>', f"<title>{escape(title)}</title>", html, count=1)
+    html = re.sub(
+        r'<meta name="description" content="[^"]*">',
+        f'<meta name="description" content="{escape(description, quote=True)}">',
+        html,
+        count=1,
+    )
+    html = re.sub(
+        r'<link rel="canonical" href="[^"]+">',
+        f'<link rel="canonical" href="{url}">',
+        html,
+        count=1,
+    )
+    html = re.sub(
+        r'\n\s*<!-- Locale alternates -->[\s\S]*?<!-- /Locale alternates -->',
+        "\n  " + market_seo_alternate_links(product),
+        html,
+        count=1,
+    )
+    html = html.replace(
+        f'<link rel="canonical" href="{url}">',
+        f'<link rel="canonical" href="{url}">\n  <meta name="ceo-market" content="{escape(market, quote=True)}">',
+        1,
+    )
+    html = re.sub(
+        r'<body\b([^>]*)>',
+        lambda match: f'<body data-market="{escape(market, quote=True)}" data-disable-partner-schema-js="true"{match.group(1)}>',
+        html,
+        count=1,
+    )
+    html = re.sub(
+        r'((?:\n\s*<a class="product-buy-link[^>]*>[\s\S]*?</a>)+)',
+        r'\1' + "\n      <?php echo ceo_market_partner_offer_html($ceoMarketProduct); ?>",
+        html,
+        count=1,
+    )
+    html = html.replace(
+        "</head>",
+        "  <?php echo ceo_market_partner_schema_script($ceoMarketProduct); ?>\n</head>",
+        1,
+    )
+    bootstrap = (
+        "<?php\n"
+        f"require_once __DIR__ . '/{require_path}';\n"
+        f"$ceoMarketProduct = ceo_market_fetch_partner_payload('{product['slug']}', '{market}', '{url}');\n"
+        "?>\n"
+    )
+    return bootstrap + html
+
+
+def write_market_seo_pages():
+    write("seo-market-product.php", market_seo_helper_php())
+    for entry in market_seo_entries():
+        write(entry["path"], market_seo_page(entry))
+
+
 def seller_tracking_page(path="suivi-vendeurs.html"):
     rows = "\n".join(
         """
@@ -6960,6 +7311,51 @@ body[data-market="no"] .norway-buy-link {
   border-color: #fff;
   color: var(--product-tone);
 }
+.partner-offer-panel {
+  width: min(100%, 420px);
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,.36);
+  background: rgba(0,0,0,.18);
+  color: #fff;
+}
+.partner-offer-panel .eyebrow {
+  max-width: none;
+  margin: 0 0 10px !important;
+  color: inherit;
+}
+.partner-offer-panel ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.partner-offer-panel li {
+  display: grid;
+  grid-template-columns: minmax(110px, .7fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+}
+.partner-offer-panel li span,
+.partner-offer-note {
+  opacity: .78;
+}
+.partner-offer-panel strong {
+  font-weight: 800;
+}
+.partner-offer-panel a {
+  color: inherit;
+}
+.partner-offer-panel p {
+  max-width: none;
+}
+.partner-offer-note {
+  margin-top: 10px !important;
+  font-size: .7rem !important;
+}
 .product-medals {
   display: flex;
   flex-wrap: wrap;
@@ -8233,6 +8629,7 @@ def write_static_files():
         product_page_path = f"produits/{product['slug']}.html"
         pages.append(product_page_path)
         pages.extend(f"{lang}/{product_page_path}" for lang in localized_languages)
+    pages.extend(entry["path"] for entry in market_seo_entries())
     sitemap_urls = "\n".join(f"  <url><loc>{page_url(p)}</loc></url>" for p in pages)
     write("sitemap.xml", f"""<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
@@ -8407,6 +8804,7 @@ Le site est prêt pour la mise en ligne :
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
 - Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.
 - Données produit partenaire : `partner-product-schema.php` relit la page distributeur associée au bouton Acheter visible et renvoie les valeurs `offers`, `review` et `aggregateRating` à injecter dans la page produit.
+- Pages SEO marché : des pages PHP indexables dédiées aux couples produit/distributeur publient aussi ces mêmes données côté serveur, sans dépendre du JavaScript ni de la géolocalisation Googlebot.
 
 ## Géociblage des boutons Acheter
 
@@ -8424,6 +8822,12 @@ Le fonctionnement est complémentaire :
 4. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
 
 Quand un bouton Acheter devient visible sur une page produit, `assets/js/main.js` appelle `partner-product-schema.php` avec le couple `product` / `market`. L'endpoint relit immédiatement la page partenaire, extrait le meilleur bloc Product JSON-LD disponible, puis le JavaScript injecte un bloc JSON-LD partenaire seulement si au moins une valeur `offers`, `review` ou `aggregateRating` est publiée par le distributeur.
+
+Pour le référencement, le sitemap contient également des pages marché indexables, servies en PHP avec les balises partenaire déjà présentes dans le HTML initial :
+
+- `produits/conviction-vsop-saq.php` et `produits/xxo-saq.php` pour le Québec ;
+- `da/produits/conviction-vsop-vinoble.php`, `da/produits/transmission-xo-vinoble.php` et `da/produits/pineau-vinoble.php` pour le Danemark ;
+- `no/produits/conviction-vsop-vinmonopolet.php` pour la Norvège.
 
 Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
 
@@ -8470,6 +8874,7 @@ Copier à la racine de l'hébergement OVH :
 - `.htaccess` ;
 - `market.php` ;
 - `partner-product-schema.php` ;
+- `seo-market-product.php` ;
 - `suivi-vendeurs-data.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
@@ -8529,9 +8934,10 @@ def main():
     write("leopold-et-fanny.html", redirect_page("leopold-et-fanny.html", "Léopold et Fanny", "leopold-et-fanny/"))
     write("equipe/index.html", team_page("equipe/index.html"))
     write("equipe.html", redirect_page("equipe.html", "L’équipe", "equipe/"))
-    write_static_files()
     sync_localized_product_data()
     sync_localized_marketing_copy()
+    write_market_seo_pages()
+    write_static_files()
     normalize_generated_asset_versions()
     remove_market_script_includes()
     normalize_generated_accessibility_markup()

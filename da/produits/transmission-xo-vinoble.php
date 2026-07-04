@@ -1,34 +1,36 @@
+<?php
+require_once __DIR__ . '/../../seo-market-product.php';
+$ceoMarketProduct = ceo_market_fetch_partner_payload('transmission-xo', 'dk', 'https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php');
+?>
 <!doctype html>
 <html lang="da" data-default-lang="da">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Cohesion Napoléon | Økologisk Napoléon-Cognac | Cognac Esprit Organic</title>
-  <meta name="description" content="Cohesion Napoléon Cognac Esprit Organic: En afbalanceret økologisk Cognac med længde, pebrede noter, tørret frugt og en mentholfrisk afslutning.">
+  <title>Transmission XO hos Vinoble | Cognac Esprit Organic</title>
+  <meta name="description" content="Markedsside for Transmission XO hos Vinoble med serveropdaterede partnerdata.">
   <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://cognac-esprit-organic.com/da/produits/cohesion-napoleon.html">
-  <!-- Locale alternates -->
-  <link rel="alternate" hreflang="fr" href="https://cognac-esprit-organic.com/produits/cohesion-napoleon.html">
-  <link rel="alternate" hreflang="en" href="https://cognac-esprit-organic.com/en/produits/cohesion-napoleon.html">
-  <link rel="alternate" hreflang="da" href="https://cognac-esprit-organic.com/da/produits/cohesion-napoleon.html">
-  <link rel="alternate" hreflang="no" href="https://cognac-esprit-organic.com/no/produits/cohesion-napoleon.html">
-  <link rel="alternate" hreflang="sv" href="https://cognac-esprit-organic.com/sv/produits/cohesion-napoleon.html">
-  <link rel="alternate" hreflang="x-default" href="https://cognac-esprit-organic.com/produits/cohesion-napoleon.html">
-  <!-- /Locale alternates -->
-  <meta property="og:title" content="Cohesion Napoléon | Økologisk Napoléon-Cognac | Cognac Esprit Organic">
-  <meta property="og:description" content="Cohesion Napoléon Cognac Esprit Organic: En afbalanceret økologisk Cognac med længde, pebrede noter, tørret frugt og en mentholfrisk afslutning.">
+  <link rel="canonical" href="https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php">
+  <meta name="ceo-market" content="dk">
+  <!-- Market SEO alternates -->
+  <link rel="alternate" hreflang="da-DK" href="https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php">
+  <link rel="alternate" hreflang="x-default" href="https://cognac-esprit-organic.com/produits/transmission-xo.html">
+  <!-- /Market SEO alternates -->
+  <meta property="og:title" content="Transmission XO | Økologisk XO-Cognac fra Charente | Cognac Esprit Organic">
+  <meta property="og:description" content="Transmission XO Cognac Esprit Organic: En struktureret og generøs økologisk Cognac præget af sort kirsebær, tørrede blomster og rancio.">
   <meta property="og:type" content="website">
-  <meta property="og:image" content="https://cognac-esprit-organic.com/assets/img/products/cohesion-napoleon.jpg">
+  <meta property="og:image" content="https://cognac-esprit-organic.com/assets/img/products/transmission-xo.jpg">
   <link rel="icon" href="../../assets/img/fav_organic.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../assets/css/styles.css?v=20260704-market-seo01">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Cognac Esprit Organic","url":"https://cognac-esprit-organic.com/","email":"Cognac@mdpierre.com","telephone":"+33 5 45 35 88 10","address":{"@type":"PostalAddress","streetAddress":"30 Rue d'Angoulême","postalCode":"16200","addressLocality":"Triac-Lautrait","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"@id":"https://cognac-esprit-organic.com/#organization"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Forside","item":"https://cognac-esprit-organic.com/da/"},{"@type":"ListItem","position":2,"name":"Cohesion Napoléon","item":"https://cognac-esprit-organic.com/da/produits/cohesion-napoleon.html"}],"@id":"https://cognac-esprit-organic.com/da/produits/cohesion-napoleon.html#breadcrumb"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Cohesion Napoléon","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"category":"Cognac Napoléon","image":"https://cognac-esprit-organic.com/assets/img/products/cohesion-napoleon.jpg","description":"En afbalanceret økologisk Cognac med længde, pebrede noter, tørret frugt og en mentholfrisk afslutning.","@id":"https://cognac-esprit-organic.com/da/produits/cohesion-napoleon.html#product","manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"additionalProperty":[{"@type":"PropertyValue","name":"Oprindelse","value":"Frankrig"},{"@type":"PropertyValue","name":"Indhold","value":"700 ml"},{"@type":"PropertyValue","name":"Alkoholprocent","value":"40 % vol"},{"@type":"PropertyValue","name":"Druesorter","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"Mund","value":"Mandel, varmt let vaniljet egetræ, jordnød, hasselnød, pære, toffee"},{"@type":"PropertyValue","name":"Farve","value":"Orangegul"},{"@type":"PropertyValue","name":"Næse","value":"Fadlagring, der viser de første træ- og vaniljenoter."},{"@type":"PropertyValue","name":"Gane","value":"Fine egetanniner binder sig til noter af tørret frugt: mandel, hasselnød og valnød"},{"@type":"PropertyValue","name":"Afslutning","value":"Struktureret, balanceret, let pebret og mentoleret"},{"@type":"PropertyValue","name":"GTIN","value":"3322870010833"},{"@type":"PropertyValue","name":"GTIN variant 6 x 700 ml","value":"3322870011045"}],"subjectOf":{"@type":"DigitalDocument","name":"Cohesion Napoléon smageark","encodingFormat":"application/pdf","url":"https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-da.pdf"},"size":"700 ml","gtin13":"3322870010833","hasVariant":[{"@type":"Product","name":"Caisse Cognac Esprit Organic Cohesion Napoléon 6 x 70 cl","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"category":"Cognac Napoléon","image":"https://cognac-esprit-organic.com/assets/img/products/cohesion-napoleon.jpg","description":"Caisse Cognac Esprit Organic Cohesion Napoléon 6 x 70 cl : Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.","size":"6 x 700 ml","gtin13":"3322870011045","isVariantOf":{"@id":"https://cognac-esprit-organic.com/da/produits/cohesion-napoleon.html#product"}}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Forside","item":"https://cognac-esprit-organic.com/da/"},{"@type":"ListItem","position":2,"name":"Transmission XO","item":"https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php"}],"@id":"https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php#breadcrumb"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Transmission XO","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"category":"Cognac XO","image":"https://cognac-esprit-organic.com/assets/img/products/transmission-xo.jpg","description":"En struktureret og generøs økologisk Cognac præget af sort kirsebær, tørrede blomster og rancio.","@id":"https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php#product","manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"additionalProperty":[{"@type":"PropertyValue","name":"Oprindelse","value":"Frankrig"},{"@type":"PropertyValue","name":"Indhold","value":"700 ml"},{"@type":"PropertyValue","name":"Alkoholprocent","value":"40 % vol"},{"@type":"PropertyValue","name":"Druesorter","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"Mund","value":"Træ, kanel, kandiseret ingefær, sveske, tobak, vanilje"},{"@type":"PropertyValue","name":"Farve","value":"Gylden rav"},{"@type":"PropertyValue","name":"Næse","value":"Kompleks frugt med sort kirsebær, blomstrede noter af vilde blomster og varme krydderier. Med tiden udvikler aromaerne sig mod kandiseret frugt, krydderier og gammelt træ"},{"@type":"PropertyValue","name":"Gane","value":"Eksplosion af krydrede smage og aromaer"},{"@type":"PropertyValue","name":"Afslutning","value":"Krydret med muskatnød og kanel. Rancio viser sig i afslutningen med en mentolfrisk tone"},{"@type":"PropertyValue","name":"GTIN","value":"3322870010857"},{"@type":"PropertyValue","name":"GTIN variant 6 x 700 ml","value":"3322870011052"}],"subjectOf":{"@type":"DigitalDocument","name":"Transmission XO smageark","encodingFormat":"application/pdf","url":"https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-da.pdf"},"size":"700 ml","gtin13":"3322870010857","hasVariant":[{"@type":"Product","name":"Caisse Cognac Esprit Organic Transmission XO 6 x 70 cl","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"category":"Cognac XO","image":"https://cognac-esprit-organic.com/assets/img/products/transmission-xo.jpg","description":"Caisse Cognac Esprit Organic Transmission XO 6 x 70 cl : Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.","size":"6 x 700 ml","gtin13":"3322870011052","isVariantOf":{"@id":"https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php#product"}}],"url":"https://cognac-esprit-organic.com/da/produits/transmission-xo-vinoble.php"}</script>
+  <?php echo ceo_market_partner_schema_script($ceoMarketProduct); ?>
 </head>
-<body data-lang="da" class="product-page">
+<body data-market="dk" data-disable-partner-schema-js="true" data-lang="da" class="product-page">
   <a class="skip-link" href="#contenu">Gå til indhold</a>
   <header class="site-header">
     <nav class="nav" aria-label="Primær navigation">
@@ -55,36 +57,38 @@
 <section class="product-menu-strip">
   <div class="section-inner"><div class="bottle-menu" aria-label="Cognac Esprit Organic sortiment"><a href="../produits/fondation-vs.html" title="Fondation VS"><img src="../../assets/img/product-menu/vs.png" alt="Fondation VS" width="170" height="236"></a><a href="../produits/conviction-vsop.html" title="Conviction VSOP"><img src="../../assets/img/product-menu/vsop.png" alt="Conviction VSOP" width="170" height="236"></a><a href="../produits/cohesion-napoleon.html" title="Cohesion Napoléon"><img src="../../assets/img/product-menu/napoleon.png" alt="Cohesion Napoléon" width="170" height="236"></a><a href="../produits/transmission-xo.html" title="Transmission XO"><img src="../../assets/img/product-menu/xo.png" alt="Transmission XO" width="173" height="236"></a><a href="../produits/xxo.html" title="XXO"><img src="../../assets/img/product-menu/xxo.png" alt="XXO" width="170" height="236"></a><a href="../produits/single-cask.html" title="Single Cask"><img src="../../assets/img/product-menu/single-cask.png" alt="Single Cask" width="170" height="236"></a><a href="../produits/pineau.html" title="Hvid Pineau"><img src="../../assets/img/product-menu/pineau.png" alt="Hvid Pineau" width="170" height="236"></a><a href="../produits/pineau-rouge.html" title="Rød Pineau"><img src="../../assets/img/product-menu/pineau-rouge.png?v=20260612-menu03" alt="Rød Pineau" width="170" height="236"></a></div></div>
 </section>
-<section class="product-old-detail" style="--product-tone: #895006; --product-gallery: #eae7da; --product-top: #ba762b; --product-mid: #a46925; --product-low: #bc8131; --product-accent: #f9bd63;">
+<section class="product-old-detail" style="--product-tone: #513213; --product-gallery: #eae7da; --product-top: #c78d0b; --product-mid: #b9780e; --product-low: #d09a25; --product-accent: #f9d872;">
   <div class="product-gallery-rail">
-    <button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/NAPO-COHESION.jpg" aria-label="Vis visuel 1 af Cohesion Napoléon"><img src="../../assets/img/old-site/NAPO-COHESION.jpg" alt="Cohesion Napoléon-flaske med Cognac Esprit Organic gaveæske" loading="lazy" width="1600" height="1600"></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/img_prod_cohesion_02.jpg" aria-label="Vis visuel 2 af Cohesion Napoléon"><img src="../../assets/img/old-site/img_prod_cohesion_02.jpg" alt="Cohesion Napoléon serveret til smagning" loading="lazy" width="1600" height="1600"></button>
+    <button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/XO-TRANSMISSION.jpg" aria-label="Vis visuel 1 af Transmission XO"><img src="../../assets/img/old-site/XO-TRANSMISSION.jpg" alt="Transmission XO-flaske med Cognac Esprit Organic gaveæske" loading="lazy" width="1600" height="1600"></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/img_prod_transmission_02.jpg" aria-label="Vis visuel 2 af Transmission XO"><img src="../../assets/img/old-site/img_prod_transmission_02.jpg" alt="Transmission XO serveret til smagning" loading="lazy" width="1600" height="1600"></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/img_prod_transmission_03.jpg" aria-label="Vis visuel 3 af Transmission XO"><img src="../../assets/img/old-site/img_prod_transmission_03.jpg" alt="Transmission XO gaveæske og smageglas" loading="lazy" width="1600" height="1600"></button>
   </div>
   <div class="product-scene">
-    <img src="../../assets/img/old-site/NAPO-COHESION.jpg" alt="Visuel Cohesion Napoléon" data-gallery-main width="1600" height="1600">
+    <img src="../../assets/img/old-site/XO-TRANSMISSION.jpg" alt="Visuel Transmission XO" data-gallery-main width="1600" height="1600">
   </div>
   <div class="product-info-block">
     <div class="product-description">
-      <p class="eyebrow">Cognac Napoléon</p>
-      <h1>Cohesion Napoléon</h1>
-      <p data-fr>En afbalanceret økologisk Cognac med længde, pebrede noter, tørret frugt og en mentholfrisk afslutning.</p>
-      <p data-en>En afbalanceret økologisk Cognac med længde, pebrede noter, tørret frugt og en mentholfrisk afslutning.</p>
-      <p class="product-story">Sortimentets succes bygger også på den styrke, hver af os har vist. Min bedstefar Marc og hans bror Roger, min bedstemor Germaine og mine forældre Pierre og Eliane har alle bidraget stærkt til dette engagement i økologisk landbrug. Det er et fælles arbejde gennem flere generationer. COHESION hylder dem.</p>
-      <div class="product-medals"><img src="../../assets/img/old-site/Sans-titre-15.png" alt="Udmærkelse Cohesion Napoléon" loading="lazy" width="1600" height="861"></div>
+      <p class="eyebrow">Cognac XO</p>
+      <h1>Transmission XO</h1>
+      <p data-fr>En struktureret og generøs økologisk Cognac præget af sort kirsebær, tørrede blomster og rancio.</p>
+      <p data-en>En struktureret og generøs økologisk Cognac præget af sort kirsebær, tørrede blomster og rancio.</p>
+      <p class="product-story">Respekt for miljøet skal være et af de vigtigste løfter for kommende generationer. Hvilken jord efterlader vi til vores børn i morgen? Jeg vil tilegne denne Cognac til de kommende generationer, især mine børn. Transmission symboliserer for mig frugten af et omhyggeligt og samvittighedsfuldt arbejde fra en generation, der er klar til at give stafetten videre. Vi er kun dem, der fører arven videre.</p>
+      <a class="product-buy-link denmark-buy-link" href="https://vinoble.dk/vare/cognac-transmission-xo-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/" target="_blank" rel="noopener" data-product-slug="transmission-xo" data-partner-market="dk" data-partner-seller="Vinoble" data-partner-schema-url="https://vinoble.dk/vare/cognac-transmission-xo-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/">Køb hos Vinoble</a>
+      <?php echo ceo_market_partner_offer_html($ceoMarketProduct); ?>
+      <div class="product-medals"><a class="product-medal-link" href="https://wineawards.org/womens-wine-spirits-awards-2022-results/" target="_blank" rel="noopener noreferrer" aria-label="proof of the Women's Wine & Spirits Awards result for Transmission XO"><img src="../../assets/img/old-site/img_prod_fondation_medaille_02.png" alt="Udmærkelse Transmission XO" loading="lazy" width="1600" height="637"></a></div>
     </div>
     <div class="product-bottle-inline">
-      <img src="../../assets/img/old-site/img_degustation_xo.jpg" alt="Illustration Cohesion Napoléon" width="1600" height="1600">
+      <img src="../../assets/img/old-site/img_fanny.jpg" alt="Illustration Transmission XO" width="1600" height="1600">
       <div>
         <h2 data-fr>Smagning</h2>
         <h2 data-en>Smagsmarkører</h2>
-        <h3>En struktureret, balanceret afslutning, let pebret og mentoleret</h3>
-        <p>Generøs fadlagring giver fine noter af tørret frugt, jordnød, mandel og hasselnød samt varmt træ og krydderier. Lang og pebret afslutning.</p>
+        <h3>Struktureret med smuk rundhed i munden</h3>
+        <p>Mange års lagring var nødvendige for at skabe TRANSMISSION. I munden findes frugtige noter af sort kirsebær og blomstrede noter af tørrede blomster. De første rancio-noter viser sig i afslutningen.</p>
       </div>
     </div>
     <div class="product-sensory">
       <h2 data-fr>Sensoriske noter</h2>
       <h2 data-en>Sensoriske noter</h2>
       <ul>
-        <li><span>Mund:</span><strong>Mandel, varmt let vaniljet egetræ, jordnød, hasselnød, pære, toffee</strong></li><li><span>Farve:</span><strong>Orangegul</strong></li><li><span>Næse:</span><strong>Fadlagring, der viser de første træ- og vaniljenoter.</strong></li><li><span>Gane:</span><strong>Fine egetanniner binder sig til noter af tørret frugt: mandel, hasselnød og valnød</strong></li><li><span>Afslutning:</span><strong>Struktureret, balanceret, let pebret og mentoleret</strong></li>
+        <li><span>Mund:</span><strong>Træ, kanel, kandiseret ingefær, sveske, tobak, vanilje</strong></li><li><span>Farve:</span><strong>Gylden rav</strong></li><li><span>Næse:</span><strong>Kompleks frugt med sort kirsebær, blomstrede noter af vilde blomster og varme krydderier. Med tiden udvikler aromaerne sig mod kandiseret frugt, krydderier og gammelt træ</strong></li><li><span>Gane:</span><strong>Eksplosion af krydrede smage og aromaer</strong></li><li><span>Afslutning:</span><strong>Krydret med muskatnød og kanel. Rancio viser sig i afslutningen med en mentolfrisk tone</strong></li>
       </ul>
       <details class="product-details-discreet">
         <summary>Detaljer</summary>
@@ -94,7 +98,7 @@
             <dl>
         <div>
           <dt>Kategori</dt>
-          <dd>Cognac Napoléon</dd>
+          <dd>Cognac XO</dd>
         </div>
         <div>
           <dt>Oprindelse</dt>
@@ -114,11 +118,11 @@
         </div>
         <div data-gtin-for-volume="700 ml">
           <dt>GTIN</dt>
-          <dd>3322870010833</dd>
+          <dd>3322870010857</dd>
         </div>
         <div data-gtin-for-volume="700 ml">
           <dt>GTIN 6 x 700 ml variant</dt>
-          <dd>3322870011045</dd>
+          <dd>3322870011052</dd>
         </div>
         </dl>
           </div>
@@ -147,7 +151,7 @@
       </details>
 
       <div class="product-downloads">
-        <a class="product-pdf-link" href="../../assets/pdf/fiches-degustation/cognac-esprit-organic-cohesion-napoleon-fiche-degustation-da.pdf" type="application/pdf" download aria-label="Hent Cohesion Napoléon smageark som PDF">
+        <a class="product-pdf-link" href="../../assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-da.pdf" type="application/pdf" download aria-label="Hent Transmission XO smageark som PDF">
           <span>Smageark</span>
         </a>
       </div>

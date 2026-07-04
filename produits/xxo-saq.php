@@ -1,20 +1,21 @@
+<?php
+require_once __DIR__ . '/../seo-market-product.php';
+$ceoMarketProduct = ceo_market_fetch_partner_payload('xxo', 'qc', 'https://cognac-esprit-organic.com/produits/xxo-saq.php');
+?>
 <!doctype html>
 <html lang="fr" data-default-lang="fr">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>XXO | Cognac Esprit Organic</title>
-  <meta name="description" content="XXO Cognac Esprit Organic : Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.">
+  <title>XXO chez SAQ | Cognac Esprit Organic</title>
+  <meta name="description" content="Page de référencement marché pour XXO : bouton d&#x27;achat SAQ et données structurées partenaire actualisées côté serveur.">
   <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://cognac-esprit-organic.com/produits/xxo.html">
-  <!-- Locale alternates -->
-  <link rel="alternate" hreflang="fr" href="https://cognac-esprit-organic.com/produits/xxo.html">
-  <link rel="alternate" hreflang="en" href="https://cognac-esprit-organic.com/en/produits/xxo.html">
-  <link rel="alternate" hreflang="da" href="https://cognac-esprit-organic.com/da/produits/xxo.html">
-  <link rel="alternate" hreflang="no" href="https://cognac-esprit-organic.com/no/produits/xxo.html">
-  <link rel="alternate" hreflang="sv" href="https://cognac-esprit-organic.com/sv/produits/xxo.html">
+  <link rel="canonical" href="https://cognac-esprit-organic.com/produits/xxo-saq.php">
+  <meta name="ceo-market" content="qc">
+  <!-- Market SEO alternates -->
+  <link rel="alternate" hreflang="fr-CA" href="https://cognac-esprit-organic.com/produits/xxo-saq.php">
   <link rel="alternate" hreflang="x-default" href="https://cognac-esprit-organic.com/produits/xxo.html">
-  <!-- /Locale alternates -->
+  <!-- /Market SEO alternates -->
   <meta property="og:title" content="XXO | Cognac Esprit Organic">
   <meta property="og:description" content="XXO Cognac Esprit Organic : Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.">
   <meta property="og:type" content="website">
@@ -25,10 +26,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/styles.css?v=20260704-market-seo01">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Cognac Esprit Organic","url":"https://cognac-esprit-organic.com/","email":"Cognac@mdpierre.com","telephone":"+33 5 45 35 88 10","@id":"https://cognac-esprit-organic.com/#organization","address":{"@type":"PostalAddress","streetAddress":"30 Rue d'Angoulême","postalCode":"16200","addressLocality":"Triac-Lautrait","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"}}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://cognac-esprit-organic.com/"},{"@type":"ListItem","position":2,"name":"XXO","item":"https://cognac-esprit-organic.com/produits/xxo.html"}],"@id":"https://cognac-esprit-organic.com/produits/xxo.html#breadcrumb"}</script>
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"XXO","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"category":"Cognac XXO","image":"https://cognac-esprit-organic.com/assets/img/products/xxo.jpg","description":"Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.","size":"700 ml","@id":"https://cognac-esprit-organic.com/produits/xxo.html#product","hasVariant":[{"@type":"Product","name":"Caisse Cognac Esprit Organic XXO 6 x 70 cl","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"category":"Cognac XXO","image":"https://cognac-esprit-organic.com/assets/img/products/xxo.jpg","description":"Caisse Cognac Esprit Organic XXO 6 x 70 cl : Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.","size":"6 x 700 ml","gtin13":"3322870011434","isVariantOf":{"@id":"https://cognac-esprit-organic.com/produits/xxo.html#product"}}],"gtin13":"3322870011427","additionalProperty":[{"@type":"PropertyValue","name":"Origine","value":"France"},{"@type":"PropertyValue","name":"Contenance","value":"700 ml"},{"@type":"PropertyValue","name":"Titre alcoométrique","value":"43,5 % vol"},{"@type":"PropertyValue","name":"Cépages","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"GTIN","value":"3322870011427"},{"@type":"PropertyValue","name":"GTIN variante 6 x 700 ml","value":"3322870011434"},{"@type":"PropertyValue","name":"Bouche","value":"Cannelle, tabac et fleurs séchées, fruits confits"},{"@type":"PropertyValue","name":"Couleur","value":"Ambrée, aux reflets dorés"},{"@type":"PropertyValue","name":"Nez","value":"Notes explosives de fruits confits et compotées, d’épices douces de cannelle"},{"@type":"PropertyValue","name":"Palais","value":"C’est un cognac rond et riche, structuré"},{"@type":"PropertyValue","name":"Finale","value":"Finale fraiche, notes de réglisse"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Accueil","item":"https://cognac-esprit-organic.com/"},{"@type":"ListItem","position":2,"name":"XXO","item":"https://cognac-esprit-organic.com/produits/xxo-saq.php"}],"@id":"https://cognac-esprit-organic.com/produits/xxo-saq.php#breadcrumb"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"XXO","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"category":"Cognac XXO","image":"https://cognac-esprit-organic.com/assets/img/products/xxo.jpg","description":"Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.","size":"700 ml","@id":"https://cognac-esprit-organic.com/produits/xxo-saq.php#product","hasVariant":[{"@type":"Product","name":"Caisse Cognac Esprit Organic XXO 6 x 70 cl","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"category":"Cognac XXO","image":"https://cognac-esprit-organic.com/assets/img/products/xxo.jpg","description":"Caisse Cognac Esprit Organic XXO 6 x 70 cl : Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.","size":"6 x 700 ml","gtin13":"3322870011434","isVariantOf":{"@id":"https://cognac-esprit-organic.com/produits/xxo-saq.php#product"}}],"gtin13":"3322870011427","additionalProperty":[{"@type":"PropertyValue","name":"Origine","value":"France"},{"@type":"PropertyValue","name":"Contenance","value":"700 ml"},{"@type":"PropertyValue","name":"Titre alcoométrique","value":"43,5 % vol"},{"@type":"PropertyValue","name":"Cépages","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"GTIN","value":"3322870011427"},{"@type":"PropertyValue","name":"GTIN variante 6 x 700 ml","value":"3322870011434"},{"@type":"PropertyValue","name":"Bouche","value":"Cannelle, tabac et fleurs séchées, fruits confits"},{"@type":"PropertyValue","name":"Couleur","value":"Ambrée, aux reflets dorés"},{"@type":"PropertyValue","name":"Nez","value":"Notes explosives de fruits confits et compotées, d’épices douces de cannelle"},{"@type":"PropertyValue","name":"Palais","value":"C’est un cognac rond et riche, structuré"},{"@type":"PropertyValue","name":"Finale","value":"Finale fraiche, notes de réglisse"}],"url":"https://cognac-esprit-organic.com/produits/xxo-saq.php"}</script>
+  <?php echo ceo_market_partner_schema_script($ceoMarketProduct); ?>
 </head>
-<body data-lang="fr" class="product-page">
+<body data-market="qc" data-disable-partner-schema-js="true" data-lang="fr" class="product-page">
   <a class="skip-link" href="#contenu">Aller au contenu</a>
   <header class="site-header">
     <nav class="nav" aria-label="Navigation principale">
@@ -70,6 +72,7 @@
       <p data-en>An organic XXO Cognac, soft, structured and fruit-forward.</p>
       <p class="product-story">Nous sommes très fiers de présenter le Premier XXO en agriculture Biologique. Ce cognac est issu d’un assemblage d’eaux de vie dont la plus jeune à 14 ans. C’est un cognac structuré, très fruité. Les eaux de vie qui composent ce XXO ont vieilli dans des barriques neuves de chêne de gros grains type Limousin.</p>
       <a class="product-buy-link quebec-buy-link" href="https://www.saq.com/fr/15263655" target="_blank" rel="noopener" data-product-slug="xxo" data-partner-market="qc" data-partner-seller="SAQ" data-partner-schema-url="https://www.saq.com/fr/15263655">Commander à la SAQ</a>
+      <?php echo ceo_market_partner_offer_html($ceoMarketProduct); ?>
       <div class="product-medals"><img src="../assets/img/old-site/img_deco_xxo.png" alt="" role="presentation" aria-hidden="true" loading="lazy"></div>
     </div>
     <div class="product-bottle-inline">

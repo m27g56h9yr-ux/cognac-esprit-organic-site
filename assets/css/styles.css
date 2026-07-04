@@ -1397,6 +1397,51 @@ body[data-market="no"] .norway-buy-link {
   border-color: #fff;
   color: var(--product-tone);
 }
+.partner-offer-panel {
+  width: min(100%, 420px);
+  margin-top: 18px;
+  padding: 16px 18px;
+  border: 1px solid rgba(255,255,255,.36);
+  background: rgba(0,0,0,.18);
+  color: #fff;
+}
+.partner-offer-panel .eyebrow {
+  max-width: none;
+  margin: 0 0 10px !important;
+  color: inherit;
+}
+.partner-offer-panel ul {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.partner-offer-panel li {
+  display: grid;
+  grid-template-columns: minmax(110px, .7fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: baseline;
+  font-family: Raleway, sans-serif;
+  font-size: .78rem;
+}
+.partner-offer-panel li span,
+.partner-offer-note {
+  opacity: .78;
+}
+.partner-offer-panel strong {
+  font-weight: 800;
+}
+.partner-offer-panel a {
+  color: inherit;
+}
+.partner-offer-panel p {
+  max-width: none;
+}
+.partner-offer-note {
+  margin-top: 10px !important;
+  font-size: .7rem !important;
+}
 .product-medals {
   display: flex;
   flex-wrap: wrap;

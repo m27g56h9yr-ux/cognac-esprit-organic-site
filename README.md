@@ -36,6 +36,7 @@ Le site est prêt pour la mise en ligne :
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
+- Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.
 
 ## Géociblage des boutons Acheter
 
@@ -96,6 +97,7 @@ Copier à la racine de l'hébergement OVH :
 - `llms.txt` ;
 - `.htaccess` ;
 - `market.php` ;
+- `suivi-vendeurs-data.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
 

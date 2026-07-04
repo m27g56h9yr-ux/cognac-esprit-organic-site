@@ -549,6 +549,15 @@ SELLER_TRACKING_SCHEMA_FIELDS = {
     ],
 }
 
+
+def seller_tracking_payload():
+    return {
+        "updatedAt": SELLER_TRACKING_UPDATED_AT,
+        "updatedAtLabel": SELLER_TRACKING_UPDATED_AT,
+        "rows": SELLER_TRACKING_ROWS,
+    }
+
+
 PRODUCT_TRADE_PDFS = {
     "fondation-vs": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf",
@@ -3561,6 +3570,447 @@ def seller_tracking_column_definitions():
     )
 
 
+def seller_tracking_client_js():
+    columns = [{"key": key, "title": title} for key, title, _ in SELLER_TRACKING_COLUMNS]
+    fields = {
+        key: [{"key": field_key, "label": label} for field_key, label in field_rows]
+        for key, field_rows in SELLER_TRACKING_SCHEMA_FIELDS.items()
+    }
+    template = r"""  <script>
+    (function () {
+      const endpoint = "suivi-vendeurs-data.php";
+      const columns = __COLUMNS__;
+      const schemaFields = __SCHEMA_FIELDS__;
+      const labels = columns.reduce((acc, column) => {
+        acc[column.key] = column.title;
+        return acc;
+      }, {});
+      const rawScript = document.getElementById("seller-tracking-data");
+      const tbody = document.getElementById("seller-tracking-body");
+      const countEl = document.getElementById("seller-tracking-count");
+      const updatedEl = document.getElementById("seller-last-updated");
+      const statusEl = document.getElementById("seller-refresh-status");
+      const exportEl = document.getElementById("seller-json-export");
+
+      function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;"
+        }[char]));
+      }
+
+      function schemaTerm(value) {
+        if (typeof value === "string" && value.startsWith("https://schema.org/")) {
+          return value.split("/").filter(Boolean).pop() || value;
+        }
+        return value;
+      }
+
+      function empty(label = "Non exposé") {
+        return `<span class="seller-empty">${escapeHtml(label)}</span>`;
+      }
+
+      function sourceLabel(url) {
+        try {
+          return new URL(url).hostname.replace(/^www\./, "");
+        } catch (error) {
+          return String(url || "").replace(/^https?:\/\//, "").split("/")[0] || "Page source";
+        }
+      }
+
+      function scalar(value) {
+        if (value === null || value === undefined) return empty("Non renseigné");
+        if (Array.isArray(value)) {
+          return value.length ? `<code>${escapeHtml(JSON.stringify(value))}</code>` : empty("Liste vide");
+        }
+        if (typeof value === "object") {
+          const name = value.name;
+          const typeValue = schemaTerm(value["@type"]);
+          if (name) {
+            const typeHtml = typeValue ? `<span class="schema-mini">${escapeHtml(typeValue)}</span>` : "";
+            return `${escapeHtml(name)}${typeHtml}`;
+          }
+          return `<code>${escapeHtml(JSON.stringify(value))}</code>`;
+        }
+        if (typeof value === "string") {
+          if (value.startsWith("https://schema.org/")) {
+            const term = schemaTerm(value);
+            return `<a class="schema-ref" href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer">${escapeHtml(term)}</a>`;
+          }
+          if (value.startsWith("http://") || value.startsWith("https://")) {
+            let label = value.replace(/^https?:\/\//, "").replace(/\/$/, "");
+            if (label.length > 54) label = `${label.slice(0, 51)}...`;
+            return `<a class="inline-url" href="${escapeHtml(value)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+          }
+        }
+        return `<code>${escapeHtml(value)}</code>`;
+      }
+
+      function fieldBlock(value, kind) {
+        if (value === null || value === undefined) return empty();
+        if (Array.isArray(value)) {
+          if (!value.length) return empty("Liste vide");
+          return value.map((item, index) => (
+            `<div class="schema-list-item"><span class="schema-list-label">#${index + 1}</span>${fieldBlock(item, kind)}</div>`
+          )).join("");
+        }
+        if (typeof value !== "object") {
+          return `<div class="schema-card schema-card--simple">${scalar(value)}</div>`;
+        }
+        const configured = schemaFields[kind] || [];
+        const keys = [];
+        configured.forEach((field) => {
+          if (Object.prototype.hasOwnProperty.call(value, field.key)) keys.push(field.key);
+        });
+        Object.keys(value).forEach((key) => {
+          if (!keys.includes(key)) keys.push(key);
+        });
+        const labelFor = configured.reduce((acc, field) => {
+          acc[field.key] = field.label;
+          return acc;
+        }, {});
+        const fields = keys.map((key) => (
+          `<div class="schema-field"><dt>${escapeHtml(labelFor[key] || key)}</dt><dd>${scalar(value[key])}</dd></div>`
+        )).join("");
+        return `<dl class="schema-card schema-card--${escapeHtml(kind)}">${fields}</dl>`;
+      }
+
+      function cell(key, content, className = "") {
+        const classAttr = className ? ` class="${escapeHtml(className)}"` : "";
+        return `<td data-label="${escapeHtml(labels[key] || key)}"${classAttr}>${content}</td>`;
+      }
+
+      function rowHtml(row) {
+        const sourceUrl = row.source_url || "";
+        return `<tr>
+          ${cell("market", `<span class="strong-value">${escapeHtml(row.market)}</span>`)}
+          ${cell("seller", `<span class="strong-value">${escapeHtml(row.seller)}</span>`)}
+          ${cell("product", `<span class="strong-value">${escapeHtml(row.product)}</span>`)}
+          ${cell("source", `<a class="source-link" href="${escapeHtml(sourceUrl)}" target="_blank" rel="noopener noreferrer"><span>${escapeHtml(sourceLabel(sourceUrl))}</span><small>Ouvrir</small></a>`)}
+          ${cell("schema_status", `<span class="status-pill">${escapeHtml(row.schema_status || "")}</span>`, "schema-status-cell")}
+          ${cell("offers", fieldBlock(row.offers, "offers"), "schema-cell schema-cell--offers")}
+          ${cell("review", fieldBlock(row.review, "review"), "schema-cell")}
+          ${cell("aggregateRating", fieldBlock(row.aggregateRating, "aggregateRating"), "schema-cell")}
+          ${cell("notes", `<p class="note-text">${escapeHtml(row.notes || "")}</p>`, "note-cell")}
+        </tr>`;
+      }
+
+      function formatUpdatedAt(payload) {
+        if (payload.updatedAt) {
+          const date = new Date(payload.updatedAt);
+          if (!Number.isNaN(date.getTime())) {
+            return new Intl.DateTimeFormat("fr-FR", {
+              dateStyle: "medium",
+              timeStyle: "medium"
+            }).format(date);
+          }
+        }
+        return payload.updatedAtLabel || payload.updatedAt || "";
+      }
+
+      function setStatus(text, state) {
+        if (!statusEl) return;
+        statusEl.textContent = text;
+        statusEl.dataset.state = state || "";
+      }
+
+      function render(payload) {
+        const rows = Array.isArray(payload.rows) ? payload.rows : [];
+        if (tbody) tbody.innerHTML = rows.map(rowHtml).join("");
+        if (countEl) countEl.textContent = `${rows.length} pages sources contrôlées`;
+        if (updatedEl) updatedEl.textContent = `Dernière extraction : ${formatUpdatedAt(payload)}`;
+        const exportPayload = {
+          updatedAt: payload.updatedAt || payload.updatedAtLabel || "",
+          rows
+        };
+        const jsonText = JSON.stringify(exportPayload, null, 2);
+        if (exportEl) exportEl.textContent = jsonText;
+        if (rawScript) rawScript.textContent = jsonText;
+      }
+
+      async function refresh() {
+        setStatus("Actualisation en cours...", "loading");
+        const controller = new AbortController();
+        const timeout = window.setTimeout(() => controller.abort(), 25000);
+        try {
+          const response = await fetch(`${endpoint}?ts=${Date.now()}`, {
+            cache: "no-store",
+            credentials: "same-origin",
+            signal: controller.signal
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const payload = await response.json();
+          if (!payload || !Array.isArray(payload.rows)) throw new Error("Réponse incomplète");
+          render(payload);
+          setStatus("Données actualisées au chargement", "ok");
+        } catch (error) {
+          setStatus("Actualisation impossible : dernier relevé intégré affiché", "error");
+        } finally {
+          window.clearTimeout(timeout);
+        }
+      }
+
+      refresh();
+    }());
+  </script>"""
+    return template.replace("__COLUMNS__", json.dumps(columns, ensure_ascii=False)).replace(
+        "__SCHEMA_FIELDS__", json.dumps(fields, ensure_ascii=False)
+    )
+
+
+def seller_tracking_data_php():
+    seed = json.dumps(seller_tracking_payload(), ensure_ascii=False, indent=2).replace("</", "<\\/")
+    template = r"""<?php
+declare(strict_types=1);
+
+if (!defined('JSON_INVALID_UTF8_SUBSTITUTE')) {
+    define('JSON_INVALID_UTF8_SUBSTITUTE', 0);
+}
+
+function ceo_json_response(array $payload, int $status = 200): void
+{
+    http_response_code($status);
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+    echo json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_INVALID_UTF8_SUBSTITUTE);
+    exit;
+}
+
+$seedJson = <<<'JSON'
+__SELLER_TRACKING_SEED__
+JSON;
+
+$seed = json_decode($seedJson, true);
+if (!is_array($seed) || !isset($seed['rows']) || !is_array($seed['rows'])) {
+    ceo_json_response(['ok' => false, 'error' => 'Configuration de suivi invalide.'], 500);
+}
+
+function ceo_fetch_url(string $url): array
+{
+    $userAgent = 'Mozilla/5.0 (compatible; CognacEspritOrganicSellerMonitor/1.0; +https://cognac-esprit-organic.com/suivi-vendeurs.html)';
+    if (function_exists('curl_init')) {
+        $ch = curl_init($url);
+        curl_setopt_array($ch, [
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_MAXREDIRS => 5,
+            CURLOPT_CONNECTTIMEOUT => 5,
+            CURLOPT_TIMEOUT => 10,
+            CURLOPT_USERAGENT => $userAgent,
+            CURLOPT_HTTPHEADER => [
+                'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language: fr-FR,fr;q=0.9,en;q=0.8',
+            ],
+        ]);
+        $body = curl_exec($ch);
+        $error = curl_error($ch);
+        $httpCode = (int) curl_getinfo($ch, CURLINFO_RESPONSE_CODE);
+        curl_close($ch);
+        return [
+            'ok' => $body !== false && $httpCode >= 200 && $httpCode < 400,
+            'body' => $body === false ? '' : (string) $body,
+            'httpCode' => $httpCode,
+            'error' => $error,
+        ];
+    }
+
+    $context = stream_context_create([
+        'http' => [
+            'method' => 'GET',
+            'timeout' => 10,
+            'ignore_errors' => true,
+            'header' => "User-Agent: {$userAgent}\r\nAccept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\nAccept-Language: fr-FR,fr;q=0.9,en;q=0.8\r\n",
+        ],
+    ]);
+    $body = @file_get_contents($url, false, $context);
+    $httpCode = 0;
+    if (isset($http_response_header) && is_array($http_response_header)) {
+        foreach ($http_response_header as $headerLine) {
+            if (preg_match('/^HTTP\/\S+\s+(\d{3})/', $headerLine, $match)) {
+                $httpCode = (int) $match[1];
+            }
+        }
+    }
+    return [
+        'ok' => $body !== false && $httpCode >= 200 && $httpCode < 400,
+        'body' => $body === false ? '' : (string) $body,
+        'httpCode' => $httpCode,
+        'error' => $body === false ? 'fetch_failed' : '',
+    ];
+}
+
+function ceo_is_assoc(array $value): bool
+{
+    if ($value === []) {
+        return false;
+    }
+    return array_keys($value) !== range(0, count($value) - 1);
+}
+
+function ceo_type_matches($type, string $expected): bool
+{
+    if (is_array($type)) {
+        foreach ($type as $item) {
+            if (ceo_type_matches($item, $expected)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    if (!is_string($type)) {
+        return false;
+    }
+    $normalized = strtolower(trim($type));
+    $expected = strtolower($expected);
+    return $normalized === $expected || $normalized === 'https://schema.org/' . $expected;
+}
+
+function ceo_find_products($node, array &$products): void
+{
+    if (!is_array($node)) {
+        return;
+    }
+    if (ceo_is_assoc($node) && isset($node['@type']) && ceo_type_matches($node['@type'], 'Product')) {
+        $products[] = $node;
+    }
+    foreach ($node as $child) {
+        ceo_find_products($child, $products);
+    }
+}
+
+function ceo_json_ld_blocks(string $html): array
+{
+    $blocks = [];
+    if (!preg_match_all('/<script\b([^>]*)>(.*?)<\/script>/is', $html, $matches, PREG_SET_ORDER)) {
+        return $blocks;
+    }
+    foreach ($matches as $match) {
+        if (stripos($match[1], 'application/ld+json') === false) {
+            continue;
+        }
+        $json = trim(html_entity_decode($match[2], ENT_QUOTES | ENT_HTML5, 'UTF-8'));
+        $json = preg_replace('/^\s*<!--/', '', $json);
+        $json = preg_replace('/-->\s*$/', '', $json);
+        $decoded = json_decode(trim($json), true);
+        if (json_last_error() === JSON_ERROR_NONE && is_array($decoded)) {
+            $blocks[] = $decoded;
+        }
+    }
+    return $blocks;
+}
+
+function ceo_extract_product(string $html): ?array
+{
+    $products = [];
+    foreach (ceo_json_ld_blocks($html) as $block) {
+        ceo_find_products($block, $products);
+    }
+    return $products[0] ?? null;
+}
+
+function ceo_clean_schema_value($value)
+{
+    if ($value === null || is_bool($value) || is_int($value) || is_float($value) || is_string($value)) {
+        return $value;
+    }
+    if (!is_array($value)) {
+        return null;
+    }
+    $clean = [];
+    foreach ($value as $key => $child) {
+        $clean[$key] = ceo_clean_schema_value($child);
+    }
+    return $clean;
+}
+
+function ceo_is_empty_schema_value($value): bool
+{
+    if ($value === null) {
+        return true;
+    }
+    if (is_array($value) && count($value) === 0) {
+        return true;
+    }
+    return false;
+}
+
+function ceo_schema_part(array $product, string $key)
+{
+    return array_key_exists($key, $product) ? ceo_clean_schema_value($product[$key]) : null;
+}
+
+function ceo_note_for_product(array $row): string
+{
+    $missing = [];
+    if (ceo_is_empty_schema_value($row['offers'])) {
+        $missing[] = 'offers';
+    }
+    if (ceo_is_empty_schema_value($row['review'])) {
+        $missing[] = 'review';
+    }
+    if (ceo_is_empty_schema_value($row['aggregateRating'])) {
+        $missing[] = 'aggregateRating';
+    }
+    if ($missing === []) {
+        return 'Product JSON-LD actualisé : offers, review et aggregateRating sont exposés.';
+    }
+    return 'Product JSON-LD actualisé. Non exposé : ' . implode(', ', $missing) . '.';
+}
+
+function ceo_refresh_row(array $row): array
+{
+    $row['refreshed_at'] = gmdate('c');
+    $fetch = ceo_fetch_url((string) $row['source_url']);
+    $row['source_http_code'] = $fetch['httpCode'];
+    if (!$fetch['ok']) {
+        $row['refresh_status'] = 'fetch_error';
+        $details = $fetch['httpCode'] ? 'HTTP ' . $fetch['httpCode'] : ($fetch['error'] ?: 'erreur inconnue');
+        $row['notes'] = 'Actualisation impossible (' . $details . '). Valeurs de secours conservées.';
+        return $row;
+    }
+
+    $product = ceo_extract_product($fetch['body']);
+    if ($product === null) {
+        $row['refresh_status'] = 'ok';
+        $row['schema_status'] = 'Aucun Product/Offer/Review/AggregateRating détecté';
+        $row['offers'] = null;
+        $row['review'] = null;
+        $row['aggregateRating'] = null;
+        $row['notes'] = 'Page actualisée : aucun Product rich result exploitable dans le JSON-LD publié.';
+        return $row;
+    }
+
+    $row['refresh_status'] = 'ok';
+    $row['schema_status'] = 'Product JSON-LD détecté';
+    $row['offers'] = ceo_schema_part($product, 'offers');
+    $row['review'] = ceo_schema_part($product, 'review');
+    $row['aggregateRating'] = ceo_schema_part($product, 'aggregateRating');
+    $row['notes'] = ceo_note_for_product($row);
+    return $row;
+}
+
+$rows = [];
+foreach ($seed['rows'] as $row) {
+    if (is_array($row)) {
+        $rows[] = ceo_refresh_row($row);
+    }
+}
+
+ceo_json_response([
+    'ok' => true,
+    'updatedAt' => gmdate('c'),
+    'updatedAtLabel' => gmdate('Y-m-d H:i:s') . ' UTC',
+    'rows' => $rows,
+]);
+"""
+    return template.replace("__SELLER_TRACKING_SEED__", seed)
+
+
 def seller_tracking_page(path="suivi-vendeurs.html"):
     rows = "\n".join(
         """
@@ -3608,14 +4058,7 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
     )
     headers = seller_tracking_column_headers()
     definitions = seller_tracking_column_definitions()
-    raw_data = json.dumps(
-        {
-            "updatedAt": SELLER_TRACKING_UPDATED_AT,
-            "rows": SELLER_TRACKING_ROWS,
-        },
-        ensure_ascii=False,
-        indent=2,
-    )
+    raw_data = json.dumps(seller_tracking_payload(), ensure_ascii=False, indent=2)
     script_data = raw_data.replace("</", "<\\/")
     return clean_html(f"""<!doctype html>
 <html lang="fr">
@@ -3688,6 +4131,9 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
     .status-pill {{ display: inline-flex; padding: 6px 8px; border-radius: 6px; background: #edf2e9; color: var(--brand-strong); font-weight: 800; line-height: 1.25; }}
     .schema-cell--offers {{ background: #fbfdf8; box-shadow: inset 4px 0 0 rgba(49, 89, 71, .55); }}
     .schema-card {{ display: grid; gap: 7px; margin: 0; }}
+    .schema-list-item {{ display: grid; gap: 6px; padding: 8px 0; border-bottom: 1px solid rgba(48, 72, 58, .14); }}
+    .schema-list-item:last-child {{ border-bottom: 0; }}
+    .schema-list-label {{ width: fit-content; padding: 2px 6px; border-radius: 4px; background: var(--soft); color: var(--brand-strong); font-size: .72rem; font-weight: 900; }}
     .schema-field {{ display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: 8px; align-items: start; padding: 0 0 7px; border-bottom: 1px solid rgba(48, 72, 58, .11); }}
     .schema-field:last-child {{ padding-bottom: 0; border-bottom: 0; }}
     dt {{ margin: 0; color: var(--muted); font-size: .72rem; font-weight: 800; text-transform: uppercase; }}
@@ -3697,6 +4143,10 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
     pre {{ max-width: none; margin: 0; white-space: pre-wrap; word-break: break-word; font-size: .78rem; line-height: 1.35; }}
     code {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
     .seller-empty {{ display: inline-flex; align-items: center; min-height: 28px; padding: 4px 8px; color: #6c6257; background: var(--warning); border: 1px solid rgba(164, 95, 42, .2); border-radius: 6px; font-style: italic; }}
+    .seller-live-status {{ background: #fff; }}
+    .seller-live-status[data-state="loading"] {{ background: #fff7e8; color: #7a4b1c; }}
+    .seller-live-status[data-state="ok"] {{ background: #e8f3ea; color: #244c37; }}
+    .seller-live-status[data-state="error"] {{ background: #fdecea; color: #8a2f24; }}
     .note-text {{ color: var(--ink); font-size: .84rem; }}
     .definitions {{ margin-top: 28px; }}
     .definitions h2 {{ margin: 0 0 12px; font-size: 1.35rem; font-family: Georgia, "Times New Roman", serif; font-weight: 500; color: var(--brand-strong); }}
@@ -3732,15 +4182,16 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
       <h1>Suivi vendeurs</h1>
       <p>Page technique interne. Elle reprend les valeurs structurées actuellement visibles dans les pages distributeurs externes pour <code>offers</code>, <code>review</code> et <code>aggregateRating</code>. Elle n'est pas reliée au reste du site et reste en <code>noindex,nofollow,noarchive</code>.</p>
       <div class="seller-meta">
-        <span>Dernière extraction : {escape(SELLER_TRACKING_UPDATED_AT)}</span>
+        <span id="seller-last-updated">Dernière extraction : {escape(SELLER_TRACKING_UPDATED_AT)}</span>
         <span>Portée : SAQ, Vinoble, Vinmonopolet</span>
         <span>Usage : suivi technique uniquement</span>
+        <span id="seller-refresh-status" class="seller-live-status" data-state="loading">Actualisation en cours...</span>
       </div>
     </header>
     <section class="seller-panel" aria-label="Données structurées des vendeurs externes">
       <div class="seller-panel-title">
         <h2>Relevé distributeurs</h2>
-        <span>{len(SELLER_TRACKING_ROWS)} pages sources contrôlées</span>
+        <span id="seller-tracking-count">{len(SELLER_TRACKING_ROWS)} pages sources contrôlées</span>
       </div>
       <div class="table-scroll">
       <table id="seller-tracking-table">
@@ -3760,7 +4211,7 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
 {headers}
           </tr>
         </thead>
-        <tbody>{rows}
+        <tbody id="seller-tracking-body">{rows}
         </tbody>
       </table>
       </div>
@@ -3773,9 +4224,10 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
     </section>
     <details>
       <summary>Exporter les données de suivi en JSON</summary>
-      <pre><code>{escape(raw_data)}</code></pre>
+      <pre><code id="seller-json-export">{escape(raw_data)}</code></pre>
     </details>
   </main>
+{seller_tracking_client_js()}
 </body>
 </html>
 """)
@@ -7564,6 +8016,7 @@ Le site est prêt pour la mise en ligne :
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
+- Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.
 
 ## Géociblage des boutons Acheter
 
@@ -7624,6 +8077,7 @@ Copier à la racine de l'hébergement OVH :
 - `llms.txt` ;
 - `.htaccess` ;
 - `market.php` ;
+- `suivi-vendeurs-data.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
 
@@ -7672,6 +8126,7 @@ def main():
     write("fiches-techniques-produits.html", technical_product_facts_page())
     write("en/fiches-techniques-produits.html", technical_product_facts_page_en())
     write("suivi-vendeurs.html", seller_tracking_page())
+    write("suivi-vendeurs-data.php", seller_tracking_data_php())
     write("mentions-legales.html", legal_page())
     for lang in LOCALIZED_LANGUAGES:
         write(f"{lang}/mentions-legales.html", legal_page(f"{lang}/mentions-legales.html", lang))

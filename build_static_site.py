@@ -7,8 +7,8 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260704-market-seo01"
-JS_VERSION = "20260704-market-seo01"
+CSS_VERSION = "20260704-assets01"
+JS_VERSION = "20260704-assets02"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
 LANGUAGE_MARKET_OPTIONS = (
@@ -19,6 +19,73 @@ LANGUAGE_MARKET_OPTIONS = (
     {"lang": "sv", "label": "SV"},
     {"lang": "fr", "label": "QC", "market": "qc", "region": "Québec"},
 )
+
+
+def web_variant_path(src: str) -> str:
+    path = Path(src)
+    return str(path.with_name(path.stem + "-web.webp")).replace("\\", "/")
+
+
+OPTIMIZED_IMAGE_PATHS = (
+    "assets/img/brand/hero-vine-02.jpg",
+    "assets/img/brand/hero-old-vine.jpg",
+    "assets/img/products/gamme-esprit-organic.jpg",
+    "assets/img/products/fondation-vs.jpg",
+    "assets/img/products/transmission-xo.jpg",
+    "assets/img/products/pineau-rouge-scene-floral-clean.png",
+    "assets/img/products/pineau-rouge-label.png",
+    "assets/img/old-site/img_home_part02_gamme.png",
+    "assets/img/old-site/img_home_vigne.jpg",
+    "assets/img/old-site/histoire.jpg",
+    "assets/img/old-site/domaine-scaled.jpg",
+    "assets/img/old-site/IMG_4079-scaled.jpg",
+    "assets/img/old-site/distillerie_02.jpg",
+    "assets/img/old-site/assemblage-scaled.jpg",
+    "assets/img/old-site/assemblage-1.jpg",
+    "assets/img/old-site/mise-en-bouteille-scaled.jpg",
+    "assets/img/old-site/leopold_croizet.jpg",
+    "assets/img/old-site/fanny_croizet.jpg",
+    "assets/img/old-site/VS-FONDATION.jpg",
+    "assets/img/old-site/img_degustation_vs.jpg",
+    "assets/img/old-site/img_prod_fondation_medaile.png",
+    "assets/img/old-site/img_prod_fondation_02.jpg",
+    "assets/img/old-site/VSOP-CONVICTION.jpg",
+    "assets/img/old-site/cocktail_vsop.jpg",
+    "assets/img/old-site/vsop-1.png",
+    "assets/img/old-site/img_prod_conviction_02.jpg",
+    "assets/img/old-site/NAPO-COHESION.jpg",
+    "assets/img/old-site/img_degustation_xo.jpg",
+    "assets/img/old-site/Sans-titre-15.png",
+    "assets/img/old-site/img_prod_cohesion_02.jpg",
+    "assets/img/old-site/XO-TRANSMISSION.jpg",
+    "assets/img/old-site/img_fanny.jpg",
+    "assets/img/old-site/img_prod_fondation_medaille_02.png",
+    "assets/img/old-site/img_prod_transmission_02.jpg",
+    "assets/img/old-site/img_prod_transmission_03.jpg",
+    "assets/img/old-site/XXO-scaled.jpg",
+    "assets/img/old-site/img_XXO_leopold.jpg",
+    "assets/img/old-site/img_deco_xxo.png",
+    "assets/img/old-site/SINGLE-CASK.jpg",
+    "assets/img/old-site/SINGLE-CASK_tonneau.jpg",
+    "assets/img/old-site/img_deco_singlecask-1.png",
+    "assets/img/old-site/visuel_pineau.jpg",
+    "assets/img/old-site/img_pineau_degustation.jpg",
+    "assets/img/old-site/deco_pineau-1.png",
+    "assets/img/old-site/visuel_pineau_02.jpg",
+    "assets/img/team/notre-equipe-cognac-esprit-organic.png",
+    "assets/img/team/team-cognac-esprit-organic-en.png",
+    "assets/img/team/team-cognac-esprit-organic-da.png",
+    "assets/img/team/team-cognac-esprit-organic-no.png",
+    "assets/img/team/team-cognac-esprit-organic-sv.png",
+)
+WEBP_ASSETS = {src: web_variant_path(src) for src in OPTIMIZED_IMAGE_PATHS}
+
+MOBILE_VIDEO_ASSETS = {
+    "assets/video/home-nature.mp4": "assets/video/home-nature-mobile.m4v",
+    "assets/video/approach-fins-bois.mp4": "assets/video/approach-fins-bois-mobile.m4v",
+    "assets/video/people-fond.mp4": "assets/video/people-fond-mobile.m4v",
+    "assets/video/production-abeille.mp4": "assets/video/production-abeille-mobile.m4v",
+}
 
 COMMON_I18N = {
     "fr": {
@@ -1299,6 +1366,96 @@ def language_menu_options_html() -> str:
     return "".join(buttons)
 
 
+def clean_asset_path(src: str) -> str:
+    return src.split("?", 1)[0]
+
+
+def optimized_image_path(src: str) -> str:
+    return WEBP_ASSETS.get(clean_asset_path(src), "")
+
+
+def image_dimensions(src: str):
+    path = ROOT / clean_asset_path(src)
+    if not path.exists():
+        return None
+    data = path.read_bytes()
+    if data.startswith(b"\x89PNG\r\n\x1a\n") and len(data) >= 24:
+        return int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")
+    if data[:2] == b"\xff\xd8":
+        i = 2
+        while i < len(data) - 9:
+            if data[i] != 0xFF:
+                i += 1
+                continue
+            marker = data[i + 1]
+            i += 2
+            if marker in (0xD8, 0xD9):
+                continue
+            if i + 2 > len(data):
+                return None
+            length = int.from_bytes(data[i:i + 2], "big")
+            if marker in (0xC0, 0xC1, 0xC2, 0xC3, 0xC5, 0xC6, 0xC7, 0xC9, 0xCA, 0xCB, 0xCD, 0xCE, 0xCF):
+                if i + 7 <= len(data):
+                    height = int.from_bytes(data[i + 3:i + 5], "big")
+                    width = int.from_bytes(data[i + 5:i + 7], "big")
+                    return width, height
+                return None
+            i += length
+    return None
+
+
+def image_size_attrs(src: str) -> str:
+    dimensions = image_dimensions(src)
+    if not dimensions:
+        return ""
+    width, height = dimensions
+    return f' width="{width}" height="{height}"'
+
+
+def prefixed_url(prefix: str, src: str) -> str:
+    return prefix + src
+
+
+def image_html(src: str, alt: str, prefix: str = "", class_name: str = "", attrs: str = "", loading: str = "", fetchpriority: str = "", width_height: bool = True) -> str:
+    class_attr = f' class="{escape(class_name)}"' if class_name else ""
+    loading_attr = f' loading="{escape(loading)}"' if loading else ""
+    priority_attr = f' fetchpriority="{escape(fetchpriority)}"' if fetchpriority else ""
+    trusted_attrs = f" {attrs.strip()}" if attrs else ""
+    size_attrs = image_size_attrs(src) if width_height else ""
+    img = (
+        f'<img{class_attr} src="{escape(prefixed_url(prefix, src))}" alt="{escape(alt)}"'
+        f'{loading_attr} decoding="async"{priority_attr}{size_attrs}{trusted_attrs}>'
+    )
+    webp = optimized_image_path(src)
+    if not webp:
+        return img
+    return f'<picture><source srcset="{escape(prefixed_url(prefix, webp))}" type="image/webp">{img}</picture>'
+
+
+def css_image_value(src: str, prefix: str = "", absolute: bool = False) -> str:
+    base_prefix = "/" if absolute else prefix
+    fallback = prefixed_url(base_prefix, src)
+    webp = optimized_image_path(src)
+    if not webp:
+        return f"url('{fallback}')"
+    extension = Path(clean_asset_path(src)).suffix.lower()
+    mime_subtype = "jpeg" if extension in (".jpg", ".jpeg") else extension.lstrip(".")
+    return f"image-set(url('{prefixed_url(base_prefix, webp)}') type('image/webp'), url('{fallback}') type('image/{mime_subtype}'))"
+
+
+def image_preload_link(src: str, prefix: str = "") -> str:
+    preload_src = optimized_image_path(src) or src
+    return f'<link rel="preload" as="image" href="{escape(prefixed_url(prefix, preload_src))}" fetchpriority="high">'
+
+
+def video_source_tags(src: str, prefix: str = "") -> str:
+    mobile = MOBILE_VIDEO_ASSETS.get(src)
+    mobile_source = ""
+    if mobile:
+        mobile_source = f'\n      <source src="{escape(prefixed_url(prefix, mobile))}" type="video/mp4" media="(max-width: 767px)">'
+    return f'{mobile_source}\n      <source src="{escape(prefixed_url(prefix, src))}" type="video/mp4">'
+
+
 def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intro_en: str, body: str, schemas=None, image="assets/img/products/gamme-esprit-organic.jpg", page_class="", hero_actions="", hero_video="", show_hero=True, robots=None, head_extra=""):
     prefix = rel_prefix(path)
     lang = lang_for_path(path)
@@ -1311,10 +1468,10 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         schema_items.extend(schemas)
     locale_links = "" if 'rel="alternate"' in head_extra else locale_alternate_links(path)
     head_extra = "\n  ".join(part for part in [locale_links, head_extra] if part)
-    root_image = "/" + image
+    root_image = css_image_value(image, absolute=True)
     hero_class = "page-hero video-hero" if hero_video else "page-hero"
     hero_video_html = f"""<video class="hero-bg-video" autoplay muted loop playsinline preload="metadata" poster="{prefix}{image}">
-        <source src="{prefix}{hero_video}" type="video/mp4">
+        {video_source_tags(hero_video, prefix)}
       </video>""" if hero_video else ""
     home_slideshow = ""
     if "home-page" in page_class:
@@ -1324,12 +1481,12 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
             "assets/img/old-site/img_home_03.jpg",
         ]
         home_slideshow = '<div class="home-hero-slideshow" aria-hidden="true">' + "".join(
-            f'<span class="{"is-active" if i == 0 else ""}" style="background-image:url({prefix}{src})"></span>'
+            f'<span class="{"is-active" if i == 0 else ""}" style="background-image:{css_image_value(src, prefix)}"></span>'
             for i, src in enumerate(home_slides)
         ) + "</div>"
     language_options = language_menu_options_html()
     hero_html = f"""
-    <section class="{hero_class}" style="--hero-image: url('{root_image}')">
+    <section class="{hero_class}" style="--hero-image: {root_image}">
       {home_slideshow}
       {hero_video_html}
       <div class="section-inner narrow">
@@ -1461,7 +1618,7 @@ def product_text_tile(product, prefix=""):
 
 def product_menu(prefix=""):
     return '<div class="bottle-menu" aria-label="Gamme Cognac Esprit Organic">' + "".join(
-        f'<a href="{prefix}produits/{p["slug"]}.html" title="{escape(p["name"])}"><img src="{prefix}{p["menu"]}" alt="{escape(p["name"])}"></a>'
+        f'<a href="{prefix}produits/{p["slug"]}.html" title="{escape(p["name"])}">{image_html(p["menu"], p["name"], prefix, loading="lazy")}</a>'
         for p in PRODUCTS
     ) + "</div>"
 
@@ -1477,12 +1634,12 @@ def split(left, right, cls=""):
 def medal_html(medal, product_name: str, prefix: str) -> str:
     if isinstance(medal, str):
         src = medal
-        return f'<img src="{prefix}{src}" alt="" role="presentation" aria-hidden="true" loading="lazy">'
+        return image_html(src, "", prefix, attrs='role="presentation" aria-hidden="true"', loading="lazy")
     src = medal["src"]
     alt = medal.get("alt", f"Distinction {product_name}")
     href = medal.get("href")
     label = medal.get("label", f"Voir le palmarès de {product_name}")
-    image = f'<img src="{prefix}{src}" alt="{escape(alt)}" loading="lazy">'
+    image = image_html(src, alt, prefix, loading="lazy")
     if href:
         return f'<a class="product-medal-link" href="{escape(href)}" target="_blank" rel="noopener noreferrer" aria-label="{escape(label)}">{image}</a>'
     return image
@@ -1516,7 +1673,7 @@ def award_visual_html(award, product_name: str, prefix: str, context: str = "pro
         return (
             f'<a class="award-page-medal-link" href="{escape(href)}" target="_blank" '
             f'rel="noopener noreferrer" aria-label="{escape(label)}">'
-            f'<img class="award-page-medal-image" src="{prefix}{escape(src)}" alt="{escape(alt)}" loading="lazy"></a>'
+            f'{image_html(src, alt, prefix, class_name="award-page-medal-image", loading="lazy")}</a>'
         )
     return ""
 
@@ -1552,11 +1709,11 @@ def home():
     body = f"""
 <section class="old-duo">
   <a class="old-panel image-panel" href="produits/transmission-xo.html">
-    <img src="assets/img/old-site/img_home_part02_gamme.png" alt="Gamme Cognac Esprit Organic">
+    {image_html("assets/img/old-site/img_home_part02_gamme.png", "Gamme Cognac Esprit Organic", loading="lazy")}
     <span class="panel-copy haut-gauche"><strong data-fr>Toute la nature de nos Cognacs</strong><strong data-en>All the nature of our Cognacs</strong><small data-fr>Organique et sans complexe</small><small data-en>Organic and uncomplicated</small></span>
   </a>
   <a class="old-panel image-panel" href="cocktails.html">
-    <img src="assets/img/old-site/img_home_cocktail_01.jpg" alt="Cocktail Cognac Esprit Organic">
+    {image_html("assets/img/old-site/img_home_cocktail_01.jpg", "Cocktail Cognac Esprit Organic", loading="lazy")}
     <span class="panel-copy haut-gauche"><strong data-fr>Accompagner nos Cognacs</strong><strong data-en>Pair our Cognacs</strong><small data-fr>Laisser courir l'inspiration</small><small data-en>Let inspiration flow</small></span>
   </a>
 </section>
@@ -1574,17 +1731,17 @@ def home():
 </section>
 <section class="old-grid">
   <a class="old-panel image-panel large" href="production/">
-    <img src="assets/img/old-site/img_home_vigne.jpg" alt="Vignes Cognac Esprit Organic">
+    {image_html("assets/img/old-site/img_home_vigne.jpg", "Vignes Cognac Esprit Organic", loading="lazy")}
     <span class="panel-copy haut-gauche"><strong data-fr>Le cycle naturel</strong><strong data-en>The natural cycle</strong><small data-fr>Travailler dans la durabilité</small><small data-en>Working sustainably</small></span>
   </a>
   <a class="old-panel image-panel" href="leopold-et-fanny/">
-    <img src="assets/img/old-site/histoire.jpg" alt="Léopold Croizet dans les vignes">
+    {image_html("assets/img/old-site/histoire.jpg", "Léopold Croizet dans les vignes", loading="lazy")}
     <span class="panel-copy bas-droit"><strong data-fr>L'esprit organic</strong><strong data-en>The organic spirit</strong><small data-fr>Notre histoire</small><small data-en>Our story</small></span>
   </a>
 </section>
 <a class="home-video-signature" href="demarche/" aria-label="La production - Maîtriser et laisser faire">
   <video autoplay muted loop playsinline preload="metadata" poster="assets/img/brand/home-video-poster.jpg">
-    <source src="assets/video/home-nature.mp4" type="video/mp4">
+    {video_source_tags("assets/video/home-nature.mp4")}
   </video>
   <div class="video-copy">
     <h2 data-fr>Maîtriser & laisser faire</h2>
@@ -1697,10 +1854,17 @@ def product_page(product):
     recognition_markup = f"\n      {recognition_blocks}" if recognition_blocks else ""
     buy_links = product_buy_links_html(product)
     gallery_images = [detail_image] + extra.get("gallery", [])
-    gallery_buttons = "".join(
-        f'<button type="button" data-gallery-thumb data-gallery-target="{prefix}{src}" aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}"><img src="{prefix}{src}" alt="{escape(product["name"])} - visuel {idx + 1}" loading="lazy"></button>'
-        for idx, src in enumerate(gallery_images)
-    )
+    gallery_buttons_parts = []
+    for idx, src in enumerate(gallery_images):
+        webp = optimized_image_path(src)
+        webp_attr = f' data-gallery-webp="{escape(prefix + webp)}"' if webp else ""
+        thumb_alt = f"{product['name']} - visuel {idx + 1}"
+        gallery_buttons_parts.append(
+            f'<button type="button" data-gallery-thumb data-gallery-target="{escape(prefix + src)}"{webp_attr} '
+            f'aria-label="Afficher le visuel {idx + 1} de {escape(product["name"])}">'
+            f'{image_html(src, thumb_alt, prefix, loading="lazy")}</button>'
+        )
+    gallery_buttons = "".join(gallery_buttons_parts)
     trade_pdf_download = ""
     if trade_pdf:
         trade_pdf_download = f"""
@@ -1721,7 +1885,7 @@ def product_page(product):
     {gallery_buttons}
   </div>
   <div class="product-scene">
-    <img src="{prefix}{detail_image}" alt="Visuel {escape(product['name'])}" data-gallery-main>
+    {image_html(detail_image, f"Visuel {product['name']}", prefix, attrs="data-gallery-main", fetchpriority="high")}
   </div>
   <div class="product-info-block">
     <div class="product-description">
@@ -1732,7 +1896,7 @@ def product_page(product):
       <p class="product-story">{escape(story)}</p>{buy_links}{recognition_markup}
     </div>
     <div class="product-bottle-inline">
-      <img src="{prefix}{tasting_image}" alt="Illustration {escape(product['name'])}">
+      {image_html(tasting_image, f"Illustration {product['name']}", prefix, loading="lazy")}
       <div>
         <h2 data-fr>Dégustation</h2>
         <h2 data-en>Tasting markers</h2>
@@ -1769,12 +1933,12 @@ def product_page(product):
 
 
 def approach_page(path="production/index.html"):
-    body = """
+    body = f"""
 <section class="legacy-content legacy-vertical">
   <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ Notre démarche</span></div>
   <section class="legacy-video-block">
     <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/domaine-scaled.jpg">
-      <source src="../assets/video/approach-fins-bois.mp4" type="video/mp4">
+      {video_source_tags("assets/video/approach-fins-bois.mp4", "../")}
     </video>
     <div>
       <p class="eyebrow">Cognac Esprit Organic</p>
@@ -1790,7 +1954,7 @@ def approach_page(path="production/index.html"):
       <p>Esprit Organic, c’est un état d’esprit dont le nom est un hommage à notre démarche.</p>
     </article>
     <div class="legacy-wide-media">
-      <img src="../assets/img/old-site/domaine-scaled.jpg" alt="Domaine de la Grande Versenne">
+      {image_html("assets/img/old-site/domaine-scaled.jpg", "Domaine de la Grande Versenne", "../", loading="lazy")}
     </div>
   </div>
   <div class="legacy-pair reverse">
@@ -1800,7 +1964,7 @@ def approach_page(path="production/index.html"):
       <p>Chaque produit raconte une histoire, celle d’une lignée de vignerons passionnés, implantés depuis plusieurs générations à Triac Lautrait, qui à force de travail, de conviction et de passion a pu transmettre cet héritage de la cuture de la vigne et du cognac et façonner la vision qui transpire aujourd’hui à travers ESPRIT ORGANIC.</p>
     </article>
     <div class="legacy-wide-media">
-      <img src="../assets/img/old-site/gamme_esprit_organic_nature-scaled.jpg" alt="Gamme Cognac Esprit Organic">
+      {image_html("assets/img/old-site/gamme_esprit_organic_nature-scaled.jpg", "Gamme Cognac Esprit Organic", "../", loading="lazy")}
     </div>
   </div>
 </section>
@@ -1814,7 +1978,7 @@ def production_page(path="demarche/index.html"):
   <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ La Production</span></div>
   <section class="legacy-video-block">
     <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/IMG_4079-scaled.jpg">
-      <source src="../assets/video/production-abeille.mp4" type="video/mp4">
+      {video_source_tags("assets/video/production-abeille.mp4", "../")}
     </video>
     <div>
       <p class="eyebrow">Cognac Esprit Organic</p>
@@ -1828,7 +1992,7 @@ def production_page(path="demarche/index.html"):
       <p>Nous sommes fiers d’être implantés dans le cru des Fins Bois, cru que nous revendiquons haut et fort. Il ne faut pas oublier que c’est le cru majoritaire de notre région, il coule dans les veines de nombreuses bouteilles de cognac.</p>
       <p>Notre domaine se situe à proximité de Jarnac et bénéficie des terres calcaires de champagne et des terres argilocalcaires et de « groies » des Fins Bois. Cette diversité apporte à nos eaux-de-vie une belle complexité aromatique.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/domaine-scaled.jpg" alt="Domaine de la Grande Versenne"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/domaine-scaled.jpg", "Domaine de la Grande Versenne", "../", loading="lazy")}</div>
   </div>
   <div class="legacy-pair reverse">
     <article class="legacy-text-block old-prod-vineyard">
@@ -1836,7 +2000,7 @@ def production_page(path="demarche/index.html"):
       <p>Nous respectons les sols en cultivant la vigne sans produits chimiques ni pesticides. Trèfle et fèverole habitent nos vignes et favorisent la régénération des sols. La conduite des vignes est étudiée en fonction du type de sol et des parcelles.</p>
       <p>Le but est d’obtenir des raisins sains de la meilleure qualité possible. Nous cultivons la diversité : le domaine se compose de 3 cépages de vins blancs : l’Ugni Blanc, le Colombard et la Folle Blanche.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/IMG_4079-scaled.jpg" alt="Vignes Cognac Esprit Organic"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/IMG_4079-scaled.jpg", "Vignes Cognac Esprit Organic", "../", loading="lazy")}</div>
   </div>
   <div class="legacy-pair">
     <article class="legacy-text-block old-prod-distillation">
@@ -1844,7 +2008,7 @@ def production_page(path="demarche/index.html"):
       <p>C’est une technique propre à notre maison, que je tiens de mon père, qu’il tenait lui-même de sa mère. Elle souligne la rondeur des eaux-de-vie et développe l’intensité des parfums de notre cru.</p>
       <p>Nous distillons dans 2 alambics en cuivre de 16 hl et 20 hl pour souligner cette complexité aromatique que l’on chérit tant.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/distillerie_02.jpg" alt="Alambics en cuivre"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/distillerie_02.jpg", "Alambics en cuivre", "../", loading="lazy")}</div>
   </div>
   <div class="legacy-pair reverse">
     <article class="legacy-text-block old-prod-aging">
@@ -1852,7 +2016,7 @@ def production_page(path="demarche/index.html"):
       <p>Fanny s’occupe passionnément d’élever nos eaux-de-vie, elle prend son temps et laisse s’opérer cette étape magique. Elle sélectionne avec soin ses barriques, en fonction des grains du bois, des chauffes et des contenances.</p>
       <p>Elle mise sur la diversité pour acquérir de la complexité. Les potentiels tanniques du bois de chêne sont aussi riches et variés que les caractéristiques organoleptiques des cépages utilisés.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/assemblage-scaled.jpg" alt="Fanny Croizet dégustant un Cognac"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/assemblage-scaled.jpg", "Fanny Croizet dégustant un Cognac", "../", loading="lazy")}</div>
   </div>
   <div class="legacy-pair">
     <article class="legacy-text-block old-prod-blending">
@@ -1860,7 +2024,7 @@ def production_page(path="demarche/index.html"):
       <p>C’est la partie complexe qui fait appel à tous nos sens car il s’agit ici d’obtenir un cognac équilibré, rond, aromatique et surtout agréable à consommer.</p>
       <p>Francis, le père de Fanny, n’est jamais loin pour déguster avec nous. C’est important pour moi de partager, d’écouter. On prend tellement de plaisir à le faire ce cognac. Le partage, c’est la moitié du travail.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/assemblage-1.jpg" alt="Travail d’assemblage Cognac Esprit Organic"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/assemblage-1.jpg", "Travail d’assemblage Cognac Esprit Organic", "../", loading="lazy")}</div>
   </div>
   <div class="legacy-pair reverse">
     <article class="legacy-text-block old-prod-bottling">
@@ -1868,7 +2032,7 @@ def production_page(path="demarche/index.html"):
       <p>Comme toutes les étapes d’élaboration de ce cognac, la mise en bouteille s’effectue également sur la propriété. Elle est faite à la main comme autrefois.</p>
       <p>Nous portons un soin particulier à l’habillage de nos bouteilles.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/mise-en-bouteille-scaled.jpg" alt="Mise en bouteille Cognac Esprit Organic"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/mise-en-bouteille-scaled.jpg", "Mise en bouteille Cognac Esprit Organic", "../", loading="lazy")}</div>
   </div>
 </section>
 """
@@ -1876,12 +2040,12 @@ def production_page(path="demarche/index.html"):
 
 
 def people_page(path="leopold-et-fanny/index.html"):
-    body = """
+    body = f"""
 <section class="legacy-content legacy-vertical people-content">
   <div class="legacy-breadcrumb"><a href="/">Accueil</a><span>/ Léopold et Fanny</span></div>
   <section class="legacy-video-block">
     <video autoplay muted loop playsinline preload="metadata" poster="../assets/img/old-site/leopold_croizet.jpg">
-      <source src="../assets/video/people-fond.mp4" type="video/mp4">
+      {video_source_tags("assets/video/people-fond.mp4", "../")}
     </video>
     <div>
       <p class="eyebrow">Cognac Esprit Organic</p>
@@ -1896,7 +2060,7 @@ def people_page(path="leopold-et-fanny/index.html"):
       <p>Études de commerce international et MBA en poche, il est armé pour reprendre et développer la propriété familiale. Il commence par convertir son vignoble en AB.</p>
       <p>Pour lui, l’avenir se trouve dans la préservation de son patrimoine et la conviction profonde que la notion de « bon sens paysan » doit reprendre sa place dans le travail de la terre.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/leopold_croizet.jpg" alt="Léopold Croizet"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/leopold_croizet.jpg", "Léopold Croizet", "../", loading="lazy")}</div>
   </div>
   <div class="legacy-pair reverse">
     <article class="legacy-text-block old-people-olive">
@@ -1905,7 +2069,7 @@ def people_page(path="leopold-et-fanny/index.html"):
       <p>Ce qui au départ n’était qu’un simple jeu sensitif a débouché sur un master de commerce international des vins et spiritueux avec une prédominance pour la dégustation des eaux-de-vie.</p>
       <p>Après quelques années à parfaire son nez et ses connaissances du vieillissement des eaux-de-vie dans une belle tonnellerie familiale, elle rejoint Léopold en 2016. Par amour, puis par passion.</p>
     </article>
-    <div class="legacy-wide-media"><img src="../assets/img/old-site/fanny_croizet.jpg" alt="Fanny Croizet"></div>
+    <div class="legacy-wide-media">{image_html("assets/img/old-site/fanny_croizet.jpg", "Fanny Croizet", "../", loading="lazy")}</div>
   </div>
 </section>
 """
@@ -1913,7 +2077,7 @@ def people_page(path="leopold-et-fanny/index.html"):
 
 
 def team_page(path="equipe/index.html"):
-    body = """
+    body = f"""
 <section class="team-page-content">
   <h1 class="visually-hidden">Notre équipe</h1>
   <div class="visually-hidden">
@@ -1931,7 +2095,7 @@ def team_page(path="equipe/index.html"):
     </ul>
   </div>
   <figure class="team-poster-shell">
-    <img src="../assets/img/team/notre-equipe-cognac-esprit-organic.png" alt="Notre équipe Cognac Esprit Organic : Léopold Croizet, Fanny Croizet, Damien Bertrand, Thierry Chavagne, Sébastien Gaborit, Joanna Gaborit, Stéphanie Beaulieu et Manoé Amrouche." width="2526" height="1786">
+    {image_html("assets/img/team/notre-equipe-cognac-esprit-organic.png", "Notre équipe Cognac Esprit Organic : Léopold Croizet, Fanny Croizet, Damien Bertrand, Thierry Chavagne, Sébastien Gaborit, Joanna Gaborit, Stéphanie Beaulieu et Manoé Amrouche.", "../", fetchpriority="high")}
   </figure>
 </section>
 """
@@ -3042,8 +3206,9 @@ def gallery_page():
         if file.suffix.lower() not in allowed:
             continue
         label = file.stem.replace("_", " ").replace("-", " ")
+        src = f"assets/img/old-site/{file.name}"
         items.append(
-            f'<figure><img src="assets/img/old-site/{escape(file.name)}" alt="Cognac Esprit Organic - {escape(label)}" loading="lazy"></figure>'
+            f'<figure>{image_html(src, f"Cognac Esprit Organic - {label}", loading="lazy")}</figure>'
         )
     body = f"""
 <section>
@@ -5250,6 +5415,121 @@ def normalize_generated_asset_versions():
             path.write_text(updated, encoding="utf-8")
 
 
+def generated_page_paths():
+    excluded_parts = {".git", "ancien-site-wordpress", "node_modules", "output"}
+    for path in ROOT.rglob("*.html"):
+        if any(part in excluded_parts for part in path.parts):
+            continue
+        yield path
+
+
+def asset_path_from_url(url: str) -> str:
+    clean = url.split("#", 1)[0].split("?", 1)[0]
+    if clean.startswith(DOMAIN + "/"):
+        clean = clean[len(DOMAIN) + 1:]
+    clean = clean.lstrip("/")
+    while clean.startswith("../"):
+        clean = clean[3:]
+    return clean
+
+
+def prefix_for_asset_url(url: str, asset: str) -> str:
+    clean = url.split("#", 1)[0].split("?", 1)[0]
+    index = clean.find(asset)
+    return clean[:index] if index >= 0 else ""
+
+
+IMG_TAG_RE = re.compile(r'<img\b[^>]*\bsrc="(?P<src>[^"]+)"[^>]*>', re.IGNORECASE)
+
+
+def inside_picture(html: str, start: int) -> bool:
+    last_open = html.rfind("<picture", 0, start)
+    last_close = html.rfind("</picture>", 0, start)
+    return last_open > last_close
+
+
+def add_dimensions_to_img_tag(tag: str, asset: str) -> str:
+    if re.search(r'\swidth="[^"]+"', tag) and re.search(r'\sheight="[^"]+"', tag):
+        return tag
+    attrs = image_size_attrs(asset)
+    if not attrs:
+        return tag
+    return tag[:-1] + attrs + ">"
+
+
+def optimize_generated_images(html: str) -> str:
+    def replace(match):
+        tag = match.group(0)
+        src = match.group("src")
+        asset = asset_path_from_url(src)
+        if not asset.startswith("assets/img/"):
+            return tag
+        updated_tag = add_dimensions_to_img_tag(tag, asset)
+        if inside_picture(html, match.start()):
+            return updated_tag
+        if "product-award-image" in updated_tag or "product-award-reflection" in updated_tag:
+            return updated_tag
+        webp = optimized_image_path(asset)
+        if not webp:
+            return updated_tag
+        prefix = prefix_for_asset_url(src, asset)
+        return f'<picture><source srcset="{escape(prefix + webp)}" type="image/webp">{updated_tag}</picture>'
+
+    return IMG_TAG_RE.sub(replace, html)
+
+
+GALLERY_BUTTON_RE = re.compile(
+    r'<button\b(?=[^>]*\bdata-gallery-thumb\b)(?=[^>]*\bdata-gallery-target="(?P<target>[^"]+)")[^>]*>',
+    re.IGNORECASE,
+)
+
+
+def sync_gallery_webp_targets(html: str) -> str:
+    def replace(match):
+        tag = match.group(0)
+        if "data-gallery-webp" in tag:
+            return tag
+        target = match.group("target")
+        asset = asset_path_from_url(target)
+        webp = optimized_image_path(asset)
+        if not webp:
+            return tag
+        prefix = prefix_for_asset_url(target, asset)
+        return tag[:-1] + f' data-gallery-webp="{escape(prefix + webp)}">'
+
+    return GALLERY_BUTTON_RE.sub(replace, html)
+
+
+def sync_mobile_video_sources(html: str) -> str:
+    for source, mobile in MOBILE_VIDEO_ASSETS.items():
+        pattern = re.compile(
+            rf'<source src="(?P<prefix>(?:\.\./)*){re.escape(source)}" type="video/mp4">',
+            re.IGNORECASE,
+        )
+
+        def replace(match):
+            prefix = match.group("prefix")
+            if mobile in html[max(0, match.start() - 220):match.start()]:
+                return match.group(0)
+            return (
+                f'<source src="{escape(prefix + mobile)}" type="video/mp4" media="(max-width: 767px)">\n'
+                f'      {match.group(0)}'
+            )
+
+        html = pattern.sub(replace, html)
+    return html
+
+
+def optimize_generated_assets():
+    for path in generated_page_paths():
+        html = path.read_text(encoding="utf-8")
+        updated = sync_mobile_video_sources(html)
+        updated = sync_gallery_webp_targets(updated)
+        updated = optimize_generated_images(updated)
+        if updated != html:
+            path.write_text(updated, encoding="utf-8")
+
+
 MARKET_SCRIPT_RE = re.compile(
     r'\n\s*<script src="(?:\.\./)*market\.php\?v=[^"]+"></script>',
     re.IGNORECASE,
@@ -5939,6 +6219,8 @@ body[data-lang="no"] [data-en],
 body[data-lang="sv"] [data-en] { display: none !important; }
 a { color: inherit; }
 img { display: block; max-width: 100%; height: auto; }
+picture { display: block; max-width: 100%; }
+picture > img { display: block; max-width: 100%; height: auto; }
 .skip-link { position: absolute; left: 16px; top: -60px; z-index: 50; background: var(--ink); color: var(--white); padding: 10px 14px; }
 .skip-link:focus { top: 16px; }
 .site-header { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid rgba(94, 61, 35, .18); background: rgba(236, 232, 220, .92); backdrop-filter: blur(14px); }
@@ -6231,6 +6513,10 @@ p { margin: 18px 0 0; }
   -webkit-overflow-scrolling: touch;
 }
 .team-poster-shell img {
+  width: 100%;
+  min-width: 0;
+}
+.team-poster-shell picture {
   width: 100%;
   min-width: 940px;
 }
@@ -6538,6 +6824,11 @@ p { margin: 18px 0 0; }
   min-height: inherit;
   object-fit: cover;
   transition: transform .85s ease;
+}
+.old-panel.image-panel picture {
+  width: 100%;
+  height: 100%;
+  min-height: inherit;
 }
 .old-panel.image-panel::after {
   content: "";
@@ -6986,6 +7277,9 @@ p { margin: 18px 0 0; }
   min-height: clamp(330px, 42vw, 620px);
   object-fit: cover;
 }
+.legacy-wide-media picture {
+  width: 100%;
+}
 @media (min-width: 1061px) {
   .legacy-page .legacy-video-block {
     min-height: clamp(330px, 32vw, 390px);
@@ -7159,6 +7453,9 @@ p { margin: 18px 0 0; }
   height: auto;
   transition: transform .35s ease;
 }
+.bottle-menu picture {
+  width: 70px;
+}
 .bottle-menu a:hover img {
   transform: translateY(-28px);
 }
@@ -7208,6 +7505,9 @@ p { margin: 18px 0 0; }
   height: auto;
   object-fit: cover;
 }
+.product-gallery-rail picture {
+  width: 100%;
+}
 .product-scene {
   min-height: 0;
   overflow: hidden;
@@ -7217,6 +7517,9 @@ p { margin: 18px 0 0; }
   width: 100%;
   height: auto;
   object-fit: contain;
+}
+.product-scene picture {
+  width: 100%;
 }
 .pineau-rouge-detail .pineau-rouge-scene {
   background: #fff !important;
@@ -7482,6 +7785,9 @@ body[data-market="no"] .norway-buy-link {
   height: auto;
   object-fit: contain;
 }
+.product-medals picture {
+  width: 100%;
+}
 .product-bottle-inline {
   display: grid;
   grid-template-columns: 20% 80%;
@@ -7496,6 +7802,11 @@ body[data-market="no"] .norway-buy-link {
   object-fit: cover;
   margin: 0;
   filter: none;
+}
+.product-bottle-inline picture {
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
 }
 .product-bottle-inline > div {
   padding: 40px 60px;
@@ -8118,6 +8429,11 @@ body[data-market="no"] .norway-buy-link {
   height: 100%;
   object-fit: cover;
 }
+.product-extra-gallery picture,
+.technical-hero-image picture {
+  width: 100%;
+  height: 100%;
+}
 .product-text-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -8213,6 +8529,10 @@ thead th {
   min-height: 260px;
   object-fit: cover;
   transition: transform .7s ease;
+}
+.legacy-gallery picture {
+  width: 100%;
+  height: 100%;
 }
 .legacy-gallery figure:hover img {
   transform: scale(1.05);
@@ -8531,6 +8851,14 @@ document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
     const main = detail && detail.querySelector("[data-gallery-main]");
     const next = button.dataset.galleryTarget;
     if (main && next) {
+      const source = main.closest("picture")?.querySelector('source[type="image/webp"]');
+      if (source) {
+        if (button.dataset.galleryWebp) {
+          source.srcset = button.dataset.galleryWebp;
+        } else {
+          source.removeAttribute("srcset");
+        }
+      }
       main.src = next;
     }
   });
@@ -8938,6 +9266,7 @@ def main():
     sync_localized_marketing_copy()
     write_market_seo_pages()
     write_static_files()
+    optimize_generated_assets()
     normalize_generated_asset_versions()
     remove_market_script_includes()
     normalize_generated_accessibility_markup()

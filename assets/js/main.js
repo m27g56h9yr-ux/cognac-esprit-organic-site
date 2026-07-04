@@ -1443,6 +1443,14 @@ document.querySelectorAll("[data-gallery-thumb]").forEach((button) => {
     const main = detail && detail.querySelector("[data-gallery-main]");
     const next = button.dataset.galleryTarget;
     if (main && next) {
+      const source = main.closest("picture")?.querySelector('source[type="image/webp"]');
+      if (source) {
+        if (button.dataset.galleryWebp) {
+          source.srcset = button.dataset.galleryWebp;
+        } else {
+          source.removeAttribute("srcset");
+        }
+      }
       main.src = next;
     }
   });

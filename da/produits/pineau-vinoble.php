@@ -24,7 +24,7 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('pineau', 'dk', 'https://co
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Raleway:wght@200;300;400;500;600;700;800;900&family=Roboto+Slab:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../assets/css/styles.css?v=20260704-market-seo01">
+  <link rel="stylesheet" href="../../assets/css/styles.css?v=20260704-assets01">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"Organization","name":"Cognac Esprit Organic","url":"https://cognac-esprit-organic.com/","email":"Cognac@mdpierre.com","telephone":"+33 5 45 35 88 10","address":{"@type":"PostalAddress","streetAddress":"30 Rue d'Angoulême","postalCode":"16200","addressLocality":"Triac-Lautrait","addressCountry":"FR"},"brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"@id":"https://cognac-esprit-organic.com/#organization"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Forside","item":"https://cognac-esprit-organic.com/da/"},{"@type":"ListItem","position":2,"name":"Hvid Pineau","item":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php"}],"@id":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php#breadcrumb"}</script>
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Product","name":"Hvid Pineau","brand":{"@type":"Brand","name":"Cognac Esprit Organic","@id":"https://cognac-esprit-organic.com/#brand"},"category":"Pineau des Charentes","image":"https://cognac-esprit-organic.com/assets/img/products/pineau.jpg","description":"Økologisk hvid Pineau des Charentes lavet med Colombard og Ugni Blanc, uden tilsatte sulfitter.","@id":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php#product","manufacturer":{"@id":"https://cognac-esprit-organic.com/#organization"},"additionalProperty":[{"@type":"PropertyValue","name":"Oprindelse","value":"Frankrig"},{"@type":"PropertyValue","name":"Indhold","value":"750 ml"},{"@type":"PropertyValue","name":"Alkoholprocent","value":"17,5 % vol"},{"@type":"PropertyValue","name":"Druesorter","value":"Ugni Blanc, Colombard, Folle Blanche"},{"@type":"PropertyValue","name":"Mund","value":"Brioche, frisk druesaft, pære, sveske, vanilje"},{"@type":"PropertyValue","name":"Farve","value":"Gyldengul, strågul, klar"},{"@type":"PropertyValue","name":"Næse","value":"Udarbejdet og balanceret. Fin sammensætning af frugtige noter, friske druer og pære, med vanilje"},{"@type":"PropertyValue","name":"Gane","value":"Rig, fyldig, kompleks"},{"@type":"PropertyValue","name":"Afslutning","value":"Frugtig, intens, fyldig"},{"@type":"PropertyValue","name":"Dokumenteret udmærkelse","value":"Officielt resultat fra Concours Mondial de Bruxelles 2025 for Pineau des Charentes Esprit Organic 2011"},{"@type":"PropertyValue","name":"GTIN","value":"3322870002227"}],"award":"Sølvmedalje - Concours Mondial de Bruxelles 2025","size":"750 ml","subjectOf":{"@type":"DigitalDocument","name":"Hvid Pineau smageark","encodingFormat":"application/pdf","url":"https://cognac-esprit-organic.com/assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-da.pdf"},"gtin13":"3322870002227","url":"https://cognac-esprit-organic.com/da/produits/pineau-vinoble.php"}</script>
@@ -59,10 +59,10 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('pineau', 'dk', 'https://co
 </section>
 <section class="product-old-detail" style="--product-tone: #6b4d13; --product-gallery: #eae7db; --product-top: #565083; --product-mid: #3e3b59; --product-low: #6e6baf; --product-accent: #ecb038;">
   <div class="product-gallery-rail">
-    <button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/visuel_pineau.jpg" aria-label="Vis visuel 1 af Hvid Pineau"><img src="../../assets/img/old-site/visuel_pineau.jpg" alt="Hvid Pineau Cognac Esprit Organic-flaske" loading="lazy" width="1600" height="1600"></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/visuel_pineau_02.jpg" aria-label="Vis visuel 2 af Hvid Pineau"><img src="../../assets/img/old-site/visuel_pineau_02.jpg" alt="Hvid Pineau serveret til smagning" loading="lazy" width="1600" height="1600"></button>
+    <button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/visuel_pineau.jpg" aria-label="Vis visuel 1 af Hvid Pineau" data-gallery-webp="../../assets/img/old-site/visuel_pineau-web.webp"><picture><source srcset="../../assets/img/old-site/visuel_pineau-web.webp" type="image/webp"><img src="../../assets/img/old-site/visuel_pineau.jpg" alt="Hvid Pineau Cognac Esprit Organic-flaske" loading="lazy" width="1600" height="1600"></picture></button><button type="button" data-gallery-thumb data-gallery-target="../../assets/img/old-site/visuel_pineau_02.jpg" aria-label="Vis visuel 2 af Hvid Pineau" data-gallery-webp="../../assets/img/old-site/visuel_pineau_02-web.webp"><picture><source srcset="../../assets/img/old-site/visuel_pineau_02-web.webp" type="image/webp"><img src="../../assets/img/old-site/visuel_pineau_02.jpg" alt="Hvid Pineau serveret til smagning" loading="lazy" width="1600" height="1600"></picture></button>
   </div>
   <div class="product-scene">
-    <img src="../../assets/img/old-site/visuel_pineau.jpg" alt="Visuel Hvid Pineau" data-gallery-main width="1600" height="1600">
+    <picture><source srcset="../../assets/img/old-site/visuel_pineau-web.webp" type="image/webp"><img src="../../assets/img/old-site/visuel_pineau.jpg" alt="Visuel Hvid Pineau" data-gallery-main width="1600" height="1600"></picture>
   </div>
   <div class="product-info-block">
     <div class="product-description">
@@ -85,10 +85,10 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('pineau', 'dk', 'https://co
           </span>
         </a>
       </div>
-      <div class="product-medals"><img src="../../assets/img/old-site/deco_pineau-1.png" alt="Udmærkelse Hvid Pineau" loading="lazy" width="1600" height="1429"></div>
+      <div class="product-medals"><picture><source srcset="../../assets/img/old-site/deco_pineau-1-web.webp" type="image/webp"><img src="../../assets/img/old-site/deco_pineau-1.png" alt="Udmærkelse Hvid Pineau" loading="lazy" width="1600" height="1429"></picture></div>
     </div>
     <div class="product-bottle-inline">
-      <img src="../../assets/img/old-site/img_pineau_degustation.jpg" alt="Illustration Hvid Pineau" width="1035" height="1600">
+      <picture><source srcset="../../assets/img/old-site/img_pineau_degustation-web.webp" type="image/webp"><img src="../../assets/img/old-site/img_pineau_degustation.jpg" alt="Illustration Hvid Pineau" width="1035" height="1600"></picture>
       <div>
         <h2 data-fr>Smagning</h2>
         <h2 data-en>Smagsmarkører</h2>
@@ -182,6 +182,6 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('pineau', 'dk', 'https://co
       </div>
     </div>
   </footer>
-  <script src="../../assets/js/main.js?v=20260704-market-seo01"></script>
+  <script src="../../assets/js/main.js?v=20260704-assets02"></script>
 </body>
 </html>

@@ -252,7 +252,25 @@ function ceo_extract_product(string $html): ?array
     foreach (ceo_json_ld_blocks($html) as $block) {
         ceo_find_products($block, $products);
     }
+    usort($products, function (array $a, array $b): int {
+        return ceo_product_score($b) <=> ceo_product_score($a);
+    });
     return $products[0] ?? null;
+}
+
+function ceo_product_score(array $product): int
+{
+    $score = 0;
+    if (array_key_exists('offers', $product) && !ceo_is_empty_schema_value($product['offers'])) {
+        $score += 4;
+    }
+    if (array_key_exists('aggregateRating', $product) && !ceo_is_empty_schema_value($product['aggregateRating'])) {
+        $score += 3;
+    }
+    if (array_key_exists('review', $product) && !ceo_is_empty_schema_value($product['review'])) {
+        $score += 2;
+    }
+    return $score;
 }
 
 function ceo_clean_schema_value($value)

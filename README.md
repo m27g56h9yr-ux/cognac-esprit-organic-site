@@ -37,6 +37,7 @@ Le site est prêt pour la mise en ligne :
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
 - Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.
+- Données produit partenaire : `partner-product-schema.php` relit la page distributeur associée au bouton Acheter visible et renvoie les valeurs `offers`, `review` et `aggregateRating` à injecter dans la page produit.
 
 ## Géociblage des boutons Acheter
 
@@ -52,6 +53,8 @@ Le fonctionnement est complémentaire :
 2. `assets/js/main.js` applique ensuite un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
 3. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
 4. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
+
+Quand un bouton Acheter devient visible sur une page produit, `assets/js/main.js` appelle `partner-product-schema.php` avec le couple `product` / `market`. L'endpoint relit immédiatement la page partenaire, extrait le meilleur bloc Product JSON-LD disponible, puis le JavaScript injecte un bloc JSON-LD partenaire seulement si au moins une valeur `offers`, `review` ou `aggregateRating` est publiée par le distributeur.
 
 Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
 
@@ -97,6 +100,7 @@ Copier à la racine de l'hébergement OVH :
 - `llms.txt` ;
 - `.htaccess` ;
 - `market.php` ;
+- `partner-product-schema.php` ;
 - `suivi-vendeurs-data.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.

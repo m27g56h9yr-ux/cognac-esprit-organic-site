@@ -1291,6 +1291,69 @@ function updateLanguageMenuState(lang) {
   });
 }
 
+let partnerSchemaRequestId = 0;
+
+function getCurrentProductSlug() {
+  const linkSlug = document.querySelector(".product-buy-link[data-product-slug]")?.dataset.productSlug || "";
+  if (/^[a-z0-9-]+$/.test(linkSlug)) return linkSlug;
+  const parts = window.location.pathname.split("/").filter(Boolean);
+  const productIndex = parts.lastIndexOf("produits");
+  const fileName = productIndex >= 0 ? parts[productIndex + 1] || "" : "";
+  const match = fileName.match(/^([a-z0-9-]+)\.html$/);
+  return match ? match[1] : "";
+}
+
+function removePartnerProductSchema() {
+  document.querySelectorAll('script[data-partner-product-schema="true"]').forEach((script) => script.remove());
+}
+
+function isPartnerBuyLinkVisible(link) {
+  if (!link) return false;
+  const style = window.getComputedStyle(link);
+  return style.display !== "none" && style.visibility !== "hidden";
+}
+
+function getVisiblePartnerBuyLink(productSlug, market) {
+  return Array.from(document.querySelectorAll(".product-buy-link[data-partner-market]")).find((link) => {
+    const linkMarket = normalizeMarket(link.dataset.partnerMarket);
+    const linkProduct = link.dataset.productSlug || productSlug;
+    return linkProduct === productSlug && linkMarket === market && isPartnerBuyLinkVisible(link);
+  }) || null;
+}
+
+function refreshPartnerProductSchema() {
+  const requestId = ++partnerSchemaRequestId;
+  removePartnerProductSchema();
+  const productSlug = getCurrentProductSlug();
+  const market = normalizeMarket(document.body.dataset.market || visitorMarket);
+  if (!productSlug || !market) return;
+  const link = getVisiblePartnerBuyLink(productSlug, market);
+  if (!link) return;
+  const endpoint = new URL("partner-product-schema.php", getSiteRootUrl());
+  endpoint.searchParams.set("product", productSlug);
+  endpoint.searchParams.set("market", market);
+  endpoint.searchParams.set("ts", String(Date.now()));
+  fetch(endpoint.href, {
+    cache: "no-store",
+    credentials: "same-origin",
+    headers: { "Accept": "application/json" }
+  })
+    .then((response) => (response.ok ? response.json() : null))
+    .then((payload) => {
+      if (requestId !== partnerSchemaRequestId) return;
+      if (!payload || payload.ok !== true || payload.hasSchema !== true || !payload.schema) return;
+      const script = document.createElement("script");
+      script.type = "application/ld+json";
+      script.dataset.partnerProductSchema = "true";
+      script.dataset.partnerMarket = market;
+      script.dataset.partnerSeller = payload.seller || link.dataset.partnerSeller || "";
+      script.dataset.partnerSource = payload.source_url || link.dataset.partnerSchemaUrl || "";
+      script.textContent = JSON.stringify(payload.schema);
+      document.head.appendChild(script);
+    })
+    .catch(() => {});
+}
+
 function setLanguage(lang) {
   if (!supportedLangs.includes(lang)) lang = "fr";
   document.body.dataset.lang = lang;
@@ -1300,6 +1363,7 @@ function setLanguage(lang) {
   applyTextTranslations(lang);
   renderFooterEnhancements(lang);
   updateLanguageMenuState(lang);
+  refreshPartnerProductSchema();
   if (langMenu) langMenu.classList.remove("is-open");
 }
 
@@ -1309,11 +1373,12 @@ function setVisitorMarket(market) {
   visitorMarket = normalizeMarket(market);
   document.body.dataset.market = visitorMarket;
   updateLanguageMenuState(document.body.dataset.lang || initialLang);
+  refreshPartnerProductSchema();
 }
 
 function loadServerMarket() {
   if (detectConfiguredMarket()) return;
-  fetch("/market.php?format=json&v=20260704-market01", {
+  fetch("/market.php?format=json&v=20260704-partner-schema01", {
     cache: "no-store",
     credentials: "same-origin"
   })

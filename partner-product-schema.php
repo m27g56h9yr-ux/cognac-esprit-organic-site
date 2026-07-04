@@ -141,12 +141,41 @@ JSON;
 
 $seed = json_decode($seedJson, true);
 if (!is_array($seed) || !isset($seed['rows']) || !is_array($seed['rows'])) {
-    ceo_json_response(['ok' => false, 'error' => 'Configuration de suivi invalide.'], 500);
+    ceo_json_response(['ok' => false, 'error' => 'Configuration partenaire invalide.'], 500);
+}
+
+function ceo_normalize_market($value): string
+{
+    $normalized = strtolower(trim((string) $value));
+    $normalized = preg_replace('/[_\s]+/', '-', $normalized) ?: '';
+    $markets = [
+        'qc' => 'qc',
+        'quebec' => 'qc',
+        'québec' => 'qc',
+        'ca-qc' => 'qc',
+        'dk' => 'dk',
+        'danmark' => 'dk',
+        'denmark' => 'dk',
+        'danemark' => 'dk',
+        'no' => 'no',
+        'norway' => 'no',
+        'norge' => 'no',
+        'norvège' => 'no',
+        'norvege' => 'no',
+        'sj' => 'no',
+    ];
+    return $markets[$normalized] ?? '';
+}
+
+function ceo_request_value(string $key): string
+{
+    $value = $_GET[$key] ?? '';
+    return is_string($value) ? trim($value) : '';
 }
 
 function ceo_fetch_url(string $url): array
 {
-    $userAgent = 'Mozilla/5.0 (compatible; CognacEspritOrganicSellerMonitor/1.0; +https://cognac-esprit-organic.com/suivi-vendeurs.html)';
+    $userAgent = 'Mozilla/5.0 (compatible; CognacEspritOrganicPartnerSchema/1.0; +https://cognac-esprit-organic.com/)';
     if (function_exists('curl_init')) {
         $ch = curl_init($url);
         curl_setopt_array($ch, [
@@ -316,66 +345,110 @@ function ceo_schema_part(array $product, string $key)
     return array_key_exists($key, $product) ? ceo_clean_schema_value($product[$key]) : null;
 }
 
-function ceo_note_for_product(array $row): string
+function ceo_find_partner_row(array $rows, string $slug, string $market): ?array
 {
-    $missing = [];
-    if (ceo_is_empty_schema_value($row['offers'])) {
-        $missing[] = 'offers';
+    foreach ($rows as $row) {
+        if (!is_array($row)) {
+            continue;
+        }
+        $rowSlug = (string) ($row['product_slug'] ?? '');
+        $rowMarket = ceo_normalize_market($row['market_key'] ?? $row['market'] ?? '');
+        if ($rowSlug === $slug && $rowMarket === $market) {
+            return $row;
+        }
     }
-    if (ceo_is_empty_schema_value($row['review'])) {
-        $missing[] = 'review';
-    }
-    if (ceo_is_empty_schema_value($row['aggregateRating'])) {
-        $missing[] = 'aggregateRating';
-    }
-    if ($missing === []) {
-        return 'Product JSON-LD actualisé : offers, review et aggregateRating sont exposés.';
-    }
-    return 'Product JSON-LD actualisé. Non exposé : ' . implode(', ', $missing) . '.';
+    return null;
 }
 
-function ceo_refresh_row(array $row): array
+function ceo_product_page_url(string $slug): string
 {
-    $row['refreshed_at'] = gmdate('c');
-    $fetch = ceo_fetch_url((string) $row['source_url']);
-    $row['source_http_code'] = $fetch['httpCode'];
-    if (!$fetch['ok']) {
-        $row['refresh_status'] = 'fetch_error';
-        $details = $fetch['httpCode'] ? 'HTTP ' . $fetch['httpCode'] : ($fetch['error'] ?: 'erreur inconnue');
-        $row['notes'] = 'Actualisation impossible (' . $details . '). Valeurs de secours conservées.';
-        return $row;
-    }
+    return 'https://cognac-esprit-organic.com/produits/' . rawurlencode($slug) . '.html';
+}
 
-    $product = ceo_extract_product($fetch['body']);
-    if ($product === null) {
-        $row['refresh_status'] = 'ok';
-        $row['schema_status'] = 'Aucun Product/Offer/Review/AggregateRating détecté';
-        $row['offers'] = null;
-        $row['review'] = null;
-        $row['aggregateRating'] = null;
-        $row['notes'] = 'Page actualisée : aucun Product rich result exploitable dans le JSON-LD publié.';
-        return $row;
+function ceo_partner_schema_from_row(array $row): ?array
+{
+    $schema = [
+        '@context' => 'https://schema.org',
+        '@type' => 'Product',
+        '@id' => ceo_product_page_url((string) $row['product_slug']) . '#product',
+        'name' => (string) $row['product'],
+        'brand' => [
+            '@type' => 'Brand',
+            'name' => 'Cognac Esprit Organic',
+            '@id' => 'https://cognac-esprit-organic.com/#brand',
+        ],
+        'url' => ceo_product_page_url((string) $row['product_slug']),
+        'sameAs' => (string) $row['source_url'],
+    ];
+    $hasPartnerRichData = false;
+    foreach (['offers', 'review', 'aggregateRating'] as $key) {
+        if (!ceo_is_empty_schema_value($row[$key] ?? null)) {
+            $schema[$key] = $row[$key];
+            $hasPartnerRichData = true;
+        }
     }
+    return $hasPartnerRichData ? $schema : null;
+}
 
+$slug = ceo_request_value('product');
+$market = ceo_normalize_market(ceo_request_value('market'));
+if (!preg_match('/^[a-z0-9-]+$/', $slug) || $market === '') {
+    ceo_json_response(['ok' => false, 'error' => 'Paramètres product/market invalides.'], 400);
+}
+
+$row = ceo_find_partner_row($seed['rows'], $slug, $market);
+if ($row === null) {
+    ceo_json_response([
+        'ok' => false,
+        'error' => 'Aucune page partenaire configurée pour ce produit et ce marché.',
+        'product' => $slug,
+        'market' => $market,
+    ], 404);
+}
+
+$row['refreshed_at'] = gmdate('c');
+$fetch = ceo_fetch_url((string) $row['source_url']);
+$row['source_http_code'] = $fetch['httpCode'];
+if (!$fetch['ok']) {
+    $details = $fetch['httpCode'] ? 'HTTP ' . $fetch['httpCode'] : ($fetch['error'] ?: 'erreur inconnue');
+    ceo_json_response([
+        'ok' => false,
+        'error' => 'Actualisation impossible : ' . $details,
+        'product' => $slug,
+        'market' => $market,
+        'seller' => $row['seller'] ?? '',
+        'source_url' => $row['source_url'] ?? '',
+        'source_http_code' => $row['source_http_code'],
+        'refreshed_at' => $row['refreshed_at'],
+    ], 502);
+}
+
+$product = ceo_extract_product($fetch['body']);
+if ($product === null) {
+    $row['refresh_status'] = 'ok';
+    $row['schema_status'] = 'Aucun Product/Offer/Review/AggregateRating détecté';
+    $row['offers'] = null;
+    $row['review'] = null;
+    $row['aggregateRating'] = null;
+} else {
     $row['refresh_status'] = 'ok';
     $row['schema_status'] = 'Product JSON-LD détecté';
     $row['offers'] = ceo_schema_part($product, 'offers');
     $row['review'] = ceo_schema_part($product, 'review');
     $row['aggregateRating'] = ceo_schema_part($product, 'aggregateRating');
-    $row['notes'] = ceo_note_for_product($row);
-    return $row;
 }
 
-$rows = [];
-foreach ($seed['rows'] as $row) {
-    if (is_array($row)) {
-        $rows[] = ceo_refresh_row($row);
-    }
-}
-
+$schema = ceo_partner_schema_from_row($row);
 ceo_json_response([
     'ok' => true,
-    'updatedAt' => gmdate('c'),
-    'updatedAtLabel' => gmdate('Y-m-d H:i:s') . ' UTC',
-    'rows' => $rows,
+    'product' => $slug,
+    'market' => $market,
+    'seller' => $row['seller'] ?? '',
+    'source_url' => $row['source_url'] ?? '',
+    'source_http_code' => $row['source_http_code'],
+    'refresh_status' => $row['refresh_status'] ?? 'ok',
+    'schema_status' => $row['schema_status'] ?? '',
+    'hasSchema' => $schema !== null,
+    'schema' => $schema,
+    'refreshed_at' => $row['refreshed_at'],
 ]);

@@ -35,6 +35,31 @@ Le site est prêt pour la mise en ligne :
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
+- Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
+
+## Géociblage des boutons Acheter
+
+Les liens d'achat produits sont présents dans les pages, mais masqués par défaut. Ils ne s'affichent que si le marché visiteur est reconnu :
+
+- `qc` : SAQ ;
+- `dk` : Vinoble ;
+- `no` : Vinmonopolet.
+
+Le fonctionnement est complémentaire :
+
+1. `assets/js/main.js` applique d'abord un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
+2. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
+3. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
+
+Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
+
+En local, on peut tester l'affichage avec :
+
+```text
+http://localhost:8080/produits/conviction-vsop.html?market=qc
+http://localhost:8080/produits/conviction-vsop.html?market=dk
+http://localhost:8080/produits/conviction-vsop.html?market=no
+```
 
 ## Ancien site WordPress
 
@@ -69,6 +94,7 @@ Copier à la racine de l'hébergement OVH :
 - `sitemap.xml` ;
 - `llms.txt` ;
 - `.htaccess` ;
+- `market.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
 

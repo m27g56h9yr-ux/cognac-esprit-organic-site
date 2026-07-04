@@ -30,6 +30,45 @@ function detectVisitorLanguage() {
   }
   return "en";
 }
+function normalizeMarket(value) {
+  const normalized = String(value || "").trim().toLowerCase().replace(/[_\s]+/g, "-");
+  const markets = {
+    qc: "qc",
+    quebec: "qc",
+    "ca-qc": "qc",
+    dk: "dk",
+    danmark: "dk",
+    denmark: "dk",
+    no: "no",
+    norway: "no",
+    norge: "no",
+    sj: "no"
+  };
+  return markets[normalized] || "";
+}
+function readCookie(name) {
+  return document.cookie
+    .split(";")
+    .map((part) => part.trim())
+    .find((part) => part.startsWith(`${name}=`))
+    ?.slice(name.length + 1) || "";
+}
+function detectConfiguredMarket() {
+  const localTestHost = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(window.location.hostname);
+  if (localTestHost) {
+    const testMarket = normalizeMarket(new URLSearchParams(window.location.search).get("market"));
+    if (testMarket) return testMarket;
+  }
+  const metaMarket = document.querySelector('meta[name="ceo-market"]')?.getAttribute("content") || "";
+  return normalizeMarket(
+    window.CEO_SERVER_MARKET ||
+    window.CEO_MARKET ||
+    document.documentElement.dataset.serverMarket ||
+    document.documentElement.dataset.market ||
+    metaMarket ||
+    readCookie("ceo-market")
+  );
+}
 function detectVisitorMarket() {
   const locales = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language];
   for (const locale of locales.filter(Boolean)) {
@@ -43,7 +82,7 @@ function detectVisitorMarket() {
   return "";
 }
 const initialLang = urlLocale || document.documentElement.dataset.defaultLang || savedLang || detectVisitorLanguage();
-const visitorMarket = detectVisitorMarket();
+let visitorMarket = detectConfiguredMarket() || detectVisitorMarket();
 const langNames = {
   fr: "Français",
   en: "English",
@@ -1222,6 +1261,27 @@ function setLanguage(lang) {
 }
 
 setLanguage(initialLang);
+
+function setVisitorMarket(market) {
+  visitorMarket = normalizeMarket(market);
+  document.body.dataset.market = visitorMarket;
+}
+
+function loadServerMarket() {
+  if (detectConfiguredMarket()) return;
+  fetch("/market.php?format=json&v=20260704-market01", {
+    cache: "no-store",
+    credentials: "same-origin"
+  })
+    .then((response) => (response.ok ? response.json() : null))
+    .then((payload) => {
+      const serverMarket = normalizeMarket(payload && payload.market);
+      if (serverMarket) setVisitorMarket(serverMarket);
+    })
+    .catch(() => {});
+}
+
+loadServerMarket();
 
 if (navToggle && navLinks) {
   navToggle.addEventListener("click", () => {

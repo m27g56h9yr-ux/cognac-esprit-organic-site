@@ -504,6 +504,43 @@ SELLER_TRACKING_ROWS = [
     },
 ]
 
+SELLER_TRACKING_COLUMNS = [
+    ("market", "Marché", "Zone consommateur concernée par le vendeur externe : Québec, Danemark ou Norvège."),
+    ("seller", "Vendeur", "Nom du distributeur partenaire chez qui la page source a été contrôlée."),
+    ("product", "Produit", "Référence Esprit Organic suivie sur la page du distributeur."),
+    ("source", "Source", "Lien vers la page partenaire utilisée pour relever les données structurées."),
+    ("schema_status", "Statut schema", "Présence ou absence d'un bloc Product exploitable dans les données structurées de la page source."),
+    ("offers", "offers", "Objet Schema.org Offer : prix, devise, disponibilité, état, vendeur et URL quand ces champs sont publiés."),
+    ("review", "review", "Objet Schema.org Review : avis individuel publié dans les données structurées. S'il n'existe pas, la cellule indique Non exposé."),
+    ("aggregateRating", "aggregateRating", "Objet Schema.org AggregateRating : note moyenne et compteurs d'avis ou de notes quand le distributeur les publie."),
+    ("notes", "Note", "Lecture humaine du résultat, notamment les limites ou absences détectées dans les données partenaires."),
+]
+
+SELLER_TRACKING_SCHEMA_FIELDS = {
+    "offers": [
+        ("@type", "Type"),
+        ("price", "Prix"),
+        ("priceCurrency", "Devise"),
+        ("availability", "Disponibilité"),
+        ("itemCondition", "État"),
+        ("seller", "Vendeur"),
+        ("url", "URL"),
+    ],
+    "review": [
+        ("@type", "Type"),
+        ("author", "Auteur"),
+        ("reviewRating", "Note"),
+        ("datePublished", "Date"),
+        ("reviewBody", "Avis"),
+    ],
+    "aggregateRating": [
+        ("@type", "Type"),
+        ("ratingValue", "Note"),
+        ("ratingCount", "Nombre de notes"),
+        ("reviewCount", "Nombre d'avis"),
+    ],
+}
+
 PRODUCT_TRADE_PDFS = {
     "fondation-vs": {
         "href": "assets/pdf/fiches-degustation/cognac-esprit-organic-fondation-vs-fiche-degustation.pdf",
@@ -3404,28 +3441,148 @@ def technical_product_facts_page():
     )
 
 
-def seller_tracking_value(value):
+def seller_tracking_empty(label="Non exposé"):
+    return f'<span class="seller-empty">{escape(label)}</span>'
+
+
+def seller_tracking_column_id(key):
+    return f"definition-{key.lower()}"
+
+
+def seller_tracking_source_label(url):
+    return re.sub(r"^https?://(?:www\.)?", "", url).split("/")[0]
+
+
+def seller_tracking_schema_term(value):
+    if isinstance(value, str) and value.startswith("https://schema.org/"):
+        return value.rsplit("/", 1)[-1] or value
+    return value
+
+
+def seller_tracking_scalar(value):
     if value is None:
-        return '<span class="seller-empty">Non exposé</span>'
-    return f"<pre><code>{escape(json.dumps(value, ensure_ascii=False, indent=2))}</code></pre>"
+        return seller_tracking_empty("Non renseigné")
+    if isinstance(value, dict):
+        name = value.get("name")
+        type_value = seller_tracking_schema_term(value.get("@type"))
+        if name:
+            type_html = f'<span class="schema-mini">{escape(str(type_value))}</span>' if type_value else ""
+            return f"{escape(str(name))}{type_html}"
+        return f"<code>{escape(json.dumps(value, ensure_ascii=False))}</code>"
+    if isinstance(value, list):
+        if not value:
+            return seller_tracking_empty("Liste vide")
+        return f"<code>{escape(json.dumps(value, ensure_ascii=False))}</code>"
+    if isinstance(value, str):
+        if value.startswith("https://schema.org/"):
+            term = seller_tracking_schema_term(value)
+            return f'<a class="schema-ref" href="{escape(value, quote=True)}" target="_blank" rel="noopener noreferrer">{escape(term)}</a>'
+        if value.startswith(("http://", "https://")):
+            label = re.sub(r"^https?://", "", value).rstrip("/")
+            if len(label) > 54:
+                label = label[:51] + "..."
+            return f'<a class="inline-url" href="{escape(value, quote=True)}" target="_blank" rel="noopener noreferrer">{escape(label)}</a>'
+    return f"<code>{escape(str(value))}</code>"
+
+
+def seller_tracking_field_block(value, kind):
+    if value is None:
+        return seller_tracking_empty()
+    if not isinstance(value, dict):
+        return f'<div class="schema-card schema-card--simple">{seller_tracking_scalar(value)}</div>'
+
+    configured_fields = SELLER_TRACKING_SCHEMA_FIELDS.get(kind, [])
+    configured_keys = [key for key, _ in configured_fields]
+    keys = [key for key in configured_keys if key in value]
+    keys.extend(key for key in value.keys() if key not in configured_keys)
+    labels = dict(configured_fields)
+
+    fields = "\n".join(
+        f"""
+              <div class="schema-field">
+                <dt>{escape(labels.get(key, key))}</dt>
+                <dd>{seller_tracking_scalar(value.get(key))}</dd>
+              </div>"""
+        for key in keys
+    )
+    return f"""
+            <dl class="schema-card schema-card--{escape(kind, quote=True)}">
+{fields}
+            </dl>"""
+
+
+def seller_tracking_cell(column_key, content, class_name=""):
+    title = next(title for key, title, _ in SELLER_TRACKING_COLUMNS if key == column_key)
+    class_attr = f' class="{class_name}"' if class_name else ""
+    return f'<td data-label="{escape(title, quote=True)}"{class_attr}>{content}</td>'
+
+
+def seller_tracking_column_headers():
+    return "\n".join(
+        f'            <th scope="col"><a class="column-link" href="#{seller_tracking_column_id(key)}"><span>{escape(title)}</span><span class="column-marker" aria-hidden="true">?</span></a></th>'
+        for key, title, _ in SELLER_TRACKING_COLUMNS
+    )
+
+
+def seller_tracking_column_definitions():
+    return "\n".join(
+        f"""
+        <article id="{seller_tracking_column_id(key)}" class="definition-card">
+          <h2>{escape(title)}</h2>
+          <p>{escape(description)}</p>
+          <a href="#seller-tracking-table">Retour au tableau</a>
+        </article>"""
+        for key, title, description in SELLER_TRACKING_COLUMNS
+    )
 
 
 def seller_tracking_page(path="suivi-vendeurs.html"):
     rows = "\n".join(
-        f"""
+        """
         <tr>
-          <td>{escape(row["market"])}</td>
-          <td>{escape(row["seller"])}</td>
-          <td>{escape(row["product"])}</td>
-          <td><a href="{escape(row["source_url"], quote=True)}" target="_blank" rel="noopener noreferrer">Page source</a></td>
-          <td>{escape(row["schema_status"])}</td>
-          <td>{seller_tracking_value(row["offers"])}</td>
-          <td>{seller_tracking_value(row["review"])}</td>
-          <td>{seller_tracking_value(row["aggregateRating"])}</td>
-          <td>{escape(row["notes"])}</td>
-        </tr>"""
+          {market}
+          {seller}
+          {product}
+          {source}
+          {schema_status}
+          {offers}
+          {review}
+          {aggregate_rating}
+          {notes}
+        </tr>""".format(
+            market=seller_tracking_cell("market", f'<span class="strong-value">{escape(row["market"])}</span>'),
+            seller=seller_tracking_cell("seller", f'<span class="strong-value">{escape(row["seller"])}</span>'),
+            product=seller_tracking_cell("product", f'<span class="strong-value">{escape(row["product"])}</span>'),
+            source=seller_tracking_cell(
+                "source",
+                f'<a class="source-link" href="{escape(row["source_url"], quote=True)}" target="_blank" rel="noopener noreferrer"><span>{escape(seller_tracking_source_label(row["source_url"]))}</span><small>Ouvrir</small></a>',
+            ),
+            schema_status=seller_tracking_cell(
+                "schema_status",
+                f'<span class="status-pill">{escape(row["schema_status"])}</span>',
+                "schema-status-cell",
+            ),
+            offers=seller_tracking_cell(
+                "offers",
+                seller_tracking_field_block(row["offers"], "offers"),
+                "schema-cell schema-cell--offers",
+            ),
+            review=seller_tracking_cell(
+                "review",
+                seller_tracking_field_block(row["review"], "review"),
+                "schema-cell",
+            ),
+            aggregate_rating=seller_tracking_cell(
+                "aggregateRating",
+                seller_tracking_field_block(row["aggregateRating"], "aggregateRating"),
+                "schema-cell",
+            ),
+            notes=seller_tracking_cell("notes", f'<p class="note-text">{escape(row["notes"])}</p>', "note-cell"),
+        )
         for row in SELLER_TRACKING_ROWS
     )
+    headers = seller_tracking_column_headers()
+    definitions = seller_tracking_column_definitions()
     raw_data = json.dumps(
         {
             "updatedAt": SELLER_TRACKING_UPDATED_AT,
@@ -3447,15 +3604,20 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
   <link rel="icon" href="assets/img/fav_organic.png">
   <style>
     :root {{
-      --ink: #17130f;
-      --muted: #6b5d50;
-      --paper: #f7f3e8;
+      --ink: #151814;
+      --muted: #5f665e;
+      --paper: #f3f5ef;
       --panel: #ffffff;
-      --line: rgba(94, 61, 35, .18);
-      --brand: #704019;
-      --soft: #ebe5d5;
+      --panel-soft: #f9fbf6;
+      --line: rgba(48, 72, 58, .18);
+      --brand: #315947;
+      --brand-strong: #203d34;
+      --accent: #a45f2a;
+      --soft: #e5eadc;
+      --warning: #fff7e8;
     }}
     * {{ box-sizing: border-box; }}
+    html {{ scroll-behavior: smooth; }}
     body {{
       margin: 0;
       color: var(--ink);
@@ -3463,24 +3625,79 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
       font-family: Arial, sans-serif;
       line-height: 1.5;
     }}
-    main {{ width: min(1440px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 52px; }}
-    header {{ display: grid; gap: 8px; margin-bottom: 24px; }}
+    main {{ width: min(1480px, calc(100% - 32px)); margin: 0 auto; padding: 34px 0 56px; }}
+    header {{ display: grid; gap: 10px; margin-bottom: 24px; }}
     h1 {{ margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(2rem, 4vw, 3.8rem); font-weight: 500; }}
     p {{ max-width: 920px; margin: 0; color: var(--muted); }}
     .seller-meta {{ display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }}
-    .seller-meta span {{ padding: 7px 10px; border: 1px solid var(--line); background: var(--soft); font-size: .82rem; font-weight: 700; }}
-    .seller-panel {{ overflow-x: auto; border: 1px solid var(--line); background: var(--panel); }}
-    table {{ width: 100%; min-width: 1220px; border-collapse: collapse; font-size: .88rem; }}
+    .seller-meta span {{ padding: 7px 10px; border: 1px solid var(--line); background: var(--soft); font-size: .82rem; font-weight: 700; border-radius: 6px; }}
+    .seller-panel {{ border: 1px solid var(--line); background: var(--panel); border-radius: 8px; box-shadow: 0 18px 40px rgba(30, 48, 38, .08); overflow: hidden; }}
+    .seller-panel-title {{ display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px; border-bottom: 1px solid var(--line); background: linear-gradient(90deg, #ffffff 0%, #f6f8f2 100%); }}
+    .seller-panel-title h2 {{ margin: 0; font-size: .95rem; letter-spacing: .04em; text-transform: uppercase; color: var(--brand-strong); }}
+    .seller-panel-title span {{ color: var(--muted); font-size: .85rem; }}
+    .table-scroll {{ overflow-x: auto; }}
+    table {{ width: 100%; min-width: 1380px; border-collapse: collapse; table-layout: fixed; font-size: .88rem; }}
+    col.market-col {{ width: 92px; }}
+    col.seller-col {{ width: 105px; }}
+    col.product-col {{ width: 140px; }}
+    col.source-col {{ width: 150px; }}
+    col.status-col {{ width: 190px; }}
+    col.offers-col {{ width: 315px; }}
+    col.review-col {{ width: 155px; }}
+    col.rating-col {{ width: 230px; }}
+    col.note-col {{ width: 260px; }}
     th, td {{ vertical-align: top; padding: 12px; border-bottom: 1px solid var(--line); border-right: 1px solid var(--line); text-align: left; }}
-    th {{ position: sticky; top: 0; background: #ded6c4; color: #2d2117; font-size: .74rem; text-transform: uppercase; letter-spacing: .06em; }}
-    td:first-child, td:nth-child(2), td:nth-child(3) {{ font-weight: 700; }}
+    th {{ position: sticky; top: 0; z-index: 1; background: var(--brand-strong); color: #fff; font-size: .72rem; text-transform: uppercase; }}
+    tbody tr:nth-child(even) td {{ background: var(--panel-soft); }}
+    tbody tr:hover td {{ background: #eef4e8; }}
+    tbody tr:last-child td {{ border-bottom: 0; }}
     a {{ color: var(--brand); font-weight: 700; }}
-    pre {{ max-width: 340px; margin: 0; white-space: pre-wrap; word-break: break-word; font-size: .78rem; line-height: 1.35; }}
+    a:focus-visible {{ outline: 3px solid rgba(164, 95, 42, .4); outline-offset: 3px; border-radius: 4px; }}
+    .column-link {{ display: flex; align-items: center; justify-content: space-between; gap: 8px; min-height: 34px; color: #fff; text-decoration: none; }}
+    .column-link:hover span:first-child {{ text-decoration: underline; }}
+    .column-marker {{ display: inline-grid; place-items: center; width: 18px; height: 18px; border: 1px solid rgba(255, 255, 255, .45); border-radius: 50%; font-size: .72rem; line-height: 1; }}
+    .strong-value {{ font-weight: 800; color: var(--ink); }}
+    .source-link {{ display: grid; gap: 2px; text-decoration: none; }}
+    .source-link span {{ overflow-wrap: anywhere; }}
+    .source-link small {{ color: var(--accent); font-size: .72rem; text-transform: uppercase; }}
+    .status-pill {{ display: inline-flex; padding: 6px 8px; border-radius: 6px; background: #edf2e9; color: var(--brand-strong); font-weight: 800; line-height: 1.25; }}
+    .schema-cell--offers {{ background: #fbfdf8; box-shadow: inset 4px 0 0 rgba(49, 89, 71, .55); }}
+    .schema-card {{ display: grid; gap: 7px; margin: 0; }}
+    .schema-field {{ display: grid; grid-template-columns: 108px minmax(0, 1fr); gap: 8px; align-items: start; padding: 0 0 7px; border-bottom: 1px solid rgba(48, 72, 58, .11); }}
+    .schema-field:last-child {{ padding-bottom: 0; border-bottom: 0; }}
+    dt {{ margin: 0; color: var(--muted); font-size: .72rem; font-weight: 800; text-transform: uppercase; }}
+    dd {{ margin: 0; min-width: 0; color: var(--ink); overflow-wrap: anywhere; }}
+    .schema-mini {{ display: block; margin-top: 2px; color: var(--muted); font-size: .72rem; font-weight: 600; }}
+    .schema-ref, .inline-url {{ overflow-wrap: anywhere; }}
+    pre {{ max-width: none; margin: 0; white-space: pre-wrap; word-break: break-word; font-size: .78rem; line-height: 1.35; }}
     code {{ font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }}
-    .seller-empty {{ display: inline-block; color: #756758; font-style: italic; }}
-    details {{ margin-top: 22px; border: 1px solid var(--line); background: var(--panel); }}
+    .seller-empty {{ display: inline-flex; align-items: center; min-height: 28px; padding: 4px 8px; color: #6c6257; background: var(--warning); border: 1px solid rgba(164, 95, 42, .2); border-radius: 6px; font-style: italic; }}
+    .note-text {{ color: var(--ink); font-size: .84rem; }}
+    .definitions {{ margin-top: 28px; }}
+    .definitions h2 {{ margin: 0 0 12px; font-size: 1.35rem; font-family: Georgia, "Times New Roman", serif; font-weight: 500; color: var(--brand-strong); }}
+    .definition-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }}
+    .definition-card {{ scroll-margin-top: 18px; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; padding: 14px; }}
+    .definition-card:target {{ border-color: rgba(164, 95, 42, .55); box-shadow: 0 0 0 4px rgba(164, 95, 42, .12); }}
+    .definition-card h2 {{ margin: 0 0 8px; font-family: Arial, sans-serif; font-size: .9rem; font-weight: 900; text-transform: uppercase; color: var(--brand-strong); }}
+    .definition-card p {{ font-size: .88rem; }}
+    .definition-card a {{ display: inline-block; margin-top: 10px; font-size: .8rem; }}
+    details {{ margin-top: 22px; border: 1px solid var(--line); background: var(--panel); border-radius: 8px; overflow: hidden; }}
     summary {{ cursor: pointer; padding: 14px 16px; font-weight: 800; }}
     details pre {{ max-width: none; padding: 0 16px 18px; }}
+    @media (max-width: 760px) {{
+      main {{ width: min(100% - 20px, 1480px); padding-top: 22px; }}
+      .seller-panel-title {{ align-items: flex-start; flex-direction: column; }}
+      table {{ min-width: 0; }}
+      colgroup, thead {{ display: none; }}
+      tr {{ display: block; border-bottom: 1px solid var(--line); }}
+      td {{ display: grid; grid-template-columns: minmax(92px, 34%) minmax(0, 1fr); gap: 10px; border-right: 0; padding: 10px 12px; }}
+      td::before {{ content: attr(data-label); color: var(--muted); font-size: .72rem; font-weight: 900; text-transform: uppercase; }}
+      .schema-field {{ grid-template-columns: minmax(80px, 42%) minmax(0, 1fr); }}
+      .schema-cell--offers {{ box-shadow: inset 3px 0 0 rgba(49, 89, 71, .55); }}
+    }}
+    @media (prefers-reduced-motion: reduce) {{
+      html {{ scroll-behavior: auto; }}
+    }}
   </style>
   <script type="application/json" id="seller-tracking-data">{script_data}</script>
 </head>
@@ -3496,23 +3713,38 @@ def seller_tracking_page(path="suivi-vendeurs.html"):
       </div>
     </header>
     <section class="seller-panel" aria-label="Données structurées des vendeurs externes">
-      <table>
+      <div class="seller-panel-title">
+        <h2>Relevé distributeurs</h2>
+        <span>{len(SELLER_TRACKING_ROWS)} pages sources contrôlées</span>
+      </div>
+      <div class="table-scroll">
+      <table id="seller-tracking-table">
+        <colgroup>
+          <col class="market-col">
+          <col class="seller-col">
+          <col class="product-col">
+          <col class="source-col">
+          <col class="status-col">
+          <col class="offers-col">
+          <col class="review-col">
+          <col class="rating-col">
+          <col class="note-col">
+        </colgroup>
         <thead>
           <tr>
-            <th>Marché</th>
-            <th>Vendeur</th>
-            <th>Produit</th>
-            <th>Source</th>
-            <th>Statut schema</th>
-            <th>offers</th>
-            <th>review</th>
-            <th>aggregateRating</th>
-            <th>Note</th>
+{headers}
           </tr>
         </thead>
         <tbody>{rows}
         </tbody>
       </table>
+      </div>
+    </section>
+    <section class="definitions" aria-labelledby="definitions-title">
+      <h2 id="definitions-title">Définitions des colonnes</h2>
+      <div class="definition-grid">
+{definitions}
+      </div>
     </section>
     <details>
       <summary>Exporter les données de suivi en JSON</summary>
@@ -3780,6 +4012,23 @@ def sync_css_version(html):
         rf'\g<1>{CSS_VERSION}',
         html,
     )
+
+
+MARKET_SCRIPT_RE = re.compile(
+    r'\n\s*<script src="(?:\.\./)*market\.php\?v=[^"]+"></script>',
+    re.IGNORECASE,
+)
+
+
+def remove_market_script_includes():
+    excluded_parts = {".git", "ancien-site-wordpress", "node_modules", "output"}
+    for path in ROOT.rglob("*.html"):
+        if any(part in excluded_parts for part in path.parts):
+            continue
+        html = path.read_text(encoding="utf-8")
+        updated = MARKET_SCRIPT_RE.sub("", html)
+        if updated != html:
+            path.write_text(updated, encoding="utf-8")
 
 
 def localized_technical_gtin_rows(product):
@@ -7263,6 +7512,31 @@ Le site est prêt pour la mise en ligne :
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
+- Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
+
+## Géociblage des boutons Acheter
+
+Les liens d'achat produits sont présents dans les pages, mais masqués par défaut. Ils ne s'affichent que si le marché visiteur est reconnu :
+
+- `qc` : SAQ ;
+- `dk` : Vinoble ;
+- `no` : Vinmonopolet.
+
+Le fonctionnement est complémentaire :
+
+1. `assets/js/main.js` applique d'abord un éventuel signal déjà configuré (`window.CEO_SERVER_MARKET`, cookie `ceo-market`, balise meta, etc.).
+2. Il interroge ensuite `market.php?format=json`, qui cherche un signal serveur/CDN : `X-CEO-Market`, `X-Market`, `CF-IPCountry`, variables GeoIP serveur courantes, puis pays/région si disponibles.
+3. Si aucun marché serveur n'est disponible, le navigateur sert de fallback : `fr-CA` => `qc`, `da-DK` => `dk`, `no-NO` / `nb-NO` / `nn-NO` => `no`.
+
+Pour Cloudflare ou un autre CDN, le plus propre est d'injecter `X-CEO-Market: qc`, `dk` ou `no` vers l'origine. Sans signal régional, `CF-IPCountry: CA` ne suffit pas à identifier le Québec ; dans ce cas le fallback navigateur `fr-CA` reste utile.
+
+En local, on peut tester l'affichage avec :
+
+```text
+http://localhost:8080/produits/conviction-vsop.html?market=qc
+http://localhost:8080/produits/conviction-vsop.html?market=dk
+http://localhost:8080/produits/conviction-vsop.html?market=no
+```
 
 ## Ancien site WordPress
 
@@ -7297,6 +7571,7 @@ Copier à la racine de l'hébergement OVH :
 - `sitemap.xml` ;
 - `llms.txt` ;
 - `.htaccess` ;
+- `market.php` ;
 - `newsletter.php` ;
 - le dossier `newsletter-data/`.
 
@@ -7356,6 +7631,7 @@ def main():
     write_static_files()
     sync_localized_product_data()
     sync_localized_marketing_copy()
+    remove_market_script_includes()
     normalize_generated_accessibility_markup()
 
 

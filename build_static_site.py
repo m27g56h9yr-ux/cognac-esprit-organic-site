@@ -7,18 +7,19 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260704-assets04"
-JS_VERSION = "20260704-assets02"
+CSS_VERSION = "20260705-lang01"
+JS_VERSION = "20260705-lang01"
 COCKTAILS_CSS_VERSION = "20260704-assets02"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
+LANGUAGE_MARKET_DEFAULTS = {"da": "dk", "no": "no"}
 LANGUAGE_MARKET_OPTIONS = (
-    {"lang": "fr", "label": "FR"},
-    {"lang": "en", "label": "EN"},
-    {"lang": "da", "label": "DA", "market": "dk", "region": "Danemark"},
-    {"lang": "no", "label": "NO", "market": "no", "region": "Norvège"},
-    {"lang": "sv", "label": "SV"},
-    {"lang": "fr", "label": "QC", "market": "qc", "region": "Québec"},
+    {"lang": "fr", "label": "FR", "name": "Français", "hreflang": "fr"},
+    {"lang": "en", "label": "EN", "name": "English", "hreflang": "en"},
+    {"lang": "da", "label": "DA", "name": "Dansk", "market": "dk", "region": "Danmark", "hreflang": "da-DK"},
+    {"lang": "no", "label": "NO", "name": "Norsk", "market": "no", "region": "Norge", "hreflang": "nb-NO"},
+    {"lang": "sv", "label": "SV", "name": "Svenska", "hreflang": "sv"},
+    {"lang": "fr", "label": "QC", "name": "Français", "market": "qc", "region": "Québec", "hreflang": "fr-CA"},
 )
 
 
@@ -1387,20 +1388,84 @@ def nav_html(current: str, prefix: str, lang: str) -> str:
 """
 
 
-def language_menu_options_html() -> str:
-    buttons = []
+def market_entry_for_path(path: str):
+    if not path.endswith(".php"):
+        return None
+    try:
+        return next((entry for entry in market_seo_entries() if entry["path"] == path), None)
+    except NameError:
+        return None
+
+
+def language_target_path(current_path: str, option: dict) -> str:
+    market_entry = market_entry_for_path(current_path)
+    if market_entry:
+        product_slug = market_entry["product"]["slug"]
+        market = option.get("market")
+        if market:
+            alternate = next(
+                (entry for entry in market_seo_entries(product_slug) if entry["market"] == market),
+                None,
+            )
+            if alternate:
+                return alternate["path"]
+        return localized_path_for(f"produits/{product_slug}.html", option["lang"])
+    return localized_path_for(base_path_for(current_path), option["lang"])
+
+
+def language_option_label_html(option: dict) -> str:
+    name = escape(option.get("name", option["label"]))
+    label_html = f'<span class="lang-option-name">{name}</span>'
+    region = option.get("region")
+    if region:
+        label_html += f'<span class="lang-option-region">{escape(region)}</span>'
+    return label_html
+
+
+def language_toggle_label(lang: str, market: str = "") -> str:
+    candidates = [option for option in LANGUAGE_MARKET_OPTIONS if option["lang"] == lang]
+    if market:
+        market_match = next((option for option in candidates if option.get("market") == market), None)
+        if market_match:
+            return market_match["label"]
+    plain_match = next((option for option in candidates if not option.get("market")), None)
+    return (plain_match or (candidates[0] if candidates else {"label": lang.upper()}))["label"]
+
+
+def language_menu_options_html(current_path: str, current_lang: str) -> str:
+    current_market_entry = market_entry_for_path(current_path)
+    current_market = current_market_entry["market"] if current_market_entry else LANGUAGE_MARKET_DEFAULTS.get(current_lang, "")
+    links = []
     for option in LANGUAGE_MARKET_OPTIONS:
+        target_path = language_target_path(current_path, option)
+        href = relative_href(current_path, target_path)
         market_attr = f' data-market-option="{escape(option["market"])}"' if option.get("market") else ""
-        region = option.get("region")
         label = escape(option["label"])
-        label_html = label
-        if region:
-            label_html += f'<span class="lang-option-region">{escape(region)}</span>'
-        buttons.append(
-            f'<button type="button" class="lang-option" data-lang-option="{escape(option["lang"])}" '
-            f'data-lang-label="{label}"{market_attr} role="menuitem">{label_html}</button>'
+        current_attr = ""
+        if option.get("market"):
+            if option["market"] == current_market:
+                current_attr = ' aria-current="true"'
+        elif option["lang"] == current_lang and not current_market:
+            current_attr = ' aria-current="true"'
+        links.append(
+            f'<a class="lang-option" href="{escape(href)}" hreflang="{escape(option.get("hreflang", option["lang"]))}" '
+            f'data-lang-option="{escape(option["lang"])}" data-lang-label="{label}"{market_attr} '
+            f'role="menuitem"{current_attr}>{language_option_label_html(option)}</a>'
         )
-    return "".join(buttons)
+    return "".join(links)
+
+
+def language_menu_html(current_path: str, lang: str, aria_label: str) -> str:
+    current_market_entry = market_entry_for_path(current_path)
+    current_market = current_market_entry["market"] if current_market_entry else LANGUAGE_MARKET_DEFAULTS.get(lang, "")
+    toggle_label = language_toggle_label(lang, current_market)
+    return (
+        '<div class="lang-menu" data-lang-menu>'
+        f'<button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" '
+        f'aria-expanded="false" aria-label="{escape(aria_label)}">{escape(toggle_label)}</button>'
+        f'<div class="lang-menu-panel" role="menu" aria-label="{escape(aria_label)}">'
+        f'{language_menu_options_html(current_path, lang)}</div></div>'
+    )
 
 
 def clean_asset_path(src: str) -> str:
@@ -1530,7 +1595,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
             f'<span class="{"is-active" if i == 0 else ""}" style="background-image:{css_image_value(src, prefix)}"></span>'
             for i, src in enumerate(home_slides)
         ) + "</div>"
-    language_options = language_menu_options_html()
+    language_menu = language_menu_html(path, lang, copy["choose_language"])
     hero_html = f"""
     <section class="{hero_class}" style="--hero-image: {root_image}">
       {home_slideshow}
@@ -1569,7 +1634,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         <img src="{prefix}assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic">
       </a>
       <button class="nav-toggle" type="button" data-nav-toggle aria-expanded="false" aria-label="{escape(copy["open_menu"])}">Menu</button>
-      <div class="nav-links" data-nav-links>{nav_html(path, prefix, lang)}<div class="lang-menu" data-lang-menu><button class="lang-toggle" type="button" data-lang-toggle aria-haspopup="true" aria-expanded="false">{lang.upper()}</button><div class="lang-menu-panel" role="menu" aria-label="{escape(copy["choose_language"])}">{language_options}</div></div><a class="header-bio-link" href="{localized_href(path, "agriculture-biologique.html", lang)}" aria-label="{escape(copy["organic"])}"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="{escape(copy["organic"])}"></a></div>
+      <div class="nav-links" data-nav-links>{nav_html(path, prefix, lang)}{language_menu}<a class="header-bio-link" href="{localized_href(path, "agriculture-biologique.html", lang)}" aria-label="{escape(copy["organic"])}"><img class="header-bio" src="{prefix}assets/img/logo-bio-home-tight.png" alt="{escape(copy["organic"])}"></a></div>
     </nav>
   </header>
   <main id="contenu">
@@ -5602,6 +5667,60 @@ def remove_market_script_includes():
             path.write_text(updated, encoding="utf-8")
 
 
+def generated_markup_paths():
+    excluded_parts = {".git", "ancien-site-wordpress", "node_modules", "output"}
+    for pattern in ("*.html", "*.php"):
+        for path in ROOT.rglob(pattern):
+            if any(part in excluded_parts for part in path.parts):
+                continue
+            yield path
+
+
+LANGUAGE_MENU_RE = re.compile(
+    r'<div class="lang-menu" data-lang-menu>[\s\S]*?</div></div>',
+    re.IGNORECASE,
+)
+
+
+def sync_language_menus():
+    for path in generated_markup_paths():
+        html = path.read_text(encoding="utf-8")
+        if "data-lang-menu" not in html:
+            continue
+        rel_path = path.relative_to(ROOT).as_posix()
+        lang = lang_for_path(rel_path)
+        copy = COMMON_I18N.get(lang, COMMON_I18N["en"])
+        updated = LANGUAGE_MENU_RE.sub(language_menu_html(rel_path, lang, copy["choose_language"]), html)
+        if updated != html:
+            path.write_text(updated, encoding="utf-8")
+
+
+def validate_language_menus():
+    expected_labels = [option["label"] for option in LANGUAGE_MARKET_OPTIONS]
+    errors = []
+    for path in generated_markup_paths():
+        html = path.read_text(encoding="utf-8")
+        if "data-lang-menu" not in html:
+            continue
+        rel_path = path.relative_to(ROOT).as_posix()
+        for index, match in enumerate(LANGUAGE_MENU_RE.finditer(html), start=1):
+            menu = match.group(0)
+            options = re.findall(r'<a\b[^>]*class="lang-option"[^>]*>', menu, re.IGNORECASE)
+            if len(options) != len(expected_labels):
+                errors.append(f"{rel_path}: menu {index} has {len(options)} language options")
+            if '<button class="lang-toggle"' not in menu or 'aria-label="' not in menu:
+                errors.append(f"{rel_path}: menu {index} missing accessible toggle")
+            if 'aria-current="true"' not in menu:
+                errors.append(f"{rel_path}: menu {index} missing active language")
+            for label in expected_labels:
+                if f'data-lang-label="{label}"' not in menu:
+                    errors.append(f"{rel_path}: menu {index} missing {label}")
+            if any('href="' not in option for option in options):
+                errors.append(f"{rel_path}: menu {index} has a language option without href")
+    if errors:
+        raise RuntimeError("Language menu validation failed:\n" + "\n".join(errors))
+
+
 def localized_technical_gtin_rows(product):
     rows = []
     if product.get("gtin13"):
@@ -6314,7 +6433,7 @@ picture > img { display: block; max-width: 100%; height: auto; }
   right: 0;
   top: calc(100% + 8px);
   z-index: 35;
-  min-width: 142px;
+  min-width: 196px;
   padding: 8px;
   border: 1px solid rgba(94, 61, 35, .18);
   background: var(--cream);
@@ -6335,6 +6454,7 @@ picture > img { display: block; max-width: 100%; height: auto; }
   min-height: 34px;
   padding: 0 8px;
   border: 0;
+  border-radius: 6px;
   background: transparent;
   color: var(--brand);
   font-family: Montserrat, Arial, sans-serif;
@@ -6342,12 +6462,15 @@ picture > img { display: block; max-width: 100%; height: auto; }
   font-weight: 800;
   text-align: left;
   cursor: pointer;
+  text-decoration: none;
   white-space: nowrap;
 }
-.lang-option-region { color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: none; }
+.lang-option-name { color: inherit; }
+.lang-option-region { margin-left: auto; color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: none; }
 .lang-option:hover,
 .lang-option:focus-visible,
 .lang-option[aria-current="true"] { background: rgba(94, 61, 35, .08); }
+.lang-option[aria-current="true"] { box-shadow: inset 3px 0 0 var(--green-dark); }
 .header-bio-link {
   display: block;
   width: 88px;
@@ -9385,11 +9508,13 @@ def main():
     sync_localized_product_data()
     sync_localized_marketing_copy()
     write_market_seo_pages()
+    sync_language_menus()
     write_static_files()
     optimize_generated_assets()
     normalize_generated_asset_versions()
     remove_market_script_includes()
     normalize_generated_accessibility_markup()
+    validate_language_menus()
 
 
 if __name__ == "__main__":

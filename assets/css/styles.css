@@ -65,7 +65,7 @@ picture > img { display: block; max-width: 100%; height: auto; }
   right: 0;
   top: calc(100% + 8px);
   z-index: 35;
-  min-width: 142px;
+  min-width: 196px;
   padding: 8px;
   border: 1px solid rgba(94, 61, 35, .18);
   background: var(--cream);
@@ -86,6 +86,7 @@ picture > img { display: block; max-width: 100%; height: auto; }
   min-height: 34px;
   padding: 0 8px;
   border: 0;
+  border-radius: 6px;
   background: transparent;
   color: var(--brand);
   font-family: Montserrat, Arial, sans-serif;
@@ -93,12 +94,15 @@ picture > img { display: block; max-width: 100%; height: auto; }
   font-weight: 800;
   text-align: left;
   cursor: pointer;
+  text-decoration: none;
   white-space: nowrap;
 }
-.lang-option-region { color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: none; }
+.lang-option-name { color: inherit; }
+.lang-option-region { margin-left: auto; color: var(--muted); font-size: .72rem; font-weight: 700; text-transform: none; }
 .lang-option:hover,
 .lang-option:focus-visible,
 .lang-option[aria-current="true"] { background: rgba(94, 61, 35, .08); }
+.lang-option[aria-current="true"] { box-shadow: inset 3px 0 0 var(--green-dark); }
 .header-bio-link {
   display: block;
   width: 88px;

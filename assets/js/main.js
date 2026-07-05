@@ -92,6 +92,13 @@ const langNames = {
   no: "Norsk",
   sv: "Svenska"
 };
+const languageMenuAria = {
+  fr: "Changer langue / pays. Sélection actuelle :",
+  en: "Change language / country. Current selection:",
+  da: "Skift sprog / land. Aktuelt valg:",
+  no: "Bytt språk / land. Gjeldende valg:",
+  sv: "Byt språk / land. Aktuellt val:"
+};
 
 const footerNewsletterCopy = {
   fr: {
@@ -1277,13 +1284,23 @@ function getOptionLabel(option, fallbackLang) {
   return option?.dataset.langLabel || fallbackLang.toUpperCase();
 }
 
+function getOptionText(option, fallbackLabel) {
+  if (!option) return fallbackLabel;
+  const parts = Array.from(option.querySelectorAll(".lang-option-name, .lang-option-region"))
+    .map((element) => element.textContent.trim())
+    .filter(Boolean);
+  return parts.length ? parts.join(" ") : option.textContent.replace(/\s+/g, " ").trim();
+}
+
 function updateLanguageMenuState(lang) {
   const currentOption = getCurrentLanguageOption(lang);
   const toggleLabel = getOptionLabel(currentOption, lang);
+  const currentText = getOptionText(currentOption, toggleLabel);
+  const ariaPrefix = languageMenuAria[lang] || languageMenuAria.en;
   if (langToggle) {
     langToggle.textContent = toggleLabel;
-    langToggle.setAttribute("aria-label", `Changer langue / pays. Sélection actuelle : ${toggleLabel}`);
-    langToggle.setAttribute("title", "FR / EN / DA / NO / SV / QC");
+    langToggle.setAttribute("aria-label", `${ariaPrefix} ${currentText}`);
+    langToggle.setAttribute("title", langOptions.map((option) => getOptionText(option, getOptionLabel(option, ""))).join(" / "));
     langToggle.setAttribute("aria-expanded", "false");
   }
   langOptions.forEach((option) => {
@@ -1409,9 +1426,26 @@ if (langToggle) {
 }
 
 langOptions.forEach((option) => {
-  option.addEventListener("click", () => {
+  option.addEventListener("click", (event) => {
+    const lang = option.dataset.langOption || "fr";
     const market = option.hasAttribute("data-market-option") ? option.dataset.marketOption : "";
-    navigateToLanguage(option.dataset.langOption || "fr", market);
+    const selectedMarket = market === undefined ? languageMarketDefaults[lang] || "" : market;
+    const href = option.getAttribute("href");
+    localStorage.setItem("ceo-lang", supportedLangs.includes(lang) ? lang : "fr");
+    persistVisitorMarket(selectedMarket);
+    if (!href) {
+      navigateToLanguage(lang, market);
+      return;
+    }
+    event.preventDefault();
+    const nextUrl = new URL(href, window.location.href);
+    nextUrl.search = window.location.search;
+    nextUrl.hash = window.location.hash;
+    if (nextUrl.href !== window.location.href) {
+      window.location.href = nextUrl.href;
+      return;
+    }
+    setLanguage(lang);
   });
 });
 

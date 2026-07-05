@@ -9174,7 +9174,7 @@ document.addEventListener("keydown", (event) => {
 
 def write_static_files():
     localized_languages = list(LOCALIZED_LANGUAGES)
-    pages = ["index.html"] + [f"{lang}/index.html" for lang in localized_languages]
+    pages = ["index.html", "llms.txt"] + [f"{lang}/index.html" for lang in localized_languages]
     localized_base_pages = [
         "hve-cec.html",
         "agriculture-biologique.html",

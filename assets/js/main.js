@@ -1300,7 +1300,7 @@ function updateLanguageMenuState(lang) {
   if (langToggle) {
     langToggle.textContent = toggleLabel;
     langToggle.setAttribute("aria-label", `${ariaPrefix} ${currentText}`);
-    langToggle.setAttribute("title", langOptions.map((option) => getOptionText(option, getOptionLabel(option, ""))).join(" / "));
+    langToggle.removeAttribute("title");
     langToggle.setAttribute("aria-expanded", "false");
   }
   langOptions.forEach((option) => {

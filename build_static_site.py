@@ -3635,7 +3635,7 @@ def product_buy_links_html(product, lang="fr", indent="      "):
     return "".join(rendered)
 
 
-def technical_product_item(product, lang="fr"):
+def technical_product_item(product, lang="fr", include_variants=False):
     excluded = {"Brand", "Product", "Category", "Short profile"} if lang == "en" else {"Marque", "Produit", "Catégorie", "Profil court"}
     properties = [
         property_value(label, value)
@@ -3658,9 +3658,10 @@ def technical_product_item(product, lang="fr"):
         "size": product["volume"],
         "additionalProperty": properties,
     }
-    variants = product_gtin_variants(product, item["@id"] if "@id" in item else item["url"] + "#product")
-    if variants:
-        item["hasVariant"] = variants
+    if include_variants:
+        variants = product_gtin_variants(product, item["@id"] if "@id" in item else item["url"] + "#product")
+        if variants:
+            item["hasVariant"] = variants
     if product.get("gtin13"):
         item["gtin13"] = product["gtin13"]
     if award:
@@ -5381,7 +5382,7 @@ def remove_gtin_properties(properties):
     ]
 
 
-def sync_product_schema_object(obj, product, parent_id):
+def sync_product_schema_object(obj, product, parent_id, include_variants=True):
     if not isinstance(obj, dict) or obj.get("@type") != "Product":
         return obj
     obj["additionalProperty"] = remove_gtin_properties(obj.get("additionalProperty"))
@@ -5392,15 +5393,18 @@ def sync_product_schema_object(obj, product, parent_id):
         obj["gtin13"] = product["gtin13"]
     else:
         obj.pop("gtin13", None)
-    variants = product_gtin_variants(product, parent_id)
-    if variants:
-        obj["hasVariant"] = variants
+    if include_variants:
+        variants = product_gtin_variants(product, parent_id)
+        if variants:
+            obj["hasVariant"] = variants
+        else:
+            obj.pop("hasVariant", None)
     else:
         obj.pop("hasVariant", None)
     return obj
 
 
-def sync_product_json_ld(html, product, page_path):
+def sync_product_json_ld(html, product, page_path, include_variants=True):
     script_re = re.compile(
         r'(<script[^>]+type=["\']application/ld\+json["\'][^>]*>)([\s\S]*?)(</script>)',
         re.IGNORECASE,
@@ -5416,7 +5420,7 @@ def sync_product_json_ld(html, product, page_path):
         changed = False
         if product and isinstance(data, dict) and data.get("@type") == "Product":
             parent_id = data.get("@id") or page_url(page_path) + "#product"
-            data = sync_product_schema_object(data, product, parent_id)
+            data = sync_product_schema_object(data, product, parent_id, include_variants=include_variants)
             changed = True
         elif isinstance(data, dict) and data.get("@type") == "ItemList":
             for element in data.get("itemListElement", []):
@@ -5427,7 +5431,7 @@ def sync_product_json_ld(html, product, page_path):
                 source = product_by_slug(slug)
                 if source:
                     parent_id = item.get("@id") or item.get("url", page_url(page_path)) + "#product"
-                    sync_product_schema_object(item, source, parent_id)
+                    sync_product_schema_object(item, source, parent_id, include_variants=include_variants)
                     changed = True
 
         if not changed:
@@ -5774,7 +5778,7 @@ def sync_localized_product_data():
             html = technical_path.read_text(encoding="utf-8")
             html = sync_css_version(html)
             html = sync_js_version(html)
-            html = sync_product_json_ld(html, None, rel_path)
+            html = sync_product_json_ld(html, None, rel_path, include_variants=False)
             html = sync_localized_technical_tables(html)
             technical_path.write_text(html, encoding="utf-8")
 

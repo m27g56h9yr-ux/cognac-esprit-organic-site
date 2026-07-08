@@ -34,6 +34,7 @@ Le site est prêt pour la mise en ligne :
 - JavaScript léger dans `assets/js/main.js` ;
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
+- Dossier de presse : `dossier-de-presse/` centralise l'identité officielle, les sources vérifiables, les fiches PDF et les liens utiles aux journalistes, importateurs et agents IA.
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
 - Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.

@@ -2038,6 +2038,125 @@ body[data-market="no"] .norway-buy-link {
   font-weight: 800;
   text-underline-offset: 3px;
 }
+.press-kit-page .page-hero {
+  min-height: 52vh;
+  background-image: linear-gradient(90deg, rgba(23,19,15,.76), rgba(47,74,43,.5), rgba(23,19,15,.28)), var(--hero-image);
+}
+.press-kit-intro {
+  background: #f8f3e8;
+}
+.press-kit-intro .split {
+  align-items: center;
+}
+.press-kit-identity strong {
+  text-align: right;
+}
+.press-kit-identity a {
+  color: var(--brand-dark);
+  text-underline-offset: 3px;
+}
+.press-kit-name {
+  background: #2f4a2b;
+  color: var(--paper);
+}
+.press-kit-name .eyebrow {
+  color: #d9bd72;
+}
+.press-kit-name p {
+  max-width: 860px;
+  color: rgba(255,255,255,.86);
+  font-size: 1.05rem;
+}
+.press-kit-section h2,
+.press-kit-agent-note h2 {
+  max-width: 840px;
+}
+.press-kit-link-grid,
+.press-kit-download-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  margin-top: 30px;
+}
+.press-kit-link-grid a,
+.press-kit-download {
+  display: grid;
+  gap: 8px;
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid rgba(94,61,35,.18);
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+}
+.press-kit-link-grid a span,
+.press-kit-download strong {
+  font-weight: 850;
+  line-height: 1.25;
+}
+.press-kit-link-grid a small,
+.press-kit-download span {
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.press-kit-link-grid a:hover,
+.press-kit-link-grid a:focus-visible,
+.press-kit-download:hover,
+.press-kit-download:focus-visible {
+  border-color: rgba(47,74,43,.55);
+  box-shadow: 0 14px 30px rgba(47,74,43,.1);
+}
+.press-kit-note {
+  max-width: 720px;
+  color: var(--muted);
+}
+.press-kit-sources {
+  background: #f8f3e8;
+}
+.press-kit-source-list {
+  display: grid;
+  gap: 10px;
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.press-kit-source-list a {
+  display: grid;
+  grid-template-columns: minmax(220px, .36fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 17px 0;
+  border-bottom: 1px solid rgba(94,61,35,.18);
+  color: var(--ink);
+  text-decoration: none;
+}
+.press-kit-source-list strong {
+  color: var(--brand-dark);
+  line-height: 1.25;
+}
+.press-kit-source-list span {
+  color: var(--muted);
+}
+.press-kit-agent-note {
+  background: #ded6c4;
+}
+.press-kit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+@media (max-width: 640px) {
+  .press-kit-identity strong {
+    text-align: left;
+  }
+  .press-kit-source-list a {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
 .technical-award-row td span {
   color: #3f3328;
   font-weight: 800;

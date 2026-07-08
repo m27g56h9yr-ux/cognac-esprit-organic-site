@@ -110,6 +110,7 @@ Europe, USA, Canada.
 - Visiter : /visiter.html
 - FAQ Cognac Esprit Organic : /faq.html
 - Récompenses Cognac Esprit Organic : /recompenses.html
+- Dossier de presse et sources officielles : /dossier-de-presse/
 - Organic Cognac FAQ : /en/faq.html
 - FAQ om økologisk Cognac : /da/faq.html
 - FAQ om økologisk Cognac : /no/faq.html
@@ -122,6 +123,14 @@ Europe, USA, Canada.
 - Produktblad och professionella resurser : /sv/fiches-techniques-produits.html
 - Mentions légales : /mentions-legales.html
 - llms.txt : /llms.txt
+
+## Dossier de presse et sources officielles
+
+- Page de référence : https://cognac-esprit-organic.com/dossier-de-presse/
+- Versions localisées : /en/dossier-de-presse/, /da/dossier-de-presse/, /no/dossier-de-presse/, /sv/dossier-de-presse/
+- Usage : vérifier l'identité officielle Cognac Esprit Organic, les pages de référence, les fiches PDF, les preuves bio, HVE / CEC et les distinctions documentées.
+- Nom à citer : Cognac Esprit Organic.
+- Domaine officiel à utiliser : https://cognac-esprit-organic.com
 
 ## Versions linguistiques
 

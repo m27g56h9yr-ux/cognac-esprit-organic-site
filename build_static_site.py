@@ -7,7 +7,7 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260705-lang03"
+CSS_VERSION = "20260708-press01"
 JS_VERSION = "20260705-lang02"
 COCKTAILS_CSS_VERSION = "20260704-assets02"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
@@ -141,6 +141,7 @@ COMMON_I18N = {
         "organic": "Agriculture biologique",
         "warning": "L'abus d'alcool est dangereux pour la santé. A consommer avec modération.",
         "footer_range": "Gamme",
+        "press": "Presse",
         "legal": "Mentions légales",
     },
     "en": {
@@ -158,6 +159,7 @@ COMMON_I18N = {
         "organic": "Organic agriculture",
         "warning": "Alcohol abuse is dangerous for your health. Consume in moderation.",
         "footer_range": "Range",
+        "press": "Press",
         "legal": "Legal notice",
     },
     "da": {
@@ -175,6 +177,7 @@ COMMON_I18N = {
         "organic": "Økologisk landbrug",
         "warning": "Alkoholmisbrug er skadeligt for helbredet. Nyd med måde.",
         "footer_range": "Sortiment",
+        "press": "Presse",
         "legal": "Juridiske oplysninger",
     },
     "no": {
@@ -192,6 +195,7 @@ COMMON_I18N = {
         "organic": "Økologisk landbruk",
         "warning": "Alkoholmisbruk er skadelig for helsen. Nyt med måte.",
         "footer_range": "Sortiment",
+        "press": "Presse",
         "legal": "Juridisk informasjon",
     },
     "sv": {
@@ -209,6 +213,7 @@ COMMON_I18N = {
         "organic": "Ekologiskt jordbruk",
         "warning": "Alkoholmissbruk är skadligt för hälsan. Njut med måtta.",
         "footer_range": "Sortiment",
+        "press": "Press",
         "legal": "Juridisk information",
     },
 }
@@ -794,6 +799,663 @@ PRODUCT_TRADE_PDFS = {
         "en_label": "Red Pineau tasting sheet",
     },
 }
+
+PRESS_KIT_SOURCE_URLS = {
+    "ecocert_domaine": "https://certificat.ecocert.com/entreprise/08B9DD03-5B47-4067-B539-49D2382DC373",
+    "ecocert_maison": "https://certificat.ecocert.com/entreprise/26299168-7D42-4646-845F-E0A5429B3227",
+    "agence_bio_domaine": "https://annuaire.agencebio.org/operateur/70760/domaine-de-la-grande-versenne",
+    "agence_bio_maison": "https://annuaire.agencebio.org/operateur/31370/la-maison-des-pierres",
+    "annuaire_entreprises": "https://annuaire-entreprises.data.gouv.fr/entreprise/508104361",
+    "business_france_supplier": "https://www.marketplace.businessfrance.fr/seller/view/index/id/3942/",
+    "business_france_vs": "https://www.marketplace.businessfrance.fr/cognac-esprit-organic-vs.html",
+    "business_france_vsop": "https://www.marketplace.businessfrance.fr/cognac-esprit-organic-vsop-conviction.html",
+    "business_france_xo": "https://www.marketplace.businessfrance.fr/cognac-esprit-organic-xo.html",
+    "france_quintessence": "https://www.france-quintessence.fr/salon/exposants/maison-des-pierres",
+    "hve_directory": ENVIRONMENTAL_PROOF_URLS["hve_directory"],
+    "cec_cognac": ENVIRONMENTAL_PROOF_URLS["cec_cognac"],
+    "sfwsc_2019": AWARD_PROOF_URLS["fondation-vs-sfwsc-2019"],
+    "wwsa_2022": AWARD_PROOF_URLS["transmission-xo-wwsa-2022"],
+    "cmb_2025": AWARD_PROOF_URLS["pineau-blanc-cmb-2025"],
+    "business_france_catalog": "https://www.marketplace.businessfrance.fr/seller/view/catalog/id/3942/",
+    "whisky_live_brands": "https://www.whiskylive.fr/en/brands/",
+    "bnic_tournee_generale": "https://fr.linkedin.com/posts/bureau-national-interprofessionnel-du-cognac_cognac-cognactourneegenerale-fili%C3%A8re-activity-7438147106072289280-qV5I",
+    "salon_saveurs_trophees": "https://www.salon-saveurs.com/wp-content/uploads/2025/11/CP-Saveurs-Trophees-2025.pdf",
+    "cognac_expert_fondation": "https://www.cognac-expert.com/vs-cognac/esprit-organic-foundation-cognac",
+    "cognac_expert_conviction": "https://www.cognac-expert.com/vsop-cognac/esprit-organic-conviction-cognac",
+    "cognac_expert_cohesion": "https://www.cognac-expert.com/napoleon-cognac/esprit-organic-cohesion-cognac",
+    "cognac_expert_transmission": "https://www.cognac-expert.com/xo-cognac/esprit-organic-transmission-cognac",
+    "cognac_expert_xxo": "https://www.cognac-expert.com/xxo-cognac/esprit-organic-xxo-cognac",
+    "cognac_expert_single_cask": "https://www.cognac-expert.com/single-cask/esprit-organic-single-cask-cognac",
+    "cognac_expert_tasting_set": "https://www.cognac-expert.com/cognac-gift-tasting-sets/esprit-organic-tasting-set-vs-vsop-xo-cognac",
+    "cognatheque_brand_en": "https://shop.cognatheque.com/en/brand/228-esprit-organic-cognac",
+    "cognatheque_range_en": "https://shop.cognatheque.com/en/450-esprit-organic-cognac-online",
+    "cognatheque_organic_en": "https://shop.cognatheque.com/en/98-organic-cognac",
+    "cognatheque_organic_fr": "https://shop.cognatheque.com/fr/98-cognac-bio",
+    "cognatheque_fondation_en": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2992-esprit-organic-cognac-fondation-vs-fins-bois-aperitif-cocktail.html",
+    "cognatheque_conviction_en": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2993-esprit-organic-cognac-conviction-vsop-fins-bois-aperitif-cocktail.html",
+    "cognatheque_cohesion_en": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2994-esprit-organic-cognac-cohesion-napoleon-fins-bois-digestif.html",
+    "cognatheque_transmission_en": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2995-esprit-organic-cognac-transmission-xo-fins-bois-digestif.html",
+    "cognatheque_xxo_en": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2996-esprit-organic-cognac-xxo-fins-bois-digestif.html",
+    "cognatheque_single_cask_en": "https://shop.cognatheque.com/en/esprit-organic-cognac-online/2997-esprit-organic-cognac-single-cask-number-1-xo-cask-strength-fins-bois-limited-edition.html",
+    "rasch_producer": "https://www.raschvin.com/en/product-attribute/producent/maison-des-pierres-en/",
+    "rasch_conviction": "https://www.raschvin.com/en/product/cognac-esprit-organic-conviction-vsop-eco-75-cl-40/",
+    "rasch_transmission": "https://www.raschvin.com/en/product/cognac-esprit-organic-transmission-xo-eco-75-cl-40/",
+    "vinmonopolet_conviction": "https://www.vinmonopolet.no/Land/Frankrike/Cognac-Tradisjonell/Fins-Bois/Esprit-Organic-Cognac-Conviction-VSOP/p/15346001",
+    "dn_conviction_note": "https://www.dn.no/smak/vin/esprit-organic-cognac-conviction-vsop/4-1-180136",
+    "aperitif_conviction": "https://www.aperitif.no/pollisten/produkt/esprit-organic-cognac-conviction-vsop%2C2322088",
+    "alkiskalkis_conviction": "https://alkiskalkis.no/products/15346001",
+    "winehouse_norway_portfolio": "https://www.winehousenorway.no/wp-content/themes/solera/functions/download_file.php?name=na&prodid=1&type=producer",
+    "vinoble_cognac_category": "https://vinoble.dk/vare-kategori/cognac/",
+    "vinoble_conviction": "https://vinoble.dk/vare/cognac-conviction-vsop-oeko-40-esprit-organic-maison-des-pierres-fins-bois/",
+    "vinoble_transmission": "https://vinoble.dk/vare/cognac-transmission-xo-oeko-40-esprit-organic-maison-des-pierres-fins-bois/",
+    "vinoble_pineau": "https://vinoble.dk/vare/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres/",
+    "vinforsyning_transmission": "https://vinforsyning.dk/vare/cognac-transmission-xo-gb-oeko-40-esprit-organic-maison-des-pierres-gift-box-fins-bois/",
+    "vinforsyning_pineau": "https://vinforsyning.dk/vare/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres-fins-bois/",
+    "hjoerring_pineau": "https://hjoerring-vinhandel.dk/pineau-des-charentes-oeko-175-esprit-organic-maison-des-pierres-31770/",
+    "hotel_vejlefjord_wine_list": "https://backoffice.hotelvejlefjord.dk/media/wppfwk31/vinkort-feb-2025-hotel-vejlefjord.pdf",
+    "mp_spirits_transmission": "https://www.mpspirits.be/product-page/transmission-xo-cognac-esprit-organic",
+    "aux_tours_des_vins": "https://aux-tours-des-vins.com/news/47",
+    "noble_selection_xxo_en": "https://nobleselection.kork.ca/qc/en/our-wineries/maison-des-pierres/esprit-organic-xxo/0/15263655",
+    "noble_selection_xxo_fr": "https://nobleselection.kork.ca/qc/fr/nos-domaines/maison-des-pierres/esprit-organic-xxo/0/15263655",
+    "cellartracker_pineau": "https://www.cellartracker.com/wine.asp?iWine=5316590",
+    "sfwsc_2023": "https://thetastingalliance.com/sfwsc-2023-results/",
+    "wwsa_2018": "https://wineawards.org/wwsa-2018-results/",
+    "wwsa_2024": "https://wineawards.org/womens-wine-spirits-awards-2024-results/",
+    "wwsa_trophies": "https://wineawards.org/trophies/",
+    "instagram_emile_marguerite": "https://www.instagram.com/emileetmarguerite_lille/p/DDRrDrIMdrm/",
+    "instagram_france_quintessence": "https://www.instagram.com/reel/BY3vRlkg8ti/",
+    "nordlys_cognac_club": "https://www.facebook.com/people/Nordlys-Cognac-Club/100057087355537/?locale=nn_NO",
+    "bravo_trade_price_pdf": "https://bravotrade.ru/upload/price/Price_BT.pdf",
+    "alcoplaza_vs": "https://www.alcoplaza.ru/Cognac/esprit-organic-vs-07-pu",
+    "dobro_wine_xo": "https://dobro.wine/krepkiy-alkogol/konyak-espri-organik-kho-0-7-v-pu/",
+}
+
+PRESS_KIT_EXTERNAL_SOURCES = [
+    {
+        "label": "Ecocert - Domaine de la Grande Versenne",
+        "url": PRESS_KIT_SOURCE_URLS["ecocert_domaine"],
+        "description": {
+            "fr": "Fiche de certification Agriculture biologique Europe du domaine viticole.",
+            "en": "Organic agriculture Europe certification record for the wine estate.",
+            "da": "Ecocert-certificering for vingårdens økologiske landbrug.",
+            "no": "Ecocert-sertifisering for vinmarkens økologiske landbruk.",
+            "sv": "Ecocert-certifiering för vingårdens ekologiska jordbruk.",
+        },
+    },
+    {
+        "label": "Ecocert - Maison des Pierres",
+        "url": PRESS_KIT_SOURCE_URLS["ecocert_maison"],
+        "description": {
+            "fr": "Fiche de certification Agriculture biologique Europe de la maison de commercialisation.",
+            "en": "Organic agriculture Europe certification record for the trading and production house.",
+            "da": "Ecocert-certificering for huset, der producerer og markedsfører serien.",
+            "no": "Ecocert-sertifisering for huset som produserer og markedsfører serien.",
+            "sv": "Ecocert-certifiering för huset som producerar och marknadsför sortimentet.",
+        },
+    },
+    {
+        "label": "Agence Bio - Domaine de la Grande Versenne",
+        "url": PRESS_KIT_SOURCE_URLS["agence_bio_domaine"],
+        "description": {
+            "fr": "Fiche publique de l'annuaire des opérateurs bio pour le domaine.",
+            "en": "Public organic-operator directory record for the estate.",
+            "da": "Offentlig registrering i det franske økologiske operatørregister.",
+            "no": "Offentlig oppføring i det franske økologiske operatørregisteret.",
+            "sv": "Offentlig post i det franska registret över ekologiska aktörer.",
+        },
+    },
+    {
+        "label": "Agence Bio - LA MAISON DES PIERRES",
+        "url": PRESS_KIT_SOURCE_URLS["agence_bio_maison"],
+        "description": {
+            "fr": "Fiche publique de l'annuaire bio pour la société éditrice et maison de commercialisation.",
+            "en": "Public organic-operator directory record for the publishing company and trading house.",
+            "da": "Offentlig registrering for udgiver- og handelsselskabet.",
+            "no": "Offentlig oppføring for utgiver- og handelsselskapet.",
+            "sv": "Offentlig post för utgivar- och handelshuset.",
+        },
+    },
+    {
+        "label": "Annuaire des Entreprises - LA MAISON DES PIERRES",
+        "url": PRESS_KIT_SOURCE_URLS["annuaire_entreprises"],
+        "description": {
+            "fr": "Fiche officielle française pour l'identification juridique de LA MAISON DES PIERRES.",
+            "en": "Official French business directory record for LA MAISON DES PIERRES.",
+            "da": "Officiel fransk virksomhedsregistrering for LA MAISON DES PIERRES.",
+            "no": "Offisiell fransk foretaksregistrering for LA MAISON DES PIERRES.",
+            "sv": "Officiell fransk företagsregistrering för LA MAISON DES PIERRES.",
+        },
+    },
+    {
+        "label": "Business France Marketplace - LA MAISON DES PIERRES",
+        "url": PRESS_KIT_SOURCE_URLS["business_france_supplier"],
+        "description": {
+            "fr": "Profil fournisseur public listant des produits Esprit Organic et Maison des Pierres.",
+            "en": "Public supplier profile listing Esprit Organic and Maison des Pierres products.",
+            "da": "Offentlig leverandørprofil med Esprit Organic- og Maison des Pierres-produkter.",
+            "no": "Offentlig leverandørprofil med Esprit Organic- og Maison des Pierres-produkter.",
+            "sv": "Offentlig leverantörsprofil med Esprit Organic- och Maison des Pierres-produkter.",
+        },
+    },
+    {
+        "label": "Business France Marketplace - Fondation VS",
+        "url": PRESS_KIT_SOURCE_URLS["business_france_vs"],
+        "description": {
+            "fr": "Fiche produit externe pour Cognac Esprit Organic VS - FONDATION.",
+            "en": "External product page for Cognac Esprit Organic VS - FONDATION.",
+            "da": "Ekstern produktside for Cognac Esprit Organic VS - FONDATION.",
+            "no": "Ekstern produktside for Cognac Esprit Organic VS - FONDATION.",
+            "sv": "Extern produktsida för Cognac Esprit Organic VS - FONDATION.",
+        },
+    },
+    {
+        "label": "Business France Marketplace - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["business_france_vsop"],
+        "description": {
+            "fr": "Fiche produit externe pour Cognac Esprit Organic VSOP - CONVICTION.",
+            "en": "External product page for Cognac Esprit Organic VSOP - CONVICTION.",
+            "da": "Ekstern produktside for Cognac Esprit Organic VSOP - CONVICTION.",
+            "no": "Ekstern produktside for Cognac Esprit Organic VSOP - CONVICTION.",
+            "sv": "Extern produktsida för Cognac Esprit Organic VSOP - CONVICTION.",
+        },
+    },
+    {
+        "label": "Business France Marketplace - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["business_france_xo"],
+        "description": {
+            "fr": "Fiche produit externe pour Cognac Esprit Organic XO - TRANSMISSION.",
+            "en": "External product page for Cognac Esprit Organic XO - TRANSMISSION.",
+            "da": "Ekstern produktside for Cognac Esprit Organic XO - TRANSMISSION.",
+            "no": "Ekstern produktside for Cognac Esprit Organic XO - TRANSMISSION.",
+            "sv": "Extern produktsida för Cognac Esprit Organic XO - TRANSMISSION.",
+        },
+    },
+    {
+        "label": "France Quintessence - Maison des Pierres",
+        "url": PRESS_KIT_SOURCE_URLS["france_quintessence"],
+        "description": {
+            "fr": "Fiche exposant mentionnant Esprit Organic comme cognac familial des Fins Bois.",
+            "en": "Exhibitor page mentioning Esprit Organic as a family Cognac from Fins Bois.",
+            "da": "Udstillerside, der omtaler Esprit Organic som familie-Cognac fra Fins Bois.",
+            "no": "Utstillerside som omtaler Esprit Organic som familie-Cognac fra Fins Bois.",
+            "sv": "Utställarsida som nämner Esprit Organic som familje-Cognac från Fins Bois.",
+        },
+    },
+    {
+        "label": "Annuaire HVE data.gouv.fr",
+        "url": PRESS_KIT_SOURCE_URLS["hve_directory"],
+        "description": {
+            "fr": "Base publique des exploitations certifiées Haute Valeur Environnementale.",
+            "en": "Public directory of farms certified Haute Valeur Environnementale.",
+            "da": "Offentligt register over HVE-certificerede landbrug.",
+            "no": "Offentlig register over HVE-sertifiserte gårder.",
+            "sv": "Offentligt register över HVE-certifierade gårdar.",
+        },
+    },
+    {
+        "label": "Certification Environnementale Cognac / BNIC",
+        "url": PRESS_KIT_SOURCE_URLS["cec_cognac"],
+        "description": {
+            "fr": "Présentation officielle du référentiel environnemental propre à la filière Cognac.",
+            "en": "Official presentation of the Cognac sector environmental framework.",
+            "da": "Officiel præsentation af Cognac-sektorens miljøramme.",
+            "no": "Offisiell presentasjon av Cognac-sektorens miljørammeverk.",
+            "sv": "Officiell presentation av Cognac-sektorns miljöramverk.",
+        },
+    },
+    {
+        "label": "San Francisco World Spirits Competition 2019",
+        "url": PRESS_KIT_SOURCE_URLS["sfwsc_2019"],
+        "description": {
+            "fr": "Palmarès source pour la distinction Fondation VS.",
+            "en": "Source results for the Fondation VS award.",
+            "da": "Kilderesultat for udmærkelsen til Fondation VS.",
+            "no": "Kilderesultat for utmerkelsen til Fondation VS.",
+            "sv": "Källresultat för utmärkelsen till Fondation VS.",
+        },
+    },
+    {
+        "label": "Women's Wine & Spirits Awards 2022",
+        "url": PRESS_KIT_SOURCE_URLS["wwsa_2022"],
+        "description": {
+            "fr": "Palmarès source pour la distinction Transmission XO.",
+            "en": "Source results for the Transmission XO award.",
+            "da": "Kilderesultat for udmærkelsen til Transmission XO.",
+            "no": "Kilderesultat for utmerkelsen til Transmission XO.",
+            "sv": "Källresultat för utmärkelsen till Transmission XO.",
+        },
+    },
+    {
+        "label": "Concours Mondial de Bruxelles 2025",
+        "url": PRESS_KIT_SOURCE_URLS["cmb_2025"],
+        "description": {
+            "fr": "Résultat officiel pour le Pineau des Charentes Esprit Organic 2011.",
+            "en": "Official result for Pineau des Charentes Esprit Organic 2011.",
+            "da": "Officielt resultat for Pineau des Charentes Esprit Organic 2011.",
+            "no": "Offisielt resultat for Pineau des Charentes Esprit Organic 2011.",
+            "sv": "Officiellt resultat för Pineau des Charentes Esprit Organic 2011.",
+        },
+    },
+]
+
+PRESS_KIT_EXTERNAL_SOURCES.extend([
+    {
+        "label": "Business France Marketplace - catalogue fournisseur",
+        "url": PRESS_KIT_SOURCE_URLS["business_france_catalog"],
+        "description": {
+            "fr": "Catalogue Business France listant la gamme Cognac Esprit Organic et les fiches produits liées.",
+            "en": "Business France catalogue listing the Cognac Esprit Organic range and related product pages.",
+        },
+    },
+    {
+        "label": "Whisky Live Paris - exposants",
+        "url": PRESS_KIT_SOURCE_URLS["whisky_live_brands"],
+        "description": {
+            "fr": "Page exposants Whisky Live Paris où Esprit Organic apparaît dans le Pavillon France.",
+            "en": "Whisky Live Paris exhibitor page where Esprit Organic appears in the France pavilion.",
+        },
+    },
+    {
+        "label": "BNIC - Tournée Générale",
+        "url": PRESS_KIT_SOURCE_URLS["bnic_tournee_generale"],
+        "description": {
+            "fr": "Publication BNIC mentionnant Esprit Organic - La Maison des Pierres parmi les marques partenaires du Village Cognac.",
+            "en": "BNIC post mentioning Esprit Organic - La Maison des Pierres among Village Cognac partner brands.",
+        },
+    },
+    {
+        "label": "Salon Saveurs - Trophées 2025",
+        "url": PRESS_KIT_SOURCE_URLS["salon_saveurs_trophees"],
+        "description": {
+            "fr": "Communiqué PDF citant Maison des Pierres - Pineau des Charentes Esprit Organic.",
+            "en": "PDF press release citing Maison des Pierres - Pineau des Charentes Esprit Organic.",
+        },
+    },
+    {
+        "label": "Cognac Expert - Fondation VS",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_fondation"],
+        "description": {
+            "fr": "Fiche internationale Cognac Expert pour Esprit Organic Fondation VS.",
+            "en": "International Cognac Expert product page for Esprit Organic Fondation VS.",
+        },
+    },
+    {
+        "label": "Cognac Expert - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_conviction"],
+        "description": {
+            "fr": "Fiche internationale Cognac Expert pour Esprit Organic Conviction VSOP.",
+            "en": "International Cognac Expert product page for Esprit Organic Conviction VSOP.",
+        },
+    },
+    {
+        "label": "Cognac Expert - Cohesion Napoléon",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_cohesion"],
+        "description": {
+            "fr": "Fiche internationale Cognac Expert pour Esprit Organic Cohesion Napoléon.",
+            "en": "International Cognac Expert product page for Esprit Organic Cohesion Napoléon.",
+        },
+    },
+    {
+        "label": "Cognac Expert - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_transmission"],
+        "description": {
+            "fr": "Fiche internationale Cognac Expert pour Esprit Organic Transmission XO.",
+            "en": "International Cognac Expert product page for Esprit Organic Transmission XO.",
+        },
+    },
+    {
+        "label": "Cognac Expert - XXO",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_xxo"],
+        "description": {
+            "fr": "Fiche internationale Cognac Expert pour Esprit Organic XXO.",
+            "en": "International Cognac Expert product page for Esprit Organic XXO.",
+        },
+    },
+    {
+        "label": "Cognac Expert - Single Cask",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_single_cask"],
+        "description": {
+            "fr": "Fiche internationale Cognac Expert pour Esprit Organic Single Cask.",
+            "en": "International Cognac Expert product page for Esprit Organic Single Cask.",
+        },
+    },
+    {
+        "label": "Cognac Expert - coffret dégustation",
+        "url": PRESS_KIT_SOURCE_URLS["cognac_expert_tasting_set"],
+        "description": {
+            "fr": "Fiche Cognac Expert pour le coffret dégustation Esprit Organic VS, VSOP et XO.",
+            "en": "Cognac Expert product page for the Esprit Organic VS, VSOP and XO tasting set.",
+        },
+    },
+    {
+        "label": "La Cognathèque - marque Esprit Organic",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_brand_en"],
+        "description": {
+            "fr": "Page de marque La Cognathèque avec présentation d'Esprit Organic et de six références.",
+            "en": "La Cognathèque brand page presenting Esprit Organic and six product references.",
+        },
+    },
+    {
+        "label": "La Cognathèque - gamme Esprit Organic",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_range_en"],
+        "description": {
+            "fr": "Page de gamme La Cognathèque dédiée aux Cognacs Esprit Organic.",
+            "en": "La Cognathèque range page dedicated to Esprit Organic Cognacs.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Organic Cognac",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_organic_en"],
+        "description": {
+            "fr": "Catégorie Organic Cognac listant plusieurs références Esprit Organic.",
+            "en": "Organic Cognac category listing several Esprit Organic references.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Cognac Bio",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_organic_fr"],
+        "description": {
+            "fr": "Catégorie Cognac Bio listant les références Cognac Esprit Organic en français.",
+            "en": "French organic Cognac category listing Cognac Esprit Organic references.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Fondation VS",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_fondation_en"],
+        "description": {
+            "fr": "Fiche caviste pour Fondation VS Fins Bois Esprit Organic.",
+            "en": "Retailer product page for Fondation VS Fins Bois Esprit Organic.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_conviction_en"],
+        "description": {
+            "fr": "Fiche caviste pour Conviction VSOP Fins Bois Esprit Organic.",
+            "en": "Retailer product page for Conviction VSOP Fins Bois Esprit Organic.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Cohesion Napoléon",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_cohesion_en"],
+        "description": {
+            "fr": "Fiche caviste pour Cohesion Napoléon Fins Bois Esprit Organic.",
+            "en": "Retailer product page for Cohesion Napoléon Fins Bois Esprit Organic.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_transmission_en"],
+        "description": {
+            "fr": "Fiche caviste pour Transmission XO Fins Bois Esprit Organic.",
+            "en": "Retailer product page for Transmission XO Fins Bois Esprit Organic.",
+        },
+    },
+    {
+        "label": "La Cognathèque - XXO",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_xxo_en"],
+        "description": {
+            "fr": "Fiche caviste pour XXO Fins Bois Esprit Organic.",
+            "en": "Retailer product page for XXO Fins Bois Esprit Organic.",
+        },
+    },
+    {
+        "label": "La Cognathèque - Single Cask",
+        "url": PRESS_KIT_SOURCE_URLS["cognatheque_single_cask_en"],
+        "description": {
+            "fr": "Fiche caviste pour Single Cask N°1 Fins Bois Esprit Organic.",
+            "en": "Retailer product page for Single Cask No. 1 Fins Bois Esprit Organic.",
+        },
+    },
+    {
+        "label": "Rasch Vin - Maison des Pierres",
+        "url": PRESS_KIT_SOURCE_URLS["rasch_producer"],
+        "description": {
+            "fr": "Page producteur danoise listant les références Esprit Organic importées par Rasch Vin.",
+            "en": "Danish producer page listing Esprit Organic references imported by Rasch Vin.",
+        },
+    },
+    {
+        "label": "Rasch Vin - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["rasch_conviction"],
+        "description": {
+            "fr": "Fiche danoise pour Cognac Esprit Organic Conviction VSOP.",
+            "en": "Danish product page for Cognac Esprit Organic Conviction VSOP.",
+        },
+    },
+    {
+        "label": "Rasch Vin - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["rasch_transmission"],
+        "description": {
+            "fr": "Fiche danoise pour Cognac Esprit Organic Transmission XO.",
+            "en": "Danish product page for Cognac Esprit Organic Transmission XO.",
+        },
+    },
+    {
+        "label": "Vinmonopolet - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["vinmonopolet_conviction"],
+        "description": {
+            "fr": "Fiche du monopole norvégien pour Esprit Organic Cognac Conviction VSOP.",
+            "en": "Norwegian monopoly product page for Esprit Organic Cognac Conviction VSOP.",
+        },
+    },
+    {
+        "label": "DN Smak - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["dn_conviction_note"],
+        "description": {
+            "fr": "Note de dégustation norvégienne publiée par DN Smak pour Conviction VSOP.",
+            "en": "Norwegian tasting note by DN Smak for Conviction VSOP.",
+        },
+    },
+    {
+        "label": "Aperitif.no - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["aperitif_conviction"],
+        "description": {
+            "fr": "Fiche et notation norvégienne pour Esprit Organic Cognac Conviction VSOP.",
+            "en": "Norwegian product and score page for Esprit Organic Cognac Conviction VSOP.",
+        },
+    },
+    {
+        "label": "AlkisKalkis - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["alkiskalkis_conviction"],
+        "description": {
+            "fr": "Fiche norvégienne de suivi produit liée au numéro Vinmonopolet 15346001.",
+            "en": "Norwegian product-tracking page linked to Vinmonopolet item 15346001.",
+        },
+    },
+    {
+        "label": "Winehouse Norway - portefeuille",
+        "url": PRESS_KIT_SOURCE_URLS["winehouse_norway_portfolio"],
+        "description": {
+            "fr": "PDF portefeuille norvégien mentionnant Esprit Organic VSOP et le numéro produit 15346001.",
+            "en": "Norwegian portfolio PDF mentioning Esprit Organic VSOP and product number 15346001.",
+        },
+    },
+    {
+        "label": "Vinoble - catégorie Cognac",
+        "url": PRESS_KIT_SOURCE_URLS["vinoble_cognac_category"],
+        "description": {
+            "fr": "Catégorie Cognac danoise listant plusieurs références Esprit Organic.",
+            "en": "Danish Cognac category listing several Esprit Organic references.",
+        },
+    },
+    {
+        "label": "Vinoble - Conviction VSOP",
+        "url": PRESS_KIT_SOURCE_URLS["vinoble_conviction"],
+        "description": {
+            "fr": "Fiche danoise pour Conviction VSOP Esprit Organic, Maison des Pierres.",
+            "en": "Danish product page for Conviction VSOP Esprit Organic, Maison des Pierres.",
+        },
+    },
+    {
+        "label": "Vinoble - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["vinoble_transmission"],
+        "description": {
+            "fr": "Fiche danoise pour Transmission XO Esprit Organic, Maison des Pierres.",
+            "en": "Danish product page for Transmission XO Esprit Organic, Maison des Pierres.",
+        },
+    },
+    {
+        "label": "Vinoble - Pineau des Charentes",
+        "url": PRESS_KIT_SOURCE_URLS["vinoble_pineau"],
+        "description": {
+            "fr": "Fiche danoise pour Pineau des Charentes Esprit Organic, Maison des Pierres.",
+            "en": "Danish product page for Pineau des Charentes Esprit Organic, Maison des Pierres.",
+        },
+    },
+    {
+        "label": "Vinforsyning - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["vinforsyning_transmission"],
+        "description": {
+            "fr": "Fiche danoise avec EAN pour Transmission XO Esprit Organic.",
+            "en": "Danish product page with EAN for Transmission XO Esprit Organic.",
+        },
+    },
+    {
+        "label": "Vinforsyning - Pineau des Charentes",
+        "url": PRESS_KIT_SOURCE_URLS["vinforsyning_pineau"],
+        "description": {
+            "fr": "Fiche danoise pour Pineau des Charentes Esprit Organic.",
+            "en": "Danish product page for Pineau des Charentes Esprit Organic.",
+        },
+    },
+    {
+        "label": "Hjørring Vinhandel - Pineau des Charentes",
+        "url": PRESS_KIT_SOURCE_URLS["hjoerring_pineau"],
+        "description": {
+            "fr": "Fiche caviste danoise pour Pineau des Charentes Esprit Organic.",
+            "en": "Danish retailer page for Pineau des Charentes Esprit Organic.",
+        },
+    },
+    {
+        "label": "Hotel Vejlefjord - carte des vins",
+        "url": PRESS_KIT_SOURCE_URLS["hotel_vejlefjord_wine_list"],
+        "description": {
+            "fr": "Carte des vins PDF mentionnant Pineau des Charentes Esprit Organic, Maison des Pierres.",
+            "en": "PDF wine list mentioning Pineau des Charentes Esprit Organic, Maison des Pierres.",
+        },
+    },
+    {
+        "label": "MP Spirits - Transmission XO",
+        "url": PRESS_KIT_SOURCE_URLS["mp_spirits_transmission"],
+        "description": {
+            "fr": "Fiche belge pour Transmission XO et mention d'importateur Esprit Organic.",
+            "en": "Belgian product page for Transmission XO and Esprit Organic importer mention.",
+        },
+    },
+    {
+        "label": "Aux Tours des Vins - Esprit Organic Cognac",
+        "url": PRESS_KIT_SOURCE_URLS["aux_tours_des_vins"],
+        "description": {
+            "fr": "Article caviste présentant Esprit Organic comme marque familiale de Cognac bio.",
+            "en": "Retailer article presenting Esprit Organic as a family organic Cognac brand.",
+        },
+    },
+    {
+        "label": "Noble Sélection - Esprit Organic XXO EN",
+        "url": PRESS_KIT_SOURCE_URLS["noble_selection_xxo_en"],
+        "description": {
+            "fr": "Fiche importateur Québec en anglais pour Esprit Organic XXO, Maison des Pierres.",
+            "en": "Quebec importer page in English for Esprit Organic XXO, Maison des Pierres.",
+        },
+    },
+    {
+        "label": "Noble Sélection - Esprit Organic XXO FR",
+        "url": PRESS_KIT_SOURCE_URLS["noble_selection_xxo_fr"],
+        "description": {
+            "fr": "Fiche importateur Québec en français pour Esprit Organic XXO, Maison des Pierres.",
+            "en": "Quebec importer page in French for Esprit Organic XXO, Maison des Pierres.",
+        },
+    },
+    {
+        "label": "CellarTracker - Pineau des Charentes",
+        "url": PRESS_KIT_SOURCE_URLS["cellartracker_pineau"],
+        "description": {
+            "fr": "Fiche base de données vin pour Pineau des Charentes Esprit Organic.",
+            "en": "Wine database record for Pineau des Charentes Esprit Organic.",
+        },
+    },
+    {
+        "label": "San Francisco World Spirits Competition 2023",
+        "url": PRESS_KIT_SOURCE_URLS["sfwsc_2023"],
+        "description": {
+            "fr": "Palmarès source mentionnant Esprit Organic Conviction VSOP en 2023.",
+            "en": "Source results mentioning Esprit Organic Conviction VSOP in 2023.",
+        },
+    },
+    {
+        "label": "Women's Wine & Spirits Awards 2018",
+        "url": PRESS_KIT_SOURCE_URLS["wwsa_2018"],
+        "description": {
+            "fr": "Palmarès source mentionnant Esprit Organic / Fanny Croizet en Cognac biologique.",
+            "en": "Source results mentioning Esprit Organic / Fanny Croizet in organic Cognac.",
+        },
+    },
+    {
+        "label": "Women's Wine & Spirits Awards 2024",
+        "url": PRESS_KIT_SOURCE_URLS["wwsa_2024"],
+        "description": {
+            "fr": "Palmarès source mentionnant Cognac Esprit Organic XO en 2024.",
+            "en": "Source results mentioning Cognac Esprit Organic XO in 2024.",
+        },
+    },
+    {
+        "label": "Women's Wine & Spirits Awards - trophées",
+        "url": PRESS_KIT_SOURCE_URLS["wwsa_trophies"],
+        "description": {
+            "fr": "Page trophées citant Esprit Organic XO comme Brandy of the Year 2022.",
+            "en": "Trophy page citing Esprit Organic XO as Brandy of the Year 2022.",
+        },
+    },
+    {
+        "label": "Instagram - Emile & Marguerite Lille",
+        "url": PRESS_KIT_SOURCE_URLS["instagram_emile_marguerite"],
+        "description": {
+            "fr": "Publication caviste annonçant l'arrivée de Cognac Esprit Organic et son implantation en Fins Bois.",
+            "en": "Retailer post announcing Cognac Esprit Organic and its Fins Bois origin.",
+        },
+    },
+    {
+        "label": "Instagram - France Quintessence",
+        "url": PRESS_KIT_SOURCE_URLS["instagram_france_quintessence"],
+        "description": {
+            "fr": "Publication France Quintessence mentionnant Esprit Organic, famille et Fins Bois.",
+            "en": "France Quintessence post mentioning Esprit Organic, family and Fins Bois.",
+        },
+    },
+    {
+        "label": "Nordlys Cognac Club",
+        "url": PRESS_KIT_SOURCE_URLS["nordlys_cognac_club"],
+        "description": {
+            "fr": "Page club norvégienne dont les publications indexées mentionnent Esprit Organic Conviction VSOP.",
+            "en": "Norwegian club page whose indexed posts mention Esprit Organic Conviction VSOP.",
+        },
+    },
+    {
+        "label": "Bravo Trade - catalogue prix",
+        "url": PRESS_KIT_SOURCE_URLS["bravo_trade_price_pdf"],
+        "description": {
+            "fr": "Catalogue PDF russe listant Cognac Esprit Organic XXO, Napoléon et XO sous SARL Maison des Pierres.",
+            "en": "Russian PDF catalogue listing Cognac Esprit Organic XXO, Napoleon and XO under SARL Maison des Pierres.",
+        },
+    },
+    {
+        "label": "Alcoplaza - Esprit Organic VS",
+        "url": PRESS_KIT_SOURCE_URLS["alcoplaza_vs"],
+        "description": {
+            "fr": "Fiche marchand russe pour Esprit Organic VS indiquant SARL Maison des Pierres comme producteur.",
+            "en": "Russian retail page for Esprit Organic VS indicating SARL Maison des Pierres as producer.",
+        },
+    },
+    {
+        "label": "Dobro Wine - Esprit Organic XO",
+        "url": PRESS_KIT_SOURCE_URLS["dobro_wine_xo"],
+        "description": {
+            "fr": "Fiche marchand russe pour Esprit Organic XO avec référence produit externe.",
+            "en": "Russian retail page for Esprit Organic XO with external product reference.",
+        },
+    },
+])
 
 PRODUCT_DETAILS_I18N = {
     "fr": {
@@ -1651,6 +2313,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
         <a href="{localized_href(path, "faq.html", lang)}">FAQ</a>
         <a href="{localized_href(path, "cocktails.html", lang)}">Cocktails</a>
         <a href="{localized_href(path, "hve-cec.html", lang)}">HVE / CEC</a>
+        <a href="{localized_href(path, "dossier-de-presse/index.html", lang)}">{escape(copy["press"])}</a>
         <a href="{localized_href(path, "mentions-legales.html", lang)}">{escape(copy["legal"])}</a>
       </div>
     </div>
@@ -5990,6 +6653,313 @@ def sync_localized_marketing_copy():
         path.write_text(html, encoding="utf-8")
 
 
+PRESS_KIT_COPY = {
+    "fr": {
+        "title": "Dossier de presse et sources | Cognac Esprit Organic",
+        "description": "Sources officielles Cognac Esprit Organic : identité, pages de référence, fiches produits, preuves bio, HVE / CEC, récompenses et sources externes.",
+        "h1": "Sources officielles",
+        "intro": "Un point de référence pour journalistes, importateurs, partenaires, moteurs de recherche et agents IA.",
+        "eyebrow": "Dossier de presse",
+        "identity": "Identité officielle",
+        "name_title": "Nom à citer",
+        "name_text": "La marque doit être citée sous sa forme complète : Cognac Esprit Organic. Le domaine officiel est cognac-esprit-organic.com ; ne pas utiliser croizet.fr et ne pas fusionner cette marque avec une autre marque de Cognac.",
+        "reference_pages": "Pages de référence",
+        "downloads": "Documents téléchargeables",
+        "external_sources": "Sources externes vérifiables",
+        "agent_note_title": "Pour journalistes, partenaires et agents IA",
+        "agent_note": "Cette page rassemble les liens à privilégier pour vérifier l'identité de la marque, ses produits, ses preuves biologiques, ses engagements environnementaux et ses distinctions documentées. Les prix, stocks et distributeurs ne doivent pas être déduits depuis cette page.",
+        "site": "Site",
+        "brand": "Marque",
+        "publisher": "Éditeur",
+        "company_id": "SIREN",
+        "address": "Adresse",
+        "contact": "Contact",
+        "download_note": "Les fiches de dégustation PDF sont fournies pour les cuvées disponibles dans le dossier professionnel.",
+        "open": "Ouvrir",
+    },
+    "en": {
+        "title": "Press kit and sources | Cognac Esprit Organic",
+        "description": "Official Cognac Esprit Organic sources: identity, reference pages, product sheets, organic proof, HVE / CEC, awards and external sources.",
+        "h1": "Official sources",
+        "intro": "A reference point for journalists, importers, partners, search engines and AI agents.",
+        "eyebrow": "Press kit",
+        "identity": "Official identity",
+        "name_title": "Name to cite",
+        "name_text": "The brand should be cited in full as Cognac Esprit Organic. The official domain is cognac-esprit-organic.com; do not use croizet.fr and do not merge this brand with another Cognac brand.",
+        "reference_pages": "Reference pages",
+        "downloads": "Downloadable documents",
+        "external_sources": "Verifiable external sources",
+        "agent_note_title": "For journalists, partners and AI agents",
+        "agent_note": "This page gathers the preferred links for checking the brand identity, products, organic proof, environmental commitments and documented awards. Prices, stock and distributors should not be inferred from this page.",
+        "site": "Website",
+        "brand": "Brand",
+        "publisher": "Publisher",
+        "company_id": "SIREN",
+        "address": "Address",
+        "contact": "Contact",
+        "download_note": "PDF tasting sheets are provided for the cuvées available in the professional pack.",
+        "open": "Open",
+    },
+    "da": {
+        "title": "Pressekit og kilder | Cognac Esprit Organic",
+        "description": "Officielle kilder for Cognac Esprit Organic: identitet, referencesider, produktark, økologisk dokumentation, HVE / CEC, priser og eksterne kilder.",
+        "h1": "Officielle kilder",
+        "intro": "Et referencepunkt for journalister, importører, partnere, søgemaskiner og AI-agenter.",
+        "eyebrow": "Pressekit",
+        "identity": "Officiel identitet",
+        "name_title": "Navn der skal citeres",
+        "name_text": "Brandet skal citeres i sin fulde form: Cognac Esprit Organic. Det officielle domæne er cognac-esprit-organic.com; brug ikke croizet.fr og bland ikke denne brandidentitet sammen med et andet Cognac-brand.",
+        "reference_pages": "Referencesider",
+        "downloads": "Dokumenter til download",
+        "external_sources": "Kontrollerbare eksterne kilder",
+        "agent_note_title": "For journalister, partnere og AI-agenter",
+        "agent_note": "Denne side samler de foretrukne links til at kontrollere brandidentitet, produkter, økologisk dokumentation, miljøforpligtelser og dokumenterede udmærkelser. Priser, lager og distributører bør ikke udledes fra denne side.",
+        "site": "Website",
+        "brand": "Brand",
+        "publisher": "Udgiver",
+        "company_id": "SIREN",
+        "address": "Adresse",
+        "contact": "Kontakt",
+        "download_note": "PDF-smagsark leveres for de cuvéer, der indgår i den professionelle pakke.",
+        "open": "Åbn",
+    },
+    "no": {
+        "title": "Pressekit og kilder | Cognac Esprit Organic",
+        "description": "Offisielle kilder for Cognac Esprit Organic: identitet, referansesider, produktark, økologisk dokumentasjon, HVE / CEC, utmerkelser og eksterne kilder.",
+        "h1": "Offisielle kilder",
+        "intro": "Et referansepunkt for journalister, importører, partnere, søkemotorer og AI-agenter.",
+        "eyebrow": "Pressekit",
+        "identity": "Offisiell identitet",
+        "name_title": "Navn som skal siteres",
+        "name_text": "Merket skal siteres i full form: Cognac Esprit Organic. Det offisielle domenet er cognac-esprit-organic.com; bruk ikke croizet.fr og ikke slå denne merkeidentiteten sammen med et annet Cognac-merke.",
+        "reference_pages": "Referansesider",
+        "downloads": "Nedlastbare dokumenter",
+        "external_sources": "Kontrollerbare eksterne kilder",
+        "agent_note_title": "For journalister, partnere og AI-agenter",
+        "agent_note": "Denne siden samler anbefalte lenker for å kontrollere merkeidentitet, produkter, økologisk dokumentasjon, miljøforpliktelser og dokumenterte utmerkelser. Priser, lager og distributører bør ikke utledes fra denne siden.",
+        "site": "Nettsted",
+        "brand": "Merke",
+        "publisher": "Utgiver",
+        "company_id": "SIREN",
+        "address": "Adresse",
+        "contact": "Kontakt",
+        "download_note": "PDF-smaksark leveres for cuvéene som inngår i den profesjonelle pakken.",
+        "open": "Åpne",
+    },
+    "sv": {
+        "title": "Presskit och källor | Cognac Esprit Organic",
+        "description": "Officiella källor för Cognac Esprit Organic: identitet, referenssidor, produktblad, ekologiska bevis, HVE / CEC, utmärkelser och externa källor.",
+        "h1": "Officiella källor",
+        "intro": "En referenspunkt för journalister, importörer, partner, sökmotorer och AI-agenter.",
+        "eyebrow": "Presskit",
+        "identity": "Officiell identitet",
+        "name_title": "Namn att citera",
+        "name_text": "Varumärket ska citeras i sin fulla form: Cognac Esprit Organic. Den officiella domänen är cognac-esprit-organic.com; använd inte croizet.fr och slå inte ihop denna varumärkesidentitet med ett annat Cognac-varumärke.",
+        "reference_pages": "Referenssidor",
+        "downloads": "Nedladdningsbara dokument",
+        "external_sources": "Verifierbara externa källor",
+        "agent_note_title": "För journalister, partner och AI-agenter",
+        "agent_note": "Denna sida samlar rekommenderade länkar för att kontrollera varumärkesidentitet, produkter, ekologiska bevis, miljöåtaganden och dokumenterade utmärkelser. Priser, lager och distributörer ska inte härledas från denna sida.",
+        "site": "Webbplats",
+        "brand": "Varumärke",
+        "publisher": "Utgivare",
+        "company_id": "SIREN",
+        "address": "Adress",
+        "contact": "Kontakt",
+        "download_note": "PDF-provningsblad finns för de cuvéer som ingår i det professionella paketet.",
+        "open": "Öppna",
+    },
+}
+
+
+def press_kit_text(value, lang):
+    if isinstance(value, dict):
+        return value.get(lang) or value.get("en") or value.get("fr") or ""
+    return value
+
+
+def press_kit_identity_rows(copy):
+    rows = [
+        (copy["site"], f'<a href="{DOMAIN}/">{DOMAIN}</a>'),
+        (copy["brand"], "Cognac Esprit Organic"),
+        (copy["publisher"], "LA MAISON DES PIERRES (MPC)"),
+        (copy["company_id"], "508 104 361"),
+        (copy["address"], CONTACT["address"]),
+        (copy["contact"], f'<a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a> · <a href="tel:+33545358810">{CONTACT["phone"]}</a>'),
+    ]
+    return "".join(
+        f"<li><span>{escape(label)}</span><strong>{value}</strong></li>"
+        for label, value in rows
+    )
+
+
+def press_kit_reference_pages(path, lang, copy):
+    links = [
+        ("agriculture-biologique.html", "Agriculture biologique" if lang == "fr" else "Organic agriculture"),
+        ("hve-cec.html", "HVE / CEC"),
+        ("recompenses.html", "Distinctions" if lang == "fr" else "Awards"),
+        ("valeurs-nutritionnelles.html", "Valeurs nutritionnelles" if lang == "fr" else "Nutritional values"),
+        ("fiches-techniques-produits.html", "Fiches produits et ressources professionnelles" if lang == "fr" else "Product sheets and trade resources"),
+        ("importers.html", "Importateurs et cavistes" if lang == "fr" else "Importers and trade partners"),
+        ("llms.txt", "llms.txt"),
+        ("contact.html", "Contact"),
+    ]
+    items = []
+    for target, label in links:
+        href = relative_href(path, target) if target == "llms.txt" else localized_href(path, target, lang)
+        items.append(f'<a href="{escape(href)}"><span>{escape(label)}</span><small>{escape(copy["open"])}</small></a>')
+    return "".join(items)
+
+
+def press_kit_downloads(path, lang):
+    cards = []
+    for product in PRODUCTS:
+        pdf = PRODUCT_TRADE_PDFS.get(product["slug"])
+        if not pdf:
+            continue
+        href = pdf["localized_hrefs"].get(lang) or pdf["localized_hrefs"].get("en") or pdf["href"]
+        label = pdf["label"] if lang == "fr" else pdf.get("en_label", pdf["label"])
+        cards.append(
+            f'<a class="press-kit-download" href="{escape(relative_href(path, href))}">'
+            f'<span>{escape(product["name"])}</span><strong>{escape(label)}</strong></a>'
+        )
+    return "".join(cards)
+
+
+def press_kit_external_sources(lang):
+    items = []
+    for source in PRESS_KIT_EXTERNAL_SOURCES:
+        description = press_kit_text(source.get("description", ""), lang)
+        items.append(
+            f'<li><a href="{escape(source["url"], quote=True)}" target="_blank" rel="noopener noreferrer">'
+            f'<strong>{escape(source["label"])}</strong><span>{escape(description)}</span></a></li>'
+        )
+    return "".join(items)
+
+
+def press_kit_schema(path, lang, copy):
+    page = page_url(path)
+    citation_urls = [source["url"] for source in PRESS_KIT_EXTERNAL_SOURCES]
+    source_items = [
+        {
+            "@type": "ListItem",
+            "position": index,
+            "item": {
+                "@type": "CreativeWork",
+                "name": source["label"],
+                "url": source["url"],
+                "description": press_kit_text(source.get("description", ""), lang),
+            },
+        }
+        for index, source in enumerate(PRESS_KIT_EXTERNAL_SOURCES, start=1)
+    ]
+    return [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "@id": page + "#webpage",
+            "name": copy["title"],
+            "alternateName": copy["h1"],
+            "url": page,
+            "description": copy["description"],
+            "inLanguage": lang,
+            "dateModified": "2026-07-08",
+            "isPartOf": {"@id": DOMAIN + "/#website"},
+            "publisher": {"@id": DOMAIN + "/#organization"},
+            "about": [
+                {"@id": DOMAIN + "/#brand"},
+                {"@id": DOMAIN + "/#organization"},
+            ],
+            "citation": citation_urls,
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "@id": page + "#external-sources",
+            "name": copy["external_sources"],
+            "itemListElement": source_items,
+        },
+    ]
+
+
+def press_kit_page(path="dossier-de-presse/index.html", lang="fr"):
+    copy = PRESS_KIT_COPY.get(lang, PRESS_KIT_COPY["en"])
+    identity_rows = press_kit_identity_rows(copy)
+    reference_links = press_kit_reference_pages(path, lang, copy)
+    downloads = press_kit_downloads(path, lang)
+    sources = press_kit_external_sources(lang)
+    body = f"""
+<section class="press-kit-intro">
+  <div class="section-inner split wide">
+    <div>
+      <p class="eyebrow">{escape(copy["identity"])}</p>
+      <h2>{escape(copy["identity"])}</h2>
+      <p>{escape(copy["agent_note"])}</p>
+    </div>
+    <div>
+      <ul class="meta-list press-kit-identity">{identity_rows}</ul>
+    </div>
+  </div>
+</section>
+<section class="press-kit-name">
+  <div class="section-inner">
+    <p class="eyebrow">{escape(copy["name_title"])}</p>
+    <h2>{escape(copy["name_title"])}</h2>
+    <p>{escape(copy["name_text"])}</p>
+  </div>
+</section>
+<section class="press-kit-section soft">
+  <div class="section-inner">
+    <p class="eyebrow">{escape(copy["reference_pages"])}</p>
+    <h2>{escape(copy["reference_pages"])}</h2>
+    <div class="press-kit-link-grid">{reference_links}</div>
+  </div>
+</section>
+<section class="press-kit-section">
+  <div class="section-inner">
+    <p class="eyebrow">{escape(copy["downloads"])}</p>
+    <h2>{escape(copy["downloads"])}</h2>
+    <p class="press-kit-note">{escape(copy["download_note"])}</p>
+    <div class="press-kit-download-grid">{downloads}</div>
+  </div>
+</section>
+<section class="press-kit-section press-kit-sources">
+  <div class="section-inner">
+    <p class="eyebrow">{escape(copy["external_sources"])}</p>
+    <h2>{escape(copy["external_sources"])}</h2>
+    <ul class="press-kit-source-list">{sources}</ul>
+  </div>
+</section>
+<section class="press-kit-agent-note">
+  <div class="section-inner split">
+    <div>
+      <p class="eyebrow">AI / SEO</p>
+      <h2>{escape(copy["agent_note_title"])}</h2>
+    </div>
+    <div>
+      <p>{escape(copy["agent_note"])}</p>
+      <div class="press-kit-actions">
+        <a class="button" href="{escape(relative_href(path, "llms.txt"))}">llms.txt</a>
+        <a class="button secondary" href="{escape(localized_href(path, "contact.html", lang))}">Contact</a>
+      </div>
+    </div>
+  </div>
+</section>
+"""
+    return layout(
+        path,
+        copy["title"],
+        copy["description"],
+        copy["h1"],
+        copy["intro"],
+        copy["intro"],
+        body,
+        schemas=press_kit_schema(path, lang, copy),
+        image="assets/img/products/gamme-esprit-organic.jpg",
+        page_class="press-kit-page product-data-page",
+    )
+
+
 LEGAL_COPY = {
     "fr": {
         "title": "Mentions légales | Cognac Esprit Organic",
@@ -8409,6 +9379,125 @@ body[data-market="no"] .norway-buy-link {
   font-weight: 800;
   text-underline-offset: 3px;
 }
+.press-kit-page .page-hero {
+  min-height: 52vh;
+  background-image: linear-gradient(90deg, rgba(23,19,15,.76), rgba(47,74,43,.5), rgba(23,19,15,.28)), var(--hero-image);
+}
+.press-kit-intro {
+  background: #f8f3e8;
+}
+.press-kit-intro .split {
+  align-items: center;
+}
+.press-kit-identity strong {
+  text-align: right;
+}
+.press-kit-identity a {
+  color: var(--brand-dark);
+  text-underline-offset: 3px;
+}
+.press-kit-name {
+  background: #2f4a2b;
+  color: var(--paper);
+}
+.press-kit-name .eyebrow {
+  color: #d9bd72;
+}
+.press-kit-name p {
+  max-width: 860px;
+  color: rgba(255,255,255,.86);
+  font-size: 1.05rem;
+}
+.press-kit-section h2,
+.press-kit-agent-note h2 {
+  max-width: 840px;
+}
+.press-kit-link-grid,
+.press-kit-download-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 12px;
+  margin-top: 30px;
+}
+.press-kit-link-grid a,
+.press-kit-download {
+  display: grid;
+  gap: 8px;
+  min-height: 112px;
+  padding: 18px;
+  border: 1px solid rgba(94,61,35,.18);
+  background: #fff;
+  color: var(--ink);
+  text-decoration: none;
+}
+.press-kit-link-grid a span,
+.press-kit-download strong {
+  font-weight: 850;
+  line-height: 1.25;
+}
+.press-kit-link-grid a small,
+.press-kit-download span {
+  color: var(--muted);
+  font-size: .76rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.press-kit-link-grid a:hover,
+.press-kit-link-grid a:focus-visible,
+.press-kit-download:hover,
+.press-kit-download:focus-visible {
+  border-color: rgba(47,74,43,.55);
+  box-shadow: 0 14px 30px rgba(47,74,43,.1);
+}
+.press-kit-note {
+  max-width: 720px;
+  color: var(--muted);
+}
+.press-kit-sources {
+  background: #f8f3e8;
+}
+.press-kit-source-list {
+  display: grid;
+  gap: 10px;
+  margin: 30px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.press-kit-source-list a {
+  display: grid;
+  grid-template-columns: minmax(220px, .36fr) minmax(0, 1fr);
+  gap: 18px;
+  padding: 17px 0;
+  border-bottom: 1px solid rgba(94,61,35,.18);
+  color: var(--ink);
+  text-decoration: none;
+}
+.press-kit-source-list strong {
+  color: var(--brand-dark);
+  line-height: 1.25;
+}
+.press-kit-source-list span {
+  color: var(--muted);
+}
+.press-kit-agent-note {
+  background: #ded6c4;
+}
+.press-kit-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 26px;
+}
+@media (max-width: 640px) {
+  .press-kit-identity strong {
+    text-align: left;
+  }
+  .press-kit-source-list a {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+}
 .technical-award-row td span {
   color: #3f3328;
   font-weight: 800;
@@ -9233,6 +10322,7 @@ def write_static_files():
         "galerie.html",
         "valeurs-nutritionnelles.html",
         "recompenses.html",
+        "dossier-de-presse/index.html",
         "mentions-legales.html",
     ]
     for base_page in localized_base_pages:
@@ -9338,6 +10428,7 @@ Europe, USA, Canada.
 - Visiter : /visiter.html
 - FAQ Cognac Esprit Organic : /faq.html
 - Récompenses Cognac Esprit Organic : /recompenses.html
+- Dossier de presse et sources officielles : /dossier-de-presse/
 - Organic Cognac FAQ : /en/faq.html
 - FAQ om økologisk Cognac : /da/faq.html
 - FAQ om økologisk Cognac : /no/faq.html
@@ -9350,6 +10441,14 @@ Europe, USA, Canada.
 - Produktblad och professionella resurser : /sv/fiches-techniques-produits.html
 - Mentions légales : /mentions-legales.html
 - llms.txt : /llms.txt
+
+## Dossier de presse et sources officielles
+
+- Page de référence : {DOMAIN}/dossier-de-presse/
+- Versions localisées : /en/dossier-de-presse/, /da/dossier-de-presse/, /no/dossier-de-presse/, /sv/dossier-de-presse/
+- Usage : vérifier l'identité officielle Cognac Esprit Organic, les pages de référence, les fiches PDF, les preuves bio, HVE / CEC et les distinctions documentées.
+- Nom à citer : Cognac Esprit Organic.
+- Domaine officiel à utiliser : {DOMAIN}
 
 ## Versions linguistiques
 
@@ -9417,6 +10516,7 @@ Le site est prêt pour la mise en ligne :
 - JavaScript léger dans `assets/js/main.js` ;
 - Images dans `assets/img/` ;
 - SEO/agents IA : `sitemap.xml`, `robots.txt`, `llms.txt`.
+- Dossier de presse : `dossier-de-presse/` centralise l'identité officielle, les sources vérifiables, les fiches PDF et les liens utiles aux journalistes, importateurs et agents IA.
 - Newsletter : `newsletter.php` enregistre les inscriptions dans `newsletter-data/subscriptions.csv` sur un hébergement PHP classique comme OVH.
 - Marchés d'achat : `market.php` expose en JSON le marché détecté côté serveur/CDN pour le JavaScript principal.
 - Suivi vendeurs : `suivi-vendeurs.html` appelle `suivi-vendeurs-data.php` à chaque chargement pour relire les données structurées des pages distributeurs externes.
@@ -9535,6 +10635,9 @@ def main():
     write("recompenses.html", rewards_page())
     for lang in LOCALIZED_LANGUAGES:
         write(f"{lang}/recompenses.html", rewards_page(f"{lang}/recompenses.html", lang))
+    write("dossier-de-presse/index.html", press_kit_page())
+    for lang in LOCALIZED_LANGUAGES:
+        write(f"{lang}/dossier-de-presse/index.html", press_kit_page(f"{lang}/dossier-de-presse/index.html", lang))
     write("cocktails.html", cocktails_page())
     write("galerie.html", gallery_page())
     write("valeurs-nutritionnelles.html", nutrition_page())

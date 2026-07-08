@@ -865,9 +865,6 @@ PRESS_KIT_SOURCE_URLS = {
     "instagram_emile_marguerite": "https://www.instagram.com/emileetmarguerite_lille/p/DDRrDrIMdrm/",
     "instagram_france_quintessence": "https://www.instagram.com/reel/BY3vRlkg8ti/",
     "nordlys_cognac_club": "https://www.facebook.com/people/Nordlys-Cognac-Club/100057087355537/?locale=nn_NO",
-    "bravo_trade_price_pdf": "https://bravotrade.ru/upload/price/Price_BT.pdf",
-    "alcoplaza_vs": "https://www.alcoplaza.ru/Cognac/esprit-organic-vs-07-pu",
-    "dobro_wine_xo": "https://dobro.wine/krepkiy-alkogol/konyak-espri-organik-kho-0-7-v-pu/",
 }
 
 PRESS_KIT_EXTERNAL_SOURCES = [
@@ -1429,30 +1426,6 @@ PRESS_KIT_EXTERNAL_SOURCES.extend([
         "description": {
             "fr": "Page club norvégienne dont les publications indexées mentionnent Esprit Organic Conviction VSOP.",
             "en": "Norwegian club page whose indexed posts mention Esprit Organic Conviction VSOP.",
-        },
-    },
-    {
-        "label": "Bravo Trade - catalogue prix",
-        "url": PRESS_KIT_SOURCE_URLS["bravo_trade_price_pdf"],
-        "description": {
-            "fr": "Catalogue PDF russe listant Cognac Esprit Organic XXO, Napoléon et XO sous SARL Maison des Pierres.",
-            "en": "Russian PDF catalogue listing Cognac Esprit Organic XXO, Napoleon and XO under SARL Maison des Pierres.",
-        },
-    },
-    {
-        "label": "Alcoplaza - Esprit Organic VS",
-        "url": PRESS_KIT_SOURCE_URLS["alcoplaza_vs"],
-        "description": {
-            "fr": "Fiche marchand russe pour Esprit Organic VS indiquant SARL Maison des Pierres comme producteur.",
-            "en": "Russian retail page for Esprit Organic VS indicating SARL Maison des Pierres as producer.",
-        },
-    },
-    {
-        "label": "Dobro Wine - Esprit Organic XO",
-        "url": PRESS_KIT_SOURCE_URLS["dobro_wine_xo"],
-        "description": {
-            "fr": "Fiche marchand russe pour Esprit Organic XO avec référence produit externe.",
-            "en": "Russian retail page for Esprit Organic XO with external product reference.",
         },
     },
 ])

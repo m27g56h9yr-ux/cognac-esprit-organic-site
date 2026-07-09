@@ -155,10 +155,12 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('pineau', 'dk', 'https://co
         </div>
       </details>
 
-      <div class="product-downloads">
+      <div class="product-downloads" data-product-trade-links>
         <a class="product-pdf-link" href="../../assets/pdf/fiches-degustation/cognac-esprit-organic-pineau-fiche-degustation-da.pdf" type="application/pdf" download aria-label="Hent Hvid Pineau smageark som PDF">
           <span>Smageark</span>
         </a>
+        <a class="product-pdf-link" href="../fiches-techniques-produits.html#pineau">Produktark og handelsressourcer</a>
+        <a class="product-pdf-link" href="../contact.html">Handelsforespørgsel</a>
       </div>
     </div>
   </div>

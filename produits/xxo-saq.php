@@ -152,6 +152,11 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('xxo', 'qc', 'https://cogna
       </details>
 
 
+      <div class="product-downloads" data-product-trade-links>
+        <a class="product-pdf-link" href="../fiches-techniques-produits.html#xxo"><span data-fr>Fiche produit professionnelle</span><span data-en>Product sheet and trade resources</span></a>
+        <a class="product-pdf-link" href="../contact.html"><span data-fr>Demande professionnelle</span><span data-en>Trade enquiry</span></a>
+      </div>
+
     </div>
   </div>
 </section>

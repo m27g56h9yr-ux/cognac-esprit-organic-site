@@ -2528,6 +2528,26 @@ def range_page():
     return layout("produits.html", "Gamme produits | Cognac Esprit Organic", "Découvrez les Cognacs biologiques Esprit Organic : VS, VSOP, Napoléon, XO, XXO, Single Cask, Pineau blanc et Pineau rouge.", "Gamme produits Cognac Esprit Organic", "Une gamme biologique structurée pour une lecture simple, du VS au XXO.", "An organic range structured for clear reading, from VS to XXO.", body)
 
 
+def product_trade_resource_links_html(product, prefix, lang="fr"):
+    sheet_href = f"{prefix}fiches-techniques-produits.html#{escape(product['slug'])}"
+    contact_href = f"{prefix}contact.html"
+    if lang == "fr":
+        return (
+            f'<a class="product-pdf-link" href="{sheet_href}"><span data-fr>Fiche produit professionnelle</span><span data-en>Product sheet and trade resources</span></a>\n'
+            f'        <a class="product-pdf-link" href="{contact_href}"><span data-fr>Demande professionnelle</span><span data-en>Trade enquiry</span></a>'
+        )
+    labels = {
+        "en": ("Product sheet and trade resources", "Trade enquiry"),
+        "da": ("Produktark og handelsressourcer", "Handelsforespørgsel"),
+        "no": ("Produktark og handelsressurser", "Handelshenvendelse"),
+        "sv": ("Produktblad och handelsresurser", "Handelsförfrågan"),
+    }.get(lang, ("Product sheet and trade resources", "Trade enquiry"))
+    return (
+        f'<a class="product-pdf-link" href="{sheet_href}">{escape(labels[0])}</a>\n'
+        f'        <a class="product-pdf-link" href="{contact_href}">{escape(labels[1])}</a>'
+    )
+
+
 def product_page(product):
     prefix = "../"
     extra = PRODUCT_EXTRAS.get(product["slug"], {})
@@ -2605,14 +2625,17 @@ def product_page(product):
             f'{image_html(src, thumb_alt, prefix, loading="lazy")}</button>'
         )
     gallery_buttons = "".join(gallery_buttons_parts)
-    trade_pdf_download = ""
+    resource_links = []
     if trade_pdf:
-        trade_pdf_download = f"""
-      <div class="product-downloads">
-        <a class="product-pdf-link" href="{prefix}{escape(trade_pdf["href"])}" type="application/pdf" download aria-label="Télécharger {escape(trade_pdf["label"])} au format PDF">
+        resource_links.append(f"""<a class="product-pdf-link" href="{prefix}{escape(trade_pdf["href"])}" type="application/pdf" download aria-label="Télécharger {escape(trade_pdf["label"])} au format PDF">
           <span data-fr>Fiche dégustation</span>
           <span data-en>Tasting sheet</span>
-        </a>
+        </a>""")
+    resource_links.append(product_trade_resource_links_html(product, prefix))
+    resource_links_html = "\n        ".join(resource_links)
+    trade_pdf_download = f"""
+      <div class="product-downloads" data-product-trade-links>
+        {resource_links_html}
       </div>
 """
     section_class = f'product-old-detail {extra.get("section_class", "")}'.strip()
@@ -2852,13 +2875,13 @@ def importer_page():
 
 
 def producer_page():
-    location_cards = "<div class=\"feature-grid\"><article><h2>From Charente, France</h2><p>30 Rue d'Angoulême, 16200 Triac-Lautrait, in the Cognac region.</p></article><article><h2>Organic identity</h2><p>A family-led organic Cognac range for partners looking for provenance, clarity and a direct producer relationship.</p></article><article><h2>Priority markets</h2><p>Europe, USA, Canada.</p></article></div>"
+    location_cards = "<div class=\"feature-grid\"><article><h2>From Charente, France</h2><p>30 Rue d'Angoulême, 16200 Triac-Lautrait, in the Cognac region.</p></article><article><h2>Organic identity</h2><p>A family-led organic Cognac range for partners looking for provenance, clarity and a direct producer relationship.</p></article><article><h2>Trade enquiries</h2><p>Professional enquiries from the United States and other markets are discussed directly with the house. No distributor coverage, availability, listing or volume is implied unless confirmed in writing.</p></article></div>"
     body = f"""
-{split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><a class="button" href="importers.html">For importers and trade partners</a>')}
+{split('<p class="eyebrow">Organic Cognac Producer in France</p><h2>Esprit Organic, organic Cognac from the Cognac region.</h2>', '<p>Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><p>For professional buyers, the site gathers product sheets, organic proof and contact details before any commercial discussion.</p><a class="button" href="importers.html">For importers and trade partners</a>')}
 {section(location_cards)}
-{section('<h2>Useful internal pages</h2><div class="link-list"><a href="produits/transmission-xo.html">Transmission XO</a><a href="production/">Organic approach</a><a href="demarche/">Production</a><a href="contact.html">Contact</a></div>')}
+{section('<h2>Useful internal pages</h2><div class="link-list"><a href="importers.html">Organic Cognac for importers</a><a href="fiches-techniques-produits.html">Product sheets and trade resources</a><a href="agriculture-biologique.html">Organic certification and commitment</a><a href="contact.html">Contact</a></div>')}
 """
-    return layout("organic-cognac-producer-france.html", "Organic Cognac Producer in France | Cognac Esprit Organic", "Meet Cognac Esprit Organic, a family organic Cognac producer in Charente, France, with a range for importers, retailers and hospitality.", "Organic Cognac Producer in France", "Organic Cognac from Charente for international partners.", "Organic Cognac from Charente for international partners.", body)
+    return layout("organic-cognac-producer-france.html", "Organic Cognac Producer in France for Importers | Cognac Esprit Organic", "Family organic Cognac producer in Charente, France. Explore the range, product sheets and contact the house for importer, retailer and hospitality enquiries.", "Organic Cognac Producer in France", "A family-led organic Cognac range from Charente for importers, specialist retailers and hospitality buyers.", "A family-led organic Cognac range from Charente for importers, specialist retailers and hospitality buyers.", body)
 
 
 def organic_proof_schema(page_path="agriculture-biologique.html", name="Certification biologique et preuves", lang="fr", description="Preuves publiques de certification Agriculture biologique Europe pour le Domaine de la Grande Versenne et Maison des Pierres SARL."):
@@ -3511,6 +3534,7 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
 def contact_page():
     body = f"""
 {split('<p class="eyebrow">Contact</p><h2 data-fr>Contacter Cognac Esprit Organic</h2><h2 data-en>Contact Cognac Esprit Organic</h2>', f'<ul class="meta-list"><li><span>Email</span><strong><a href="mailto:{CONTACT["email"]}">{CONTACT["email"]}</a></strong></li><li><span>Téléphone</span><strong><a href="tel:+33545358810">{CONTACT["phone"]}</a></strong></li><li><span>Adresse</span><strong>{CONTACT["address"]}</strong></li></ul>')}
+{section(f'<h2 data-fr>Demandes importateurs et professionnels</h2><h2 data-en>Trade and importer enquiries</h2><p data-fr>Pour une demande importateur, caviste, CHR ou acheteur spécialisé, indiquez votre société, pays ou État, rôle, canal de vente, produits d’intérêt et documents souhaités.</p><p data-en>For importer, retail, hospitality or specialist buyer enquiries, please include your company, country or state, role, sales channel, products of interest and requested documents.</p><p data-fr>La disponibilité, la couverture marché et les conditions commerciales sont confirmées directement et ne sont pas sous-entendues par cette page.</p><p data-en>Availability, market coverage and commercial terms are confirmed directly and are not implied by this page.</p><a class="button" href="mailto:{CONTACT["email"]}?subject=Trade%20enquiry%20-%20Cognac%20Esprit%20Organic" data-fr>Envoyer une demande professionnelle</a><a class="button" href="mailto:{CONTACT["email"]}?subject=Trade%20enquiry%20-%20Cognac%20Esprit%20Organic" data-en>Start a trade enquiry</a>')}
 {section('<h2 data-fr>Visites</h2><h2 data-en>Visits</h2><p data-fr>Horaires actuels : lundi-vendredi, 10h-12h ou 14h-17h. Durée : 1h. Maximum : 10 personnes.</p><p data-en>Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.</p>')}
 """
     return layout("contact.html", "Contact | Cognac Esprit Organic", "Contactez Cognac Esprit Organic à Triac-Lautrait : demande de visite, information produit ou échange professionnel avec la maison.", "Contact Cognac Esprit Organic", "Pour organiser une visite, parler d’une cuvée ou préparer un projet professionnel.", "For visits, product questions or professional projects.", body)
@@ -5908,6 +5932,8 @@ def technical_product_facts_page_en():
     <h2>Product sheets and trade resources</h2>
     <p>This page brings together the key information needed to present Cognac Esprit Organic accurately: range, aromatic profiles, bottle sizes, alcohol by volume, grape varieties, awards and tasting sheets.</p>
     <p>It helps wine merchants, importers, hospitality teams and partners prepare clear selections without adding prices, stock, customer reviews or claims not published by the house.</p>
+    <p>For United States or other international trade enquiries, use these sheets with the importer page or contact the house directly. Availability, market coverage and commercial terms are confirmed case by case.</p>
+    <div class="link-list"><a href="importers.html">Organic Cognac for importers</a><a href="contact.html">Start a trade enquiry</a></div>
     <figure class="technical-hero-image">
       <img src="{asset_prefix}assets/img/products/gamme-esprit-organic.jpg" alt="Cognac Esprit Organic range: Fondation VS, Conviction VSOP, Cohesion Napoléon and Transmission XO" width="1800" height="1130" loading="lazy">
       <figcaption>Cognac Esprit Organic range: a clear resource for presenting the cuvées and their essential information.</figcaption>
@@ -6391,6 +6417,21 @@ def sync_localized_technical_tables(html):
     return html
 
 
+def sync_localized_product_trade_links(html, product, lang):
+    if "data-product-trade-links" in html:
+        return html
+    link_html = product_trade_resource_links_html(product, "../", lang)
+    if '<div class="product-downloads">' in html:
+        html = html.replace('<div class="product-downloads">', '<div class="product-downloads" data-product-trade-links>', 1)
+        downloads_re = re.compile(r'(<div class="product-downloads" data-product-trade-links>[\s\S]*?)(\n\s*</div>)')
+        return downloads_re.sub(lambda match: match.group(1).rstrip() + "\n        " + link_html + match.group(2), html, count=1)
+    insert_before = "\n    </div>\n  </div>\n</section>"
+    trade_block = f'\n      <div class="product-downloads" data-product-trade-links>\n        {link_html}\n      </div>'
+    if insert_before in html:
+        return html.replace(insert_before, trade_block + insert_before, 1)
+    return html
+
+
 def sync_localized_product_data():
     localized_languages = ["en", "da", "no", "sv"]
     for lang in localized_languages:
@@ -6405,6 +6446,7 @@ def sync_localized_product_data():
             html = sync_product_buy_links(html, product, lang)
             html = sync_product_json_ld(html, product, rel_path)
             html = sync_product_detail_rows(html, product)
+            html = sync_localized_product_trade_links(html, product, lang)
             path.write_text(html, encoding="utf-8")
 
         technical_path = ROOT / lang / "fiches-techniques-produits.html"
@@ -6472,6 +6514,7 @@ def sync_localized_marketing_copy():
             "Esprit Organic henvender sig til eksportmarkeder formuleret som: Europa, USA, Canada. Denne side er bevidst faktuel: den præsenterer sortimentet, kontaktoplysningerne og de dokumenter, der skal forberedes, uden at opfinde volumener eller distributører.": "Esprit Organic ledsager partnere, der søger et klart, familiedrevet og certificeret økologisk sortiment af Cognac og Pineau med direkte kontakt i Charente.",
             "Bed om eksportinformation": "Tal med os om jeres projekt",
             "Familiedrevet, naturlig, premium og uafhængig økologisk Cognac.": "Familiedrevet, premium og uafhængig økologisk Cognac.",
+            "<article><h2>Markeder</h2><p>Europa, USA, Canada.</p></article>": "<article><h2>Handelsforespørgsler</h2><p>Professionelle forespørgsler, også fra USA, drøftes direkte med huset. Ingen distributørdækning, tilgængelighed, listing eller volumen er underforstået uden skriftlig bekræftelse.</p></article>",
             "Dokumenter der skal forberedes": "Ressourcer til jeres udvalg",
             "Produktdata og professionelle dokumenter.": "Produktark og professionelle oplysninger.",
             "Regulatoriske oplysninger og næringsoplysninger i tilgængelig HTML.": "Regulatoriske oplysninger og næringsoplysninger til en klar præsentation.",
@@ -6484,6 +6527,7 @@ def sync_localized_marketing_copy():
             "Esprit Organic retter seg mot eksportmarkeder formulert slik: Europa, USA, Canada. Denne siden er bevisst faktuell: den presenterer sortimentet, kontaktopplysninger og dokumenter som skal forberedes, uten å finne opp volumer eller distributører.": "Esprit Organic støtter partnere som ønsker et tydelig, familiedrevet og sertifisert økologisk sortiment av Cognac og Pineau med direkte kontakt i Charente.",
             "Be om eksportinformasjon": "Snakk med oss om prosjektet",
             "Familiedrevet, naturlig, premium og uavhengig økologisk Cognac.": "Familiedrevet, premium og uavhengig økologisk Cognac.",
+            "<article><h2>Markeder</h2><p>Europa, USA, Canada.</p></article>": "<article><h2>Handelshenvendelser</h2><p>Profesjonelle henvendelser, også fra USA, diskuteres direkte med huset. Ingen distributørdekning, tilgjengelighet, listing eller volum er underforstått uten skriftlig bekreftelse.</p></article>",
             "Dokumenter som skal forberedes": "Ressurser for utvalget deres",
             "Produktdata og profesjonelle dokumenter.": "Produktark og profesjonell informasjon.",
             "Regulatorisk og ernæringsmessig informasjon i tilgjengelig HTML.": "Regulatorisk og ernæringsmessig informasjon for en klar presentasjon.",
@@ -6496,33 +6540,49 @@ def sync_localized_marketing_copy():
             "Esprit Organic riktar sig till exportmarknader formulerade som: Europa, USA, Kanada. Denna sida är medvetet faktabaserad: den presenterar sortimentet, kontaktuppgifter och dokument att förbereda, utan att hitta på volymer eller distributörer.": "Esprit Organic stödjer partner som söker ett tydligt, familjeägt och certifierat ekologiskt sortiment av Cognac och Pineau med direkt kontakt i Charente.",
             "Begär exportinformation": "Prata med oss om ert projekt",
             "Familjedriven, naturlig, premium och oberoende ekologisk Cognac.": "Familjeägd, premium och oberoende ekologisk Cognac.",
+            "<article><h2>Marknader</h2><p>Europa, USA, Kanada.</p></article>": "<article><h2>Handelsförfrågningar</h2><p>Professionella förfrågningar, även från USA, diskuteras direkt med huset. Ingen distributörstäckning, tillgänglighet, listning eller volym är underförstådd utan skriftlig bekräftelse.</p></article>",
             "Dokument att förbereda": "Resurser för ert urval",
             "Produktdata och professionella dokument.": "Produktblad och professionell information.",
             "Regulatorisk information och näringsinformation i tillgänglig HTML.": "Regulatorisk information och näringsinformation för en tydlig presentation.",
         },
         "en/organic-cognac-producer-france.html": {
-            "Cognac Esprit Organic is an organic Cognac brand in France, with a range for Europe, USA and Canada.": "Meet Cognac Esprit Organic, a family organic Cognac producer in Charente, France, with a range for importers, retailers and hospitality.",
-            "Page stratégique en anglais pour les acheteurs internationaux.": "Organic Cognac from Charente for international partners.",
-            "Strategic English page for international buyers.": "Organic Cognac from Charente for international partners.",
+            "Organic Cognac Producer in France | Cognac Esprit Organic": "Organic Cognac Producer in France for Importers | Cognac Esprit Organic",
+            "Meet Cognac Esprit Organic, a family organic Cognac producer in Charente, France, with a range for importers, retailers and hospitality.": "Family organic Cognac producer in Charente, France. Explore the range, product sheets and contact the house for importer, retailer and hospitality enquiries.",
+            "Cognac Esprit Organic is an organic Cognac brand in France, with a range for Europe, USA and Canada.": "Family organic Cognac producer in Charente, France. Explore the range, product sheets and contact the house for importer, retailer and hospitality enquiries.",
+            "Page stratégique en anglais pour les acheteurs internationaux.": "A family-led organic Cognac range from Charente for importers, specialist retailers and hospitality buyers.",
+            "Strategic English page for international buyers.": "A family-led organic Cognac range from Charente for importers, specialist retailers and hospitality buyers.",
+            "Organic Cognac from Charente for international partners.": "A family-led organic Cognac range from Charente for importers, specialist retailers and hospitality buyers.",
             "This page is written in English for international buyers. Esprit Organic is an organic Cognac brand led by Léopold and Fanny Croizet.": "Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.",
+            "<p>Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><a class=\"button\" href=\"importers.html\">For importers and trade partners</a>": "<p>Esprit Organic is a family organic Cognac brand led by Léopold and Fanny Croizet in Charente, France.</p><p>The range includes VS, VSOP, Napoléon, XO, XXO, Single Cask, white Pineau and red Pineau.</p><p>For professional buyers, the site gathers product sheets, organic proof and contact details before any commercial discussion.</p><a class=\"button\" href=\"importers.html\">For importers and trade partners</a>",
             "For Importers": "For importers and trade partners",
             "<h2>Location</h2>": "<h2>From Charente, France</h2>",
             "30 Rue d'Angoulême, 16200 Triac-Lautrait, France.": "30 Rue d'Angoulême, 16200 Triac-Lautrait, in the Cognac region.",
             "<h2>Organic focus</h2>": "<h2>Organic identity</h2>",
             "Family, natural and premium positioning for professional buyers looking for organic Cognac from France.": "A family-led organic Cognac range for partners looking for provenance, clarity and a direct producer relationship.",
-            "<h2>Export wording</h2>": "<h2>Priority markets</h2>",
+            "<h2>Export wording</h2>": "<h2>Trade enquiries</h2>",
+            "<article><h2>Priority markets</h2><p>Europe, USA, Canada.</p></article>": "<article><h2>Trade enquiries</h2><p>Professional enquiries from the United States and other markets are discussed directly with the house. No distributor coverage, availability, listing or volume is implied unless confirmed in writing.</p></article>",
+            "<div class=\"link-list\"><a href=\"produits/transmission-xo.html\">Transmission XO</a><a href=\"production/\">Organic approach</a><a href=\"demarche/\">Production</a><a href=\"contact.html\">Contact</a></div>": "<div class=\"link-list\"><a href=\"importers.html\">Organic Cognac for importers</a><a href=\"fiches-techniques-produits.html\">Product sheets and trade resources</a><a href=\"agriculture-biologique.html\">Organic certification and commitment</a><a href=\"contact.html\">Contact</a></div>",
+        },
+        "en/contact.html": {
+            "Contact Organic Cognac Producer | Cognac Esprit Organic": "Contact Cognac Esprit Organic | Trade and Visit Enquiries",
+            "Contact Cognac Esprit Organic: email, phone, address in Triac-Lautrait and visit information.": "Contact Cognac Esprit Organic in Charente for importer, retail, hospitality, product information and visit enquiries.",
+            "Email, phone, address and approved visit information.": "Email, phone, address, visit information and professional enquiries.",
+            "<section class=\"\"><div class=\"section-inner\"><h2 data-fr>Visits</h2><h2 data-en>Visits</h2><p data-fr>Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.</p><p data-en>Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.</p></div></section>": "<section class=\"\"><div class=\"section-inner\"><h2 data-fr>Trade and importer enquiries</h2><h2 data-en>Trade and importer enquiries</h2><p data-fr>For importer, retail, hospitality or specialist buyer enquiries, please include your company, country or state, role, sales channel, products of interest and requested documents.</p><p data-en>For importer, retail, hospitality or specialist buyer enquiries, please include your company, country or state, role, sales channel, products of interest and requested documents.</p><p data-fr>Availability, market coverage and commercial terms are confirmed directly and are not implied by this page.</p><p data-en>Availability, market coverage and commercial terms are confirmed directly and are not implied by this page.</p><a class=\"button\" href=\"mailto:Cognac@mdpierre.com?subject=Trade%20enquiry%20-%20Cognac%20Esprit%20Organic\" data-fr>Start a trade enquiry</a><a class=\"button\" href=\"mailto:Cognac@mdpierre.com?subject=Trade%20enquiry%20-%20Cognac%20Esprit%20Organic\" data-en>Start a trade enquiry</a></div></section><section class=\"\"><div class=\"section-inner\"><h2 data-fr>Visits</h2><h2 data-en>Visits</h2><p data-fr>Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.</p><p data-en>Current visiting hours: Monday-Friday, 10am-12pm or 2pm-5pm. Duration: 1 hour. Maximum: 10 people.</p></div></section>",
         },
         "da/organic-cognac-producer-france.html": {
             "Familiedrevet, naturlig og premium positionering for professionelle købere, der søger økologisk Cognac fra Frankrig.": "Familiedrevet og premium økologisk Cognac til professionelle partnere, der søger oprindelse, klarhed og direkte kontakt.",
             "Eksportmarkeder": "Prioriterede markeder",
+            "<article><h2>Prioriterede markeder</h2><p>Europa, USA, Canada.</p></article>": "<article><h2>Handelsforespørgsler</h2><p>Professionelle forespørgsler fra USA og andre markeder drøftes direkte med huset. Ingen distributørdækning, tilgængelighed, listing eller volumen er underforstået uden skriftlig bekræftelse.</p></article>",
         },
         "no/organic-cognac-producer-france.html": {
             "Familiedrevet, naturlig og premium posisjonering for profesjonelle kjøpere som søker økologisk Cognac fra Frankrike.": "Familiedrevet og premium økologisk Cognac for profesjonelle partnere som søker opprinnelse, klarhet og direkte kontakt.",
             "Eksportmarkeder": "Prioriterte markeder",
+            "<article><h2>Prioriterte markeder</h2><p>Europa, USA, Canada.</p></article>": "<article><h2>Handelshenvendelser</h2><p>Profesjonelle henvendelser fra USA og andre markeder diskuteres direkte med huset. Ingen distributørdekning, tilgjengelighet, listing eller volum er underforstått uten skriftlig bekreftelse.</p></article>",
         },
         "sv/organic-cognac-producer-france.html": {
             "Familjeägd, naturlig och premium positionering för professionella köpare som söker ekologisk Cognac från Frankrike.": "Familjeägd och premium ekologisk Cognac för professionella partner som söker ursprung, tydlighet och direkt kontakt.",
             "Exportmarknader": "Prioriterade marknader",
+            "<article><h2>Prioriterade marknader</h2><p>Europa, USA, Kanada.</p></article>": "<article><h2>Handelsförfrågningar</h2><p>Professionella förfrågningar från USA och andra marknader diskuteras direkt med huset. Ingen distributörstäckning, tillgänglighet, listning eller volym är underförstådd utan skriftlig bekräftelse.</p></article>",
         },
         "en/faq.html": {
             "Factual answers about the house, the organic range, visits and useful information for professionals.": "For choosing a cuvée, planning a visit or contacting the house.",
@@ -6615,7 +6675,18 @@ def sync_localized_marketing_copy():
         if not path.exists():
             continue
         html = path.read_text(encoding="utf-8")
-        path.write_text(replace_many(html, replacements), encoding="utf-8")
+        html = replace_many(html, replacements)
+        if rel_path == "en/contact.html":
+            trade_marker = '<section class=""><div class="section-inner"><h2 data-fr>Trade and importer enquiries</h2>'
+            visits_marker = '<section class=""><div class="section-inner"><h2 data-fr>Visits</h2>'
+            while html.count(trade_marker) > 1:
+                first = html.find(trade_marker)
+                second = html.find(trade_marker, first + len(trade_marker))
+                visits = html.find(visits_marker, second)
+                if second == -1 or visits == -1:
+                    break
+                html = html[:second] + html[visits:]
+        path.write_text(html, encoding="utf-8")
     for lang, replacements in gallery_replacements.items():
         path = ROOT / lang / "galerie.html"
         if not path.exists():
@@ -9220,6 +9291,11 @@ body[data-market="no"] .norway-buy-link {
 }
 .product-downloads {
   margin-top: 12px;
+}
+.product-downloads[data-product-trade-links] {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 18px;
 }
 .product-pdf-link {
   display: inline-block !important;

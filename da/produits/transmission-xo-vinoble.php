@@ -151,8 +151,8 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('transmission-xo', 'dk', 'h
         <a class="product-pdf-link" href="../../assets/pdf/fiches-degustation/cognac-esprit-organic-transmission-xo-fiche-degustation-da.pdf" type="application/pdf" download aria-label="Hent Transmission XO smageark som PDF">
           <span>Smageark</span>
         </a>
-        <a class="product-pdf-link" href="../fiches-techniques-produits.html#transmission-xo">Produktark og handelsressourcer</a>
-        <a class="product-pdf-link" href="../contact.html">Handelsforespørgsel</a>
+
+
       </div>
     </div>
   </div>

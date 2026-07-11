@@ -173,8 +173,8 @@ $ceoMarketProduct = ceo_market_fetch_partner_payload('conviction-vsop', 'dk', 'h
         <a class="product-pdf-link" href="../../assets/pdf/fiches-degustation/cognac-esprit-organic-conviction-vsop-fiche-degustation-da.pdf" type="application/pdf" download aria-label="Hent Conviction VSOP smageark som PDF">
           <span>Smageark</span>
         </a>
-        <a class="product-pdf-link" href="../fiches-techniques-produits.html#conviction-vsop">Produktark og handelsressourcer</a>
-        <a class="product-pdf-link" href="../contact.html">Handelsforespørgsel</a>
+
+
       </div>
     </div>
   </div>

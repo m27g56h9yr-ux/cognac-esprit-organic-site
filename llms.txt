@@ -1,29 +1,27 @@
 # Cognac Esprit Organic
 
-> Site officiel public de Cognac Esprit Organic, marque de cognacs biologiques et de Pineaux des Charentes situee a Triac-Lautrait, en Charente. Le site presente la gamme, les fiches produits, les preuves biologiques et environnementales, les distinctions documentees, les informations professionnelles, la FAQ et les moyens de contact.
+> Site officiel public de Cognac Esprit Organic, marque de cognacs biologiques et de Pineaux des Charentes situee a Triac-Lautrait, en Charente. Le site presente la gamme, les fiches produits, les preuves biologiques et environnementales, les distinctions documentees, la FAQ et les moyens de contact.
 
 ## Pages essentielles
 
 - [Accueil](https://cognac-esprit-organic.com/): presentation de Cognac Esprit Organic et acces rapides vers la gamme.
-- [Fiches produits et ressources professionnelles](https://cognac-esprit-organic.com/fiches-techniques-produits.html): donnees par produit, contenances, ABV, cepages, GTIN, distinctions visibles et fiches de degustation publiees.
 - [Distinctions](https://cognac-esprit-organic.com/recompenses.html): recompenses documentees et liens vers les palmares ou resultats sources.
 - [Agriculture biologique](https://cognac-esprit-organic.com/agriculture-biologique.html): preuves publiques liees a la certification Agriculture biologique Europe.
 - [HVE / CEC](https://cognac-esprit-organic.com/hve-cec.html): page de synthese sur les preuves environnementales HVE et CEC citees sur le site.
 - [Dossier de presse et sources officielles](https://cognac-esprit-organic.com/dossier-de-presse/): sources internes et externes utiles pour verifier les informations publiees.
-- [Importateurs et cavistes](https://cognac-esprit-organic.com/importers.html): page pour partenaires professionnels, importateurs, cavistes, CHR et reseaux specialises.
 - [FAQ](https://cognac-esprit-organic.com/faq.html): questions frequentes sur la maison, la gamme, le service, les visites et le contact.
 - [Contact](https://cognac-esprit-organic.com/contact.html): email, telephone, adresse et informations de visite.
 
 ## Produits
 
-- [Fondation VS](https://cognac-esprit-organic.com/produits/fondation-vs.html): Cognac VS. Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#fondation-vs.
-- [Conviction VSOP](https://cognac-esprit-organic.com/produits/conviction-vsop.html): Cognac VSOP. Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#conviction-vsop.
-- [Cohesion Napoléon](https://cognac-esprit-organic.com/produits/cohesion-napoleon.html): Cognac Napoléon. Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#cohesion-napoleon.
-- [Transmission XO](https://cognac-esprit-organic.com/produits/transmission-xo.html): Cognac XO. Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#transmission-xo.
-- [XXO](https://cognac-esprit-organic.com/produits/xxo.html): Cognac XXO. Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#xxo.
-- [Single Cask](https://cognac-esprit-organic.com/produits/single-cask.html): Cognac Single Cask. Édition limitée, 51 %, sélectionnée par Fanny. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#single-cask.
-- [Pineau blanc](https://cognac-esprit-organic.com/produits/pineau.html): Pineau des Charentes blanc. Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau.
-- [Pineau rouge](https://cognac-esprit-organic.com/produits/pineau-rouge.html): Pineau des Charentes rouge. Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande. Fiche technique: https://cognac-esprit-organic.com/fiches-techniques-produits.html#pineau-rouge.
+- [Fondation VS](https://cognac-esprit-organic.com/produits/fondation-vs.html): Cognac VS. Cognac biologique jeune, fruité et expressif, pensé pour une lecture directe du fruit.
+- [Conviction VSOP](https://cognac-esprit-organic.com/produits/conviction-vsop.html): Cognac VSOP. Cognac biologique rond et gourmand, avec une expression souple des fruits confits, du bois et des épices.
+- [Cohesion Napoléon](https://cognac-esprit-organic.com/produits/cohesion-napoleon.html): Cognac Napoléon. Cognac biologique équilibré, long et poivré, autour des fruits secs et d'une finale mentholée.
+- [Transmission XO](https://cognac-esprit-organic.com/produits/transmission-xo.html): Cognac XO. Cognac biologique structuré et généreux, marqué par la cerise noire, les fleurs séchées et le rancio.
+- [XXO](https://cognac-esprit-organic.com/produits/xxo.html): Cognac XXO. Cognac XXO issu de l’agriculture biologique, doux, structuré et très fruité.
+- [Single Cask](https://cognac-esprit-organic.com/produits/single-cask.html): Cognac Single Cask. Édition limitée, 51 %, sélectionnée par Fanny.
+- [Pineau blanc](https://cognac-esprit-organic.com/produits/pineau.html): Pineau des Charentes blanc. Pineau blanc des Charentes biologique élaboré avec Colombard et Ugni Blanc, sans sulfites ajoutés.
+- [Pineau rouge](https://cognac-esprit-organic.com/produits/pineau-rouge.html): Pineau des Charentes rouge. Pineau des Charentes rouge issu de Merlot et d'Ugni Blanc, avec une expression fruitée, souple et gourmande.
 
 ## Preuves
 
@@ -32,12 +30,6 @@
 - [Distinctions documentees](https://cognac-esprit-organic.com/recompenses.html): Fondation VS, Transmission XO et Pineau blanc sont les cuvees distinguees listees sur la page.
 - [Valeurs nutritionnelles](https://cognac-esprit-organic.com/valeurs-nutritionnelles.html): synthese des donnees nutritionnelles visibles par produit.
 - [Sources officielles et externes](https://cognac-esprit-organic.com/dossier-de-presse/): page de verification pour l'identite, les preuves bio, les distinctions et les sources publiques.
-
-## Importateurs et professionnels
-
-- [Importateurs et cavistes](https://cognac-esprit-organic.com/importers.html): gamme, positionnement, marches accompagnes et ressources pour selections professionnelles.
-- [Organic Cognac Producer in France](https://cognac-esprit-organic.com/organic-cognac-producer-france.html): page anglophone pour partenaires internationaux.
-- [Fiches produits et ressources professionnelles](https://cognac-esprit-organic.com/fiches-techniques-produits.html): donnees techniques et liens de telechargement des fiches de degustation publiees.
 
 ## FAQ
 

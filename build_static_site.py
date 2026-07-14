@@ -230,12 +230,16 @@ AWARD_PROOF_URLS = {
     "pineau-blanc-cmb-2025": "https://resultats.concoursmondial.com/fr/resultats/2025/240534-pineau-des-charentes-esprit-organic-2011",
 }
 
+CEC_ATTESTATION_PATH = "assets/pdf/preuves/attestation-cec-scea-domaine-grande-versenne-2025-2028.pdf"
+
 ENVIRONMENTAL_PROOF_URLS = {
     "hve_directory": "https://www.data.gouv.fr/datasets/annuaire-des-exploitations-certifiees-haute-valeur-environnementale",
     "hve_directory_csv": "https://www.data.gouv.fr/api/1/datasets/r/24f689c4-2966-4003-bba0-c43fdae5dc47",
     "environmental_certification": "https://agriculture.gouv.fr/certification-environnementale-mode-demploi-pour-les-exploitations",
     "cec_cognac": "https://www.cognac.fr/sengager/certification-environnementale-cognac/",
+    "cec_ministry_recognition": "https://info.agriculture.gouv.fr/boagri/document_administratif-67cb3d40-64f8-4ad7-8fba-203ed0d37e31",
     "cec_bureau_veritas": "https://www.bureauveritas.fr/besoin/certification-environnementale-cognac-cec",
+    "cec_attestation": DOMAIN + "/" + CEC_ATTESTATION_PATH,
 }
 
 PRODUCTS = [
@@ -3122,9 +3126,9 @@ HVE_CEC_COPY = {
         "heading": "Des vignes engagées, des eaux-de-vie choisies avec soin.",
         "lockup_label": "Signature officielle Certification Environnementale Cognac et Haute Valeur Environnementale",
         "promise": "Un cognac bio, traçable et engagé, des vignes jusqu’au verre.",
-        "lead": "L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait, ou d’un fournisseur référencé, agréé HVE et CEC.",
+        "lead": "L’essentiel des eaux-de-vie utilisées par Cognac Esprit Organic provient de la SCEA Domaine de la Grande Versenne, à Triac-Lautrait. La SCEA est titulaire d’une attestation CEC délivrée par le BNIC, valable du 14 mars 2025 au 13 mars 2028 sous réserve du respect du référentiel. Les autres achats sont documentés séparément.",
         "proof_label": "Sources officielles HVE et CEC",
-        "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Ministère de l’Agriculture", "CEC Cognac / BNIC", "Audit CEC Bureau Veritas"],
+        "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Certification environnementale agricole", "Attestation CEC 2025–2028", "Reconnaissance ministérielle CEC", "CEC Cognac / BNIC", "Audit CEC Bureau Veritas"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
             "title": "HVE : le domaine dans l’annuaire officiel.",
@@ -3137,21 +3141,21 @@ HVE_CEC_COPY = {
             "kicker": "Certification Environnementale Cognac",
             "title": "CEC : une démarche propre au vignoble de Cognac.",
             "text": "La Certification Environnementale Cognac est une démarche de filière portée par les acteurs du Cognac. Elle évalue les pratiques viticoles autour de cinq objectifs : biodiversité, qualité de l’eau, de l’air et des sols, restriction des traitements de synthèse, vie des sols et sobriété carbone.",
-            "facts": [("Référentiel", "24 pratiques environnementales adaptées au contexte Cognac"), ("Statut public", "Reconnaissance de niveau 2 par le ministère de l’Agriculture"), ("Contrôle", "Audit externe et certificat au nom de l’exploitation selon Bureau Veritas"), ("Approvisionnement", "SCEA Domaine de la Grande Versenne ou fournisseur référencé HVE / CEC")],
-            "buttons": ["Voir la page Cognac / BNIC", "Voir Bureau Veritas CEC"],
+            "facts": [("Titulaire", "SCEA Domaine de la Grande Versenne"), ("SIRET", "83791822600015"), ("Validité", "14/03/2025 au 13/03/2028"), ("Délivrance", "Bureau National Interprofessionnel du Cognac"), ("Référentiel", "24 pratiques environnementales adaptées au contexte Cognac"), ("Statut public", "Reconnaissance de niveau 2 par le ministère de l’Agriculture")],
+            "buttons": ["Voir l’attestation 2025–2028", "Voir la page Cognac / BNIC"],
             "alt": "Vieilles vignes dans le vignoble de Cognac",
         },
         "band": {
             "eyebrow": "Ce que cela change",
             "title": "Une sélection plus claire des eaux-de-vie.",
-            "text": "La démarche permet de relier les lots à des exploitations engagées et contrôlées, puis de documenter les achats auprès de fournisseurs référencés quand l’approvisionnement ne vient pas directement de la SCEA Domaine de la Grande Versenne.",
+            "text": "L’attestation CEC nominative documente l’engagement de la SCEA Domaine de la Grande Versenne. Lorsque l’approvisionnement ne vient pas directement de la SCEA, les achats sont tracés et documentés séparément ; l’attestation de la SCEA n’implique pas la certification d’un fournisseur non nommé.",
             "chain": ["Domaine", "Fournisseurs", "Traçabilité", "Élevage", "Assemblage"],
         },
         "note": {
             "title": "Des engagements visibles, des sources accessibles.",
-            "p1": "Nos engagements se vérifient simplement : HVE dans l’annuaire public, CEC auprès des sources officielles de la filière Cognac.",
-            "p2": "La HVE de la SCEA Domaine de la Grande Versenne est nominative sur data.gouv. Pour la CEC, les sites publics du BNIC et de Bureau Veritas détaillent le référentiel, sa reconnaissance et le contrôle ; aucun annuaire nominatif ouvert équivalent au fichier HVE n’est publié à ce jour.",
-            "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Certification environnementale agricole", "Certification Environnementale Cognac", "Audit CEC Bureau Veritas"],
+            "p1": "Nos engagements se vérifient simplement : HVE dans l’annuaire public, attestation CEC nominative de la SCEA, reconnaissance ministérielle et référentiel officiel de la filière Cognac.",
+            "p2": "À la date du 14 juillet 2026, nous n’avons pas identifié d’annuaire nominatif CEC ouvert et actuel équivalent au fichier HVE. L’attestation BNIC publiée ici constitue la preuve directe pour la SCEA Domaine de la Grande Versenne.",
+            "links": ["Annuaire HVE data.gouv", "Fichier public HVE", "Certification environnementale agricole", "Attestation CEC de la SCEA", "Arrêté de reconnaissance CEC", "Certification Environnementale Cognac", "Audit CEC Bureau Veritas"],
         },
     },
     "en": {
@@ -3161,9 +3165,9 @@ HVE_CEC_COPY = {
         "heading": "Committed vineyards and carefully selected eaux-de-vie.",
         "lockup_label": "Official Cognac Environmental Certification and High Environmental Value signature",
         "promise": "Organic, traceable and committed Cognac, from vineyard to glass.",
-        "lead": "Most eaux-de-vie used by Cognac Esprit Organic come from SCEA Domaine de la Grande Versenne in Triac-Lautrait, or from a listed supplier approved HVE and CEC.",
+        "lead": "Most eaux-de-vie used by Cognac Esprit Organic come from SCEA Domaine de la Grande Versenne in Triac-Lautrait. The SCEA holds a CEC certificate issued by the BNIC, valid from 14 March 2025 to 13 March 2028 subject to continued compliance with the standard. Other purchases are documented separately.",
         "proof_label": "Official HVE and CEC sources",
-        "links": ["HVE directory on data.gouv", "Public HVE CSV file", "French Ministry of Agriculture", "CEC Cognac / BNIC", "Bureau Veritas CEC audit"],
+        "links": ["HVE directory on data.gouv", "Public HVE CSV file", "Farm environmental certification", "CEC certificate 2025–2028", "Ministerial recognition of CEC", "CEC Cognac / BNIC", "Bureau Veritas CEC audit"],
         "hve_card": {
             "kicker": "High Environmental Value",
             "title": "HVE: the estate in the official directory.",
@@ -3176,21 +3180,21 @@ HVE_CEC_COPY = {
             "kicker": "Cognac Environmental Certification",
             "title": "CEC: a programme specific to the Cognac vineyard.",
             "text": "Cognac Environmental Certification is a sector programme led by Cognac stakeholders. It assesses winegrowing practices around five objectives: biodiversity, water, air and soil quality, restriction of synthetic treatments, soil life and carbon restraint.",
-            "facts": [("Standard", "24 environmental practices adapted to the Cognac context"), ("Public status", "Level 2 recognition by the French Ministry of Agriculture"), ("Control", "External audit and estate certificate according to Bureau Veritas"), ("Supply", "SCEA Domaine de la Grande Versenne or listed HVE / CEC supplier")],
-            "buttons": ["View the Cognac / BNIC page", "View Bureau Veritas CEC"],
+            "facts": [("Holder", "SCEA Domaine de la Grande Versenne"), ("SIRET", "83791822600015"), ("Validity", "14/03/2025 to 13/03/2028"), ("Issued by", "Bureau National Interprofessionnel du Cognac"), ("Standard", "24 environmental practices adapted to the Cognac context"), ("Public status", "Level 2 recognition by the French Ministry of Agriculture")],
+            "buttons": ["View the 2025–2028 certificate", "View the Cognac / BNIC page"],
             "alt": "Old vines in the Cognac vineyard",
         },
         "band": {
             "eyebrow": "What it changes",
             "title": "A clearer selection of eaux-de-vie.",
-            "text": "The approach links lots to committed and audited estates, and documents purchases from listed suppliers when supply does not come directly from SCEA Domaine de la Grande Versenne.",
+            "text": "The nominative CEC certificate documents the commitment of SCEA Domaine de la Grande Versenne. When supply does not come directly from the SCEA, purchases are traced and documented separately; the SCEA certificate does not imply certification of an unnamed supplier.",
             "chain": ["Estate", "Suppliers", "Traceability", "Ageing", "Blending"],
         },
         "note": {
             "title": "Visible commitments, accessible sources.",
-            "p1": "Our commitments can be checked simply: HVE in the public directory, CEC through official Cognac sector sources.",
-            "p2": "The HVE certification of SCEA Domaine de la Grande Versenne is named on data.gouv. For CEC, the public BNIC and Bureau Veritas websites describe the standard, its recognition and the audit process; no equivalent open nominative directory to the HVE file is published to date.",
-            "links": ["HVE data.gouv directory", "Public HVE file", "Agricultural environmental certification", "Cognac Environmental Certification", "Bureau Veritas CEC audit"],
+            "p1": "Our commitments can be checked simply: HVE in the public directory, the SCEA’s nominative CEC certificate, ministerial recognition and the official Cognac sector standard.",
+            "p2": "As of 14 July 2026, we have not identified a current open nominative CEC directory equivalent to the HVE file. The BNIC certificate published here is the direct evidence for SCEA Domaine de la Grande Versenne.",
+            "links": ["HVE data.gouv directory", "Public HVE file", "Agricultural environmental certification", "SCEA CEC certificate", "CEC recognition order", "Cognac Environmental Certification", "Bureau Veritas CEC audit"],
         },
     },
     "da": {
@@ -3200,9 +3204,9 @@ HVE_CEC_COPY = {
         "heading": "Engagerede vinmarker og tydeligere sporbarhed for eaux-de-vie.",
         "lockup_label": "Officiel signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
         "promise": "Økologisk, sporbar og engageret Cognac, fra vinmark til glas.",
-        "lead": "Størstedelen af de eaux-de-vie, som bruges af Cognac Esprit Organic, kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait eller fra en registreret leverandør godkendt HVE og CEC.",
+        "lead": "Størstedelen af de eaux-de-vie, som bruges af Cognac Esprit Organic, kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait. SCEA’en har en CEC-attest udstedt af BNIC, gyldig fra 14. marts 2025 til 13. marts 2028, forudsat at kravene i standarden fortsat overholdes. Andre indkøb dokumenteres særskilt.",
         "proof_label": "Officielle HVE- og CEC-kilder",
-        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Det franske landbrugsministerium", "CEC Cognac / BNIC", "Bureau Veritas CEC-audit"],
+        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Miljøcertificering af landbrug", "CEC-attest 2025–2028", "Ministeriel anerkendelse af CEC", "CEC Cognac / BNIC", "Bureau Veritas CEC-audit"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
             "title": "HVE: en ejendom nævnt i det offentlige register.",
@@ -3215,21 +3219,21 @@ HVE_CEC_COPY = {
             "kicker": "Certification Environnementale Cognac",
             "title": "CEC: en tilgang specifik for Cognac-vinmarkerne.",
             "text": "Certification Environnementale Cognac er en sektorordning drevet af Cognac-aktørerne. Den vurderer vinavlspraksis omkring fem mål: biodiversitet, vand-, luft- og jordkvalitet, begrænsning af syntetiske behandlinger, jordliv og lavere kulstofbelastning.",
-            "facts": [("Standard", "24 miljøpraksisser tilpasset Cognac-konteksten"), ("Offentlig status", "Niveau 2-anerkendelse fra det franske landbrugsministerium"), ("Kontrol", "Ekstern audit og certifikat for ejendommen ifølge Bureau Veritas"), ("Forsyning", "SCEA Domaine de la Grande Versenne eller registreret HVE / CEC-leverandør")],
-            "buttons": ["Se Cognac / BNIC-siden", "Se Bureau Veritas CEC"],
+            "facts": [("Indehaver", "SCEA Domaine de la Grande Versenne"), ("SIRET", "83791822600015"), ("Gyldighed", "14/03/2025 til 13/03/2028"), ("Udstedt af", "Bureau National Interprofessionnel du Cognac"), ("Standard", "24 miljøpraksisser tilpasset Cognac-konteksten"), ("Offentlig status", "Niveau 2-anerkendelse fra det franske landbrugsministerium")],
+            "buttons": ["Se attesten 2025–2028", "Se Cognac / BNIC-siden"],
             "alt": "Gamle vinstokke i Cognac-vinmarken",
         },
         "band": {
             "eyebrow": "Hvad det ændrer",
             "title": "Et tydeligere udvalg af eaux-de-vie.",
-            "text": "Tilgangen gør det muligt at knytte partier til engagerede og kontrollerede ejendomme og dokumentere indkøb fra registrerede leverandører, når forsyningen ikke kommer direkte fra SCEA Domaine de la Grande Versenne.",
+            "text": "Den navngivne CEC-attest dokumenterer engagementet hos SCEA Domaine de la Grande Versenne. Når forsyningen ikke kommer direkte fra SCEA’en, spores og dokumenteres indkøbene særskilt; SCEA’ens attest indebærer ikke certificering af en unavngiven leverandør.",
             "chain": ["Ejendom", "Leverandører", "Sporbarhed", "Lagring", "Assemblage"],
         },
         "note": {
             "title": "Synlige forpligtelser, tilgængelige beviser.",
-            "p1": "Vores forpligtelser kan kontrolleres enkelt: HVE i det offentlige register, CEC via officielle kilder fra Cognac-sektoren.",
-            "p2": "HVE-certificeringen for SCEA Domaine de la Grande Versenne er navngivet på data.gouv. For CEC beskriver de offentlige BNIC- og Bureau Veritas-sider standarden, anerkendelsen og kontrollen; der er ikke offentliggjort et tilsvarende åbent navngivet register som HVE-filen.",
-            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljøcertificering af landbrug", "Certification Environnementale Cognac", "Bureau Veritas CEC-audit"],
+            "p1": "Vores forpligtelser kan kontrolleres enkelt: HVE i det offentlige register, SCEA’ens navngivne CEC-attest, ministeriel anerkendelse og Cognac-sektorens officielle standard.",
+            "p2": "Pr. 14. juli 2026 har vi ikke identificeret et aktuelt åbent navngivet CEC-register svarende til HVE-filen. BNIC-attesten, der offentliggøres her, er den direkte dokumentation for SCEA Domaine de la Grande Versenne.",
+            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljøcertificering af landbrug", "SCEA’s CEC-attest", "CEC-anerkendelsesbekendtgørelse", "Certification Environnementale Cognac", "Bureau Veritas CEC-audit"],
         },
     },
     "no": {
@@ -3239,9 +3243,9 @@ HVE_CEC_COPY = {
         "heading": "Engasjerte vinmarker og tydeligere sporbarhet for eaux-de-vie.",
         "lockup_label": "Offisiell signatur for Certification Environnementale Cognac og Haute Valeur Environnementale",
         "promise": "Økologisk, sporbar og forpliktende Cognac, fra vinmark til glass.",
-        "lead": "Det meste av eaux-de-vie som brukes av Cognac Esprit Organic kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller fra en registrert leverandør godkjent HVE og CEC.",
+        "lead": "Det meste av eaux-de-vie som brukes av Cognac Esprit Organic kommer fra SCEA Domaine de la Grande Versenne i Triac-Lautrait. SCEA-en har en CEC-attest utstedt av BNIC, gyldig fra 14. mars 2025 til 13. mars 2028, forutsatt at kravene i standarden fortsatt oppfylles. Andre innkjøp dokumenteres separat.",
         "proof_label": "Offisielle HVE- og CEC-kilder",
-        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Det franske landbruksdepartementet", "CEC Cognac / BNIC", "Bureau Veritas CEC-revisjon"],
+        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Miljøsertifisering av landbruk", "CEC-attest 2025–2028", "Departementets anerkjennelse av CEC", "CEC Cognac / BNIC", "Bureau Veritas CEC-revisjon"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
             "title": "HVE: en eiendom navngitt i det offentlige registeret.",
@@ -3254,21 +3258,21 @@ HVE_CEC_COPY = {
             "kicker": "Certification Environnementale Cognac",
             "title": "CEC: en ordning som er spesifikk for Cognac-vinmarkene.",
             "text": "Certification Environnementale Cognac er en sektorordning drevet av Cognac-aktørene. Den vurderer vinpraksis rundt fem mål: biodiversitet, vann-, luft- og jordkvalitet, begrensning av syntetiske behandlinger, jordliv og lavere karbonbelastning.",
-            "facts": [("Standard", "24 miljøpraksiser tilpasset Cognac-konteksten"), ("Offentlig status", "Nivå 2-anerkjennelse fra det franske landbruksdepartementet"), ("Kontroll", "Ekstern revisjon og sertifikat for eiendommen ifølge Bureau Veritas"), ("Forsyning", "SCEA Domaine de la Grande Versenne eller registrert HVE / CEC-leverandør")],
-            "buttons": ["Se Cognac / BNIC-siden", "Se Bureau Veritas CEC"],
+            "facts": [("Innehaver", "SCEA Domaine de la Grande Versenne"), ("SIRET", "83791822600015"), ("Gyldighet", "14/03/2025 til 13/03/2028"), ("Utstedt av", "Bureau National Interprofessionnel du Cognac"), ("Standard", "24 miljøpraksiser tilpasset Cognac-konteksten"), ("Offentlig status", "Nivå 2-anerkjennelse fra det franske landbruksdepartementet")],
+            "buttons": ["Se attesten 2025–2028", "Se Cognac / BNIC-siden"],
             "alt": "Gamle vinstokker i Cognac-vinmarken",
         },
         "band": {
             "eyebrow": "Hva det endrer",
             "title": "Et tydeligere utvalg av eaux-de-vie.",
-            "text": "Tilnærmingen gjør det mulig å knytte partier til engasjerte og kontrollerte eiendommer, og dokumentere innkjøp fra registrerte leverandører når forsyningen ikke kommer direkte fra SCEA Domaine de la Grande Versenne.",
+            "text": "Den navngitte CEC-attesten dokumenterer engasjementet til SCEA Domaine de la Grande Versenne. Når forsyningen ikke kommer direkte fra SCEA-en, spores og dokumenteres innkjøpene separat; SCEA-attesten innebærer ikke sertifisering av en ikke navngitt leverandør.",
             "chain": ["Eiendom", "Leverandører", "Sporbarhet", "Lagring", "Assemblage"],
         },
         "note": {
             "title": "Synlige forpliktelser, tilgjengelige bevis.",
-            "p1": "Forpliktelsene våre kan kontrolleres enkelt: HVE i det offentlige registeret, CEC gjennom offisielle kilder fra Cognac-sektoren.",
-            "p2": "HVE-sertifiseringen til SCEA Domaine de la Grande Versenne er navngitt på data.gouv. For CEC beskriver de offentlige BNIC- og Bureau Veritas-sidene standarden, anerkjennelsen og kontrollen; det er ikke publisert et tilsvarende åpent navngitt register som HVE-filen.",
-            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljøsertifisering av landbruk", "Certification Environnementale Cognac", "Bureau Veritas CEC-revisjon"],
+            "p1": "Forpliktelsene våre kan kontrolleres enkelt: HVE i det offentlige registeret, SCEA-ens navngitte CEC-attest, departementets anerkjennelse og Cognac-sektorens offisielle standard.",
+            "p2": "Per 14. juli 2026 har vi ikke identifisert et aktuelt åpent navngitt CEC-register som tilsvarer HVE-filen. BNIC-attesten som publiseres her, er den direkte dokumentasjonen for SCEA Domaine de la Grande Versenne.",
+            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljøsertifisering av landbruk", "SCEAs CEC-attest", "Vedtak om anerkjennelse av CEC", "Certification Environnementale Cognac", "Bureau Veritas CEC-revisjon"],
         },
     },
     "sv": {
@@ -3278,9 +3282,9 @@ HVE_CEC_COPY = {
         "heading": "Engagerade vingårdar och tydligare spårbarhet för eaux-de-vie.",
         "lockup_label": "Officiell signatur för Certification Environnementale Cognac och Haute Valeur Environnementale",
         "promise": "Ekologisk, spårbar och engagerad Cognac, från vingård till glas.",
-        "lead": "Merparten av de eaux-de-vie som används av Cognac Esprit Organic kommer från SCEA Domaine de la Grande Versenne i Triac-Lautrait, eller från en registrerad leverantör godkänd HVE och CEC.",
+        "lead": "Merparten av de eaux-de-vie som används av Cognac Esprit Organic kommer från SCEA Domaine de la Grande Versenne i Triac-Lautrait. SCEA:n har ett CEC-intyg utfärdat av BNIC, giltigt från den 14 mars 2025 till den 13 mars 2028 under förutsättning att kraven i standarden fortsatt uppfylls. Övriga inköp dokumenteras separat.",
         "proof_label": "Officiella HVE- och CEC-källor",
-        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Franska jordbruksministeriet", "CEC Cognac / BNIC", "Bureau Veritas CEC-revision"],
+        "links": ["HVE-bevis på data.gouv", "Offentlig HVE CSV-fil", "Miljöcertifiering av jordbruk", "CEC-intyg 2025–2028", "Ministeriellt erkännande av CEC", "CEC Cognac / BNIC", "Bureau Veritas CEC-revision"],
         "hve_card": {
             "kicker": "Haute Valeur Environnementale",
             "title": "HVE: en egendom namngiven i det offentliga registret.",
@@ -3293,21 +3297,21 @@ HVE_CEC_COPY = {
             "kicker": "Certification Environnementale Cognac",
             "title": "CEC: ett program särskilt för Cognac-vingårdarna.",
             "text": "Certification Environnementale Cognac är ett branschprogram drivet av Cognac-aktörerna. Det bedömer vinodlingspraxis utifrån fem mål: biologisk mångfald, vatten-, luft- och jordkvalitet, begränsning av syntetiska behandlingar, markliv och lägre koldioxidpåverkan.",
-            "facts": [("Standard", "24 miljöpraktiker anpassade till Cognac-kontexten"), ("Offentlig status", "Nivå 2-erkännande från franska jordbruksministeriet"), ("Kontroll", "Extern revision och certifikat för egendomen enligt Bureau Veritas"), ("Försörjning", "SCEA Domaine de la Grande Versenne eller registrerad HVE / CEC-leverantör")],
-            "buttons": ["Se Cognac / BNIC-sidan", "Se Bureau Veritas CEC"],
+            "facts": [("Innehavare", "SCEA Domaine de la Grande Versenne"), ("SIRET", "83791822600015"), ("Giltighet", "14/03/2025 till 13/03/2028"), ("Utfärdat av", "Bureau National Interprofessionnel du Cognac"), ("Standard", "24 miljöpraktiker anpassade till Cognac-kontexten"), ("Offentlig status", "Nivå 2-erkännande från franska jordbruksministeriet")],
+            "buttons": ["Se intyget 2025–2028", "Se Cognac / BNIC-sidan"],
             "alt": "Gamla vinstockar i Cognac-vingården",
         },
         "band": {
             "eyebrow": "Vad det förändrar",
             "title": "Ett tydligare urval av eaux-de-vie.",
-            "text": "Arbetssättet gör det möjligt att koppla partier till engagerade och kontrollerade egendomar, och dokumentera inköp från registrerade leverantörer när försörjningen inte kommer direkt från SCEA Domaine de la Grande Versenne.",
+            "text": "Det namngivna CEC-intyget dokumenterar åtagandet hos SCEA Domaine de la Grande Versenne. När försörjningen inte kommer direkt från SCEA:n spåras och dokumenteras inköpen separat; SCEA-intyget innebär inte certifiering av en leverantör som inte namnges.",
             "chain": ["Egendom", "Leverantörer", "Spårbarhet", "Lagring", "Assemblage"],
         },
         "note": {
             "title": "Synliga åtaganden, tillgängliga bevis.",
-            "p1": "Våra åtaganden kan kontrolleras enkelt: HVE i det offentliga registret, CEC via officiella källor från Cognac-sektorn.",
-            "p2": "HVE-certifieringen för SCEA Domaine de la Grande Versenne är namngiven på data.gouv. För CEC beskriver de offentliga BNIC- och Bureau Veritas-sidorna standarden, erkännandet och kontrollen; inget motsvarande öppet namngivet register som HVE-filen är publicerat hittills.",
-            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljöcertifiering av jordbruk", "Certification Environnementale Cognac", "Bureau Veritas CEC-revision"],
+            "p1": "Våra åtaganden kan kontrolleras enkelt: HVE i det offentliga registret, SCEA:ns namngivna CEC-intyg, ministeriets erkännande och Cognac-sektorns officiella standard.",
+            "p2": "Per den 14 juli 2026 har vi inte identifierat något aktuellt öppet namngivet CEC-register som motsvarar HVE-filen. BNIC-intyget som publiceras här är det direkta beviset för SCEA Domaine de la Grande Versenne.",
+            "links": ["HVE-register på data.gouv", "Offentlig HVE-fil", "Miljöcertifiering av jordbruk", "SCEA:s CEC-intyg", "Beslut om erkännande av CEC", "Certification Environnementale Cognac", "Bureau Veritas CEC-revision"],
         },
     },
 }
@@ -3320,7 +3324,8 @@ HVE_SCHEMA_COPY = {
         "hve_set": "Certification environnementale des exploitations agricoles",
         "hve_description": "L'annuaire public HVE au 01/06/2025 mentionne SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activité viticulture, date de certification 23/12/2024.",
         "cec_set": "Démarche environnementale de la filière Cognac",
-        "cec_description": "Démarche filière Cognac reconnue de niveau 2 par le ministère de l'Agriculture selon les sources publiques Cognac/BNIC et Bureau Veritas.",
+        "cec_description": "Démarche de la filière Cognac reconnue de niveau 2 par le ministère de l'Agriculture.",
+        "cec_certificate_description": "La SCEA Domaine de la Grande Versenne est titulaire d'une attestation Certification Environnementale Cognac délivrée par le BNIC, valable du 14 mars 2025 au 13 mars 2028 sous réserve du respect du référentiel.",
     },
     "en": {
         "name": "HVE / CEC: environmental approach and official sources",
@@ -3328,7 +3333,8 @@ HVE_SCHEMA_COPY = {
         "hve_set": "Environmental certification for farms",
         "hve_description": "The public HVE directory dated 01/06/2025 lists SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, activity viticulture, certification date 23/12/2024.",
         "cec_set": "Environmental programme for the Cognac sector",
-        "cec_description": "Cognac sector programme recognised as level 2 by the French Ministry of Agriculture according to public Cognac/BNIC and Bureau Veritas sources.",
+        "cec_description": "Cognac sector programme recognised as level 2 by the French Ministry of Agriculture.",
+        "cec_certificate_description": "SCEA Domaine de la Grande Versenne holds a Cognac Environmental Certification certificate issued by the BNIC, valid from 14 March 2025 to 13 March 2028 subject to continued compliance with the standard.",
     },
     "da": {
         "name": "HVE / CEC: miljøtilgang og officielle kilder",
@@ -3336,7 +3342,8 @@ HVE_SCHEMA_COPY = {
         "hve_set": "Miljøcertificering af landbrug",
         "hve_description": "Det offentlige HVE-register pr. 01/06/2025 nævner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, aktivitet vinavl, certificeringsdato 23/12/2024.",
         "cec_set": "Miljøordning for Cognac-sektoren",
-        "cec_description": "Cognac-sektorens ordning er anerkendt som niveau 2 af det franske landbrugsministerium ifølge offentlige Cognac/BNIC- og Bureau Veritas-kilder.",
+        "cec_description": "Cognac-sektorens ordning er anerkendt som niveau 2 af det franske landbrugsministerium.",
+        "cec_certificate_description": "SCEA Domaine de la Grande Versenne har en Certification Environnementale Cognac-attest udstedt af BNIC, gyldig fra 14. marts 2025 til 13. marts 2028, forudsat at kravene i standarden fortsat overholdes.",
     },
     "no": {
         "name": "HVE / CEC: miljøtilnærming og offisielle kilder",
@@ -3344,7 +3351,8 @@ HVE_SCHEMA_COPY = {
         "hve_set": "Miljøsertifisering av landbruk",
         "hve_description": "Det offentlige HVE-registeret per 01/06/2025 nevner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, aktivitet vinavl, sertifiseringsdato 23/12/2024.",
         "cec_set": "Miljøordning for Cognac-sektoren",
-        "cec_description": "Cognac-sektorens ordning er anerkjent som nivå 2 av det franske landbruksdepartementet ifølge offentlige Cognac/BNIC- og Bureau Veritas-kilder.",
+        "cec_description": "Cognac-sektorens ordning er anerkjent som nivå 2 av det franske landbruksdepartementet.",
+        "cec_certificate_description": "SCEA Domaine de la Grande Versenne har en Certification Environnementale Cognac-attest utstedt av BNIC, gyldig fra 14. mars 2025 til 13. mars 2028, forutsatt at kravene i standarden fortsatt oppfylles.",
     },
     "sv": {
         "name": "HVE / CEC: miljöarbete och officiella källor",
@@ -3352,7 +3360,8 @@ HVE_SCHEMA_COPY = {
         "hve_set": "Miljöcertifiering av jordbruk",
         "hve_description": "Det offentliga HVE-registret per 01/06/2025 nämner SCEA DOMAINE DE LA GRANDE VERSENNE, 30 rue d'Angoulême, 16200 Triac-Lautrait, verksamhet vinodling, certifieringsdatum 23/12/2024.",
         "cec_set": "Miljöprogram för Cognac-sektorn",
-        "cec_description": "Cognac-sektorns program är erkänt som nivå 2 av franska jordbruksministeriet enligt offentliga Cognac/BNIC- och Bureau Veritas-källor.",
+        "cec_description": "Cognac-sektorns program är erkänt som nivå 2 av det franska jordbruksministeriet.",
+        "cec_certificate_description": "SCEA Domaine de la Grande Versenne har ett Certification Environnementale Cognac-intyg utfärdat av BNIC, giltigt från den 14 mars 2025 till den 13 mars 2028 under förutsättning att kraven i standarden fortsatt uppfylls.",
     },
 }
 
@@ -3363,7 +3372,9 @@ def hve_cec_schema(path="hve-cec.html", lang="fr"):
     domaine_id = page + "#scea-domaine-grande-versenne"
     hve_cert_id = page + "#certification-hve"
     cec_term_id = page + "#certification-environnementale-cognac"
+    cec_cert_id = page + "#certification-cec-scea-grande-versenne"
     hve_term_id = page + "#haute-valeur-environnementale"
+    bnic_id = page + "#bnic"
     return {
         "@context": "https://schema.org",
         "@graph": [
@@ -3381,7 +3392,7 @@ def hve_cec_schema(path="hve-cec.html", lang="fr"):
                 "url": page,
                 "description": schema_copy["description"],
                 "inLanguage": lang,
-                "dateModified": "2026-07-02",
+                "dateModified": "2026-07-14",
                 "isPartOf": {"@id": DOMAIN + "/#website"},
                 "publisher": {"@id": DOMAIN + "/#organization"},
                 "about": [
@@ -3389,11 +3400,14 @@ def hve_cec_schema(path="hve-cec.html", lang="fr"):
                     {"@id": hve_cert_id},
                     {"@id": hve_term_id},
                     {"@id": cec_term_id},
+                    {"@id": cec_cert_id},
                 ],
                 "citation": [
                     ENVIRONMENTAL_PROOF_URLS["hve_directory"],
                     ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"],
                     ENVIRONMENTAL_PROOF_URLS["environmental_certification"],
+                    ENVIRONMENTAL_PROOF_URLS["cec_attestation"],
+                    ENVIRONMENTAL_PROOF_URLS["cec_ministry_recognition"],
                     ENVIRONMENTAL_PROOF_URLS["cec_cognac"],
                     ENVIRONMENTAL_PROOF_URLS["cec_bureau_veritas"],
                 ],
@@ -3402,6 +3416,11 @@ def hve_cec_schema(path="hve-cec.html", lang="fr"):
                 "@type": "Organization",
                 "@id": domaine_id,
                 "name": "SCEA Domaine de la Grande Versenne",
+                "identifier": {
+                    "@type": "PropertyValue",
+                    "propertyID": "SIRET",
+                    "value": "83791822600015",
+                },
                 "address": {
                     "@type": "PostalAddress",
                     "streetAddress": "30 rue d'Angoulême",
@@ -3411,7 +3430,10 @@ def hve_cec_schema(path="hve-cec.html", lang="fr"):
                     "addressCountry": "FR",
                 },
                 "sameAs": [ENVIRONMENTAL_PROOF_URLS["hve_directory"]],
-                "hasCertification": {"@id": hve_cert_id},
+                "hasCertification": [
+                    {"@id": hve_cert_id},
+                    {"@id": cec_cert_id},
+                ],
             },
             {
                 "@type": "DefinedTerm",
@@ -3445,6 +3467,29 @@ def hve_cec_schema(path="hve-cec.html", lang="fr"):
                 },
                 "description": schema_copy["cec_description"],
             },
+            {
+                "@type": "Organization",
+                "@id": bnic_id,
+                "name": "Bureau National Interprofessionnel du Cognac",
+                "alternateName": "BNIC",
+                "url": "https://www.cognac.fr/",
+            },
+            {
+                "@type": "Certification",
+                "@id": cec_cert_id,
+                "name": "Certification Environnementale Cognac — SCEA Domaine de la Grande Versenne",
+                "url": ENVIRONMENTAL_PROOF_URLS["cec_attestation"],
+                "issuedBy": {"@id": bnic_id},
+                "about": {"@id": cec_term_id},
+                "description": schema_copy["cec_certificate_description"],
+                "validFrom": "2025-03-14",
+                "expires": "2028-03-13",
+                "validIn": {"@type": "AdministrativeArea", "name": "France"},
+                "citation": [
+                    ENVIRONMENTAL_PROOF_URLS["cec_ministry_recognition"],
+                    ENVIRONMENTAL_PROOF_URLS["cec_cognac"],
+                ],
+            },
         ],
     }
 
@@ -3455,6 +3500,8 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
     hve_directory = ENVIRONMENTAL_PROOF_URLS["hve_directory"]
     hve_csv = ENVIRONMENTAL_PROOF_URLS["hve_directory_csv"]
     environmental_certification = ENVIRONMENTAL_PROOF_URLS["environmental_certification"]
+    cec_attestation = prefix + CEC_ATTESTATION_PATH
+    cec_ministry_recognition = ENVIRONMENTAL_PROOF_URLS["cec_ministry_recognition"]
     cec_cognac = ENVIRONMENTAL_PROOF_URLS["cec_cognac"]
     cec_bureau_veritas = ENVIRONMENTAL_PROOF_URLS["cec_bureau_veritas"]
     cec_logo = prefix + "assets/img/certifications/logo-cec-cuivre-rvb.png"
@@ -3463,8 +3510,10 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
         (hve_directory, copy["links"][0]),
         (hve_csv, copy["links"][1]),
         (environmental_certification, copy["links"][2]),
-        (cec_cognac, copy["links"][3]),
-        (cec_bureau_veritas, copy["links"][4]),
+        (cec_attestation, copy["links"][3]),
+        (cec_ministry_recognition, copy["links"][4]),
+        (cec_cognac, copy["links"][5]),
+        (cec_bureau_veritas, copy["links"][6]),
     ]
     hve_link_html = "".join(
         f'<a class="hve-cec-source-link" href="{href}" target="_blank" rel="noopener">{escape(label)}</a>'
@@ -3479,8 +3528,10 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
         (hve_directory, copy["note"]["links"][0]),
         (hve_csv, copy["note"]["links"][1]),
         (environmental_certification, copy["note"]["links"][2]),
-        (cec_cognac, copy["note"]["links"][3]),
-        (cec_bureau_veritas, copy["note"]["links"][4]),
+        (cec_attestation, copy["note"]["links"][3]),
+        (cec_ministry_recognition, copy["note"]["links"][4]),
+        (cec_cognac, copy["note"]["links"][5]),
+        (cec_bureau_veritas, copy["note"]["links"][6]),
     ]
     note_link_html = "".join(
         f'<a href="{href}" target="_blank" rel="noopener">{escape(label)}</a>'
@@ -3537,8 +3588,8 @@ def hve_cec_page(path="hve-cec.html", lang="fr"):
             {cec_facts}
           </ul>
           <div class="proof-links">
-            <a class="button" href="{cec_cognac}" target="_blank" rel="noopener">{escape(cec_card["buttons"][0])}</a>
-            <a class="text-link" href="{cec_bureau_veritas}" target="_blank" rel="noopener">{escape(cec_card["buttons"][1])}</a>
+            <a class="button" href="{cec_attestation}" target="_blank" rel="noopener">{escape(cec_card["buttons"][0])}</a>
+            <a class="text-link" href="{cec_cognac}" target="_blank" rel="noopener">{escape(cec_card["buttons"][1])}</a>
           </div>
         </div>
       </article>

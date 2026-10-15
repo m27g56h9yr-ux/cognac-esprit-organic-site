@@ -2,7 +2,7 @@
 
 ## État de livraison
 
-Préparé localement le 15 octobre 2026, non publié. L’approbation automatique a refusé la création de l’accès administrateur et son dépôt dans le secret GitHub : accord spécifique du propriétaire requis avant activation. Aucun secret n’a été créé par l’opération refusée.
+Préparé le 15 octobre 2026. Le propriétaire a explicitement autorisé la création du jeton administrateur, sa conservation privée sur son Mac et dans le secret GitHub `EO_SALON_ADMIN_TOKEN`, puis la publication. Le jeton est créé (fichier local 0600) et le secret GitHub provisionné. Publication et initialisation du stockage OVH en cours.
 
 - Page permanente prévue : `https://cognac-esprit-organic.com/se-retrouver/`.
 - Retrait : `https://cognac-esprit-organic.com/se-retrouver/desinscription/`.
@@ -30,9 +30,9 @@ Le service concerne les inscriptions de cette page Esprit Organic. Il ne modifie
 - Pas de journal applicatif contenant les coordonnées, IP brute, jetons privés ou clés.
 - Conservation active : trois ans après le dernier consentement explicite. Preuves et empreinte d’opposition : trois ans. Purge aux accès et quotidiennement par le workflow `salon-retention.yml`.
 
-### Activation à autoriser
+### Accès administrateur autorisé
 
-Créer un jeton aléatoire de 64 caractères hexadécimaux permettant de consulter les compteurs et d’exporter les contacts Esprit Organic, le conserver dans `~/.config/cognac-esprit-organic/salon-admin.token` (0600), et l’ajouter au secret `EO_SALON_ADMIN_TOKEN` du dépôt GitHub `m27g56h9yr-ux/cognac-esprit-organic-site`.
+Un jeton aléatoire de 64 caractères hexadécimaux permet de consulter les compteurs et d’exporter les contacts Esprit Organic. Il est conservé dans `~/.config/cognac-esprit-organic/salon-admin.token` (0600), et dans le secret `EO_SALON_ADMIN_TOKEN` du dépôt GitHub `m27g56h9yr-ux/cognac-esprit-organic-site`.
 
 Le déploiement ne place que son empreinte SHA-256 dans `api/salon-config.php` (0600). Ce fichier est hors Git et interdit par HTTP. Sans configuration valide, le service refuse de collecter. Le jeton est transmis uniquement en en-tête Authorization sur HTTPS, jamais dans l’URL. La configuration de déploiement appelle l’état du stockage puis l’accès privé avant de déclarer l’activation terminée.
 

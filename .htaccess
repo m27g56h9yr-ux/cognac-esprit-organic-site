@@ -7,6 +7,12 @@ RewriteCond %{HTTP_HOST} ^ancien\.cognac-esprit-organic\.com$ [NC]
 RewriteRule ^ - [L]
 
 # Redirect legacy duplicate URLs to their canonical destinations.
+# Keep existing salon QR/NFC links working after the page rename.
+RewriteRule ^salon(?:/index\.html)?/?$ https://cognac-esprit-organic.com/se-retrouver/ [R=301,L]
+RewriteRule ^salon/desinscription(?:/index\.html)?/?$ https://cognac-esprit-organic.com/se-retrouver/desinscription/ [R=301,L]
+RewriteRule ^(?:private-eo-se-retrouver|salon-data)(?:/|$) - [F,L]
+RewriteRule ^api/salon-(?:config|lib)\.php$ - [F,L]
+RewriteRule ^api/salon-admin\.php$ - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteRule ^(.*/)?index\.html$ https://cognac-esprit-organic.com/$1 [R=301,L]
 RewriteRule ^production\.html$ https://cognac-esprit-organic.com/demarche/ [R=301,L]
 RewriteRule ^demarche-bio\.html$ https://cognac-esprit-organic.com/production/ [R=301,L]

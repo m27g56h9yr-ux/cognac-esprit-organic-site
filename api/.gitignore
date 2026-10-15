@@ -1,0 +1,6 @@
+salon-config.php
+*.sqlite*
+*.key
+*.log
+*.csv
+*.lock

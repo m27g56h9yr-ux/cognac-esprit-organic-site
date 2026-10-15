@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <meta name="theme-color" content="#3b2113">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="Désinscrivez-vous des invitations et nouvelles de Cognac Esprit Organic, par SMS ou par e-mail.">
+  <title>Désinscription | Cognac Esprit Organic</title>
+  <link rel="icon" href="../../assets/img/logo-esprit-organic-brown.svg" type="image/svg+xml">
+  <style>
+    @font-face { font-family: Montserrat; src: url('../../assets/fonts/montserrat-latin-variable.woff2') format('woff2'); font-weight: 300 900; font-display: swap; }
+    @font-face { font-family: 'Roboto Slab'; src: url('../../assets/fonts/roboto-slab-latin-variable.woff2') format('woff2'); font-weight: 200 800; font-display: swap; }
+    :root { color-scheme: light; --paper: #ece8dc; --ink: #17130f; --brand: #704019; --brand-dark: #3b2113; --muted: #6b5d50; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 400 .9375rem/1.65 Montserrat, Arial, sans-serif; }
+    main { width: min(100%, 480px); margin-inline: auto; padding: calc(24px + env(safe-area-inset-top)) max(24px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(24px, env(safe-area-inset-left)); }
+    a { color: var(--brand); text-underline-offset: .22em; overflow-wrap: anywhere; }
+    a:focus-visible { outline: 3px solid #b78a43; outline-offset: 3px; }
+    .brand { display: block; width: fit-content; margin: 0 auto 36px; }
+    .brand img { display: block; width: 170px; height: auto; }
+    .eyebrow { margin: 0 0 10px; font-size: .6875rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+    h1 { margin: 0 0 20px; color: var(--brand-dark); font: 400 2rem/1.2 'Roboto Slab', Georgia, serif; text-wrap: balance; }
+    p { margin: 0 0 18px; }
+    .action { display: flex; min-height: 48px; align-items: center; justify-content: center; margin: 26px 0 12px; padding: 12px 16px; background: var(--brand); color: #fbf8ee; text-align: center; text-decoration: none; font-size: .8125rem; font-weight: 650; }
+    .action:hover { background: var(--brand-dark); }
+    .help { font-size: .75rem; color: var(--muted); }
+    [hidden] { display: none !important; }
+    .fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; margin-bottom: 14px; }
+    .field { font-size: .75rem; font-weight: 600; }
+    .field input { display: block; width: 100%; min-height: 44px; padding: 10px; margin-top: 4px; border: 1px solid #988b7a; border-radius: 0; color: var(--ink); background: #fbf8ee; font: 400 1rem/1.25 Montserrat, Arial, sans-serif; }
+    .field input::placeholder { font-size: .75rem; }
+    .consent { display: flex; align-items: center; gap: 10px; min-height: 44px; padding-block: 8px; font-size: .8125rem; cursor: pointer; }
+    .consent input { flex: 0 0 auto; width: 20px; height: 20px; accent-color: var(--brand); }
+    .action { width: 100%; border: 0; cursor: pointer; font-family: inherit; }
+    .action:disabled { opacity: .65; cursor: wait; }
+    input:focus-visible, button:focus-visible { outline: 3px solid #b78a43; outline-offset: 3px; }
+    .status { font-size: .8125rem; color: var(--brand-dark); }
+    .status:empty { display: none; }
+    .hidden-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    .contact { margin-top: 22px; font-size: .8125rem; }
+    footer { margin-top: 30px; border-top: 1px solid rgba(94, 61, 35, .22); padding-top: 10px; text-align: center; }
+    nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 0 20px; font-size: .6875rem; }
+    nav a { display: inline-flex; min-height: 44px; align-items: center; }
+    .health { margin: 8px 0 0; font-size: .6875rem; line-height: 1.4; color: var(--muted); }
+  </style>
+</head>
+<body>
+  <main>
+    <a class="brand" href="../" aria-label="Retour à Se retrouver Cognac Esprit Organic"><img src="../../assets/img/logo-esprit-organic-brown.svg" width="240" height="66" alt="Cognac Esprit Organic"></a>
+    <p class="eyebrow">Désinscription</p>
+    <h1>Vous gardez le choix.</h1>
+    <p>Vous souhaitez arrêter de recevoir nos invitations aux salons et nos nouvelles occasionnelles ?</p>
+    <p class="help" id="management-state" role="status" aria-live="polite">Indiquez la coordonnée concernée, puis choisissez les communications à arrêter. Votre demande est prise en compte immédiatement.</p>
+    <form id="salon-form" name="se-retrouver-desinscription" action="../../api/salon-contact.php" method="post" data-mode="withdraw" autocomplete="on" novalidate>
+      <div class="fields" id="contact-fields">
+        <label class="field" for="phone">Téléphone mobile
+          <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="30" placeholder="06 12 34 56 78">
+        </label>
+        <label class="field" for="email">Adresse e-mail
+          <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="done" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" placeholder="vous@exemple.fr">
+        </label>
+      </div>
+      <label class="consent"><input type="checkbox" name="consent_sms" value="1"><span>Ne plus recevoir vos SMS.</span></label>
+      <label class="consent"><input type="checkbox" name="consent_email" value="1"><span>Ne plus recevoir vos e-mails.</span></label>
+      <div class="hidden-trap" aria-hidden="true" inert><label for="company_url">Ne pas remplir</label><input id="company_url" name="company_url" type="text" tabindex="-1" autocomplete="off"></div>
+      <button class="action" type="submit" disabled>Confirmer ma désinscription</button>
+      <p class="status" id="form-status" role="status" aria-live="polite" tabindex="-1"></p>
+    </form>
+    <noscript><p class="help">Activez JavaScript pour vous désinscrire en ligne, ou écrivez à <a href="mailto:cognac@mdpierre.com">cognac@mdpierre.com</a>.</p></noscript>
+    <p class="help">Ce formulaire concerne les invitations et nouvelles de la page « Se retrouver ». Pour toute autre demande : <a href="mailto:cognac@mdpierre.com">cognac@mdpierre.com</a>.</p>
+    <footer>
+      <nav aria-label="Liens utiles"><a href="../">Retour à Se retrouver</a><a href="../#privacy-notice">Vos données</a></nav>
+      <p class="health">L’abus d’alcool est dangereux pour la santé.<br>À consommer avec modération. Réservé aux majeurs.</p>
+    </footer>
+  </main>
+  <script src="../../assets/js/salon-contact.js?v=20261015-eo-1" defer></script>
+</body>
+</html>

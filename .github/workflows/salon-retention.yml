@@ -1,0 +1,22 @@
+name: Esprit Organic contact retention
+on:
+  schedule:
+    - cron: '37 3 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retention:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Apply retention to private contacts
+        run: |
+          curl --fail --silent --show-error --retry 2 --max-time 30 'https://cognac-esprit-organic.com/api/salon-contact.php?action=health' > /tmp/eo-salon-health.json
+          python3 - <<'PYHEALTH'
+          import json
+          with open('/tmp/eo-salon-health.json') as f:
+              result = json.load(f)
+          if not result.get('ok') or result.get('status') != 'ready':
+              raise SystemExit('Private contact storage is not ready')
+          print('Retention applied to the Esprit Organic store.')
+          PYHEALTH

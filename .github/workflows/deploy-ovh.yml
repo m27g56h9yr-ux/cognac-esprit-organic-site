@@ -27,6 +27,20 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y lftp
 
+      - name: Prepare private Esprit Organic signup access
+        env:
+          EO_SALON_ADMIN_TOKEN: ${{ secrets.EO_SALON_ADMIN_TOKEN }}
+        run: |
+          python3 - <<'PYCONFIG'
+          import hashlib, os, pathlib, re
+          token = os.environ.get('EO_SALON_ADMIN_TOKEN', '')
+          if not re.fullmatch('[a-f0-9]{64}', token):
+              raise SystemExit('Missing valid EO_SALON_ADMIN_TOKEN secret')
+          config = pathlib.Path('api/salon-config.php')
+          config.write_text("<?php\nreturn ['admin_token_hash' => '" + hashlib.sha256(token.encode()).hexdigest() + "'];\n")
+          config.chmod(0o600)
+          PYCONFIG
+
       - name: Deploy files
         env:
           OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
@@ -93,8 +107,15 @@ jobs:
             --exclude-glob AGENTS.md \
             --exclude-glob README.md \
             --exclude-glob build_static_site.py \
+            --exclude-glob "*.sqlite*" \
+            --exclude-glob "*.key" \
+            --exclude-glob "*.token" \
+            --exclude-glob "*.log" \
+            --exclude-glob "*/.gitignore" \
+            --exclude-glob scripts/** \
             ./ "${TARGET_DIR}"
           put -O "${TARGET_DIR}" .htaccess
+          chmod 600 "${TARGET_DIR}/api/salon-config.php"
           bye
           EOF
 
@@ -112,3 +133,23 @@ jobs:
           grep -Eqi '^HTTP/[0-9.]+ 200|^HTTP/2 200' "${archive_headers}"
           grep -Eqi '^x-powered-by: PHP' "${archive_headers}"
           grep -Eqi '^x-robots-tag: .*noindex' "${archive_headers}"
+
+      - name: Initialize private signup storage
+        env:
+          EO_SALON_ADMIN_TOKEN: ${{ secrets.EO_SALON_ADMIN_TOKEN }}
+        run: |
+          python3 - <<'PYSTORAGE'
+          import json, os, urllib.request
+          origin = 'https://cognac-esprit-organic.com'
+          with urllib.request.urlopen(origin + '/api/salon-contact.php?action=health', timeout=30) as response:
+              health = json.load(response)
+          if not health.get('ok') or health.get('status') != 'ready':
+              raise SystemExit('Signup storage is not ready')
+          request = urllib.request.Request(origin + '/api/salon-admin.php', headers={
+              'Authorization': 'Bearer ' + os.environ['EO_SALON_ADMIN_TOKEN'], 'Accept': 'application/json'})
+          with urllib.request.urlopen(request, timeout=30) as response:
+              admin = json.load(response)
+          if not admin.get('ok') or admin.get('storage') != 'outside_public_root':
+              raise SystemExit('Private signup administration is not ready')
+          print('Esprit Organic private storage and authenticated administration ready.')
+          PYSTORAGE

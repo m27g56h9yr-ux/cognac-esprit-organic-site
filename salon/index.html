@@ -8,7 +8,8 @@
   <meta name="description" content="La rencontre continue : retrouvez Cognac Esprit Organic sur Instagram et gardons le lien après le salon.">
   <title>Retrouvons-nous sur Instagram | Cognac Esprit Organic</title>
   <link rel="icon" href="../assets/img/logo-esprit-organic-brown.svg" type="image/svg+xml">
-  <link rel="preload" as="image" href="../assets/img/brand/hero-vine-02-web.webp">
+  <link rel="preload" as="image" href="../assets/img/brand/fanny-croizet.jpg">
+  <link rel="preload" as="image" href="../assets/img/brand/leopold-croizet.jpg">
   <style>
     @font-face {
       font-family: Montserrat;
@@ -48,7 +49,7 @@
       font-family: Montserrat, Arial, sans-serif;
       line-height: 1.4;
     }
-    main { width: min(100%, 480px); margin-inline: auto; }
+    main { width: min(100%, 480px); margin-inline: auto; padding: calc(12px + env(safe-area-inset-top)) max(18px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left)); }
     a { color: inherit; text-underline-offset: .22em; }
     a:focus-visible, input:focus-visible, button:focus-visible {
       outline: 3px solid var(--gold);
@@ -56,38 +57,38 @@
     }
     .skip-link { position: absolute; inset-block-start: -100px; inset-inline-start: 12px; z-index: 3; padding: 12px; background: var(--cream); }
     .skip-link:focus { inset-block-start: 12px; }
-    .hero {
-      color: var(--cream);
-      text-align: center;
-      padding: calc(12px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) 12px max(20px, env(safe-area-inset-left));
-      background: linear-gradient(180deg, rgba(23, 19, 15, .57), rgba(23, 19, 15, .78)),
-        url('../assets/img/brand/hero-vine-02-web.webp') center 48% / cover;
-    }
-    .brand { display: block; width: 140px; height: auto; margin: 0 auto 8px; }
-    h1 { margin: 0; font-family: 'Roboto Slab', Georgia, serif; font-size: 1.625rem; font-weight: 400; line-height: 1.15; text-wrap: balance; }
+    .hero { color: var(--brand-dark); text-align: center; }
+    .brand { display: block; width: 150px; height: auto; margin: 0 auto 8px; }
+    h1 { margin: 0; font-family: 'Roboto Slab', Georgia, serif; font-size: 1.75rem; font-weight: 400; line-height: 1.15; text-wrap: balance; }
     .instagram-cta {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 9px;
-      min-height: 48px;
-      margin: 8px auto 0;
-      padding: 10px;
-      background: var(--cream);
-      color: var(--brand-dark);
-      border: 1px solid var(--cream);
-      font-size: .9375rem;
-      font-weight: 750;
+      display: grid;
+      align-items: end;
+      position: relative;
+      isolation: isolate;
+      height: clamp(220px, calc(100svh - 570px), 320px);
+      margin-block-start: 12px;
+      overflow: hidden;
+      color: #fff;
+      background: var(--brand-dark);
+      text-align: start;
       text-decoration: none;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, .12);
     }
-    .instagram-cta:hover { background: var(--paper); }
-    .instagram-cta svg { width: 23px; height: 23px; flex-shrink: 0; }
-    .follow-hint { margin: 6px 0 0; font-size: .75rem; }
-    .secondary { padding: 12px max(20px, env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); }
+    .portrait-pair { position: absolute; z-index: -2; inset: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+    .portrait-pair img { width: 100%; height: 100%; min-width: 0; object-fit: cover; }
+    .portrait-pair .portrait-fanny { object-position: 43% center; }
+    .portrait-pair .portrait-leopold { object-position: 51% center; }
+    .instagram-cta::after { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(0deg, rgba(23, 19, 15, .85), rgba(23, 19, 15, .48) 65px, transparent 145px); }
+    .instagram-caption { display: grid; grid-template-columns: 28px minmax(0, 1fr) 22px; align-items: center; gap: 12px; padding: 16px 18px; }
+    .instagram-caption svg { width: 28px; height: 28px; }
+    .instagram-caption small { display: block; font-size: .75rem; line-height: 1.4; }
+    .instagram-caption strong { display: block; font: 400 2rem/1.15 'Roboto Slab', Georgia, serif; }
+    .instagram-arrow { font: 28px/1 Arial, sans-serif; }
+    .instagram-cta:hover .instagram-caption { text-decoration: underline; text-underline-offset: 5px; }
+    .secondary { padding-block-start: 12px; }
     .signup-heading { margin: 0 0 8px; color: var(--brand-dark); font-family: Raleway, Arial, sans-serif; font-size: .9375rem; font-weight: 600; line-height: 1.35; }
     .preview-notice { margin: 0 0 10px; padding-inline-start: 8px; border-inline-start: 2px solid var(--gold); color: var(--muted); font-size: .75rem; }
-    .channel + .channel { margin-block-start: 8px; }
+    .fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+    .consents { margin-block-start: 6px; }
     .field { display: block; font-size: .8125rem; font-weight: 650; }
     .field span { font-weight: 400; color: var(--muted); }
     .field input {
@@ -116,23 +117,27 @@
     .health { margin: 0; font-size: .6875rem; line-height: 1.35; color: var(--muted); }
     .hidden-trap { position: absolute; inset-inline-start: -10000px; width: 1px; height: 1px; overflow: hidden; }
     @media (max-width: 350px) {
-      .hero, .secondary { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
+      main { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
       h1 { font-size: 1.6rem; }
-      .instagram-cta { font-size: .875rem; }
+      .instagram-caption { gap: 10px; padding-inline: 14px; }
+      .instagram-caption strong { font-size: 1.8rem; }
+      .field { font-size: .75rem; }
       .footer-nav { gap: 0 14px; }
     }
+    @media (max-height: 700px) and (max-width: 759px) {
+      .brand { width: 130px; margin-block-end: 6px; }
+      .instagram-cta { height: 210px; margin-block-start: 10px; }
+    }
     @media (min-width: 760px) {
-      main { display: grid; grid-template-columns: 1fr 1.1fr; width: min(calc(100% - 48px), 940px); margin-block: 32px; box-shadow: 0 12px 40px rgba(59, 33, 19, .1); }
-      .hero { display: flex; align-items: center; justify-content: center; padding: 32px; }
-      .hero-inner { width: 100%; }
-      .brand { width: 220px; margin-block-end: 28px; }
-      h1 { font-size: 2.5rem; }
-      .instagram-cta { margin-block-start: 28px; }
-      .follow-hint { margin-block-start: 12px; }
-      .secondary { padding: 28px; }
+      main { display: grid; grid-template-columns: 1fr 1.05fr; gap: 32px; width: min(calc(100% - 48px), 940px); margin-block: 32px; padding: 28px; box-shadow: 0 12px 40px rgba(59, 33, 19, .1); }
+      .hero { display: flex; }
+      .hero-inner { display: flex; flex-direction: column; width: 100%; }
+      .brand { width: 180px; margin-block-end: 14px; }
+      h1 { font-size: 2rem; }
+      .instagram-cta { flex: 1; min-height: 300px; height: auto; margin-block-start: 20px; }
+      .secondary { padding: 0; }
       .signup-heading { font-size: 1.125rem; margin-block-end: 12px; }
       .preview-notice { margin-block-end: 16px; }
-      .channel + .channel { margin-block-start: 12px; }
     }
   </style>
 </head>
@@ -141,17 +146,23 @@
   <main>
     <header class="hero">
       <div class="hero-inner">
-        <img class="brand" src="../assets/img/logo-esprit-organic-white.svg" alt="Cognac Esprit Organic" width="240" height="66">
+        <img class="brand" src="../assets/img/logo-esprit-organic-brown.svg" alt="Cognac Esprit Organic" width="240" height="66">
         <h1>On garde le lien ?</h1>
-        <a class="instagram-cta" id="instagram" href="https://www.instagram.com/cognac_esprit_organic/" rel="noopener noreferrer" aria-describedby="instagram-hint">
-          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
-            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
-            <circle cx="12" cy="12" r="4"></circle>
-            <circle cx="17.2" cy="6.8" r=".8" fill="currentColor" stroke="none"></circle>
-          </svg>
-          <span>Suivez-nous sur Instagram</span>
+        <a class="instagram-cta" id="instagram" href="https://www.instagram.com/cognac_esprit_organic/" rel="noopener noreferrer" aria-label="Suivez-nous sur Instagram : Cognac Esprit Organic">
+          <span class="portrait-pair" aria-hidden="true">
+            <img class="portrait-fanny" src="../assets/img/brand/fanny-croizet.jpg" alt="" width="1800" height="770" fetchpriority="high">
+            <img class="portrait-leopold" src="../assets/img/brand/leopold-croizet.jpg" alt="" width="1800" height="788" fetchpriority="high">
+          </span>
+          <span class="instagram-caption">
+            <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+              <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+              <circle cx="12" cy="12" r="4"></circle>
+              <circle cx="17.2" cy="6.8" r=".8" fill="currentColor" stroke="none"></circle>
+            </svg>
+            <span><small>Suivez-nous sur</small><strong>Instagram</strong></span>
+            <span class="instagram-arrow" aria-hidden="true">↗</span>
+          </span>
         </a>
-        <p class="follow-hint" id="instagram-hint">@cognac_esprit_organic</p>
       </div>
     </header>
 
@@ -161,16 +172,16 @@
         <div class="signup-content">
           <p class="preview-notice" id="preview-notice">Aperçu · inscription non activée.</p>
           <form id="contact-form" name="salon-contact" autocomplete="on" aria-describedby="preview-notice privacy-note" novalidate>
-            <div class="channel">
-              <label class="field" for="phone">Téléphone mobile <span>· facultatif</span>
+            <div class="fields">
+              <label class="field" for="phone">Téléphone mobile
                 <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="30" placeholder="06 12 34 56 78">
               </label>
-              <label class="consent"><input type="checkbox" name="consent_sms" value="yes" autocomplete="off"><span>Je souhaite recevoir par SMS vos invitations aux salons et nouvelles occasionnelles.</span></label>
-            </div>
-            <div class="channel">
-              <label class="field" for="email">Adresse e-mail <span>· facultative</span>
+              <label class="field" for="email">Adresse e-mail
                 <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="done" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" placeholder="vous@exemple.fr">
               </label>
+            </div>
+            <div class="consents">
+              <label class="consent"><input type="checkbox" name="consent_sms" value="yes" autocomplete="off"><span>Je souhaite recevoir par SMS vos invitations aux salons et nouvelles occasionnelles.</span></label>
               <label class="consent"><input type="checkbox" name="consent_email" value="yes" autocomplete="off"><span>Je souhaite recevoir par e-mail vos invitations aux salons et nouvelles occasionnelles.</span></label>
             </div>
             <p class="privacy" id="privacy-note">Cognac Esprit Organic uniquement. Chaque canal est facultatif. Désinscription à tout moment.</p>

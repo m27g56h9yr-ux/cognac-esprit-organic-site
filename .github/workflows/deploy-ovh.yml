@@ -5,13 +5,18 @@ on:
     branches:
       - main
   workflow_dispatch:
+    inputs:
+      full_deploy:
+        description: Force a full mirror to repair remote files
+        type: boolean
+        default: false
 
 permissions:
   contents: read
 
 concurrency:
   group: ovh-deploy
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
@@ -22,6 +27,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Test incremental deployment planner
+        run: python3 scripts/test-ovh-deploy-plan.py
+
       - name: Install FTP client
         run: |
           sudo apt-get update
@@ -29,6 +37,7 @@ jobs:
 
       - name: Deploy files
         env:
+          FULL_DEPLOY: ${{ inputs.full_deploy || false }}
           OVH_FTP_PASSWORD: ${{ secrets.OVH_FTP_PASSWORD }}
           OVH_FTP_TARGET_DIR: ${{ secrets.OVH_FTP_TARGET_DIR }}
         run: |
@@ -77,11 +86,32 @@ jobs:
             exit 1
           fi
 
-          lftp -u "${FTP_USERNAME},${OVH_FTP_PASSWORD}" "${FTP_HOST}" <<EOF
+          rm -rf _deploy
+          mkdir _deploy
+          rsync -a --exclude='.git/' --exclude='.github/' --exclude='.gitignore' \
+            --exclude='ancien-site-wordpress/' --exclude='output/' --exclude='wp-content/' \
+            --exclude='AUDIT-SEO-*.md' --exclude='AGENTS.md' --exclude='README.md' \
+            --exclude='build_static_site.py' --exclude='scripts/' --exclude='_deploy/' \
+            --exclude='newsletter-data/' ./ _deploy/
+          printf 'commit=%s\nrun_id=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > _deploy/deploy-version.txt
+
+          if ! lftp -u "${FTP_USERNAME},${OVH_FTP_PASSWORD}" "${FTP_HOST}" <<BASELINE
+          set cmd:fail-exit yes
           set ftp:ssl-allow no
-          set ftp:list-options -a
           set net:max-retries 2
           set net:timeout 20
+          get "${TARGET_DIR}/.ovh-deploy-manifest.json" -o /tmp/ovh-baseline.json
+          bye
+          BASELINE
+          then
+            rm -f /tmp/ovh-baseline.json
+          fi
+          force_args=()
+          if [ "$FULL_DEPLOY" = true ]; then force_args+=(--force); fi
+          mode="$(python3 scripts/ovh-deploy-plan.py --bundle _deploy --baseline /tmp/ovh-baseline.json \
+            --target "$TARGET_DIR" --site esprit-organic --output /tmp/ovh-transfer.lftp "${force_args[@]}")"
+          if [ "$mode" = full ]; then
+            cat > /tmp/ovh-transfer.lftp <<FULL_MIRROR
           mirror --reverse --verbose --parallel=2 \
             --exclude-glob .git/** \
             --exclude-glob .github/** \
@@ -93,8 +123,19 @@ jobs:
             --exclude-glob AGENTS.md \
             --exclude-glob README.md \
             --exclude-glob build_static_site.py \
-            ./ "${TARGET_DIR}"
-          put -O "${TARGET_DIR}" .htaccess
+            _deploy/ "${TARGET_DIR}"
+          FULL_MIRROR
+          fi
+
+          lftp -u "${FTP_USERNAME},${OVH_FTP_PASSWORD}" "${FTP_HOST}" <<EOF
+          set cmd:fail-exit yes
+          set ftp:ssl-allow no
+          set ftp:list-options -a
+          set net:max-retries 2
+          set net:timeout 20
+          rm -f "${TARGET_DIR}/.ovh-deploy-manifest.json"
+          source /tmp/ovh-transfer.lftp
+          put /tmp/ovh-transfer.json -o "${TARGET_DIR}/.ovh-deploy-manifest.json"
           bye
           EOF
 
@@ -112,3 +153,6 @@ jobs:
           grep -Eqi '^HTTP/[0-9.]+ 200|^HTTP/2 200' "${archive_headers}"
           grep -Eqi '^x-powered-by: PHP' "${archive_headers}"
           grep -Eqi '^x-robots-tag: .*noindex' "${archive_headers}"
+
+          version="$(curl -fsS --retry 3 --connect-timeout 8 --max-time 20 "https://cognac-esprit-organic.com/deploy-version.txt?v=$GITHUB_SHA-$GITHUB_RUN_ID")"
+          grep -Fx "commit=$GITHUB_SHA" <<< "$version"

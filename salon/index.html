@@ -1,0 +1,244 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#3b2113">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="description" content="La rencontre continue : retrouvez Cognac Esprit Organic sur Instagram et gardons le lien après le salon.">
+  <title>Retrouvons-nous sur Instagram | Cognac Esprit Organic</title>
+  <link rel="icon" href="../assets/img/logo-esprit-organic-brown.svg" type="image/svg+xml">
+  <link rel="preload" as="image" href="../assets/img/brand/hero-vine-02-web.webp">
+  <style>
+    @font-face {
+      font-family: Montserrat;
+      src: url('../assets/fonts/montserrat-latin-variable.woff2') format('woff2');
+      font-weight: 300 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: Raleway;
+      src: url('../assets/fonts/raleway-latin-variable.woff2') format('woff2');
+      font-weight: 200 900;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Roboto Slab';
+      src: url('../assets/fonts/roboto-slab-latin-variable.woff2') format('woff2');
+      font-weight: 200 800;
+      font-display: swap;
+    }
+    :root {
+      color-scheme: light;
+      --paper: #ece8dc;
+      --ink: #17130f;
+      --brand: #704019;
+      --brand-dark: #3b2113;
+      --cream: #fbf8ee;
+      --line: rgba(94, 61, 35, .22);
+      --gold: #b78a43;
+      --muted: #6b5d50;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+      font-family: Montserrat, Arial, sans-serif;
+      line-height: 1.6;
+    }
+    main { width: min(100%, 1000px); margin: auto; }
+    a { color: inherit; text-underline-offset: .22em; }
+    a:focus-visible, input:focus-visible, button:focus-visible {
+      outline: 3px solid var(--gold);
+      outline-offset: 5px;
+    }
+    .skip-link { position: absolute; top: -100px; left: 12px; z-index: 3; padding: 12px; background: var(--cream); }
+    .skip-link:focus { top: 12px; }
+    .hero {
+      color: var(--cream);
+      text-align: center;
+      padding: 40px 24px 38px;
+      background: linear-gradient(180deg, rgba(23, 19, 15, .57), rgba(23, 19, 15, .72)),
+        url('../assets/img/brand/hero-vine-02-web.webp') center 48% / cover;
+    }
+    .hero-inner { max-width: 600px; margin: auto; }
+    .brand { display: block; width: 240px; max-width: 76%; height: auto; margin: 0 auto 32px; }
+    .eyebrow {
+      margin: 0 0 12px;
+      font-size: .7rem;
+      font-weight: 650;
+      text-transform: uppercase;
+      letter-spacing: .13em;
+    }
+    h1 {
+      margin: 0;
+      font-family: 'Roboto Slab', Georgia, serif;
+      font-size: clamp(2.1rem, 5.3vw, 3.8rem);
+      font-weight: 400;
+      line-height: 1.14;
+      text-wrap: balance;
+    }
+    .intro { margin: 20px auto 26px; font-family: Raleway, Arial, sans-serif; font-size: 1.1rem; line-height: 1.55; }
+    .instagram-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 60px;
+      width: min(100%, 410px);
+      padding: 16px 14px;
+      background: var(--cream);
+      color: var(--brand-dark);
+      border: 1px solid var(--cream);
+      font-size: 1rem;
+      font-weight: 750;
+      text-decoration: none;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, .12);
+    }
+    .instagram-cta:hover { background: var(--paper); }
+    .instagram-cta svg { width: 25px; height: 25px; flex-shrink: 0; }
+    .handle { margin: 14px 0 0; font-size: .88rem; overflow-wrap: anywhere; }
+    .follow-hint { margin: 3px 0 0; font-size: .8rem; }
+    .secondary { max-width: 700px; margin: 0 auto; padding: 24px 24px 32px; }
+    .health { margin: 0 auto 24px; max-width: 560px; text-align: center; font-size: .75rem; color: var(--muted); }
+    .signup { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .signup-heading { padding: 22px 0 4px; color: var(--brand-dark); }
+    .signup-heading h2 { margin: 0; font-family: 'Roboto Slab', Georgia, serif; font-weight: 450; font-size: 1.6rem; line-height: 1.25; }
+    .signup-heading p { margin: 8px 0 0; color: var(--muted); font-size: .8rem; }
+    .signup-content { padding: 0 0 24px; }
+    .signup-content > p { font-size: .9rem; }
+    .preview-notice { color: var(--muted); border-left: 2px solid var(--gold); padding-left: 12px; }
+    .field { display: block; margin: 16px 0; font-weight: 650; font-size: .9rem; }
+    .field span { font-weight: 400; }
+    .field input {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      padding: 12px;
+      margin-top: 6px;
+      border: 1px solid #988b7a;
+      border-radius: 0;
+      background: var(--cream);
+      color: var(--ink);
+      font: inherit;
+      font-size: 1rem;
+    }
+    .field input::placeholder { color: var(--muted); }
+    .consents { display: grid; gap: 16px; margin: 18px 0; }
+    .consent { display: grid; grid-template-columns: 22px 1fr; gap: 10px; align-items: start; font-size: .84rem; line-height: 1.5; }
+    .consent input { width: 20px; height: 20px; margin: 2px 0; accent-color: var(--brand); }
+    .privacy { font-size: .8rem; color: var(--muted); }
+    .submit { min-height: 48px; padding: 12px 18px; border: 1px solid var(--brand); border-radius: 0; background: transparent; color: var(--brand); font: inherit; font-weight: 650; cursor: pointer; }
+    .status { font-size: .88rem; color: var(--brand-dark); }
+    .status:empty { display: none; }
+    .footer { text-align: center; margin-top: 24px; }
+    .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px 24px; font-size: .82rem; color: var(--brand); }
+    .footer-nav a { display: inline-flex; align-items: center; min-height: 44px; }
+    .provenance { margin: 12px 0 8px; font-size: .74rem; color: var(--muted); }
+    .legal { display: inline-flex; align-items: center; min-height: 44px; font-size: .74rem; color: var(--muted); }
+    .hidden-trap { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
+    @media (max-width: 600px) {
+      .hero { padding: 30px 20px; }
+      .brand { width: 220px; margin-bottom: 28px; }
+      .intro { margin: 18px auto 24px; font-size: 1rem; }
+      .instagram-cta { font-size: .95rem; gap: 10px; }
+      .secondary { padding: 20px 20px 24px; }
+    }
+    @media (max-width: 350px) {
+      .hero { padding: 24px 16px; }
+      .brand { width: 196px; margin-bottom: 24px; }
+      .eyebrow { font-size: .65rem; }
+      h1 { font-size: 1.95rem; }
+      .instagram-cta { font-size: .85rem; }
+    }
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#instagram">Aller au lien Instagram</a>
+  <main>
+    <header class="hero">
+      <div class="hero-inner">
+        <img class="brand" src="../assets/img/logo-esprit-organic-white.svg" alt="Cognac Esprit Organic" width="240" height="66">
+        <p class="eyebrow">Merci pour votre visite au salon</p>
+        <h1>On se retrouve<br>sur Instagram ?</h1>
+        <p class="intro">La maison, les vignes, les Cognacs…<br>Gardons le lien après cette rencontre.</p>
+        <a class="instagram-cta" id="instagram" href="https://www.instagram.com/cognac_esprit_organic/" rel="noopener noreferrer" aria-describedby="instagram-hint">
+          <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+            <rect x="3.5" y="3.5" width="17" height="17" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.2" cy="6.8" r=".8" fill="currentColor" stroke="none"></circle>
+          </svg>
+          <span>Suivez-nous sur Instagram</span>
+        </a>
+        <p class="handle">@cognac_esprit_organic</p>
+        <p class="follow-hint" id="instagram-hint">Ouvrez notre profil et abonnez-vous.</p>
+      </div>
+    </header>
+
+    <div class="secondary">
+      <p class="health">L’abus d’alcool est dangereux pour la santé.<br>À consommer avec modération. Réservé aux personnes majeures.</p>
+      <section class="signup" aria-labelledby="signup-heading">
+        <div class="signup-heading"><h2 id="signup-heading">Gardons le contact</h2><p>Par SMS ou e-mail · facultatif</p></div>
+        <div class="signup-content">
+          <p>Vous souhaitez recevoir des invitations aux prochains salons ? Des nouvelles ?</p>
+          <p class="preview-notice" id="preview-notice">L’inscription n’est pas encore ouverte. Ce formulaire est un aperçu : aucune donnée n’est envoyée ni enregistrée.</p>
+          <form id="contact-form" aria-describedby="preview-notice" novalidate>
+            <label class="field" for="phone">Téléphone mobile <span>(facultatif)</span>
+              <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" placeholder="+33 6 12 34 56 78">
+            </label>
+            <label class="field" for="email">Adresse e-mail <span>(facultative)</span>
+              <input id="email" name="email" type="email" inputmode="email" autocomplete="email" maxlength="254" placeholder="vous@exemple.fr">
+            </label>
+            <div class="consents">
+              <label class="consent"><input type="checkbox" name="consent_sms" value="yes"><span>Je souhaite recevoir par SMS des invitations aux prochains salons et des nouvelles occasionnelles de <strong>Cognac Esprit Organic</strong>. Je peux retirer mon accord à tout moment.</span></label>
+              <label class="consent"><input type="checkbox" name="consent_email" value="yes"><span>Je souhaite recevoir par e-mail des invitations aux prochains salons et des nouvelles occasionnelles de <strong>Cognac Esprit Organic</strong>. Je peux retirer mon accord à tout moment.</span></label>
+            </div>
+            <p class="privacy">Chaque canal est facultatif et indépendant. Vos coordonnées ne seront pas transmises à une autre marque.</p>
+            <div class="hidden-trap" aria-hidden="true"><label for="company_url">Ne pas remplir</label><input id="company_url" name="company_url" type="text" tabindex="-1" autocomplete="off"></div>
+            <button class="submit" id="submit-preview" type="button" disabled>Recevoir vos nouvelles</button>
+            <noscript><p class="status">L’inscription est indisponible. Le lien Instagram reste accessible.</p></noscript>
+            <p class="status" id="form-status" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+      </section>
+      <footer class="footer">
+        <nav class="footer-nav" aria-label="Découvrir la maison">
+          <a href="https://cognac-esprit-organic.com/produits/transmission-xo.html">Découvrir nos Cognacs</a>
+          <a href="https://cognac-esprit-organic.com/">Visiter le site</a>
+        </nav>
+        <p class="provenance">Cognac biologique familial · Triac-Lautrait, Charente</p>
+        <a class="legal" href="https://cognac-esprit-organic.com/mentions-legales.html">Confidentialité et mentions légales</a>
+      </footer>
+    </div>
+  </main>
+  <script>
+    // Aperçu uniquement : aucun endpoint, aucune requête ni persistance.
+    const form = document.getElementById('contact-form');
+    const button = document.getElementById('submit-preview');
+    const status = document.getElementById('form-status');
+    form.addEventListener('submit', (event) => event.preventDefault());
+    button.disabled = false;
+    button.addEventListener('click', () => {
+      const phone = document.getElementById('phone');
+      const email = document.getElementById('email');
+      const sms = form.elements.consent_sms.checked;
+      const mail = form.elements.consent_email.checked;
+      if (!sms && !mail) {
+        status.textContent = 'Choisissez au moins un canal pour rester en contact. Aucun renseignement n’a été envoyé.';
+        return;
+      }
+      if ((sms && !phone.value.trim()) || (mail && !email.value.trim())) {
+        status.textContent = 'Ajoutez la coordonnée correspondant au canal choisi. Aucun renseignement n’a été envoyé.';
+        return;
+      }
+      const validPhone = /^\+?[\d\s().-]{6,30}$/.test(phone.value.trim()) && phone.value.replace(/\D/g, '').length >= 8;
+      if ((sms && !validPhone) || (mail && !email.validity.valid)) {
+        status.textContent = 'Vérifiez le format de la coordonnée correspondant au canal choisi. Aucun renseignement n’a été envoyé.';
+        return;
+      }
+      status.textContent = 'Inscription indisponible pour le moment : aucun renseignement n’a été envoyé ni enregistré. Vous pouvez nous écrire à cognac@mdpierre.com.';
+    });
+  </script>
+</body>
+</html>

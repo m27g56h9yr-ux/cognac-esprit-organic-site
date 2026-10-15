@@ -108,9 +108,15 @@
     .status { margin: 8px 0; font-size: .8125rem; color: var(--brand-dark); }
     .status:empty { display: none; }
     .footer { margin-block-start: 6px; text-align: center; }
-    .footer-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 20px; font-size: .75rem; color: var(--brand); }
+    .footer-nav { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 0 14px; font-size: .6875rem; color: var(--muted); }
     .footer-nav a { display: inline-flex; align-items: center; min-height: 44px; }
     .health { margin: 0; font-size: .6875rem; line-height: 1.35; color: var(--muted); }
+    .privacy-dialog { width: min(calc(100% - 32px), 560px); max-height: 85svh; padding: 24px; overflow-y: auto; border: 1px solid var(--line); color: var(--ink); background: var(--paper); }
+    .privacy-dialog::backdrop { background: rgba(23, 19, 15, .6); }
+    .privacy-dialog h2 { margin: 0 30px 20px 0; color: var(--brand-dark); font: 400 1.5rem/1.2 'Roboto Slab', Georgia, serif; }
+    .privacy-dialog p { margin: 14px 0 0; font-size: .8125rem; line-height: 1.65; }
+    .privacy-dialog a { color: var(--brand); }
+    .close-notice { position: absolute; top: 8px; right: 8px; width: 44px; height: 44px; border: 0; background: transparent; color: var(--brand-dark); cursor: pointer; font: 28px/1 Arial, sans-serif; }
     .hidden-trap { position: absolute; inset-inline-start: -10000px; width: 1px; height: 1px; overflow: hidden; }
     @media (max-width: 350px) {
       main { padding-inline: max(14px, env(safe-area-inset-left)) max(14px, env(safe-area-inset-right)); }
@@ -184,14 +190,35 @@
       </section>
       <footer class="footer">
         <nav class="footer-nav" aria-label="Liens utiles">
+          <a href="../mentions-legales.html" id="privacy-open">Vos données</a>
+          <a href="desinscription/">Désinscription</a>
           <a href="https://cognac-esprit-organic.com/">Découvrir la maison</a>
-          <a href="https://cognac-esprit-organic.com/mentions-legales.html">Confidentialité et mentions</a>
         </nav>
         <p class="health">L’abus d’alcool est dangereux pour la santé.<br>À consommer avec modération. Réservé aux majeurs.</p>
       </footer>
     </div>
   </main>
+  <dialog class="privacy-dialog" id="privacy-notice" aria-labelledby="privacy-title">
+    <button class="close-notice" id="privacy-close" type="button" aria-label="Fermer les informations sur vos données" autofocus>×</button>
+    <h2 id="privacy-title">Vos données et vos choix</h2>
+    <p>La Maison des Pierres (MPC), éditrice de Cognac Esprit Organic, est votre interlocutrice pour vos données personnelles : 30 rue d’Angoulême, 16200 Triac-Lautrait. Vous pouvez nous écrire à <a href="mailto:cognac@mdpierre.com">cognac@mdpierre.com</a>.</p>
+    <p>Le téléphone et l’e-mail sont facultatifs. Le formulaire de cette page n’est pas encore activé : les coordonnées que vous y saisissez ne sont ni envoyées ni enregistrées. Vous pouvez nous retrouver sur Instagram sans remplir ces champs.</p>
+    <p>Vous recevez déjà nos invitations ou nos nouvelles ? Vous pouvez <a href="desinscription/">demander votre désinscription</a> en précisant l’e-mail ou le téléphone concerné. Pour consulter, corriger ou faire supprimer vos données, contactez-nous à l’adresse ci-dessus.</p>
+    <p><a href="../mentions-legales.html">Consulter les mentions légales et la politique de confidentialité</a></p>
+  </dialog>
   <script>
+    const privacyNotice = document.getElementById('privacy-notice');
+    const privacyOpen = document.getElementById('privacy-open');
+    if (typeof privacyNotice.showModal === 'function') {
+      privacyOpen.setAttribute('aria-haspopup', 'dialog');
+      privacyOpen.setAttribute('aria-controls', 'privacy-notice');
+      privacyOpen.addEventListener('click', (event) => {
+        event.preventDefault();
+        privacyNotice.showModal();
+      });
+      document.getElementById('privacy-close').addEventListener('click', () => privacyNotice.close());
+    }
+
     // Aperçu uniquement : aucun endpoint, aucune requête ni persistance.
     const form = document.getElementById('contact-form');
     const button = document.getElementById('submit-preview');

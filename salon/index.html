@@ -86,9 +86,7 @@
     .instagram-cta:hover .instagram-caption { text-decoration: underline; text-underline-offset: 5px; }
     .secondary { padding-block-start: 12px; }
     .signup-heading { margin: 0 0 8px; color: var(--brand-dark); font-family: Raleway, Arial, sans-serif; font-size: .9375rem; font-weight: 600; line-height: 1.35; }
-    .preview-notice { margin: 0 0 10px; padding-inline-start: 8px; border-inline-start: 2px solid var(--gold); color: var(--muted); font-size: .75rem; }
     .fields { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
-    .consents { margin-block-start: 6px; }
     .field { display: block; font-size: .8125rem; font-weight: 650; }
     .field span { font-weight: 400; color: var(--muted); }
     .field input {
@@ -105,8 +103,6 @@
       scroll-margin-block: 20px;
     }
     .field input::placeholder { color: var(--muted); opacity: 1; font-size: .8125rem; }
-    .consent { display: grid; grid-template-columns: 20px 1fr; gap: 8px; align-items: center; min-height: 44px; margin-block-start: 2px; padding-block: 4px; font-size: .8125rem; line-height: 1.35; cursor: pointer; }
-    .consent input { width: 20px; height: 20px; margin: 0; accent-color: var(--brand); }
     .privacy { margin: 8px 0; color: var(--muted); font-size: .75rem; line-height: 1.4; }
     .submit { width: 100%; min-height: 44px; padding: 10px 14px; border: 1px solid var(--brand); border-radius: 0; background: transparent; color: var(--brand); font: 650 .875rem/1.4 Montserrat, Arial, sans-serif; cursor: pointer; }
     .status { margin: 8px 0; font-size: .8125rem; color: var(--brand-dark); }
@@ -137,7 +133,6 @@
       .instagram-cta { flex: 1; min-height: 300px; height: auto; margin-block-start: 20px; }
       .secondary { padding: 0; }
       .signup-heading { font-size: 1.125rem; margin-block-end: 12px; }
-      .preview-notice { margin-block-end: 16px; }
     }
   </style>
 </head>
@@ -170,8 +165,7 @@
       <section class="signup" aria-labelledby="signup-heading">
         <h2 class="signup-heading" id="signup-heading">Vous souhaitez recevoir des invitations aux prochains salons ? Des nouvelles ?</h2>
         <div class="signup-content">
-          <p class="preview-notice" id="preview-notice">Aperçu · inscription non activée.</p>
-          <form id="contact-form" name="salon-contact" autocomplete="on" aria-describedby="preview-notice privacy-note" novalidate>
+          <form id="contact-form" name="salon-contact" autocomplete="on" aria-describedby="privacy-note" novalidate>
             <div class="fields">
               <label class="field" for="phone">Téléphone mobile
                 <input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" enterkeyhint="next" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="30" placeholder="06 12 34 56 78">
@@ -179,10 +173,6 @@
               <label class="field" for="email">Adresse e-mail
                 <input id="email" name="email" type="email" inputmode="email" autocomplete="email" enterkeyhint="done" autocapitalize="none" autocorrect="off" spellcheck="false" maxlength="254" placeholder="vous@exemple.fr">
               </label>
-            </div>
-            <div class="consents">
-              <label class="consent"><input type="checkbox" name="consent_sms" value="yes" autocomplete="off"><span>Je souhaite recevoir par SMS vos invitations aux salons et nouvelles occasionnelles.</span></label>
-              <label class="consent"><input type="checkbox" name="consent_email" value="yes" autocomplete="off"><span>Je souhaite recevoir par e-mail vos invitations aux salons et nouvelles occasionnelles.</span></label>
             </div>
             <p class="privacy" id="privacy-note">Cognac Esprit Organic uniquement. Chaque canal est facultatif. Désinscription à tout moment.</p>
             <div class="hidden-trap" aria-hidden="true"><label for="company_url">Ne pas remplir</label><input id="company_url" name="company_url" type="text" tabindex="-1" autocomplete="off"></div>
@@ -216,19 +206,15 @@
     });
     form.addEventListener('submit', (event) => {
       event.preventDefault();
-      const sms = form.elements.consent_sms.checked;
-      const mail = form.elements.consent_email.checked;
-      if (!sms && !mail) {
-        status.textContent = 'Choisissez au moins un canal pour rester en contact. Aucun renseignement n’a été envoyé.';
-        return;
-      }
-      if ((sms && !phone.value.trim()) || (mail && !email.value.trim())) {
-        status.textContent = 'Ajoutez la coordonnée correspondant au canal choisi. Aucun renseignement n’a été envoyé.';
+      const hasPhone = Boolean(phone.value.trim());
+      const hasEmail = Boolean(email.value.trim());
+      if (!hasPhone && !hasEmail) {
+        status.textContent = 'Renseignez votre téléphone ou votre adresse e-mail. Aucun renseignement n’a été envoyé.';
         return;
       }
       const validPhone = /^\+?[\d\s().-]{6,30}$/.test(phone.value.trim()) && phone.value.replace(/\D/g, '').length >= 8;
-      if ((sms && !validPhone) || (mail && !email.validity.valid)) {
-        status.textContent = 'Vérifiez le format de la coordonnée correspondant au canal choisi. Aucun renseignement n’a été envoyé.';
+      if ((hasPhone && !validPhone) || (hasEmail && !email.validity.valid)) {
+        status.textContent = 'Vérifiez le format du téléphone ou de l’adresse e-mail. Aucun renseignement n’a été envoyé.';
         return;
       }
       status.textContent = 'Inscription indisponible pour le moment : aucun renseignement n’a été envoyé ni enregistré. Vous pouvez nous écrire à cognac@mdpierre.com.';

@@ -33,7 +33,10 @@ jobs:
       - name: Install FTP client
         run: |
           sudo apt-get update
-          sudo apt-get install -y lftp
+          sudo apt-get install -y lftp php-cli
+
+      - name: Test shared contacts and hourly notifications
+        run: php scripts/test-shared-newsletter.php
 
       - name: Prepare private Esprit Organic signup access
         env:

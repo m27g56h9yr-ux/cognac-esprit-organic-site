@@ -11,7 +11,8 @@ try {
     salon_sync_newsletter($store);
     if ($method === 'GET') {
         if (($_GET['action'] ?? '') === 'health') {
-            salon_response(200, ['ok' => true, 'status' => 'ready', 'version' => EO_SALON_VERSION, 'brand' => EO_SALON_BRAND, 'newsletter_schema' => 2]);
+            $notification = salon_notify_newsletter($store);
+            salon_response(200, ['ok' => true, 'notification' => $notification, 'status' => 'ready', 'version' => EO_SALON_VERSION, 'brand' => EO_SALON_BRAND, 'newsletter_schema' => 2]);
         }
         salon_limit($store, 'challenge', 120);
         salon_response(200, ['ok' => true, 'challenge' => salon_challenge($store), 'consent_version' => EO_SALON_VERSION]);
@@ -36,6 +37,7 @@ try {
         throw $e;
     }
     salon_sync_newsletter($store);
+    if ($action === 'subscribe') $result['notification'] = salon_notify_newsletter($store);
     salon_response(200, $result);
 } catch (SalonError $e) {
     if ($e->httpStatus === 429) header('Retry-After: 900');

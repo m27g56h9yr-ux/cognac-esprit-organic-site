@@ -120,6 +120,13 @@ function salon_store(): array
         CREATE TABLE IF NOT EXISTS newsletter_pending (id INTEGER PRIMARY KEY AUTOINCREMENT, cipher TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS newsletter_bridge (name TEXT PRIMARY KEY, value TEXT NOT NULL);
         CREATE TABLE IF NOT EXISTS newsletter_backup (id INTEGER PRIMARY KEY, cipher TEXT NOT NULL, expires_at TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS newsletter_mail_state (
+            singleton INTEGER PRIMARY KEY CHECK(singleton=1), revision INTEGER NOT NULL DEFAULT 0,
+            sent_revision INTEGER NOT NULL DEFAULT 0, last_attempt_at INTEGER NOT NULL DEFAULT 0,
+            last_sent_at INTEGER NOT NULL DEFAULT 0, last_status TEXT NOT NULL DEFAULT "idle",
+            last_message_id TEXT NOT NULL DEFAULT "", sent_count INTEGER NOT NULL DEFAULT 0
+        );
+        INSERT OR IGNORE INTO newsletter_mail_state(singleton) VALUES (1);
         CREATE INDEX IF NOT EXISTS contacts_expiry ON contacts(expires_at);
         CREATE INDEX IF NOT EXISTS events_expiry ON consent_events(expires_at);');
     } finally {

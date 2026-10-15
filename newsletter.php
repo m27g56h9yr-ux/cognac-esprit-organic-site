@@ -3,38 +3,6 @@ declare(strict_types=1);
 require_once __DIR__ . '/api/salon-lib.php';
 salon_headers();
 
-function sendSubscriptionsFile(string $csvFile): bool
-{
-    if (!function_exists('mail') || !is_readable($csvFile)) {
-        return false;
-    }
-
-    $to = 'cognac@mdpierre.com';
-    $subject = 'Newsletter Cognac Esprit Organic - fichier mis a jour';
-    $boundary = 'ceo-newsletter-' . bin2hex(random_bytes(12));
-    $csvContent = chunk_split(base64_encode((string)file_get_contents($csvFile)));
-
-    $headers = [
-        'From: Cognac Esprit Organic <no-reply@cognac-esprit-organic.com>',
-        'MIME-Version: 1.0',
-        'Content-Type: multipart/mixed; boundary="' . $boundary . '"'
-    ];
-
-    $message = "--{$boundary}\r\n";
-    $message .= "Content-Type: text/plain; charset=utf-8\r\n";
-    $message .= "Content-Transfer-Encoding: 8bit\r\n\r\n";
-    $message .= "Bonjour,\r\n\r\n";
-    $message .= "Une nouvelle adresse e-mail vient d'etre ajoutee a la newsletter Cognac Esprit Organic.\r\n";
-    $message .= "Le fichier complet subscriptions.csv est joint a cet e-mail.\r\n\r\n";
-    $message .= "--{$boundary}\r\n";
-    $message .= "Content-Type: text/csv; name=\"subscriptions.csv\"\r\n";
-    $message .= "Content-Transfer-Encoding: base64\r\n";
-    $message .= "Content-Disposition: attachment; filename=\"subscriptions.csv\"\r\n\r\n";
-    $message .= $csvContent . "\r\n";
-    $message .= "--{$boundary}--\r\n";
-
-    return mail($to, $subject, $message, implode("\r\n", $headers));
-}
 
 try {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') throw new SalonError('method_not_allowed', 405);
@@ -73,19 +41,13 @@ try {
         salon_event($store, $id, 'email', 'consent_granted', ['consent_version' => $context['consent_version'],
             'source' => 'site-newsletter', 'page' => $context['page'], 'language' => $context['language'],
             'text' => $text, 'positive_action' => 'newsletter_form_submit']);
-        $operation = salon_queue($store, ['action' => 'add', 'selected' => ['email' => $email],
+        salon_queue($store, ['action' => 'add', 'selected' => ['email' => $email],
             'context' => $context, 'texts' => ['email' => $text]]);
         $db->exec('COMMIT');
     } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
-    $applied = salon_sync_newsletter($store);
-    // Retain the existing footer notification, only for a newly added address.
-    // Health, migration, withdrawals and Se retrouver never invoke mail().
-    $mailSent = false;
-    if (!empty($applied[$operation])) {
-        try { $mailSent = sendSubscriptionsFile(newsletter_path()); }
-        catch (Throwable $e) { error_log('Newsletter notification unavailable'); }
-    }
-    salon_response(200, ['ok' => true, 'status' => 'saved', 'mail_sent' => $mailSent]);
+    salon_sync_newsletter($store);
+    $notification = salon_notify_newsletter($store);
+    salon_response(200, ['ok' => true, 'status' => 'saved', 'notification' => $notification, 'mail_sent' => $notification === 'sent']);
 } catch (SalonError $e) {
     if ($e->httpStatus === 429) header('Retry-After: 900');
     salon_response($e->httpStatus, ['ok' => false, 'status' => $e->getMessage(), 'error' => $e->getMessage()]);

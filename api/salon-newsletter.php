@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__ . '/newsletter-lib.php';
+const EO_NEWSLETTER_NOTIFICATION_INTERVAL = 3600;
+const EO_NEWSLETTER_NOTIFICATION_TO = 'cognac@mdpierre.com';
 
 /** Encrypted outbox; success is returned only after the common CSV is durable. */
 function salon_queue(array $store, array $operation): int
@@ -46,21 +48,30 @@ function salon_sync_newsletter(array $store): array
                         'texts' => [$r['channel'] => $data['consent_text']]]);
                 }
             }
-            foreach ($db->query('SELECT * FROM newsletter_pending ORDER BY id')->fetchAll() as $item) {
+            $pending = $db->query('SELECT * FROM newsletter_pending ORDER BY id')->fetchAll();
+            foreach ($pending as $item) {
                 $applied[$item['id']] = newsletter_apply($store, $rows, salon_decrypt($store, $item['cipher']));
             }
             $expired = newsletter_expire($rows);
-            if (!$migrated || $applied || $expired || !is_file(newsletter_path())) newsletter_write($header, $rows);
+            // Persist notification intent before touching the CSV. If a replacement
+            // succeeds but acknowledgement fails, replay cannot lose the notification.
+            if (in_array(true, $applied, true)) $db->exec('UPDATE newsletter_mail_state SET revision=revision+1 WHERE singleton=1');
+            $db->exec('COMMIT');
+        } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
+        if (!$migrated || $applied || $expired || !is_file(newsletter_path())) newsletter_write($header, $rows);
+        $db->exec('BEGIN IMMEDIATE');
+        try {
             if (!$migrated) {
                 $q = $db->prepare('INSERT OR REPLACE INTO newsletter_bridge VALUES (?, ?)');
                 $q->execute(['legacy_rows', (string) $legacyRows]);
                 $q->execute(['imported', '1']);
             }
-            $db->exec('DELETE FROM newsletter_pending');
+            $q = $db->prepare('DELETE FROM newsletter_pending WHERE id=?');
+            foreach ($pending as $item) $q->execute([$item['id']]);
             $db->exec('COMMIT');
         } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
     } finally { flock($lock, LOCK_UN); fclose($lock); }
-    // Neither migration, maintenance nor a Se retrouver registration sends mail.
+    // Transport is separate: an administration read never sends a message.
     return $applied;
 }
 
@@ -89,7 +100,8 @@ function salon_newsletter_status(array $store): array
         'legacy_rows' => (int) $store['db']->query("SELECT value FROM newsletter_bridge WHERE name='legacy_rows'")->fetchColumn(),
         'pending' => (int) $store['db']->query('SELECT COUNT(*) FROM newsletter_pending')->fetchColumn(),
         'storage' => 'protected_newsletter_csv',
-        'migration_backup_expires_at' => $store['db']->query('SELECT expires_at FROM newsletter_backup WHERE id=1')->fetchColumn() ?: null];
+        'migration_backup_expires_at' => $store['db']->query('SELECT expires_at FROM newsletter_backup WHERE id=1')->fetchColumn() ?: null,
+        'notification' => salon_newsletter_notification_status($store)];
 }
 
 function salon_newsletter_states(array $store, string $token): array
@@ -129,4 +141,98 @@ function salon_newsletter_export(array $store): void
         newsletter_csv_row($out, $header, $row);
     }
     fclose($out);
+}
+
+function salon_newsletter_notification_status(array $store): array
+{
+    $state = $store['db']->query('SELECT * FROM newsletter_mail_state WHERE singleton=1')->fetch();
+    $pending = (int) $state['revision'] > (int) $state['sent_revision'];
+    $eligibleAt = max((int) $state['last_attempt_at'], (int) $state['last_sent_at']) + EO_NEWSLETTER_NOTIFICATION_INTERVAL;
+    return ['to' => EO_NEWSLETTER_NOTIFICATION_TO, 'min_interval_seconds' => EO_NEWSLETTER_NOTIFICATION_INTERVAL,
+        'pending' => $pending, 'last_status' => $state['last_status'],
+        'last_sent_at' => $state['last_sent_at'] ? gmdate('c', (int) $state['last_sent_at']) : null,
+        'next_eligible_at' => $pending ? gmdate('c', max(time(), $eligibleAt)) : null,
+        'sent_count' => (int) $state['sent_count'], 'last_message_id' => $state['last_message_id']];
+}
+
+/** Separate process lock + durable reservation: never more than one send per hour. */
+function salon_notify_newsletter(array $store, ?callable $transport = null, ?callable $clock = null): string
+{
+    $transport = $transport ?? 'salon_send_newsletter_list';
+    $clock = $clock ?? static fn (): int => time();
+    $mailLock = null;
+    $db = $store['db'];
+    $reserved = false;
+    try {
+        $lockPath = newsletter_path() . '.mail.lock';
+        if (is_link($lockPath)) throw new RuntimeException('Unsafe notification lock');
+        $mailLock = fopen($lockPath, 'c+b');
+        if (!$mailLock || !chmod($lockPath, 0600)) throw new RuntimeException('Notification lock unavailable');
+        if (!flock($mailLock, LOCK_EX | LOCK_NB)) return 'pending';
+        $csvLock = newsletter_lock();
+        try {
+            $db->exec('BEGIN IMMEDIATE');
+            try {
+                $state = $db->query('SELECT * FROM newsletter_mail_state WHERE singleton=1')->fetch();
+                $revision = (int) $state['revision'];
+                $pending = $revision > (int) $state['sent_revision'];
+                $now = $clock();
+                $eligible = $now >= max((int) $state['last_attempt_at'], (int) $state['last_sent_at']) + EO_NEWSLETTER_NOTIFICATION_INTERVAL;
+                $unflushed = (int) $db->query('SELECT COUNT(*) FROM newsletter_pending')->fetchColumn() > 0;
+                if ($pending && $eligible && !$unflushed) {
+                    $csv = file_get_contents(newsletter_path());
+                    if ($csv === false) throw new RuntimeException('Notification snapshot unavailable');
+                    $messageId = '<eo-list-' . bin2hex(random_bytes(16)) . '@cognac-esprit-organic.com>';
+                    $q = $db->prepare('UPDATE newsletter_mail_state SET last_attempt_at=?, last_status="sending", last_message_id=? WHERE singleton=1');
+                    $q->execute([$now, $messageId]);
+                    $reserved = true;
+                }
+                $db->exec('COMMIT');
+            } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
+        } finally { flock($csvLock, LOCK_UN); fclose($csvLock); }
+        if (!$pending) return 'idle';
+        if (!$reserved) return 'pending';
+        // The CSV lock is released before transport. The dedicated mail lock stays
+        // held until completion, including across slow transport or concurrent calls.
+        if (!$transport($csv, $messageId)) throw new RuntimeException('Notification transport rejected');
+        $q = $db->prepare('UPDATE newsletter_mail_state SET sent_revision=MAX(sent_revision, ?),
+            last_sent_at=?, last_status="sent", sent_count=sent_count+1 WHERE singleton=1');
+        $q->execute([$revision, $clock()]);
+        return 'sent';
+    } catch (Throwable $e) {
+        if ($reserved) {
+            try { $db->exec('UPDATE newsletter_mail_state SET last_status="failed" WHERE singleton=1'); }
+            catch (Throwable $ignored) { /* Keep the existing durable reservation. */ }
+        }
+        error_log('Esprit Organic newsletter notification delayed [' . get_class($e) . ']');
+        return 'failed';
+    } finally {
+        if (is_resource($mailLock)) { flock($mailLock, LOCK_UN); fclose($mailLock); }
+    }
+}
+
+function salon_send_newsletter_list(string $csv, string $messageId): bool
+{
+    if (!function_exists('mail')) return false;
+    $boundary = 'eo-newsletter-' . bin2hex(random_bytes(12));
+    $filename = 'contacts-esprit-organic-' . gmdate('Ymd-His') . '-UTC.csv';
+    $subject = '=?UTF-8?B?' . base64_encode('Inscriptions Esprit Organic — liste actualisée') . '?=';
+    $headers = [
+        'From: Cognac Esprit Organic <no-reply@cognac-esprit-organic.com>',
+        'MIME-Version: 1.0', 'Message-ID: ' . $messageId,
+        'Content-Type: multipart/mixed; boundary="' . $boundary . '"',
+    ];
+    $message = implode("\r\n", [
+        '--' . $boundary, 'Content-Type: text/plain; charset=utf-8',
+        'Content-Transfer-Encoding: 8bit', '', 'Bonjour Léopold,', '',
+        'De nouvelles inscriptions ont été enregistrées sur le site Esprit Organic.',
+        'Voici la liste complète à jour, avec les e-mails, les téléphones et les pages d’inscription.',
+        'Les inscriptions rapprochées sont regroupées : au maximum une liste par heure.',
+        'Les coordonnées désinscrites sont retirées de la liste avant chaque nouvel envoi.', '',
+        'Date de la liste : ' . gmdate('Y-m-d H:i:s') . ' UTC.', '',
+        '--' . $boundary, 'Content-Type: text/csv; charset=utf-8; name="' . $filename . '"',
+        'Content-Transfer-Encoding: base64', 'Content-Disposition: attachment; filename="' . $filename . '"', '',
+        chunk_split(base64_encode($csv)), '--' . $boundary . '--', '',
+    ]);
+    return mail(EO_NEWSLETTER_NOTIFICATION_TO, $subject, $message, implode("\r\n", $headers));
 }

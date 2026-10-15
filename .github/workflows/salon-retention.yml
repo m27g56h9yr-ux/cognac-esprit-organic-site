@@ -1,7 +1,7 @@
-name: Esprit Organic contact retention
+name: Esprit Organic contacts and grouped notifications
 on:
   schedule:
-    - cron: '37 3 * * *'
+    - cron: '7,22,37,52 * * * *'
   workflow_dispatch:
 permissions:
   contents: read
@@ -9,7 +9,7 @@ jobs:
   retention:
     runs-on: ubuntu-latest
     steps:
-      - name: Apply retention to private contacts
+      - name: Apply retention and send eligible grouped notifications
         run: |
           curl --fail --silent --show-error --retry 2 --max-time 30 'https://cognac-esprit-organic.com/api/salon-contact.php?action=health' > /tmp/eo-salon-health.json
           python3 - <<'PYHEALTH'
@@ -18,5 +18,7 @@ jobs:
               result = json.load(f)
           if not result.get('ok') or result.get('status') != 'ready':
               raise SystemExit('Private contact storage is not ready')
-          print('Retention applied to the Esprit Organic store.')
+          if result.get('notification') == 'failed':
+              raise SystemExit('Newsletter notification transport failed; pending list is retained for retry')
+          print('Retention applied; eligible Esprit Organic notifications processed.')
           PYHEALTH

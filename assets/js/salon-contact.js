@@ -109,7 +109,7 @@
       const data = await request(payload);
       form.reset();
       show(withdraw
-        ? 'Votre demande est prise en compte. Les canaux choisis sont désinscrits des invitations et nouvelles de cette page.'
+        ? 'Votre demande est prise en compte. Les canaux choisis sont désinscrits des invitations et nouvelles de Cognac Esprit Organic.'
         : `Merci ! Votre inscription par ${wantsSms && wantsEmail ? 'SMS et e-mail' : wantsSms ? 'SMS' : 'e-mail'} est enregistrée.`, null, true);
       if (withdraw && privateReady) {
         // The server has committed the withdrawal: do not obscure success with a second request.

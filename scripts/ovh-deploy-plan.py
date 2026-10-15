@@ -57,8 +57,15 @@ def plan(bundle, baseline, target, site, output, delete=False, force=False):
     for name in removed:
         commands.append('rm -f ' + quote(target + '/' + name))
     parents = sorted({str(PurePosixPath(name).parent) for name in changed} - {'.'})
+    # OVH may return 550 even for mkdir -p on an existing directory. Only directory
+    # preparation is best-effort; every upload below must still succeed before
+    # the caller can publish the new manifest.
+    if parents:
+        commands.append('set cmd:fail-exit no')
     for parent in parents:
         commands.append('mkdir -p ' + quote(target + '/' + parent))
+    if parents:
+        commands.append('set cmd:fail-exit yes')
     for name in changed:
         commands.append('put ' + quote(str(bundle / name)) + ' -o ' + quote(target + '/' + name))
     output.write_text('\n'.join(commands) + '\n')

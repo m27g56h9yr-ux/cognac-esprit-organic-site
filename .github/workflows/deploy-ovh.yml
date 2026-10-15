@@ -45,7 +45,7 @@ jobs:
           if not re.fullmatch('[a-f0-9]{64}', token):
               raise SystemExit('Missing valid EO_SALON_ADMIN_TOKEN secret')
           config = pathlib.Path('/tmp/eo-salon-config.php')
-          config.write_text("<?php\nreturn ['admin_token_hash' => '" + hashlib.sha256(token.encode()).hexdigest() + "'];\n")
+          config.write_text("<?php\nreturn ['admin_token_hash' => '" + hashlib.sha256(token.encode()).hexdigest() + "', 'newsletter_schema' => 2];\n")
           config.chmod(0o600)
           PYCONFIG
 
@@ -183,7 +183,7 @@ jobs:
           origin = 'https://cognac-esprit-organic.com'
           with urllib.request.urlopen(origin + '/api/salon-contact.php?action=health', timeout=30) as response:
               health = json.load(response)
-          if not health.get('ok') or health.get('status') != 'ready':
+          if not health.get('ok') or health.get('status') != 'ready' or health.get('newsletter_schema') != 2:
               raise SystemExit('Signup storage is not ready')
           request = urllib.request.Request(origin + '/api/salon-admin.php', headers={
               'Authorization': 'Bearer ' + os.environ['EO_SALON_ADMIN_TOKEN'], 'Accept': 'application/json'})
@@ -191,5 +191,8 @@ jobs:
               admin = json.load(response)
           if not admin.get('ok') or admin.get('storage') != 'outside_public_root':
               raise SystemExit('Private signup administration is not ready')
-          print('Esprit Organic private storage and authenticated administration ready.')
+          newsletter = admin.get('newsletter', {})
+          if newsletter.get('schema_version') != 2 or newsletter.get('pending') != 0 or not {'phone', 'page', 'last_page'}.issubset(newsletter.get('columns', [])):
+              raise SystemExit('Shared newsletter storage is not ready')
+          print('Esprit Organic shared newsletter and authenticated administration ready.')
           PYSTORAGE

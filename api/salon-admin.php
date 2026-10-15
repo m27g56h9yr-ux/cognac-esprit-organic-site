@@ -15,27 +15,32 @@ try {
     }
     $store = salon_store();
     salon_cleanup($store);
+    salon_sync_newsletter($store);
+    if (($_GET['format'] ?? '') === 'csv') {
+        salon_newsletter_export($store);
+        exit;
+    }
     $rows = $store['db']->query('SELECT * FROM contacts ORDER BY channel, changed_at')->fetchAll();
-    if (($_GET['format'] ?? '') !== 'csv') {
+    if (($_GET['format'] ?? '') !== 'proofs') {
         $counts = ['active_sms' => 0, 'active_email' => 0, 'withdrawn' => 0, 'expired' => 0];
         foreach ($rows as $r) {
             $k = $r['state'] === 'active' ? 'active_' . $r['channel'] : $r['state'];
             if (isset($counts[$k])) $counts[$k]++;
         }
         salon_response(200, ['ok' => true, 'counts' => $counts, 'encryption' => 'AES-256-GCM',
-            'storage' => 'outside_public_root', 'ownership_verification' => 'declared_only']);
+            'storage' => 'outside_public_root', 'ownership_verification' => 'declared_only', 'newsletter' => salon_newsletter_status($store)]);
     }
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="cognac-esprit-organic-consentements-' . gmdate('Ymd-His') . '-utc.csv"');
     $out = fopen('php://output', 'wb');
-    fputcsv($out, ['brand', 'channel', 'contact', 'consented_at', 'consent_version', 'source',
+    fputcsv($out, ['brand', 'channel', 'contact', 'consented_at', 'consent_version', 'source', 'page',
         'ownership', 'expires_at', 'unsubscribe_url', 'consent_text', 'adult_confirmed'], ',', '"', '');
     foreach ($rows as $r) {
         if ($r['state'] !== 'active') continue;
         $data = salon_decrypt($store, $r['cipher']);
         $token = salon_sign($store, 'manage', ['ids' => [$r['id']]]);
         $cells = [EO_SALON_BRAND, $r['channel'], $data['contact'], $data['consented_at'],
-            $data['consent_version'], $data['source'], $data['ownership'], $r['expires_at'],
+            $data['consent_version'], $data['source'], $data['page'], $data['ownership'], $r['expires_at'],
             EO_SALON_ORIGIN . '/se-retrouver/desinscription/#' . $token, $data['consent_text'], array_key_exists('adult_confirmed', $data) ? ($data['adult_confirmed'] ? 'yes' : 'no') : ''];
         // Prevent formula execution in spreadsheet applications.
         $cells = array_map(static fn ($v) => preg_match('/^[=+@\-\t\r]/u', (string) $v) ? "'" . $v : $v, $cells);

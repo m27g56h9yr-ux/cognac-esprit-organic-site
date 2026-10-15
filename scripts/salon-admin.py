@@ -9,8 +9,11 @@ import urllib.request
 
 parser = argparse.ArgumentParser(description='Contacts consentis Cognac Esprit Organic')
 parser.add_argument('--export', type=Path, help='CSV destination outside the repository (created with mode 0600)')
+parser.add_argument('--proofs', action='store_true', help='Export encrypted-store consent evidence instead of the common address book (requires --export)')
 parser.add_argument('--token-file', type=Path, default=Path.home()/'.config/cognac-esprit-organic/salon-admin.token')
 args = parser.parse_args()
+if args.proofs and not args.export:
+    parser.error('--proofs requires --export')
 repo = Path(__file__).resolve().parents[1]
 if args.export:
     target = args.export.expanduser().resolve()
@@ -19,7 +22,7 @@ if args.export:
     if target.exists(): parser.error('The export destination already exists; choose a new filename.')
 try:
     token = args.token_file.read_text().strip()
-    url = 'https://cognac-esprit-organic.com/api/salon-admin.php' + ('?format=csv' if args.export else '')
+    url = 'https://cognac-esprit-organic.com/api/salon-admin.php' + (('?format=proofs' if args.proofs else '?format=csv') if args.export else '')
     req = urllib.request.Request(url, headers={'Authorization': 'Bearer '+token, 'Accept':'text/csv' if args.export else 'application/json'})
     with urllib.request.urlopen(req, timeout=30) as response:
         data = response.read()

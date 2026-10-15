@@ -1,7 +1,8 @@
 <?php
 declare(strict_types=1);
 
-/** Dedicated consent store for Cognac Esprit Organic. No marketing transport. */
+/** Encrypted consent store and shared Esprit Organic newsletter bridge. */
+require_once __DIR__ . '/salon-newsletter.php';
 const EO_SALON_BRAND = 'Cognac Esprit Organic';
 const EO_SALON_VERSION = 'eo-se-retrouver-2026-10-15-v1';
 const EO_SALON_ORIGIN = 'https://cognac-esprit-organic.com';
@@ -116,13 +117,16 @@ function salon_store(): array
         );
         CREATE TABLE IF NOT EXISTS limits (bucket TEXT PRIMARY KEY, hits INTEGER NOT NULL, expires_at INTEGER NOT NULL);
         CREATE TABLE IF NOT EXISTS nonces (id TEXT PRIMARY KEY, expires_at INTEGER NOT NULL);
+        CREATE TABLE IF NOT EXISTS newsletter_pending (id INTEGER PRIMARY KEY AUTOINCREMENT, cipher TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS newsletter_bridge (name TEXT PRIMARY KEY, value TEXT NOT NULL);
+        CREATE TABLE IF NOT EXISTS newsletter_backup (id INTEGER PRIMARY KEY, cipher TEXT NOT NULL, expires_at TEXT NOT NULL);
         CREATE INDEX IF NOT EXISTS contacts_expiry ON contacts(expires_at);
         CREATE INDEX IF NOT EXISTS events_expiry ON consent_events(expires_at);');
     } finally {
         flock($setup, LOCK_UN);
         fclose($setup);
     }
-    return ['db' => $db, 'key' => $key];
+    return ['db' => $db, 'key' => $key, 'newsletter_ready' => ($config['newsletter_schema'] ?? 0) === 2];
 }
 
 function salon_key(array $store, string $purpose): string
@@ -214,15 +218,25 @@ function salon_cleanup(array $store): void
 {
     $now = gmdate('c');
     $db = $store['db'];
-    $q = $db->prepare('UPDATE contacts SET state="expired", cipher="", changed_at=?,
-        expires_at=? WHERE state="active" AND expires_at < ?');
-    $q->execute([$now, gmdate('c', strtotime('+3 years')), $now]);
-    $q = $db->prepare('DELETE FROM contacts WHERE state != "active" AND expires_at < ?');
-    $q->execute([$now]);
-    $q = $db->prepare('DELETE FROM consent_events WHERE expires_at < ?');
-    $q->execute([$now]);
-    $db->exec('DELETE FROM limits WHERE expires_at < ' . time());
-    $db->exec('DELETE FROM nonces WHERE expires_at < ' . time());
+    $db->exec('BEGIN IMMEDIATE');
+    try {
+        $q = $db->prepare('SELECT id FROM contacts WHERE state="active" AND expires_at < ?');
+        $q->execute([$now]);
+        $expiredIds = $q->fetchAll(PDO::FETCH_COLUMN);
+        if ($expiredIds) salon_queue($store, ['action' => 'remove', 'ids' => $expiredIds]);
+        $q = $db->prepare('UPDATE contacts SET state="expired", cipher="", changed_at=?,
+            expires_at=? WHERE state="active" AND expires_at < ?');
+        $q->execute([$now, gmdate('c', strtotime('+3 years')), $now]);
+        $q = $db->prepare('DELETE FROM contacts WHERE state != "active" AND expires_at < ?');
+        $q->execute([$now]);
+        $q = $db->prepare('DELETE FROM consent_events WHERE expires_at < ?');
+        $q->execute([$now]);
+        $q = $db->prepare('DELETE FROM newsletter_backup WHERE expires_at < ?');
+        $q->execute([$now]);
+        $db->exec('DELETE FROM limits WHERE expires_at < ' . time());
+        $db->exec('DELETE FROM nonces WHERE expires_at < ' . time());
+        $db->exec('COMMIT');
+    } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
 }
 
 function salon_challenge(array $store): string
@@ -313,6 +327,8 @@ function salon_subscribe(array $store, array $input): array
             'challenge_hash' => hash('sha256', (string) $input['challenge']),
         ]);
     }
+    salon_queue($store, ['action' => 'add', 'selected' => $selected,
+        'context' => newsletter_context('/se-retrouver/', 'fr', '', EO_SALON_VERSION, 'se-retrouver'), 'texts' => EO_SALON_TEXT]);
     $token = salon_sign($store, 'manage', ['ids' => $ids]);
     return ['ok' => true, 'status' => 'saved', 'manage_url' => EO_SALON_ORIGIN . '/se-retrouver/desinscription/#' . $token];
 }
@@ -328,15 +344,21 @@ function salon_manage_ids(array $store, string $token): array
     return array_values(array_unique($ids));
 }
 
-function salon_inspect(array $store, array $input): array
+function salon_inspect(array $store, array $input, array $newsletterStates): array
 {
-    $ids = salon_manage_ids($store, (string) ($input['token'] ?? ''));
+    $token = (string) ($input['token'] ?? '');
+    $ids = salon_manage_ids($store, $token);
+    $claims = salon_claims($store, 'manage', $token);
     $rows = [];
     foreach ($ids as $id) {
         $q = $store['db']->prepare('SELECT channel, state FROM contacts WHERE id=?');
         $q->execute([$id]);
         $r = $q->fetch();
-        if ($r) $rows[] = $r;
+        if ($r) { $rows[] = $r; continue; }
+        $channel = $claims['channels'][$id] ?? '';
+        if (!in_array($channel, ['email', 'sms'], true)) continue;
+        // The CSV snapshot was read before taking this transaction's SQLite lock.
+        $rows[] = ['channel' => $channel, 'state' => $newsletterStates[$id] ?? 'withdrawn'];
     }
     return ['ok' => true, 'channels' => $rows];
 }
@@ -344,6 +366,7 @@ function salon_inspect(array $store, array $input): array
 function salon_withdraw(array $store, array $input): array
 {
     $ids = [];
+    $directChannels = [];
     $selected = $input['channels'] ?? [];
     if (!is_array($selected) || !$selected || count($selected) > 2
         || count(array_filter($selected, static fn ($v) => is_string($v) && in_array($v, ['sms', 'email'], true))) !== count($selected)) {
@@ -351,23 +374,32 @@ function salon_withdraw(array $store, array $input): array
     }
     if (!empty($input['token'])) {
         $ids = salon_manage_ids($store, (string) $input['token']);
+        $claims = salon_claims($store, 'manage', (string) $input['token']);
+        $directChannels = $claims['channels'] ?? [];
     } else {
         // A visitor who has lost their link can still oppose processing online.
         // Responses never disclose whether an address/number was registered.
         foreach ($selected as $channel) {
             $value = salon_normalize($channel, $input[$channel === 'sms' ? 'phone' : 'email'] ?? '');
-            $ids[] = salon_id($store, $channel, $value);
+            $id = salon_id($store, $channel, $value);
+            $ids[] = $id;
+            $directChannels[$id] = $channel;
         }
     }
+    $withdrawnIds = [];
     foreach ($ids as $id) {
         $q = $store['db']->prepare('SELECT channel FROM contacts WHERE id=?');
         $q->execute([$id]);
-        $channel = $q->fetchColumn();
+        $channel = $q->fetchColumn() ?: ($directChannels[$id] ?? null);
         if (!$channel || !in_array($channel, $selected, true)) continue;
-        $q = $store['db']->prepare('UPDATE contacts SET state="withdrawn", cipher="", changed_at=?, expires_at=? WHERE id=?');
-        $q->execute([gmdate('c'), gmdate('c', strtotime('+3 years')), $id]);
+        $now = gmdate('c');
+        $q = $store['db']->prepare('INSERT INTO contacts VALUES (?, ?, "withdrawn", "", ?, ?, ?, "declared")
+            ON CONFLICT(id) DO UPDATE SET state="withdrawn", cipher="", changed_at=excluded.changed_at, expires_at=excluded.expires_at');
+        $q->execute([$id, $channel, $now, $now, gmdate('c', strtotime('+3 years'))]);
+        $withdrawnIds[] = $id;
         salon_event($store, $id, $channel, 'consent_withdrawn', ['method' => empty($input['token']) ? 'contact_opposition' : 'private_link']);
     }
+    if ($withdrawnIds) salon_queue($store, ['action' => 'remove', 'ids' => $withdrawnIds]);
     return ['ok' => true, 'status' => 'withdrawn'];
 }
 

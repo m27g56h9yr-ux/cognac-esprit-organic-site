@@ -1547,3 +1547,57 @@ document.addEventListener("keydown", (event) => {
   if (event.key !== "Escape") return;
   document.querySelectorAll("[data-volume-selector]").forEach(closeVolumeSelector);
 });
+
+/* Maison des Pierres: direct orders for the French commercial opening. */
+(function () {
+  'use strict';
+  var catalogue = {"fondation-vs": {"700": "EO0001"}, "conviction-vsop": {"700": "EO0002"}, "cohesion-napoleon": {"700": "EO0004"}, "transmission-xo": {"700": "EO0005"}, "xxo": {"700": "EO0006"}, "single-cask": {"500": "EO0008"}};
+  var match = location.pathname.match(/^\/produits\/([a-z0-9-]+)\.html$/);
+  if (!match || !catalogue[match[1]]) return;
+  if (typeof visitorMarket !== 'undefined' && visitorMarket) return;
+  function mount() {
+    if (document.getElementById('mdp-direct-order')) return;
+    var anchor = document.querySelector('.product-description');
+    if (!anchor) return;
+    var formats = catalogue[match[1]];
+    var box = document.createElement('div');
+    box.id = 'mdp-direct-order';
+    box.style.cssText = 'margin:24px 0;max-width:100%;font-family:inherit;line-height:1.5';
+    var link = document.createElement('a');
+    link.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 22px;box-sizing:border-box;background:#342c22;color:#fff;border:1px solid #342c22;text-decoration:none;font-size:15px;max-width:100%';
+    var note = document.createElement('p');
+    note.style.cssText = 'margin:8px 0 0;font-size:13px;line-height:1.5';
+    note.textContent = 'Livraison en France métropolitaine ou retrait gratuit à la propriété.';
+    box.append(link, note);
+    anchor.appendChild(box);
+    function update() {
+      var selected = document.querySelector('[data-product-model-option][aria-pressed="true"], [data-volume-option][aria-selected="true"]');
+      var value = selected ? (selected.getAttribute('data-product-model-option') || selected.getAttribute('data-volume-option') || '') : '';
+      var volume = value ? value.match(/^([0-9]+) ml$/) : null;
+      // Never substitute a saleable format for a different selected format.
+      var ml = selected ? (volume ? volume[1] : '') : Object.keys(formats)[0];
+      var sku = formats[ml];
+      if (sku) {
+        var url = new URL('https://boutique.mdpierre.com/commander/');
+        url.searchParams.set('mdp_ref', sku);
+        url.searchParams.set('mdp_lang', 'fr');
+        link.href = url.href;
+        link.textContent = 'Commander — ' + (Number(ml) / 10) + ' cl';
+        link.removeAttribute('aria-disabled');
+        link.style.opacity = '1';
+      } else {
+        link.removeAttribute('href');
+        link.setAttribute('aria-disabled', 'true');
+        link.textContent = 'Ce format n’est pas encore disponible en ligne';
+        link.style.opacity = '.6';
+      }
+    }
+    update();
+    // Observe selection attributes: both sites use different click propagation.
+    document.querySelectorAll('[data-product-model-selector], [data-volume-selector]').forEach(function (selector) {
+      new MutationObserver(update).observe(selector, {subtree:true,attributes:true,attributeFilter:['aria-pressed','aria-selected']});
+    });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount);
+  else mount();
+})();

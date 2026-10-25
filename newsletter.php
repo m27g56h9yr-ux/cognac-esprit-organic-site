@@ -6,8 +6,10 @@ salon_headers();
 
 try {
     if (($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST') throw new SalonError('method_not_allowed', 405);
-    salon_guard_origin();
+    $shop=(string)($_SERVER['HTTP_ORIGIN']??'')==='https://boutique.mdpierre.com';
+    if (!$shop) salon_guard_origin();
     $input = salon_input();
+    if ($shop && (($input['consent']??'')!=='yes' || ($input['consent_version']??'')!=='mdp-boutique-news-20261025-v1')) throw new SalonError('consent_required',422);
     $email = salon_normalize('email', $input['email'] ?? '');
     if (!empty($input['company_url'])) throw new SalonError('submission_rejected', 422);
     $store = salon_store();
@@ -16,7 +18,7 @@ try {
     salon_sync_newsletter($store);
     $context = newsletter_context((string) ($input['page'] ?? $_SERVER['HTTP_REFERER'] ?? ''),
         (string) ($input['language'] ?? 'fr'), (string) ($input['market'] ?? ''),
-        'eo-footer-news-2026-10-15-v1', 'site-newsletter');
+         $shop?'mdp-boutique-news-20261025-v1':'eo-footer-news-2026-10-15-v1', $shop?'boutique-mdpierre':'site-newsletter');
     $texts = [
         'fr' => 'En renseignant votre adresse e-mail, vous acceptez de recevoir nos dernières actualités sur nos produits et vous prenez connaissance de nos mentions légales.',
         'en' => 'By entering your e-mail address, you agree to receive occasional news about our products and acknowledge our legal notice.',
@@ -24,7 +26,7 @@ try {
         'no' => 'Ved å skrive inn e-postadressen din samtykker du til å motta nyheter om produktene våre og bekrefter våre juridiske opplysninger.',
         'sv' => 'Genom att ange din e-postadress godkänner du att få nyheter om våra produkter och bekräftar vår juridiska information.',
     ];
-    $text = $texts[$context['language']] ?? $texts['fr'];
+    $text = $shop?'Recevoir des nouvelles de temps en temps':($texts[$context['language']] ?? $texts['fr']);
     $db = $store['db'];
     $db->exec('BEGIN IMMEDIATE');
     try {
@@ -32,15 +34,15 @@ try {
         $id = salon_id($store, 'email', $email);
         $record = ['brand' => EO_SALON_BRAND, 'channel' => 'email', 'contact' => $email,
             'consented_at' => $now, 'consent_version' => $context['consent_version'],
-            'consent_text' => $text, 'source' => 'site-newsletter', 'page' => $context['page'],
+            'consent_text' => $text, 'source' => $shop?'boutique-mdpierre':'site-newsletter', 'page' => $context['page'],
             'language' => $context['language'], 'market' => $context['market'], 'ownership' => 'declared_not_verified'];
         $q = $db->prepare('INSERT INTO contacts VALUES (?, "email", "active", ?, ?, ?, ?, "declared")
             ON CONFLICT(id) DO UPDATE SET state="active", cipher=excluded.cipher,
             changed_at=excluded.changed_at, expires_at=excluded.expires_at');
         $q->execute([$id, salon_encrypt($store, $record), $now, $now, gmdate('c', strtotime('+3 years'))]);
         salon_event($store, $id, 'email', 'consent_granted', ['consent_version' => $context['consent_version'],
-            'source' => 'site-newsletter', 'page' => $context['page'], 'language' => $context['language'],
-            'text' => $text, 'positive_action' => 'newsletter_form_submit']);
+            'source' => $shop?'boutique-mdpierre':'site-newsletter', 'page' => $context['page'], 'language' => $context['language'],
+            'text' => $text, 'positive_action' => $shop?'optional_checkbox':'newsletter_form_submit']);
         salon_queue($store, ['action' => 'add', 'selected' => ['email' => $email],
             'context' => $context, 'texts' => ['email' => $text]]);
         $db->exec('COMMIT');

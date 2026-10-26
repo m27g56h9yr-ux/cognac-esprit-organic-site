@@ -1,5 +1,5 @@
 from html import escape
-from boutique import purchase_block, BLOCK_RE as SHOP_BLOCK_RE
+from boutique import purchase_block, purchase_offers, BLOCK_RE as SHOP_BLOCK_RE
 import json
 import posixpath
 from pathlib import Path
@@ -8,8 +8,8 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20261026-boutique01"
-JS_VERSION = "20261026-boutique01"
+CSS_VERSION = "20261026-photo02"
+JS_VERSION = "20261026-photo02"
 COCKTAILS_CSS_VERSION = "20260704-assets02"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
@@ -2562,6 +2562,9 @@ def product_page(product):
         "size": product["volume"],
         "@id": page_url(f"produits/{product['slug']}.html") + "#product",
     }
+    offers = purchase_offers(product)
+    if offers:
+        schema["offers"] = offers
     variants = product_gtin_variants(product, schema["@id"])
     if variants:
         schema["hasVariant"] = variants
@@ -2641,6 +2644,7 @@ def product_page(product):
   </div>
   <div class="product-scene">
     {image_html(detail_image, f"Visuel {product['name']}", prefix, attrs="data-gallery-main", fetchpriority="high")}
+    {purchase_block(product)}
   </div>
   <div class="product-info-block">
     <div class="product-description">
@@ -4386,7 +4390,7 @@ BUY_LINK_ANCHOR_RE = re.compile(
 
 def product_buy_links_html(product, lang="fr", indent="      "):
     links = PRODUCT_BUY_LINKS.get(product["slug"], [])
-    rendered = [purchase_block(product, lang)]
+    rendered = []
     for link in links:
         labels = link.get("labels", {})
         label = labels.get(lang) or labels.get("en") or labels.get("fr", "")
@@ -6262,7 +6266,12 @@ def sync_product_buy_links(html, product, lang):
         cleaned = SHOP_BLOCK_RE.sub("", BUY_LINK_ANCHOR_RE.sub("", match.group(2))).rstrip()
         return match.group(1) + product_buy_links_html(product, lang) + cleaned + match.group(3)
 
-    return description_re.sub(replace, html, count=1)
+    html = SHOP_BLOCK_RE.sub("", html)
+    html = description_re.sub(replace, html, count=1)
+    block = purchase_block(product, lang)
+    if block:
+        html = re.sub(r'(<div class="product-scene">[\s\S]*?</picture>)(\s*</div>)', lambda m: m.group(1) + block + m.group(2), html, count=1)
+    return html
 
 
 def sync_css_version(html):
@@ -7602,14 +7611,16 @@ def write_css():
 .eo-shop [hidden] { display: none !important; }
 .eo-shop .eo-shop-heading { font-weight: 700; font-size: .85rem; }
 
-.eo-shop { margin-top: 24px; padding: 0; max-width: 460px; }
-.eo-shop-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.35); }
-.eo-shop-row strong { margin-left: auto; font-variant-numeric: tabular-nums; }
-.eo-shop-row small { font-size: .65em; font-weight: 400; }
-.eo-shop-row a { padding: 12px 20px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; background: #fff; color: #273c25; font-weight: 700; text-decoration: none; border: 1px solid #fff; }
-.eo-shop-row a:hover { background: #edf1e7; }
-.eo-shop-row a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
-.eo-shop p { font-size: .75rem; line-height: 1.5; margin-top: 10px; }
+.product-scene { position: relative; align-self: start; }
+.product-scene .eo-shop { position: absolute; left: 5%; right: 5%; bottom: 20px; z-index: 2; margin: 0; padding: 14px 18px 10px; border: 1px solid rgba(255,255,255,.8); border-radius: 5px; background: rgba(255,253,247,.95); color: #293c2c; box-shadow: 0 4px 22px rgba(24,37,23,.12); backdrop-filter: blur(8px); }
+.eo-shop-row { display: flex; align-items: center; gap: 12px; }
+.eo-shop-row strong { margin-left: auto; white-space: nowrap; font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.eo-shop-row small { font-size: .6em; font-weight: 400; }
+.eo-shop-row a { padding: 12px 22px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; background: #29452f; color: #fff; font-weight: 600; text-decoration: none; border-radius: 3px; }
+.eo-shop-row a:hover { background: #182d1d; }
+.eo-shop-row a:focus-visible { outline: 3px solid #926826; outline-offset: 3px; }
+.eo-shop p { font-size: .65rem; line-height: 1.4; margin: 7px 0 0; color: #586052; }
+@media(max-width: 600px) { .product-scene .eo-shop { left: 12px; right: 12px; bottom: 12px; padding: 12px; } .eo-shop-row { gap: 8px; font-size: .85rem; } .eo-shop-row strong { font-size: 1.1rem; } .eo-shop-row a { padding: 10px 16px; } }
 body[data-market="qc"] .eo-shop, body[data-market="dk"] .eo-shop, body[data-market="no"] .eo-shop { display: none; }
 @font-face {
   font-family: "Montserrat";

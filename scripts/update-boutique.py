@@ -2,10 +2,12 @@
 """Refresh French purchase blocks without rebuilding unrelated site pages."""
 from pathlib import Path
 import re
+import json
 import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 import build_static_site as site
+import boutique
 
 
 def update():
@@ -22,6 +24,14 @@ def update():
             pattern = r'<script type="application/ld\+json">\{"@context":"https://schema.org","@type":"Product"[\s\S]*?</script>'
             schema = re.search(pattern, generated).group(0)
             html = re.sub(pattern, lambda _: schema, html, count=1)
+        def offers(match):
+            obj = json.loads(match.group(1))
+            if obj.get('@type') == 'Product':
+                values = boutique.purchase_offers(product)
+                if values: obj['offers'] = values
+                else: obj.pop('offers', None)
+            return '<script type="application/ld+json">' + json.dumps(obj, ensure_ascii=False, separators=(',', ':')) + '</script>'
+        html = re.sub(r'<script type="application/ld\+json">(.*?)</script>', offers, html)
         path.write_text(html, encoding="utf-8")
 
 

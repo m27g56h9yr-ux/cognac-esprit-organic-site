@@ -1,0 +1,75 @@
+{
+  "enabled": true,
+  "verified_at": "2026-10-26T15:57:00+01:00",
+  "source": "Catalogue commercial OVH, vérifié en lecture seule par le chat VPS 01a14b96-1113-7c80-b3ed-0378566ffdef, réponse 01a178b7-11ab-74d3-a9bd-7671b62f7e72",
+  "products": {
+    "fondation-vs": [
+      {
+        "reference": "EO0001",
+        "volume_ml": 700,
+        "price_cents": 4500
+      }
+    ],
+    "conviction-vsop": [
+      {
+        "reference": "EO0002",
+        "volume_ml": 700,
+        "price_cents": 5700
+      }
+    ],
+    "cohesion-napoleon": [
+      {
+        "reference": "EO0004",
+        "volume_ml": 700,
+        "price_cents": 8000
+      }
+    ],
+    "transmission-xo": [
+      {
+        "reference": "EO0005",
+        "volume_ml": 700,
+        "price_cents": 12000
+      }
+    ],
+    "xxo": [
+      {
+        "reference": "EO0006",
+        "volume_ml": 700,
+        "price_cents": 24000
+      }
+    ],
+    "single-cask": [
+      {
+        "reference": "EO0008",
+        "volume_ml": 500,
+        "price_cents": 11000
+      }
+    ]
+  },
+  "unavailable": {
+    "conviction-vsop": [
+      {
+        "reference": "EO0003",
+        "volume_ml": 350,
+        "reason": "Prix absent"
+      }
+    ],
+    "single-cask": [
+      {
+        "reference": "EO0007",
+        "volume_ml": 700,
+        "reason": "Prix absent"
+      }
+    ],
+    "pineau": [
+      {
+        "reason": "Absent du catalogue"
+      }
+    ],
+    "pineau-rouge": [
+      {
+        "reason": "Absent du catalogue"
+      }
+    ]
+  }
+}

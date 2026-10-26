@@ -1,4 +1,5 @@
 from html import escape
+from boutique import purchase_block, BLOCK_RE as SHOP_BLOCK_RE
 import json
 import posixpath
 from pathlib import Path
@@ -7,8 +8,8 @@ import re
 ROOT = Path(__file__).resolve().parent
 DOMAIN = "https://cognac-esprit-organic.com"
 NOINDEX = False
-CSS_VERSION = "20260708-press01"
-JS_VERSION = "20261024-order1"
+CSS_VERSION = "20261026-boutique01"
+JS_VERSION = "20261026-boutique01"
 COCKTAILS_CSS_VERSION = "20260704-assets02"
 LOCALIZED_LANGUAGES = ("en", "da", "no", "sv")
 SUPPORTED_LANGUAGES = ("fr", *LOCALIZED_LANGUAGES)
@@ -385,11 +386,12 @@ PRODUCTS = [
         "tasting_image": "assets/img/product-scenes/single-cask-01.jpg",
         "menu": "assets/img/product-menu/single-cask.png",
         "tone": "#522e03",
-        "volume": "700 ml",
+        "volume": "500 ml",
+        "volume_options": ["500 ml", "700 ml"],
         "abv": "51 % vol",
         "grapes": "Ugni Blanc, Colombard, Folle Blanche",
-        "gtin13": "3322870011458",
         "gtin_variants": [
+            {"name": "Cognac Esprit Organic Single Cask 70 cl", "size": "700 ml", "gtin13": "3322870011458"},
             {
                 "name": "Caisse Cognac Esprit Organic Single Cask n°1 6 x 70 cl",
                 "size": "6 x 700 ml",
@@ -4384,7 +4386,7 @@ BUY_LINK_ANCHOR_RE = re.compile(
 
 def product_buy_links_html(product, lang="fr", indent="      "):
     links = PRODUCT_BUY_LINKS.get(product["slug"], [])
-    rendered = []
+    rendered = [purchase_block(product, lang)]
     for link in links:
         labels = link.get("labels", {})
         label = labels.get(lang) or labels.get("en") or labels.get("fr", "")
@@ -6257,7 +6259,7 @@ def sync_product_buy_links(html, product, lang):
     )
 
     def replace(match):
-        cleaned = BUY_LINK_ANCHOR_RE.sub("", match.group(2)).rstrip()
+        cleaned = SHOP_BLOCK_RE.sub("", BUY_LINK_ANCHOR_RE.sub("", match.group(2))).rstrip()
         return match.group(1) + product_buy_links_html(product, lang) + cleaned + match.group(3)
 
     return description_re.sub(replace, html, count=1)
@@ -7596,7 +7598,20 @@ def legal_page(path="mentions-legales.html", lang="fr"):
 
 
 def write_css():
-    css = r'''@font-face {
+    css = r'''/* Direct orders: each format keeps its own price and shop reference. */
+.eo-shop [hidden] { display: none !important; }
+.eo-shop .eo-shop-heading { font-weight: 700; font-size: .85rem; }
+
+.eo-shop { margin-top: 24px; padding: 0; max-width: 460px; }
+.eo-shop-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.35); }
+.eo-shop-row strong { margin-left: auto; font-variant-numeric: tabular-nums; }
+.eo-shop-row small { font-size: .65em; font-weight: 400; }
+.eo-shop-row a { padding: 12px 20px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; background: #fff; color: #273c25; font-weight: 700; text-decoration: none; border: 1px solid #fff; }
+.eo-shop-row a:hover { background: #edf1e7; }
+.eo-shop-row a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.eo-shop p { font-size: .75rem; line-height: 1.5; margin-top: 10px; }
+body[data-market="qc"] .eo-shop, body[data-market="dk"] .eo-shop, body[data-market="no"] .eo-shop { display: none; }
+@font-face {
   font-family: "Montserrat";
   src: url("../fonts/montserrat-latin-variable.woff2") format("woff2");
   font-weight: 300 900;
@@ -10671,6 +10686,27 @@ Sitemap: {DOMAIN}/sitemap.xml
     write("README.md", f"""# Cognac Esprit Organic - nouveau site statique
 
 Première version complète du nouveau site statique Cognac Esprit Organic.
+
+## Achat direct et prix TTC France
+
+Les six fiches françaises de Cognac proposent les références vendables vérifiées le
+26 octobre 2026 dans la boutique Maison des Pierres. Les montants TTC et les codes
+articles sont centralisés dans `data/boutique.json`. Ils ne sont pas actualisés
+automatiquement : la boutique ne propose pas encore d’API publique de prix.
+Après vérification du catalogue commercial, modifier ce fichier et sa date/source,
+puis lancer `python3 scripts/update-boutique.py`. Le générateur complet utilise
+également ces données. Vérification : `python3 scripts/test-boutique.py`.
+
+Les liens ordinaires `/commander/?mdp_ref=…&mdp_lang=fr` ajoutent une unité au clic.
+Ne jamais les précharger ni les utiliser pour interroger les prix. Le checkout
+confirme le prix, la disponibilité et le transport avant paiement. La livraison
+est limitée à la France métropolitaine ; le retrait à la propriété est gratuit.
+
+Les distributeurs Québec/Danemark/Norvège gardent leurs boutons. Les offres directes
+s’effacent dès que l’un de ces marchés est identifié, même après chargement.
+Le VSOP 35 cl et le Single Cask 70 cl ne sont pas vendables faute de prix ; aucun
+lien ne leur substitue une autre contenance. Le Single Cask proposé est le 50 cl,
+sans GTIN attribué à ce format. Les Pineau sont absents du catalogue commercial.
 
 ## Tester localement
 

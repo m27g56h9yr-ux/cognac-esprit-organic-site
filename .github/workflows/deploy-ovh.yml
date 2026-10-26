@@ -30,6 +30,9 @@ jobs:
       - name: Test incremental deployment planner
         run: python3 scripts/test-ovh-deploy-plan.py
 
+      - name: Check purchase prices and formats
+        run: python3 scripts/test-boutique.py
+
       - name: Install FTP client
         run: |
           sudo apt-get update
@@ -108,7 +111,7 @@ jobs:
           rsync -a --exclude='.git/' --exclude='.github/' --exclude='.gitignore' \
             --exclude='ancien-site-wordpress/' --exclude='output/' --exclude='wp-content/' \
             --exclude='AUDIT-SEO-*.md' --exclude='AGENTS.md' --exclude='README.md' \
-            --exclude='build_static_site.py' --exclude='scripts/' --exclude='_deploy/' \
+            --exclude='build_static_site.py' --exclude='boutique.py' --exclude='data/' --exclude='__pycache__/' --exclude='scripts/' --exclude='_deploy/' \
             --exclude='newsletter-data/' --exclude='salon-config.php' \
             --exclude='*.sqlite*' --exclude='*.key' --exclude='*.token' --exclude='*.log' ./ _deploy/
           printf 'commit=%s\nrun_id=%s\n' "$GITHUB_SHA" "$GITHUB_RUN_ID" > _deploy/deploy-version.txt

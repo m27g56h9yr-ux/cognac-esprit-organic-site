@@ -2,6 +2,27 @@
 
 Première version complète du nouveau site statique Cognac Esprit Organic.
 
+## Achat direct et prix TTC France
+
+Les six fiches françaises de Cognac proposent les références vendables vérifiées le
+26 octobre 2026 dans la boutique Maison des Pierres. Les montants TTC et les codes
+articles sont centralisés dans `data/boutique.json`. Ils ne sont pas actualisés
+automatiquement : la boutique ne propose pas encore d’API publique de prix.
+Après vérification du catalogue commercial, modifier ce fichier et sa date/source,
+puis lancer `python3 scripts/update-boutique.py`. Le générateur complet utilise
+également ces données. Vérification : `python3 scripts/test-boutique.py`.
+
+Les liens ordinaires `/commander/?mdp_ref=…&mdp_lang=fr` ajoutent une unité au clic.
+Ne jamais les précharger ni les utiliser pour interroger les prix. Le checkout
+confirme le prix, la disponibilité et le transport avant paiement. La livraison
+est limitée à la France métropolitaine ; le retrait à la propriété est gratuit.
+
+Les distributeurs Québec/Danemark/Norvège gardent leurs boutons. Les offres directes
+s’effacent dès que l’un de ces marchés est identifié, même après chargement.
+Le VSOP 35 cl et le Single Cask 70 cl ne sont pas vendables faute de prix ; aucun
+lien ne leur substitue une autre contenance. Le Single Cask proposé est le 50 cl,
+sans GTIN attribué à ce format. Les Pineau sont absents du catalogue commercial.
+
 ## Tester localement
 
 Depuis ce dossier, lancer un petit serveur local :

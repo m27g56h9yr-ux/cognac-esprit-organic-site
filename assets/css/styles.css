@@ -1,3 +1,16 @@
+/* Direct orders: each format keeps its own price and shop reference. */
+.eo-shop [hidden] { display: none !important; }
+.eo-shop .eo-shop-heading { font-weight: 700; font-size: .85rem; }
+
+.eo-shop { margin-top: 24px; padding: 0; max-width: 460px; }
+.eo-shop-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; padding: 12px 0; border-top: 1px solid rgba(255,255,255,.35); }
+.eo-shop-row strong { margin-left: auto; font-variant-numeric: tabular-nums; }
+.eo-shop-row small { font-size: .65em; font-weight: 400; }
+.eo-shop-row a { padding: 12px 20px; min-height: 44px; display: inline-flex; align-items: center; justify-content: center; background: #fff; color: #273c25; font-weight: 700; text-decoration: none; border: 1px solid #fff; }
+.eo-shop-row a:hover { background: #edf1e7; }
+.eo-shop-row a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+.eo-shop p { font-size: .75rem; line-height: 1.5; margin-top: 10px; }
+body[data-market="qc"] .eo-shop, body[data-market="dk"] .eo-shop, body[data-market="no"] .eo-shop { display: none; }
 @font-face {
   font-family: "Montserrat";
   src: url("../fonts/montserrat-latin-variable.woff2") format("woff2");

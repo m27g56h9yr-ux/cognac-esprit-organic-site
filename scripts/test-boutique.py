@@ -31,6 +31,20 @@ class PurchaseTests(unittest.TestCase):
                     self.assertNotIn('mdp_ref=' + variant['reference'], html)
             self.assertEqual(site.sync_product_buy_links(html, product, 'fr'), html)
 
+    def test_photo_overlay_and_offer_prices(self):
+        for product in site.PRODUCTS:
+            html = (site.ROOT / 'produits' / (product['slug'] + '.html')).read_text()
+            self.assertNotIn('Retrait gratuit à la propriété', html)
+            expected = boutique.purchase_offers(product)
+            objects = [json.loads(x) for x in re.findall(r'<script type="application/ld\+json">(.*?)</script>', html)]
+            structured = next(o for o in objects if o.get('@type') == 'Product')
+            self.assertEqual(structured.get('offers', []), expected)
+            if expected:
+                self.assertRegex(html, r'<div class="product-scene">[\s\S]*?id="mdp-direct-order"[\s\S]*?</section>[\s\S]*?</div>')
+                for offer in expected:
+                    self.assertEqual(offer['priceCurrency'], 'EUR')
+                    self.assertNotIn('availability', offer)
+
     def test_missing_verification_or_invalid_price_blocks_build(self):
         p = site.PRODUCTS[0]
         for field in ['source', 'verified_at']:

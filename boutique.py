@@ -8,7 +8,7 @@ from urllib.parse import urlencode
 CATALOGUE_PATH = Path(__file__).resolve().parent / "data/boutique.json"
 BLOCK_RE = re.compile(r'\n?<!-- eo-shop-start -->[\s\S]*?<!-- eo-shop-end -->')
 COPY = {
-    "fr": ("Acheter", "TTC", "Vendu par Maison des Pierres. Livraison en France métropolitaine, frais calculés dans la boutique. Retrait gratuit à la propriété."),
+    "fr": ("Acheter", "TTC", "Vendu par Maison des Pierres."),
     "en": ("Buy", "incl. VAT", "Sold by Maison des Pierres. Delivery in mainland France; shipping calculated in the shop."),
     "da": ("Køb", "inkl. moms", "Sælges af Maison des Pierres. Levering i det franske fastland; fragt beregnes i butikken."),
     "no": ("Kjøp", "inkl. mva.", "Selges av Maison des Pierres. Levering i det franske fastlandet; frakt beregnes i nettbutikken."),
@@ -51,4 +51,18 @@ def purchase_block(product, lang="fr", catalogue=None):
             '</div>'
         )
     return ('\n<!-- eo-shop-start -->\n<section id="mdp-direct-order" class="eo-shop" aria-label="' + escape(buy, quote=True) + '">'
-            + '<p class="eo-shop-heading">Commander en ligne</p>' + ''.join(rows) + '<p data-shop-unavailable hidden role="status">Ce format n’est pas encore disponible en ligne.</p><p>' + escape(note) + '</p></section>\n<!-- eo-shop-end -->')
+            + ''.join(rows) + '<p data-shop-unavailable hidden role="status">Ce format n’est pas encore disponible en ligne.</p><p>' + escape(note) + '</p></section>\n<!-- eo-shop-end -->')
+
+
+def purchase_offers(product, lang="fr"):
+    """Match the visible verified prices; never invent live stock or delivery rates."""
+    if not purchase_block(product, lang):
+        return []
+    catalogue = json.loads(CATALOGUE_PATH.read_text(encoding="utf-8"))
+    return [{"@type": "Offer", "sku": v["reference"],
+             "url": "https://boutique.mdpierre.com/commander/?" + urlencode({"mdp_ref": v["reference"], "mdp_lang": lang}),
+             "price": f'{v["price_cents"] / 100:.2f}', "priceCurrency": "EUR",
+             "seller": {"@type": "Organization", "name": "Maison des Pierres", "url": "https://mdpierre.com/"},
+             "eligibleRegion": {"@type": "Place", "name": "France métropolitaine"},
+             "itemCondition": "https://schema.org/NewCondition"}
+            for v in catalogue["products"].get(product["slug"], [])]

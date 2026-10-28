@@ -97,3 +97,7 @@ Révision finale en ligne : `169852f4088d63b323399f9fc6b4b49a0f095e80`, [déploi
 - État final relu : zéro coordonnée d’essai dans la liste active; l’unique ligne historique est strictement identique (comparaison d’empreinte SHA-256 avant/après). Trois empreintes d’opposition restent dans le registre, conformément à la conservation des preuves. Synchronisation CSV : zéro opération en attente.
 - Le second essai laisse une notification groupée en attente, éligible à partir de 20:47:39 heure de Paris. Elle utilisera la liste courante sans les contacts de test. Un seul mail reçu pendant les deux inscriptions; borne de 3 600 secondes vérifiée localement, reprise périodique conservée.
 - Capture de la confirmation publique : `/Users/leopold/.codex/visualizations/2026/10/14/01a13c74-98de-7891-9483-a9a757bfcad9/esprit-organic-desinscription-test.png`.
+
+## Cartes NFC individuelles · 28 octobre 2026
+
+Dix liens EO01 à EO10 sont préparés sur la même page, avec `?carte=EO01` à `?carte=EO10`. Le numéro rejoint les preuves et la base commune. Les compteurs d’ouvertures, de clics Instagram et d’inscriptions sont disponibles dans le rapport privé `scripts/salon-admin.py --cards`. Le bilan CSV est joint aux notifications existantes, sans nouvel e-mail pour une simple ouverture et avec le même plafond d’un envoi par heure. Voir [le fonctionnement et les dix liens](../docs/nfc-card-tracking.md).

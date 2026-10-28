@@ -14,7 +14,8 @@ function newsletter_header(): array
         'consent_email', 'consent_sms', 'email_page', 'phone_page', 'last_page',
         'updated_at', 'email_consented_at', 'phone_consented_at',
         'email_consent_version', 'phone_consent_version',
-        'email_consent_text', 'phone_consent_text', 'source', 'last_source', 'record_version'];
+        'email_consent_text', 'phone_consent_text', 'source', 'last_source', 'record_version',
+        'card_id', 'email_card_id', 'phone_card_id'];
 }
 
 function newsletter_page(string $value): string
@@ -127,7 +128,7 @@ function newsletter_clear(array &$row, string $channel): void
     $field = $channel === 'sms' ? 'phone' : 'email';
     $row[$field] = '';
     $row[$channel === 'sms' ? 'consent_sms' : 'consent_email'] = '';
-    foreach (['_page', '_consented_at', '_consent_version', '_consent_text'] as $suffix) $row[$field . $suffix] = '';
+    foreach (['_page', '_consented_at', '_consent_version', '_consent_text', '_card_id'] as $suffix) $row[$field . $suffix] = '';
 }
 
 /** Idempotent application: retries never add a duplicate coordinate. */
@@ -144,6 +145,7 @@ function newsletter_apply(array $store, array &$rows, array $operation): bool
     }
     $selected = $operation['selected'];
     $context = $operation['context'];
+    $card = nfc_card_id($context['card_id'] ?? null);
     $targets = [];
     foreach ($selected as $channel => $value) {
         $field = $channel === 'sms' ? 'phone' : 'email';
@@ -168,6 +170,8 @@ function newsletter_apply(array $store, array &$rows, array $operation): bool
             $rows[$i][$field] = $value;
             $rows[$i][$channel === 'sms' ? 'consent_sms' : 'consent_email'] = 'yes';
             $rows[$i][$field . '_page'] = $context['page'];
+            $rows[$i][$field . '_card_id'] = $card;
+            $rows[$i]['card_id'] = $card;
             $rows[$i][$field . '_consented_at'] = $context['registered_at'];
             $rows[$i][$field . '_consent_version'] = $context['consent_version'];
             $rows[$i][$field . '_consent_text'] = $operation['texts'][$channel] ?? '';

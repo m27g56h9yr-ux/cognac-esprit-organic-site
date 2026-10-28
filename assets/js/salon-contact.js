@@ -1,6 +1,44 @@
-/* Esprit Organic contact preferences. No tracking or browser storage. */
+/* Contact preferences and card counters. No cookies or browser persistence. */
 (() => {
   'use strict';
+  const pageUrl = new URL(location.href);
+  const cardMatch = /^EO([0-9]{1,4})$/i.exec((pageUrl.searchParams.get('carte') || '').trim());
+  const cardNumber = cardMatch ? Number(cardMatch[1]) : 0;
+  const cardId = cardNumber > 0 ? `EO${String(cardNumber).padStart(2, '0')}` : '';
+  const measure = pageUrl.searchParams.get('mesure') !== 'non'
+    && navigator.doNotTrack !== '1' && navigator.globalPrivacyControl !== true;
+  const noMeasureLink = document.getElementById('nfc-no-measure');
+  if (noMeasureLink) {
+    const noMeasureUrl = new URL(location.href);
+    noMeasureUrl.searchParams.set('mesure', 'non');
+    noMeasureUrl.hash = '';
+    noMeasureLink.href = noMeasureUrl.href;
+    if (!measure) noMeasureLink.textContent = 'La mesure est désactivée pour cette page.';
+  }
+  if (cardId && measure && document.querySelector('form[data-mode="subscribe"]')) initializeCardCounters();
+  function initializeCardCounters() {
+    let pageId;
+    try {
+      pageId = Array.from(crypto.getRandomValues(new Uint8Array(16)), byte => byte.toString(16).padStart(2, '0')).join('');
+    } catch (_) { return; }
+    const recorded = new Set();
+    function record(event) {
+      if (recorded.has(event)) return;
+      recorded.add(event);
+      // Never delay navigation or signup if counting is unavailable.
+      fetch(new URL('../api/nfc-event.php', location.href), {
+        method: 'POST', credentials: 'omit', cache: 'no-store', keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ card_id: cardId, event, page_id: pageId })
+      }).catch(() => {});
+    }
+    function recordVisiblePage() {
+      if (document.visibilityState === 'visible') record('view');
+    }
+    recordVisiblePage();
+    document.addEventListener('visibilitychange', recordVisiblePage);
+    document.getElementById('instagram')?.addEventListener('click', () => record('instagram'));
+  }
   const notice = document.getElementById('privacy-notice');
   const privacyOpen = document.getElementById('privacy-open');
   if (notice && typeof notice.showModal === 'function') {
@@ -99,7 +137,7 @@
       payload.channels = [wantsSms && 'sms', wantsEmail && 'email'].filter(Boolean);
       if (privateReady) payload.token = token;
     } else Object.assign(payload, {
-      consent_sms: wantsSms, consent_email: wantsEmail,
+      consent_sms: wantsSms, consent_email: wantsEmail, card_id: cardId, measure,
       consent_version: form.elements.consent_version.value
     });
     busy = true;

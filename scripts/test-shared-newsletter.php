@@ -5,7 +5,7 @@ declare(strict_types=1);
 $fixture = sys_get_temp_dir() . '/eo-newsletter-test-' . bin2hex(random_bytes(8));
 mkdir($fixture . '/www/site/api', 0700, true);
 mkdir($fixture . '/www/site/newsletter-data', 0700, true);
-foreach (['salon-lib.php', 'salon-newsletter.php', 'newsletter-lib.php'] as $name) {
+foreach (['salon-lib.php', 'salon-newsletter.php', 'newsletter-lib.php', 'nfc-lib.php'] as $name) {
     copy(dirname(__DIR__) . '/api/' . $name, $fixture . '/www/site/api/' . $name);
 }
 file_put_contents($fixture . '/www/site/api/salon-config.php', "<?php return ['admin_token_hash' => '" . str_repeat('1', 64) . "', 'newsletter_schema' => 2];");

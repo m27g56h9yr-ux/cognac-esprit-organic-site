@@ -21,6 +21,7 @@ function salon_sync_newsletter(array $store): array
     $applied = [];
     try {
         $migrated = (bool) $db->query("SELECT value FROM newsletter_bridge WHERE name='imported'")->fetchColumn();
+        $upgradeCards = $db->query("SELECT value FROM newsletter_bridge WHERE name='nfc_columns'")->fetchColumn() !== '1';
         if (!$migrated) {
             // Commit the encrypted original BEFORE replacing the historical file.
             // A failed migration can therefore be recovered without losing rows.
@@ -44,7 +45,8 @@ function salon_sync_newsletter(array $store): array
                     newsletter_apply($store, $rows, ['action' => 'add', 'selected' => [$r['channel'] => $data['contact']],
                         'context' => ['registered_at' => $data['consented_at'], 'page' => $data['page'],
                             'language' => $data['language'] ?? 'fr', 'market' => $data['market'] ?? '',
-                            'consent_version' => $data['consent_version'], 'source' => $data['source']],
+                            'consent_version' => $data['consent_version'], 'source' => $data['source'],
+                            'card_id' => $data['card_id'] ?? ''],
                         'texts' => [$r['channel'] => $data['consent_text']]]);
                 }
             }
@@ -58,7 +60,7 @@ function salon_sync_newsletter(array $store): array
             if (in_array(true, $applied, true)) $db->exec('UPDATE newsletter_mail_state SET revision=revision+1 WHERE singleton=1');
             $db->exec('COMMIT');
         } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
-        if (!$migrated || $applied || $expired || !is_file(newsletter_path())) newsletter_write($header, $rows);
+        if (!$migrated || $upgradeCards || $applied || $expired || !is_file(newsletter_path())) newsletter_write($header, $rows);
         $db->exec('BEGIN IMMEDIATE');
         try {
             if (!$migrated) {
@@ -66,6 +68,7 @@ function salon_sync_newsletter(array $store): array
                 $q->execute(['legacy_rows', (string) $legacyRows]);
                 $q->execute(['imported', '1']);
             }
+            if ($upgradeCards) $db->exec("INSERT OR REPLACE INTO newsletter_bridge VALUES ('nfc_columns', '1')");
             $q = $db->prepare('DELETE FROM newsletter_pending WHERE id=?');
             foreach ($pending as $item) $q->execute([$item['id']]);
             $db->exec('COMMIT');
@@ -182,6 +185,7 @@ function salon_notify_newsletter(array $store, ?callable $transport = null, ?cal
                 if ($pending && $eligible && !$unflushed) {
                     $csv = file_get_contents(newsletter_path());
                     if ($csv === false) throw new RuntimeException('Notification snapshot unavailable');
+                    $cardsCsv = nfc_report_csv(nfc_report($store));
                     $messageId = '<eo-list-' . bin2hex(random_bytes(16)) . '@cognac-esprit-organic.com>';
                     $q = $db->prepare('UPDATE newsletter_mail_state SET last_attempt_at=?, last_status="sending", last_message_id=? WHERE singleton=1');
                     $q->execute([$now, $messageId]);
@@ -194,7 +198,7 @@ function salon_notify_newsletter(array $store, ?callable $transport = null, ?cal
         if (!$reserved) return 'pending';
         // The CSV lock is released before transport. The dedicated mail lock stays
         // held until completion, including across slow transport or concurrent calls.
-        if (!$transport($csv, $messageId)) throw new RuntimeException('Notification transport rejected');
+        if (!$transport($csv, $messageId, $cardsCsv)) throw new RuntimeException('Notification transport rejected');
         $q = $db->prepare('UPDATE newsletter_mail_state SET sent_revision=MAX(sent_revision, ?),
             last_sent_at=?, last_status="sent", sent_count=sent_count+1 WHERE singleton=1');
         $q->execute([$revision, $clock()]);
@@ -211,7 +215,7 @@ function salon_notify_newsletter(array $store, ?callable $transport = null, ?cal
     }
 }
 
-function salon_send_newsletter_list(string $csv, string $messageId): bool
+function salon_send_newsletter_list(string $csv, string $messageId, ?string $cardsCsv = null): bool
 {
     if (!function_exists('mail')) return false;
     $boundary = 'eo-newsletter-' . bin2hex(random_bytes(12));
@@ -227,12 +231,23 @@ function salon_send_newsletter_list(string $csv, string $messageId): bool
         'Content-Transfer-Encoding: 8bit', '', 'Bonjour Léopold,', '',
         'De nouvelles inscriptions ont été enregistrées sur le site Esprit Organic.',
         'Voici la liste complète à jour, avec les e-mails, les téléphones et les pages d’inscription.',
+        'Le bilan par carte NFC est également joint : ouvertures, clics Instagram et inscriptions.',
+        'Ces compteurs ne mesurent ni les visiteurs uniques ni les abonnements Instagram.',
         'Les inscriptions rapprochées sont regroupées : au maximum une liste par heure.',
         'Les coordonnées désinscrites sont retirées de la liste avant chaque nouvel envoi.', '',
         'Date de la liste : ' . gmdate('Y-m-d H:i:s') . ' UTC.', '',
         '--' . $boundary, 'Content-Type: text/csv; charset=utf-8; name="' . $filename . '"',
         'Content-Transfer-Encoding: base64', 'Content-Disposition: attachment; filename="' . $filename . '"', '',
-        chunk_split(base64_encode($csv)), '--' . $boundary . '--', '',
+        chunk_split(base64_encode($csv)),
     ]);
+    if ($cardsCsv !== null) {
+        $cardsFilename = 'cognac-esprit-organic-cartes-nfc-' . gmdate('Ymd-His') . '-utc.csv';
+        $message .= implode("\r\n", [
+            '--' . $boundary, 'Content-Type: text/csv; charset=utf-8; name="' . $cardsFilename . '"',
+            'Content-Transfer-Encoding: base64', 'Content-Disposition: attachment; filename="' . $cardsFilename . '"', '',
+            chunk_split(base64_encode($cardsCsv)),
+        ]);
+    }
+    $message .= '--' . $boundary . '--' . "\r\n";
     return mail(EO_NEWSLETTER_NOTIFICATION_TO, $subject, $message, implode("\r\n", $headers));
 }

@@ -1,5 +1,5 @@
 Options -Indexes
-<FilesMatch "^(?:(?:salon-(?:config|lib|newsletter)|newsletter-lib)\.php|.*\.(?:sqlite|key|log|csv|lock))$">
+<FilesMatch "^(?:(?:salon-(?:config|lib|newsletter)|newsletter-lib|nfc-lib)\.php|.*\.(?:sqlite|key|log|csv|lock))$">
   Require all denied
 </FilesMatch>
 <IfModule mod_rewrite.c>

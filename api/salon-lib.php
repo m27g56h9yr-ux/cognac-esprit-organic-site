@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 /** Encrypted consent store and shared Esprit Organic newsletter bridge. */
 require_once __DIR__ . '/salon-newsletter.php';
+require_once __DIR__ . '/nfc-lib.php';
 const EO_SALON_BRAND = 'Cognac Esprit Organic';
 const EO_SALON_VERSION = 'eo-se-retrouver-2026-10-15-v1';
 const EO_SALON_ORIGIN = 'https://cognac-esprit-organic.com';
@@ -129,6 +130,7 @@ function salon_store(): array
         INSERT OR IGNORE INTO newsletter_mail_state(singleton) VALUES (1);
         CREATE INDEX IF NOT EXISTS contacts_expiry ON contacts(expires_at);
         CREATE INDEX IF NOT EXISTS events_expiry ON consent_events(expires_at);');
+        nfc_schema($db);
     } finally {
         flock($setup, LOCK_UN);
         fclose($setup);
@@ -242,6 +244,7 @@ function salon_cleanup(array $store): void
         $q->execute([$now]);
         $db->exec('DELETE FROM limits WHERE expires_at < ' . time());
         $db->exec('DELETE FROM nonces WHERE expires_at < ' . time());
+        nfc_cleanup($db);
         $db->exec('COMMIT');
     } catch (Throwable $e) { $db->exec('ROLLBACK'); throw $e; }
 }
@@ -309,6 +312,7 @@ function salon_subscribe(array $store, array $input): array
     if (($input['consent_sms'] ?? false) === true) $selected['sms'] = salon_normalize('sms', $input['phone'] ?? '');
     if (($input['consent_email'] ?? false) === true) $selected['email'] = salon_normalize('email', $input['email'] ?? '');
     if (!$selected) throw new SalonError('consent_required');
+    $card = nfc_card_id($input['card_id'] ?? null);
     $ids = [];
     $now = gmdate('c');
     foreach ($selected as $channel => $value) {
@@ -318,7 +322,7 @@ function salon_subscribe(array $store, array $input): array
             'brand' => EO_SALON_BRAND, 'channel' => $channel, 'contact' => $value,
             'consented_at' => $now, 'consent_version' => EO_SALON_VERSION,
             'consent_text' => EO_SALON_TEXT[$channel], 'source' => 'se-retrouver',
-            'page' => '/se-retrouver/',
+            'page' => '/se-retrouver/', 'card_id' => $card,
             'ownership' => 'declared_not_verified',
         ];
         $q = $store['db']->prepare('INSERT INTO contacts VALUES (?, ?, "active", ?, ?, ?, ?, "declared")
@@ -326,7 +330,7 @@ function salon_subscribe(array $store, array $input): array
             changed_at=excluded.changed_at, expires_at=excluded.expires_at, ownership="declared"');
         $q->execute([$id, $channel, salon_encrypt($store, $record), $now, $now, gmdate('c', strtotime('+3 years'))]);
         salon_event($store, $id, $channel, 'consent_granted', [
-            'text' => EO_SALON_TEXT[$channel],
+            'text' => EO_SALON_TEXT[$channel], 'card_id' => $card,
             'form_text' => EO_SALON_FORM_TEXT,
             'positive_action' => 'filled_contact_fields_and_subscription_submit',
             'button_text' => 'Recevoir vos nouvelles',
@@ -334,8 +338,13 @@ function salon_subscribe(array $store, array $input): array
             'challenge_hash' => hash('sha256', (string) $input['challenge']),
         ]);
     }
+    if ($card !== '' && nfc_measure_allowed() && ($input['measure'] ?? true) !== false) {
+        nfc_increment($store, $card, 'subscribe');
+        foreach (array_keys($selected) as $channel) nfc_increment($store, $card, $channel);
+    }
     salon_queue($store, ['action' => 'add', 'selected' => $selected,
-        'context' => newsletter_context('/se-retrouver/', 'fr', '', EO_SALON_VERSION, 'se-retrouver'), 'texts' => EO_SALON_TEXT]);
+        'context' => array_merge(newsletter_context('/se-retrouver/', 'fr', '', EO_SALON_VERSION, 'se-retrouver'),
+            ['card_id' => $card]), 'texts' => EO_SALON_TEXT]);
     $token = salon_sign($store, 'manage', ['ids' => $ids]);
     return ['ok' => true, 'status' => 'saved', 'manage_url' => EO_SALON_ORIGIN . '/se-retrouver/desinscription/#' . $token];
 }

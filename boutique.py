@@ -40,7 +40,7 @@ def purchase_block(product, lang="fr", catalogue=None):
         if code in seen:
             raise ValueError("Référence boutique dupliquée")
         seen.add(code)
-        url = "https://boutique.mdpierre.com/commander/?" + urlencode({"mdp_ref": code, "mdp_lang": lang})
+        url = "https://boutique.mdpierre.com/commander/?" + urlencode({"mdp_ref": code, "mdp_lang": lang, "mdp_source": "site_eo"})
         price = f"{cents // 100},{cents % 100:02d} €"
         size = f"{volume / 10:g} cl"
         label = f"{buy} {product['name']} — {size} — {price} {tax}"
@@ -60,7 +60,7 @@ def purchase_offers(product, lang="fr"):
         return []
     catalogue = json.loads(CATALOGUE_PATH.read_text(encoding="utf-8"))
     return [{"@type": "Offer", "sku": v["reference"],
-             "url": "https://boutique.mdpierre.com/commander/?" + urlencode({"mdp_ref": v["reference"], "mdp_lang": lang}),
+             "url": "https://boutique.mdpierre.com/commander/?" + urlencode({"mdp_ref": v["reference"], "mdp_lang": lang, "mdp_source": "site_eo"}),
              "price": f'{v["price_cents"] / 100:.2f}', "priceCurrency": "EUR",
              "seller": {"@type": "Organization", "name": "Maison des Pierres", "url": "https://mdpierre.com/"},
              "eligibleRegion": {"@type": "Place", "name": "France métropolitaine"},

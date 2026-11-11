@@ -2298,7 +2298,7 @@ def layout(path: str, title: str, description: str, h1: str, intro_fr: str, intr
     </div>
   </footer>
   <script src="{prefix}assets/js/main.js?v={JS_VERSION}"></script>
-  <script id="mdp-cse-pass-js" src="/assets/js/cse-pass.js?v=20261111-1" defer></script>
+  <script id="mdp-cse-pass-js" src="/assets/js/cse-pass.js?v=20261111-2" defer></script>
 </body>
 </html>
 """)
@@ -6128,7 +6128,7 @@ def technical_product_facts_page_en():
     </div>
   </footer>
   <script src="../assets/js/main.js?v=20260629-faq01"></script>
-  <script id="mdp-cse-pass-js" src="/assets/js/cse-pass.js?v=20261111-1" defer></script>
+  <script id="mdp-cse-pass-js" src="/assets/js/cse-pass.js?v=20261111-2" defer></script>
 </body>
 </html>
 """

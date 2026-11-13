@@ -1,7 +1,7 @@
 {
   "enabled": true,
-  "verified_at": "2026-10-26T15:57:00+01:00",
-  "source": "Catalogue commercial OVH, vérifié en lecture seule par le chat VPS 01a14b96-1113-7c80-b3ed-0378566ffdef, réponse 01a178b7-11ab-74d3-a9bd-7671b62f7e72",
+  "verified_at": "2026-11-13T18:00:00+01:00",
+  "source": "Catalogue commercial OVH (références EO0001 à EO0008 vérifiées le 26 octobre 2026) et tarif 2026 de Fanny Croizet du 13 novembre 2026 pour les Pineau (prix public 28 € TTC)",
   "products": {
     "fondation-vs": [
       {
@@ -44,6 +44,20 @@
         "volume_ml": 500,
         "price_cents": 11000
       }
+    ],
+    "pineau": [
+      {
+        "reference": "EO0011",
+        "volume_ml": 750,
+        "price_cents": 2800
+      }
+    ],
+    "pineau-rouge": [
+      {
+        "reference": "EO0012",
+        "volume_ml": 750,
+        "price_cents": 2800
+      }
     ]
   },
   "unavailable": {
@@ -59,16 +73,6 @@
         "reference": "EO0007",
         "volume_ml": 700,
         "reason": "Prix absent"
-      }
-    ],
-    "pineau": [
-      {
-        "reason": "Absent du catalogue"
-      }
-    ],
-    "pineau-rouge": [
-      {
-        "reason": "Absent du catalogue"
       }
     ]
   }

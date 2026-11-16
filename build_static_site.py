@@ -7243,7 +7243,7 @@ LEGAL_COPY = {
             ("Site", "https://cognac-esprit-organic.com"),
             ("Marque", "Cognac Esprit Organic"),
             ("Éditeur", "LA MAISON DES PIERRES (MPC)"),
-            ("Forme juridique", "EURL, entreprise unipersonnelle à responsabilité limitée"),
+            ("Forme juridique", "SARL à associé unique (EURL)"),
             ("Capital social", "10 000 euros"),
             ("RCS", "508 104 361 R.C.S. Angoulême"),
             ("SIREN", "508 104 361"),
@@ -7261,11 +7261,11 @@ LEGAL_COPY = {
             ]),
             ("Objet du site et accès", [
                 "Le site présente la marque Cognac Esprit Organic, ses cognacs, ses Pineaux des Charentes, sa démarche biologique et environnementale, ses actualités et ses moyens de contact.",
-                "Le site ne conclut directement aucune commande, aucun panier et aucun paiement en ligne. Les informations publiées sont fournies à titre indicatif et ne constituent pas une offre contractuelle de vente ; toute demande commerciale doit être confirmée par échange direct, devis, facture ou accord écrit de LA MAISON DES PIERRES (MPC).",
+                "Le site n’a ni panier ni paiement intégré. Les boutons « Acheter » des fiches produits françaises ouvrent la boutique en ligne boutique.mdpierre.com, exploitée par LA MAISON DES PIERRES (MPC), pour une livraison en France métropolitaine ou un retrait à la propriété. Les prix TTC affichés sur ces fiches sont ceux de la boutique. Les conditions générales de vente de la boutique (https://boutique.mdpierre.com/conditions-generales-de-vente/) régissent ces ventes : elles précisent notamment la livraison, le droit de rétractation de quatorze jours, les garanties légales et le médiateur de la consommation. Les autres informations publiées sont fournies à titre indicatif ; toute autre demande commerciale doit être confirmée par échange direct, devis, facture ou accord écrit de LA MAISON DES PIERRES (MPC).",
                 "Le site contient des informations relatives à des boissons alcooliques. Son accès est réservé aux personnes ayant l’âge légal requis pour consulter ce type de contenu dans leur pays de résidence.",
             ]),
             ("Commandes, alcool et mineurs", [
-                "La vente d’alcool est interdite aux mineurs. Une preuve de majorité peut être demandée avant toute vente ou remise de produits alcooliques.",
+                "La vente d’alcool est interdite aux mineurs. Une preuve de majorité peut être demandée avant toute vente ou remise de produits alcooliques. En cas de litige après une réclamation écrite restée sans solution, le consommateur peut saisir gratuitement le médiateur de la consommation : Centre de la Médiation de la Consommation de Conciliateurs de Justice (CM2C), 49 rue de Ponthieu, 75008 Paris, www.cm2c.net.",
                 "Le client demeure responsable du respect des règles applicables à l’achat, à l’importation, à la détention et à la consommation de boissons alcooliques dans son pays de livraison ou de résidence.",
             ]),
             ("Données personnelles", [
@@ -7293,7 +7293,7 @@ LEGAL_COPY = {
             ]),
             ("Avertissement alcool", [
                 "L’ABUS D’ALCOOL EST DANGEREUX POUR LA SANTÉ, À CONSOMMER AVEC MODÉRATION.",
-                "Dernière mise à jour : 2 juillet 2026.",
+                "Dernière mise à jour : 16 novembre 2026.",
             ]),
         ],
     },

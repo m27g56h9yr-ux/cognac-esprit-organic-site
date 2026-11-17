@@ -7309,7 +7309,7 @@ LEGAL_COPY = {
             ("Website", "https://cognac-esprit-organic.com"),
             ("Brand", "Cognac Esprit Organic"),
             ("Publisher", "LA MAISON DES PIERRES (MPC)"),
-            ("Legal form", "EURL, single-member limited liability company"),
+            ("Legal form", "SARL with a single shareholder (EURL), French limited liability company"),
             ("Share capital", "10,000 euros"),
             ("Trade register", "508 104 361 R.C.S. Angoulême"),
             ("SIREN", "508 104 361"),
@@ -7327,11 +7327,11 @@ LEGAL_COPY = {
             ]),
             ("Purpose and access", [
                 "The website presents the Cognac Esprit Organic brand, its cognacs, Pineaux des Charentes, organic and environmental approach, news and contact details.",
-                "The website does not directly conclude any order, shopping cart or online payment. Published information is provided for guidance only and does not constitute a contractual offer to sell; any commercial request must be confirmed by direct exchange, quotation, invoice or written agreement from LA MAISON DES PIERRES (MPC).",
+                "The website has no shopping cart or integrated payment. Online sales are made only on the shop boutique.mdpierre.com, operated by LA MAISON DES PIERRES (MPC), for delivery in mainland France or collection at the estate. The general terms and conditions of sale of the shop, written in French (https://boutique.mdpierre.com/conditions-generales-de-vente/), govern these sales: they set out delivery, the fourteen-day right of withdrawal, the legal guarantees and the consumer mediator. Other published information is provided for guidance only; any other commercial request must be confirmed by direct exchange, quotation, invoice or written agreement from LA MAISON DES PIERRES (MPC).",
                 "The website contains information about alcoholic beverages. Access is reserved for people of legal age to view this type of content in their country of residence.",
             ]),
             ("Orders, alcohol and minors", [
-                "The sale of alcohol to minors is prohibited. Proof of legal age may be requested before any sale or handover of alcoholic products.",
+                "The sale of alcohol to minors is prohibited. Proof of legal age may be requested before any sale or handover of alcoholic products. If a written complaint has not been resolved, consumers may refer the dispute free of charge to the consumer mediator: Centre de la Médiation de la Consommation de Conciliateurs de Justice (CM2C), 49 rue de Ponthieu, 75008 Paris, France, www.cm2c.net.",
                 "The customer remains responsible for complying with the rules applicable to the purchase, import, possession and consumption of alcoholic beverages in their delivery or residence country.",
             ]),
             ("Personal data", [
@@ -7359,7 +7359,7 @@ LEGAL_COPY = {
             ]),
             ("Alcohol warning", [
                 "ALCOHOL ABUSE IS DANGEROUS FOR YOUR HEALTH. CONSUME IN MODERATION.",
-                "Last updated: 2 July 2026.",
+                "Last updated: 16 November 2026.",
             ]),
         ],
     },
@@ -7375,7 +7375,7 @@ LEGAL_COPY = {
             ("Websted", "https://cognac-esprit-organic.com"),
             ("Brand", "Cognac Esprit Organic"),
             ("Udgiver", "LA MAISON DES PIERRES (MPC)"),
-            ("Juridisk form", "EURL, fransk enkeltmandsselskab med begrænset ansvar"),
+            ("Juridisk form", "SARL med én selskabsdeltager (EURL), fransk selskab med begrænset ansvar"),
             ("Selskabskapital", "10.000 euro"),
             ("Handelsregister", "508 104 361 R.C.S. Angoulême"),
             ("SIREN", "508 104 361"),
@@ -7393,11 +7393,11 @@ LEGAL_COPY = {
             ]),
             ("Formål og adgang", [
                 "Webstedet præsenterer Cognac Esprit Organic, brandets cognacs, Pineaux des Charentes, økologiske og miljømæssige tilgang, nyheder og kontaktmuligheder.",
-                "Webstedet gennemfører ikke direkte ordrer, indkøbskurv eller onlinebetaling. Oplysningerne er vejledende og udgør ikke et kontraktligt salgstilbud; enhver kommerciel forespørgsel skal bekræftes ved direkte kontakt, tilbud, faktura eller skriftlig aftale fra LA MAISON DES PIERRES (MPC).",
+                "Webstedet har hverken indkøbskurv eller integreret betaling. Onlinesalg sker udelukkende i butikken boutique.mdpierre.com, som drives af LA MAISON DES PIERRES (MPC), med levering i det franske fastland eller afhentning på ejendommen. Butikkens almindelige salgsbetingelser, som er skrevet på fransk (https://boutique.mdpierre.com/conditions-generales-de-vente/), gælder for disse salg: de beskriver levering, fortrydelsesretten på fjorten dage, de lovbestemte garantier og forbrugermægleren. Øvrige oplysninger er vejledende; enhver anden kommerciel forespørgsel skal bekræftes ved direkte kontakt, tilbud, faktura eller skriftlig aftale fra LA MAISON DES PIERRES (MPC).",
                 "Webstedet indeholder oplysninger om alkoholholdige drikkevarer. Adgang er forbeholdt personer, der har den lovlige alder til at se denne type indhold i deres bopælsland.",
             ]),
             ("Ordrer, alkohol og mindreårige", [
-                "Salg af alkohol til mindreårige er forbudt. Dokumentation for lovlig alder kan kræves før ethvert salg eller udlevering af alkoholholdige produkter.",
+                "Salg af alkohol til mindreårige er forbudt. Dokumentation for lovlig alder kan kræves før ethvert salg eller udlevering af alkoholholdige produkter. Hvis en skriftlig klage ikke er blevet løst, kan forbrugeren gratis indbringe tvisten for forbrugermægleren: Centre de la Médiation de la Consommation de Conciliateurs de Justice (CM2C), 49 rue de Ponthieu, 75008 Paris, France, www.cm2c.net.",
                 "Kunden er ansvarlig for at overholde de regler, der gælder for køb, import, besiddelse og forbrug af alkoholholdige drikkevarer i leverings- eller bopælslandet.",
             ]),
             ("Persondata", [
@@ -7425,7 +7425,7 @@ LEGAL_COPY = {
             ]),
             ("Alkoholadvarsel", [
                 "ALKOHOLMISBRUG ER SKADELIGT FOR HELBREDET. NYD MED MÅDE.",
-                "Senest opdateret: 2. juli 2026.",
+                "Senest opdateret: 16. november 2026.",
             ]),
         ],
     },
@@ -7441,7 +7441,7 @@ LEGAL_COPY = {
             ("Nettsted", "https://cognac-esprit-organic.com"),
             ("Merke", "Cognac Esprit Organic"),
             ("Utgiver", "LA MAISON DES PIERRES (MPC)"),
-            ("Juridisk form", "EURL, fransk enkeltpersonsforetak med begrenset ansvar"),
+            ("Juridisk form", "SARL med én deltaker (EURL), fransk selskap med begrenset ansvar"),
             ("Selskapskapital", "10 000 euro"),
             ("Handelsregister", "508 104 361 R.C.S. Angoulême"),
             ("SIREN", "508 104 361"),
@@ -7459,11 +7459,11 @@ LEGAL_COPY = {
             ]),
             ("Formål og tilgang", [
                 "Nettstedet presenterer Cognac Esprit Organic, merkets cognacer, Pineaux des Charentes, økologiske og miljømessige tilnærming, nyheter og kontaktmuligheter.",
-                "Nettstedet gjennomfører ikke direkte ordre, handlekurv eller nettbetaling. Informasjonen er veiledende og utgjør ikke et kontraktsmessig salgstilbud; enhver kommersiell forespørsel må bekreftes ved direkte kontakt, tilbud, faktura eller skriftlig avtale fra LA MAISON DES PIERRES (MPC).",
+                "Nettstedet har verken handlekurv eller integrert betaling. Nettsalg skjer utelukkende i butikken boutique.mdpierre.com, som drives av LA MAISON DES PIERRES (MPC), med levering i det franske fastlandet eller henting på eiendommen. Butikkens alminnelige salgsvilkår, som er skrevet på fransk (https://boutique.mdpierre.com/conditions-generales-de-vente/), gjelder for disse salgene: de beskriver levering, angreretten på fjorten dager, de lovbestemte garantiene og forbrukermegleren. Øvrig informasjon er veiledende; enhver annen kommersiell forespørsel må bekreftes ved direkte kontakt, tilbud, faktura eller skriftlig avtale fra LA MAISON DES PIERRES (MPC).",
                 "Nettstedet inneholder informasjon om alkoholholdige drikker. Tilgang er forbeholdt personer som har lovlig alder til å se denne typen innhold i sitt bostedsland.",
             ]),
             ("Ordrer, alkohol og mindreårige", [
-                "Salg av alkohol til mindreårige er forbudt. Bevis på lovlig alder kan kreves før salg eller utlevering av alkoholholdige produkter.",
+                "Salg av alkohol til mindreårige er forbudt. Bevis på lovlig alder kan kreves før salg eller utlevering av alkoholholdige produkter. Hvis en skriftlig klage ikke er løst, kan forbrukeren gratis bringe tvisten inn for forbrukermegleren: Centre de la Médiation de la Consommation de Conciliateurs de Justice (CM2C), 49 rue de Ponthieu, 75008 Paris, France, www.cm2c.net.",
                 "Kunden er ansvarlig for å overholde reglene som gjelder kjøp, import, besittelse og forbruk av alkoholholdige drikker i leverings- eller bostedslandet.",
             ]),
             ("Personopplysninger", [
@@ -7491,7 +7491,7 @@ LEGAL_COPY = {
             ]),
             ("Alkoholadvarsel", [
                 "ALKOHOLMISBRUK ER SKADELIG FOR HELSEN. NYT MED MÅTE.",
-                "Sist oppdatert: 2. juli 2026.",
+                "Sist oppdatert: 16. november 2026.",
             ]),
         ],
     },
@@ -7507,7 +7507,7 @@ LEGAL_COPY = {
             ("Webbplats", "https://cognac-esprit-organic.com"),
             ("Varumärke", "Cognac Esprit Organic"),
             ("Utgivare", "LA MAISON DES PIERRES (MPC)"),
-            ("Juridisk form", "EURL, franskt enmansbolag med begränsat ansvar"),
+            ("Juridisk form", "SARL med en enda delägare (EURL), franskt bolag med begränsat ansvar"),
             ("Bolagskapital", "10 000 euro"),
             ("Handelsregister", "508 104 361 R.C.S. Angoulême"),
             ("SIREN", "508 104 361"),
@@ -7525,11 +7525,11 @@ LEGAL_COPY = {
             ]),
             ("Syfte och åtkomst", [
                 "Webbplatsen presenterar Cognac Esprit Organic, varumärkets cognacer, Pineaux des Charentes, ekologiska och miljömässiga arbetssätt, nyheter och kontaktmöjligheter.",
-                "Webbplatsen genomför inte direkt någon order, kundvagn eller onlinebetalning. Informationen är vägledande och utgör inte ett avtalsenligt erbjudande om försäljning; varje kommersiell förfrågan måste bekräftas genom direkt kontakt, offert, faktura eller skriftlig överenskommelse från LA MAISON DES PIERRES (MPC).",
+                "Webbplatsen har varken kundvagn eller integrerad betalning. Försäljning online sker enbart i butiken boutique.mdpierre.com, som drivs av LA MAISON DES PIERRES (MPC), med leverans inom det franska fastlandet eller avhämtning på egendomen. Butikens allmänna försäljningsvillkor, som är skrivna på franska (https://boutique.mdpierre.com/conditions-generales-de-vente/), gäller för dessa köp: de beskriver leverans, ångerrätten på fjorton dagar, de lagstadgade garantierna och konsumentmedlaren. Övrig information är vägledande; varje annan kommersiell förfrågan måste bekräftas genom direkt kontakt, offert, faktura eller skriftlig överenskommelse från LA MAISON DES PIERRES (MPC).",
                 "Webbplatsen innehåller information om alkoholhaltiga drycker. Åtkomst är förbehållen personer som har laglig ålder för att se denna typ av innehåll i sitt bosättningsland.",
             ]),
             ("Beställningar, alkohol och minderåriga", [
-                "Försäljning av alkohol till minderåriga är förbjuden. Bevis på laglig ålder kan begäras före varje försäljning eller överlämnande av alkoholhaltiga produkter.",
+                "Försäljning av alkohol till minderåriga är förbjuden. Bevis på laglig ålder kan begäras före varje försäljning eller överlämnande av alkoholhaltiga produkter. Om ett skriftligt klagomål inte har lösts kan konsumenten kostnadsfritt hänskjuta tvisten till konsumentmedlaren: Centre de la Médiation de la Consommation de Conciliateurs de Justice (CM2C), 49 rue de Ponthieu, 75008 Paris, France, www.cm2c.net.",
                 "Kunden ansvarar för att följa de regler som gäller köp, import, innehav och konsumtion av alkoholhaltiga drycker i leverans- eller bosättningslandet.",
             ]),
             ("Personuppgifter", [
@@ -7557,7 +7557,7 @@ LEGAL_COPY = {
             ]),
             ("Alkoholvarning", [
                 "ALKOHOLMISSBRUK ÄR SKADLIGT FÖR HÄLSAN. NJUT MED MÅTTA.",
-                "Senast uppdaterad: 2 juli 2026.",
+                "Senast uppdaterad: 16 november 2026.",
             ]),
         ],
     },
